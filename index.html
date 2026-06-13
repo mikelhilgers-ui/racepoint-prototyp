@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Racepoint · Startseiten-Prototypen (THROWAWAY)</title>
+
+<!-- ============================================================= -->
+<!--  RACEPOINT — STARTSEITEN-PROTOTYP · WEGWERF-CODE (THROWAWAY)   -->
+<!--  6 Richtungen · Desktop + Mobil (responsive, F12 Mobilansicht)-->
+<!--  Echtes Logo (assets/racepoint-logo*.svg) · Rot #E83637 ·     -->
+<!--  Roboto Condensed. Echte YouTube-Videos & Thumbnails vom      -->
+<!--  Racepoint-Kanal. Hero-Videos laufen automatisch (stumm,Loop),-->
+<!--  Galerie-Videos starten per Klick. Achim/Team-Foto: racepoint.be -->
+<!--  Icons nur bei Telefon/WhatsApp + Play-Dreieck. ?v=1..6.       -->
+<!-- ============================================================= -->
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Roboto+Condensed:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: { extend: {
+    fontFamily: { cond:['"Roboto Condensed"','sans-serif'], anton:['Anton','sans-serif'], fraunces:['Fraunces','serif'] },
+    colors: { rp: { red:'#E83637', reddark:'#c5282a', ink:'#0e0f11', paper:'#f5f2ec' } }
+  } }
+}
+</script>
+
+<style>
+  html, body { background:#0e0f11; scroll-behavior:smooth; }
+  body, .variant { font-family:'Roboto Condensed', sans-serif; }
+  .variant { display:none; }
+  .variant.active { display:block; }
+  .hscroll{ scrollbar-width:none; -ms-overflow-style:none; }
+  .hscroll::-webkit-scrollbar{ display:none; }
+  .yt { cursor:pointer; }
+  .yt iframe, .heroframe iframe { border:0; }
+  .heroframe { position:absolute; inset:0; overflow:hidden; }
+  .cover-full { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:100vw; height:56.25vw; min-height:100%; min-width:177.78vh; pointer-events:none; }
+  .cover-box  { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  @keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(232,54,55,.5)} 70%{box-shadow:0 0 0 16px rgba(232,54,55,0)} 100%{box-shadow:0 0 0 0 rgba(232,54,55,0)} }
+  .ring { animation: pulse-ring 2.4s infinite; }
+  .skew-band{ transform: skewY(-3.5deg); } .skew-fix{ transform: skewY(3.5deg); }
+  /* Mobil-Menue: Hover + Tap-Feedback (greift auch auf Touch-Geraeten) */
+  .mnav{ transition: color .2s, border-color .2s, padding-left .2s; }
+  .mnav:hover, .mnav:active, .mnav:focus{ color:#E83637; border-color:#E83637; padding-left:.5rem; }
+  /* Bike-Slider (V3/V4): horizontal, scroll-snap, Pfeil-Steuerung */
+  .bstrack{ scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; }
+  .bstrack::-webkit-scrollbar{ display:none; }
+  .bslide{ scroll-snap-align:start; }
+  /* Kategorie-Auswahl (V4) */
+  .catpick{ transition: all .2s; }
+  .catpick.catactive{ outline:3px solid #E83637; outline-offset:2px; }
+  .catpick.catactive .catlabel{ color:#E83637; }
+  /* Chat-Simulation: Tipp-Animation */
+  .chatdot{ display:inline-block; width:6px; height:6px; margin:0 1px; border-radius:50%; background:#9ca3af; animation:chatblink 1.2s infinite both; }
+  .chatdot:nth-child(2){ animation-delay:.2s; } .chatdot:nth-child(3){ animation-delay:.4s; }
+  @keyframes chatblink{ 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+</style>
+</head>
+
+<body class="font-cond text-white">
+
+<!-- play-Dreieck, WhatsApp, Telefon als wiederverwendbare SVG-Symbole -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></symbol>
+  <symbol id="ic-wa" viewBox="0 0 32 32"><path fill="currentColor" d="M16.04 4C9.9 4 4.92 8.98 4.92 15.12c0 2.06.56 4.06 1.6 5.82L4.8 27l6.2-1.62c1.7.93 3.6 1.42 5.04 1.42h.01c6.14 0 11.12-4.98 11.12-11.12C27.17 8.98 22.18 4 16.04 4zm0 20.3c-1.5 0-2.97-.4-4.26-1.16l-.3-.18-3.68.96.98-3.59-.2-.31a9.1 9.1 0 01-1.4-4.84c0-5.03 4.1-9.12 9.13-9.12 2.44 0 4.73.95 6.45 2.68a9.06 9.06 0 012.67 6.45c0 5.03-4.1 9.12-9.12 9.12zm5.01-6.83c-.27-.14-1.62-.8-1.87-.89-.25-.09-.43-.14-.62.14-.18.27-.71.89-.87 1.07-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.36-.81-.72-1.36-1.62-1.52-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.35.98 2.65 1.12 2.84.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.52-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32z"/></symbol>
+</svg>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 1 — CINEMATIC : Hero-Video laeuft automatisch (stumm,Loop)  -->
+<!-- =================================================================== -->
+<section data-variant="1" class="variant bg-black text-white">
+  <header id="hdr1" class="fixed top-0 inset-x-0 z-40 transition-colors duration-300"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide text-white/80"><a class="cursor-pointer transition-colors hover:text-rp-red">Bikes</a><a class="cursor-pointer transition-colors hover:text-rp-red">Builds &amp; Videos</a><a class="cursor-pointer transition-colors hover:text-rp-red">Service</a><a class="cursor-pointer transition-colors hover:text-rp-red">Über Achim</a><a class="cursor-pointer transition-colors hover:text-rp-red">Kontakt</a></nav>
+    <div class="flex items-center gap-4"><div class="hidden sm:flex items-center gap-2 text-xs text-white/60"><button class="lang text-white font-semibold">DE</button>·<button class="lang">FR</button>·<button class="lang">NL</button>·<button class="lang">EN</button></div><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+  </div></header>
+
+  <div class="relative h-screen min-h-[680px] w-full overflow-hidden">
+    <!-- Hero = echtes Teaser-Video der bestehenden racepoint.be (selbst gehostet, laeuft ueberall, auch per Doppelklick) -->
+    <video id="heroVideo" class="absolute inset-0 h-full w-full object-cover brightness-110" autoplay muted loop playsinline poster="assets/teaser-poster.jpg"><source src="assets/racepoint-teaser.mp4" type="video/mp4"></video>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none"></div>
+    <button class="soundtoggle absolute top-24 right-5 z-20 rounded-full bg-black/40 backdrop-blur ring-1 ring-white/25 px-4 py-2 text-xs font-semibold uppercase tracking-wide">Ton an</button>
+    <div class="absolute bottom-0 inset-x-0 z-10 pointer-events-none"><div class="mx-auto max-w-7xl px-6 lg:px-10 pb-12 md:pb-16">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium mb-5"><span class="h-1.5 w-1.5 rounded-full bg-rp-red"></span> Specialized Elite Händler · ~80.000 Abos · ~18 Mio. Aufrufe</div>
+      <h1 class="font-anton text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight max-w-4xl uppercase">Der Experte aus den Videos. <span class="text-rp-red">Jetzt für dein Bike.</span></h1>
+      <p class="mt-4 text-lg md:text-xl text-white/80 max-w-2xl">80.000 Menschen schauen zu, wie hier aus Carbon Träume werden. Deiner ist der nächste. Beratung, Bikefitting und Werkstatt in Schönberg, Ostbelgien.</p>
+      <div class="mt-7 flex flex-wrap gap-3 pointer-events-auto">
+        <a class="rounded-xl bg-rp-red px-7 py-4 text-base font-bold uppercase hover:bg-rp-reddark transition">Termin · Beratung &amp; Bikefitting</a>
+        <a class="rounded-xl bg-white/15 backdrop-blur px-7 py-4 text-base font-semibold uppercase ring-1 ring-white/20 hover:bg-white/25 transition">Bike anfragen</a>
+        <a class="rounded-xl bg-white/15 backdrop-blur px-7 py-4 text-base font-semibold uppercase ring-1 ring-white/20 hover:bg-white/25 transition">Komm in den Laden</a>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Achim / Personenmarke: echtes Team-Foto von racepoint.be -->
+  <div class="border-t border-white/5"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-20 grid md:grid-cols-[1.1fr_1fr] gap-10 items-center">
+    <div>
+      <div class="text-sm text-rp-red font-semibold uppercase tracking-wider">Achim Leufgen · Meister Zweiradmechanik · Retuel-zertifiziert</div>
+      <p class="mt-3 text-2xl md:text-3xl font-light leading-snug">"Ich bin der Achim aus den Videos. Seit 18 Jahren baue ich Bikes, die wirklich passen. Komm vorbei, wir finden deins."</p>
+      <p class="mt-4 text-white/55">Mit Ehefrau Elke und dem Racepoint-Team in Schönberg, Ostbelgien.</p>
+    </div>
+    <figure><img src="assets/achim-team.jpg" class="w-full rounded-2xl object-cover ring-1 ring-white/10" alt="Achim, Elke und das Racepoint-Team"><figcaption class="mt-2 text-xs text-white/40">Das Racepoint-Team · Foto: racepoint.be</figcaption></figure>
+  </div></div>
+
+  <!-- Emotionaler Vollbild-Moment -->
+  <section class="relative h-[78vh] min-h-[500px] overflow-hidden">
+    <img src="assets/gefuehl-moment.jpg" class="absolute inset-0 h-full w-full object-cover object-center brightness-110" alt="Abfahrt im Abendlicht über dem Tal">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-black/35"></div>
+    <div class="relative h-full grid place-items-center text-center px-6 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]">
+      <div>
+        <p class="font-anton text-4xl md:text-6xl lg:text-7xl uppercase leading-[0.95] max-w-4xl mx-auto">Es geht nicht ums Rad.<br><span class="text-rp-red">Es geht um das Gefühl, wenn alles passt.</span></p>
+        <p class="mt-6 text-white/85 max-w-xl mx-auto text-lg">Vom ersten Tritt bis zum letzten Höhenmeter. Genau dafür bauen wir.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Builds: echte Videos (Klick startet) -->
+  <div class="border-t border-white/5"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-20">
+    <div class="flex items-end justify-between mb-8"><h2 class="font-anton text-4xl md:text-5xl uppercase">Builds &amp; Videos</h2><a class="text-sm text-rp-red font-semibold uppercase">Alle ansehen →</a></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="yt group relative aspect-[3/4] rounded-2xl overflow-hidden" data-id="9KIh7oOIPT4"><img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="h-full w-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><span class="absolute top-4 left-4 grid place-items-center h-10 w-10 rounded-full bg-rp-red text-white"><svg class="w-4 h-4 ml-0.5"><use href="#ic-play"/></svg></span><div class="absolute bottom-4 left-4 right-4"><div class="font-semibold leading-tight">S-Works Tarmac SL8 LTD · Unboxing</div><div class="text-xs text-white/60">Limited Edition</div></div></div>
+      <div class="yt group relative aspect-[3/4] rounded-2xl overflow-hidden" data-id="MHXDMPbMypQ"><img src="https://img.youtube.com/vi/MHXDMPbMypQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/MHXDMPbMypQ/hqdefault.jpg'" class="h-full w-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><span class="absolute top-4 left-4 grid place-items-center h-10 w-10 rounded-full bg-rp-red text-white"><svg class="w-4 h-4 ml-0.5"><use href="#ic-play"/></svg></span><div class="absolute bottom-4 left-4 right-4"><div class="font-semibold leading-tight">Tarmac SL7 S-Works · Rapid CLX</div><div class="text-xs text-white/60">Dreambuild · SRAM Red AXS</div></div></div>
+      <div class="yt group relative aspect-[3/4] rounded-2xl overflow-hidden" data-id="vV_rL9yq620"><img src="https://img.youtube.com/vi/vV_rL9yq620/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/vV_rL9yq620/hqdefault.jpg'" class="h-full w-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><span class="absolute top-4 left-4 grid place-items-center h-10 w-10 rounded-full bg-rp-red text-white"><svg class="w-4 h-4 ml-0.5"><use href="#ic-play"/></svg></span><div class="absolute bottom-4 left-4 right-4"><div class="font-semibold leading-tight">Aethos S-Works · Bike Ahead</div><div class="text-xs text-white/60">Roadbike · SRAM Red AXS</div></div></div>
+      <div class="yt group relative aspect-[3/4] rounded-2xl overflow-hidden" data-id="5TcRRpUy5T4"><img src="https://img.youtube.com/vi/5TcRRpUy5T4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/5TcRRpUy5T4/hqdefault.jpg'" class="h-full w-full object-cover group-hover:scale-105 transition duration-500"><div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div><span class="absolute top-4 left-4 grid place-items-center h-10 w-10 rounded-full bg-rp-red text-white"><svg class="w-4 h-4 ml-0.5"><use href="#ic-play"/></svg></span><div class="absolute bottom-4 left-4 right-4"><div class="font-semibold leading-tight">Cervélo S5 2023 · Princeton</div><div class="text-xs text-white/60">Bike Build · Dura-Ace 12s</div></div></div>
+    </div>
+  </div></div>
+
+  <!-- Showroom / Besuch (Vollbild) -->
+  <section class="relative overflow-hidden">
+    <img src="assets/shop-interior.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+    <div class="absolute inset-0 bg-black/45"></div>
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-10 py-28 md:py-36 text-center [text-shadow:0_2px_24px_rgba(0,0,0,.85)]">
+      <h2 class="font-anton text-4xl md:text-6xl uppercase">Komm vorbei, wo die Videos entstehen.</h2>
+      <p class="mt-5 text-white/80 max-w-2xl mx-auto text-lg">Ein Showroom voller Traumbikes, eine Werkstatt auf Profi-Niveau und der Experte, den du aus den Videos kennst. Mitten in Schönberg, Ostbelgien.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a class="rounded-xl bg-rp-red px-7 py-4 font-bold uppercase hover:bg-rp-reddark transition">Beratungstermin sichern</a>
+        <a class="rounded-xl bg-white/15 ring-1 ring-white/25 px-7 py-4 font-semibold uppercase">Anfahrt &amp; Öffnungszeiten</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service + Local -->
+  <div class="border-t border-white/5 bg-zinc-950"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-20 grid md:grid-cols-2 gap-12">
+    <div><h2 class="font-anton text-4xl uppercase">Service &amp; Bikefitting</h2><p class="mt-3 text-white/60 max-w-md">Retuel-Fit und Werkstatt für alle Marken, nicht nur Specialized. Vormittags Werkstatt-Fokus.</p><a class="mt-6 inline-block rounded-xl bg-rp-red px-7 py-4 font-bold uppercase hover:bg-rp-reddark transition">Bikefitting-Termin sichern</a></div>
+    <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-8">
+      <dl class="space-y-3 text-white/80">
+        <div><dt class="text-xs uppercase tracking-wider text-white/40">Adresse</dt><dd>Schönberg, Ostbelgien</dd></div>
+        <div><dt class="text-xs uppercase tracking-wider text-white/40">Öffnungszeiten</dt><dd>Di–Fr · Werkstatt vormittags</dd></div>
+      </dl>
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <a class="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3 font-semibold"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a>
+        <a class="flex items-center justify-center gap-2 rounded-xl ring-1 ring-white/20 px-5 py-3 font-semibold text-white/90"><svg class="w-4 h-4"><use href="#ic-phone"/></svg> Anrufen</a>
+      </div>
+    </div>
+  </div></div>
+
+  <footer class="border-t border-white/5"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-10 flex items-center justify-between text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Schönberg</span></div></footer>
+</section>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 2 — EMOTION : Hero-Video + grosse emotionale Vollbild-Bilder -->
+<!-- =================================================================== -->
+<section data-variant="2" class="variant bg-rp-ink text-white">
+  <header class="absolute top-0 inset-x-0 z-40"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,.6)]"><a class="cursor-pointer transition-colors hover:text-rp-red">Bikes</a><a class="cursor-pointer transition-colors hover:text-rp-red">Builds &amp; Videos</a><a class="cursor-pointer transition-colors hover:text-rp-red">Service</a><a class="cursor-pointer transition-colors hover:text-rp-red">Über Achim</a><a class="cursor-pointer transition-colors hover:text-rp-red">Kontakt</a></nav>
+    <div class="flex items-center gap-4"><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+  </div></header>
+
+  <!-- Hero = Vollbild-Video -->
+  <div class="relative h-screen min-h-[640px] w-full overflow-hidden">
+    <div class="heroplay absolute inset-0" data-id="9KIh7oOIPT4" data-cover="full"><img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt=""><div class="heroframe"></div></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/30 pointer-events-none"></div>
+    <div class="relative h-full grid place-items-center text-center px-6 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]">
+      <div>
+        <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium mb-5"><span class="h-1.5 w-1.5 rounded-full bg-rp-red"></span> Specialized Elite Händler · Ostbelgien</div>
+        <h1 class="font-anton text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.9]">Spür den<br><span class="text-rp-red">Unterschied.</span></h1>
+        <p class="mt-5 text-lg md:text-xl text-white/85 max-w-2xl mx-auto">80.000 Menschen schauen zu, wie hier aus Carbon Träume werden. Deiner ist der nächste.</p>
+        <div class="mt-8 flex flex-wrap gap-3 justify-center">
+          <a class="rounded-xl bg-rp-red px-7 py-4 text-base font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Termin · Beratung &amp; Bikefitting</a>
+          <a class="rounded-xl bg-white/15 backdrop-blur px-7 py-4 text-base font-semibold uppercase ring-1 ring-white/20 hover:bg-white/25 transition cursor-pointer">Bike anfragen</a>
+        </div>
+      </div>
+      <div class="absolute bottom-7 left-1/2 -translate-x-1/2 text-white/70 text-xs uppercase tracking-widest animate-pulse">↓ Scrollen</div>
+    </div>
+  </div>
+
+  <!-- Emotion 1 -->
+  <section class="relative h-[88vh] min-h-[500px] overflow-hidden">
+    <img src="assets/gefuehl-moment.jpg" class="absolute inset-0 h-full w-full object-cover object-center brightness-110" alt="">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/30"></div>
+    <div class="relative h-full grid items-end pb-16 md:pb-24 px-6 lg:px-10 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="mx-auto max-w-7xl w-full">
+      <p class="text-sm text-rp-red font-semibold uppercase tracking-wider">Das Gefühl</p>
+      <h2 class="mt-2 font-anton text-4xl md:text-6xl uppercase max-w-3xl leading-[0.95]">Wenn alles passt, vergisst du das Rad.</h2>
+    </div></div>
+  </section>
+
+  <!-- Emotion 2 -->
+  <section class="relative h-[88vh] min-h-[500px] overflow-hidden">
+    <img src="assets/mtb-action.jpg" class="absolute inset-0 h-full w-full object-cover object-center brightness-110" alt="">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/30"></div>
+    <div class="relative h-full grid items-end pb-16 md:pb-24 px-6 lg:px-10 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="mx-auto max-w-7xl w-full text-right ml-auto">
+      <p class="text-sm text-rp-red font-semibold uppercase tracking-wider">Der Trail</p>
+      <h2 class="mt-2 font-anton text-4xl md:text-6xl uppercase max-w-3xl leading-[0.95] ml-auto">Vom ersten Tritt bis zum letzten Höhenmeter.</h2>
+    </div></div>
+  </section>
+
+  <!-- Emotion 3 -->
+  <section class="relative h-[88vh] min-h-[500px] overflow-hidden">
+    <img src="assets/gravel-ride.jpg" class="absolute inset-0 h-full w-full object-cover object-center brightness-110" alt="">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/30"></div>
+    <div class="relative h-full grid items-end pb-16 md:pb-24 px-6 lg:px-10 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="mx-auto max-w-7xl w-full">
+      <p class="text-sm text-rp-red font-semibold uppercase tracking-wider">Die Strecke</p>
+      <h2 class="mt-2 font-anton text-4xl md:text-6xl uppercase max-w-3xl leading-[0.95]">Egal wohin. Hauptsache, es passt.</h2>
+    </div></div>
+  </section>
+
+  <!-- Abschluss: Komm vorbei -->
+  <section class="relative h-[80vh] min-h-[460px] overflow-hidden">
+    <img src="assets/shop-interior.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+    <div class="absolute inset-0 bg-black/45"></div>
+    <div class="relative h-full grid place-items-center text-center px-6 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div>
+      <h2 class="font-anton text-4xl md:text-6xl uppercase">Komm vorbei, wo die Videos entstehen.</h2>
+      <p class="mt-4 text-white/85 max-w-xl mx-auto text-lg">Showroom, Werkstatt und Bikefitting-Studio in Schönberg, Ostbelgien.</p>
+      <a class="mt-7 inline-block rounded-xl bg-rp-red px-8 py-4 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Termin · Anfahrt &amp; Öffnungszeiten</a>
+    </div></div>
+  </section>
+  <section class="border-t border-white/10 bg-rp-ink">
+    <div class="mx-auto max-w-7xl px-6 lg:px-10 py-14 grid gap-10 md:grid-cols-4">
+      <div>
+        <img src="assets/racepoint-logo-light.svg" class="h-6 w-auto" alt="Racepoint">
+        <p class="mt-4 text-sm text-white/60 leading-relaxed">Specialized Elite Händler in Schönberg, Ostbelgien. Der Experte aus den Videos · seit 18 Jahren bauen wir Bikes, die wirklich passen.</p>
+        <div class="mt-5 flex gap-3">
+          <a class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a>
+          <a class="inline-flex items-center gap-2 rounded-xl ring-1 ring-white/25 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-phone"/></svg> Anrufen</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Öffnungszeiten</div>
+        <ul class="mt-4 space-y-1.5 text-sm text-white/70">
+          <li class="flex justify-between gap-4"><span>Mo, Di, Mi, Fr</span><span class="text-white">13–18 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Samstag</span><span class="text-white">9–14 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Do &amp; So</span><span class="text-white/40">geschlossen</span></li>
+        </ul>
+        <p class="mt-3 text-xs text-white/40">Werkstatt arbeitet vormittags.</p>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Entdecken</div>
+        <ul class="mt-4 space-y-2 text-sm text-white/70">
+          <li><a class="cursor-pointer hover:text-rp-red transition">Bikes</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Builds &amp; Videos</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Service &amp; Bikefitting</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Über Achim</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Kontakt &amp; Anfahrt</div>
+        <p class="mt-4 text-sm text-white/70 leading-relaxed">Racepoint Bike Shop<br>Schönberg · Ostbelgien<br>Gut erreichbar aus DE, BE &amp; LU</p>
+        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/50"><span>~80.000 Abos</span><span>·</span><span>~18 Mio. Aufrufe</span></div>
+        <a class="mt-4 inline-block rounded-xl bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer hover:bg-rp-reddark transition">Termin buchen</a>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-black"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler</span></div></footer>
+</section>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 3 — NEUESTE BIKES : Hero-Video + Vollbild-Slider (wischen)   -->
+<!-- =================================================================== -->
+<section data-variant="3" class="variant bg-rp-ink text-white">
+  <header class="absolute top-0 inset-x-0 z-40"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,.6)]"><a class="cursor-pointer transition-colors hover:text-rp-red">Bikes</a><a class="cursor-pointer transition-colors hover:text-rp-red">Builds &amp; Videos</a><a class="cursor-pointer transition-colors hover:text-rp-red">Service</a><a class="cursor-pointer transition-colors hover:text-rp-red">Über Achim</a><a class="cursor-pointer transition-colors hover:text-rp-red">Kontakt</a></nav>
+    <div class="flex items-center gap-4"><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+  </div></header>
+
+  <!-- Hero = Vollbild-Video -->
+  <div class="relative h-[88vh] min-h-[600px] w-full overflow-hidden">
+    <div class="heroplay absolute inset-0" data-id="MHXDMPbMypQ" data-cover="full"><img src="https://img.youtube.com/vi/MHXDMPbMypQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/MHXDMPbMypQ/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt=""><div class="heroframe"></div></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30 pointer-events-none"></div>
+    <div class="relative h-full grid items-end pb-14 md:pb-20 px-6 lg:px-10 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="mx-auto max-w-7xl w-full">
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium mb-4"><span class="h-1.5 w-1.5 rounded-full bg-rp-red"></span> Frisch gebaut · echte Builds aus den Videos</div>
+      <h1 class="font-anton text-5xl md:text-7xl uppercase leading-[0.9] max-w-4xl">Aus Carbon werden<br><span class="text-rp-red">Träume.</span></h1>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a class="rounded-xl bg-rp-red px-7 py-4 text-base font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Termin · Beratung</a>
+        <a class="rounded-xl bg-white/15 backdrop-blur px-7 py-4 text-base font-semibold uppercase ring-1 ring-white/20 hover:bg-white/25 transition cursor-pointer">Bike anfragen</a>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- Slider: neueste Bikes -->
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 pt-14 pb-6 flex items-end justify-between">
+    <div><div class="text-sm text-rp-red font-semibold uppercase tracking-wider">Frisch im Laden</div><h2 class="font-anton text-4xl md:text-6xl uppercase">Die neuesten Bikes</h2></div>
+    <div class="hidden sm:block text-white/50 text-sm uppercase tracking-widest self-end pb-2">→ wischen</div>
+  </div>
+  <div class="bikeslider relative">
+    <div class="bstrack flex overflow-x-auto">
+      <article class="bslide shrink-0 w-full relative h-[78vh] min-h-[520px]">
+        <img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Tarmac SL8 LTD</h3>
+          <p class="mt-3 text-white/85 text-lg">Das Aero-Allround-Flaggschiff. Limited Edition Forward 50.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Red AXS</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Roval Rapide CLX</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">6,8 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="9KIh7oOIPT4">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[78vh] min-h-[520px]">
+        <img src="https://img.youtube.com/vi/cIBBbESSOoc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/cIBBbESSOoc/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Gravel</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Crux</h3>
+          <p class="mt-3 text-white/85 text-lg">Das leichteste Gravelbike, das Specialized je gebaut hat. Für die Ardennen gemacht.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Force XPLR</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Pathfinder Pro</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">7,25 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="cIBBbESSOoc">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[78vh] min-h-[520px]">
+        <img src="https://img.youtube.com/vi/vV_rL9yq620/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/vV_rL9yq620/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Aethos</h3>
+          <p class="mt-3 text-white/85 text-lg">Pures Fahrgefühl statt Aero-Diktat. Einer der leichtesten Rahmen der Welt.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Red AXS</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Roval Alpinist</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">6,1 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="vV_rL9yq620">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[78vh] min-h-[520px]">
+        <img src="https://img.youtube.com/vi/5TcRRpUy5T4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/5TcRRpUy5T4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">Cervélo S5</h3>
+          <p class="mt-3 text-white/85 text-lg">Kompromisslose Aero-Maschine mit Princeton-Laufrädern. Gebaut für Tempo.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Dura-Ace Di2</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Princeton CarbonWorks</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Aero</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="5TcRRpUy5T4">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[78vh] min-h-[520px]">
+        <img src="https://img.youtube.com/vi/WHggv7Jye4M/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/WHggv7Jye4M/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Triathlon</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Shiv</h3>
+          <p class="mt-3 text-white/85 text-lg">Die Zeitfahr-Waffe. Jede Linie auf Windschnittigkeit getrimmt.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Dura-Ace</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Integriert</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Tiefe Aero</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="WHggv7Jye4M">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+    </div>
+    <button class="bsprev absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 grid place-items-center h-12 w-12 rounded-full bg-black/50 backdrop-blur ring-1 ring-white/20 hover:bg-rp-red transition text-2xl leading-none pb-1">‹</button>
+    <button class="bsnext absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 grid place-items-center h-12 w-12 rounded-full bg-black/50 backdrop-blur ring-1 ring-white/20 hover:bg-rp-red transition text-2xl leading-none pb-1">›</button>
+    <div class="bscount absolute bottom-5 right-5 z-10 text-sm font-semibold tracking-widest bg-black/50 backdrop-blur rounded-full px-4 py-1.5">01 / 05</div>
+  </div>
+  <section class="border-t border-white/10 bg-rp-ink mt-2">
+    <div class="mx-auto max-w-7xl px-6 lg:px-10 py-14 grid gap-10 md:grid-cols-4">
+      <div>
+        <img src="assets/racepoint-logo-light.svg" class="h-6 w-auto" alt="Racepoint">
+        <p class="mt-4 text-sm text-white/60 leading-relaxed">Specialized Elite Händler in Schönberg, Ostbelgien. Der Experte aus den Videos · seit 18 Jahren bauen wir Bikes, die wirklich passen.</p>
+        <div class="mt-5 flex gap-3">
+          <a class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a>
+          <a class="inline-flex items-center gap-2 rounded-xl ring-1 ring-white/25 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-phone"/></svg> Anrufen</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Öffnungszeiten</div>
+        <ul class="mt-4 space-y-1.5 text-sm text-white/70">
+          <li class="flex justify-between gap-4"><span>Mo, Di, Mi, Fr</span><span class="text-white">13–18 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Samstag</span><span class="text-white">9–14 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Do &amp; So</span><span class="text-white/40">geschlossen</span></li>
+        </ul>
+        <p class="mt-3 text-xs text-white/40">Werkstatt arbeitet vormittags.</p>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Entdecken</div>
+        <ul class="mt-4 space-y-2 text-sm text-white/70">
+          <li><a class="cursor-pointer hover:text-rp-red transition">Bikes</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Builds &amp; Videos</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Service &amp; Bikefitting</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Über Achim</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Kontakt &amp; Anfahrt</div>
+        <p class="mt-4 text-sm text-white/70 leading-relaxed">Racepoint Bike Shop<br>Schönberg · Ostbelgien<br>Gut erreichbar aus DE, BE &amp; LU</p>
+        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/50"><span>~80.000 Abos</span><span>·</span><span>~18 Mio. Aufrufe</span></div>
+        <a class="mt-4 inline-block rounded-xl bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer hover:bg-rp-reddark transition">Termin buchen</a>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-black"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler</span></div></footer>
+</section>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 4 — FINDE DEIN BIKE : Hero-Video + Typ-Auswahl, adaptiver Slider -->
+<!-- =================================================================== -->
+<section data-variant="4" class="variant bg-rp-ink text-white">
+  <header class="absolute top-0 inset-x-0 z-40"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,.6)]"><a class="cursor-pointer transition-colors hover:text-rp-red">Bikes</a><a class="cursor-pointer transition-colors hover:text-rp-red">Builds &amp; Videos</a><a class="cursor-pointer transition-colors hover:text-rp-red">Service</a><a class="cursor-pointer transition-colors hover:text-rp-red">Über Achim</a><a class="cursor-pointer transition-colors hover:text-rp-red">Kontakt</a></nav>
+    <div class="flex items-center gap-4"><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+  </div></header>
+
+  <!-- Hero = Vollbild-Video -->
+  <div class="relative h-[80vh] min-h-[560px] w-full overflow-hidden">
+    <div class="heroplay absolute inset-0" data-id="9KIh7oOIPT4" data-cover="full"><img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt=""><div class="heroframe"></div></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/30 pointer-events-none"></div>
+    <div class="relative h-full grid place-items-center text-center px-6 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div>
+      <h1 class="font-anton text-5xl md:text-7xl uppercase leading-[0.9]">Welcher Fahrer<br><span class="text-rp-red">bist du?</span></h1>
+      <p class="mt-5 text-lg md:text-xl text-white/85 max-w-2xl mx-auto">Sag uns deinen Stil, wir zeigen dir die passenden Bikes. Den Rest klärt Achim persönlich.</p>
+    </div></div>
+  </div>
+
+  <!-- Typ-Auswahl -->
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 pt-12">
+    <div class="text-sm font-semibold uppercase tracking-wider text-white/50 mb-4">Wähle deinen Typ</div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <button class="catpick catactive relative h-40 rounded-2xl overflow-hidden ring-1 ring-white/10 text-left" data-cat="rennrad">
+        <img src="assets/roadbike-shop.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-black/20"></div>
+        <div class="absolute bottom-4 left-5 [text-shadow:0_2px_16px_rgba(0,0,0,.85)]"><div class="catlabel font-anton text-3xl uppercase">Rennrad</div><div class="text-sm text-white/70">Asphalt · Tempo · Aero</div></div>
+      </button>
+      <button class="catpick relative h-40 rounded-2xl overflow-hidden ring-1 ring-white/10 text-left" data-cat="gravel">
+        <img src="assets/gravel-ride.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-black/20"></div>
+        <div class="absolute bottom-4 left-5 [text-shadow:0_2px_16px_rgba(0,0,0,.85)]"><div class="catlabel font-anton text-3xl uppercase">Gravel</div><div class="text-sm text-white/70">Schotter · Abenteuer · Weite</div></div>
+      </button>
+      <button class="catpick relative h-40 rounded-2xl overflow-hidden ring-1 ring-white/10 text-left" data-cat="mtb">
+        <img src="assets/mtb-action.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-black/20"></div>
+        <div class="absolute bottom-4 left-5 [text-shadow:0_2px_16px_rgba(0,0,0,.85)]"><div class="catlabel font-anton text-3xl uppercase">MTB</div><div class="text-sm text-white/70">Trail · Wald · Adrenalin</div></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Adaptiver Slider -->
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 pt-10 pb-6 flex items-end justify-between">
+    <h2 class="font-anton text-3xl md:text-5xl uppercase">Passende Bikes</h2>
+    <div class="hidden sm:block text-white/50 text-sm uppercase tracking-widest self-end pb-2">→ wischen</div>
+  </div>
+  <div class="bikeslider relative">
+    <div class="bstrack flex overflow-x-auto">
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="rennrad">
+        <img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Tarmac SL8 LTD</h3>
+          <p class="mt-3 text-white/85 text-lg">Aero trifft Leichtbau. Das Allround-Flaggschiff.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Red AXS</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Roval Rapide</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">6,8 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="9KIh7oOIPT4">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="rennrad">
+        <img src="https://img.youtube.com/vi/vV_rL9yq620/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/vV_rL9yq620/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Aethos</h3>
+          <p class="mt-3 text-white/85 text-lg">Pures Fahrgefühl, kompromissloser Leichtbau.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Red AXS</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Roval Alpinist</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">6,1 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="vV_rL9yq620">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="rennrad">
+        <img src="https://img.youtube.com/vi/5TcRRpUy5T4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/5TcRRpUy5T4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Rennrad</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">Cervélo S5</h3>
+          <p class="mt-3 text-white/85 text-lg">Kompromisslose Aero-Maschine, gebaut für Tempo.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Dura-Ace Di2</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Princeton</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Aero</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="5TcRRpUy5T4">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="gravel">
+        <img src="https://img.youtube.com/vi/cIBBbESSOoc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/cIBBbESSOoc/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Gravel</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Crux</h3>
+          <p class="mt-3 text-white/85 text-lg">Das leichteste Gravelbike von Specialized. Für die Ardennen.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Force XPLR</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Pathfinder Pro</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">7,25 kg</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="yt rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer" data-id="cIBBbESSOoc">Video ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="gravel">
+        <img src="assets/gravel-ride.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">Gravel</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">Specialized Diverge STR</h3>
+          <p class="mt-3 text-white/85 text-lg">Federung an Front und Heck. Komfort für die ganz langen Touren.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Future Shock 2.0</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">SRAM Rival XPLR</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Bikepacking-ready</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer">Im Laden ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="mtb">
+        <img src="assets/mtb-action.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">MTB</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">Stumpjumper EVO</h3>
+          <p class="mt-3 text-white/85 text-lg">Der Trail-Allrounder. Verstellbare Geometrie, GENIE-Dämpfer.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">150 mm</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">GENIE Shock</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">29&quot;</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer">Im Laden ansehen</a></div>
+        </div></div></div>
+      </article>
+      <article class="bslide shrink-0 w-full relative h-[74vh] min-h-[480px]" data-cat="mtb">
+        <img src="assets/mtb-ridge.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/5 md:bg-gradient-to-r md:from-black/90 md:via-black/45 md:to-transparent"></div>
+        <div class="relative h-full flex items-end md:items-center"><div class="mx-auto max-w-7xl w-full px-6 lg:px-10 pb-20 md:pb-0 [text-shadow:0_2px_24px_rgba(0,0,0,.85)]"><div class="max-w-xl">
+          <span class="inline-block rounded-full bg-rp-red px-3 py-1 text-xs font-bold uppercase">MTB</span>
+          <h3 class="mt-4 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">S-Works Epic 8</h3>
+          <p class="mt-3 text-white/85 text-lg">Das Race-Hardtail-Gefühl im Fully. Marathon und XC pur.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-sm"><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">120 mm</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">Brain-Dämpfer</span><span class="rounded-lg bg-white/10 ring-1 ring-white/15 px-3 py-1.5">XC-Race</span></div>
+          <div class="mt-6 flex flex-wrap gap-3"><a class="rounded-xl bg-rp-red px-6 py-3.5 font-bold uppercase hover:bg-rp-reddark transition cursor-pointer">Anfragen</a><a class="rounded-xl bg-white/15 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/25 transition cursor-pointer">Im Laden ansehen</a></div>
+        </div></div></div>
+      </article>
+    </div>
+    <button class="bsprev absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-10 grid place-items-center h-12 w-12 rounded-full bg-black/50 backdrop-blur ring-1 ring-white/20 hover:bg-rp-red transition text-2xl leading-none pb-1">‹</button>
+    <button class="bsnext absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-10 grid place-items-center h-12 w-12 rounded-full bg-black/50 backdrop-blur ring-1 ring-white/20 hover:bg-rp-red transition text-2xl leading-none pb-1">›</button>
+    <div class="bscount absolute bottom-5 right-5 z-10 text-sm font-semibold tracking-widest bg-black/50 backdrop-blur rounded-full px-4 py-1.5">01 / 03</div>
+  </div>
+  <section class="border-t border-white/10 bg-rp-ink mt-2">
+    <div class="mx-auto max-w-7xl px-6 lg:px-10 py-14 grid gap-10 md:grid-cols-4">
+      <div>
+        <img src="assets/racepoint-logo-light.svg" class="h-6 w-auto" alt="Racepoint">
+        <p class="mt-4 text-sm text-white/60 leading-relaxed">Specialized Elite Händler in Schönberg, Ostbelgien. Der Experte aus den Videos · seit 18 Jahren bauen wir Bikes, die wirklich passen.</p>
+        <div class="mt-5 flex gap-3">
+          <a class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a>
+          <a class="inline-flex items-center gap-2 rounded-xl ring-1 ring-white/25 px-4 py-2.5 text-sm font-semibold cursor-pointer"><svg class="w-5 h-5"><use href="#ic-phone"/></svg> Anrufen</a>
+        </div>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Öffnungszeiten</div>
+        <ul class="mt-4 space-y-1.5 text-sm text-white/70">
+          <li class="flex justify-between gap-4"><span>Mo, Di, Mi, Fr</span><span class="text-white">13–18 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Samstag</span><span class="text-white">9–14 Uhr</span></li>
+          <li class="flex justify-between gap-4"><span>Do &amp; So</span><span class="text-white/40">geschlossen</span></li>
+        </ul>
+        <p class="mt-3 text-xs text-white/40">Werkstatt arbeitet vormittags.</p>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Entdecken</div>
+        <ul class="mt-4 space-y-2 text-sm text-white/70">
+          <li><a class="cursor-pointer hover:text-rp-red transition">Bikes</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Builds &amp; Videos</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Service &amp; Bikefitting</a></li>
+          <li><a class="cursor-pointer hover:text-rp-red transition">Über Achim</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="text-sm font-semibold uppercase tracking-wider text-rp-red">Kontakt &amp; Anfahrt</div>
+        <p class="mt-4 text-sm text-white/70 leading-relaxed">Racepoint Bike Shop<br>Schönberg · Ostbelgien<br>Gut erreichbar aus DE, BE &amp; LU</p>
+        <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/50"><span>~80.000 Abos</span><span>·</span><span>~18 Mio. Aufrufe</span></div>
+        <a class="mt-4 inline-block rounded-xl bg-rp-red px-5 py-2.5 text-sm font-bold uppercase cursor-pointer hover:bg-rp-reddark transition">Termin buchen</a>
+      </div>
+    </div>
+  </section>
+  <footer class="bg-black"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler</span></div></footer>
+</section>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 5 — BOLD / SPORTLICH : Rot+Schwarz, Diagonalen, Hero-Video  -->
+<!-- =================================================================== -->
+<section data-variant="5" class="variant bg-rp-ink text-white overflow-hidden">
+  <header class="sticky top-0 z-40 bg-rp-ink/90 backdrop-blur"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-white.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-7 text-sm font-bold uppercase tracking-wide text-white/70"><a>Bikes</a><a>Builds</a><a>Service</a><a>Achim</a></nav>
+    <a class="hidden md:inline-block rounded-full bg-black px-5 py-2.5 text-sm font-bold uppercase">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div></header>
+
+  <div class="relative">
+    <div class="absolute -top-24 -left-24 -right-24 h-[640px] bg-rp-red skew-band"></div>
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-10 pt-10 grid lg:grid-cols-2 gap-10 items-center">
+      <div class="text-white"><div class="font-bold text-sm tracking-[0.25em] uppercase">Specialized Elite · Ostbelgien</div><h1 class="font-anton text-7xl md:text-8xl lg:text-9xl leading-[0.82] mt-3 uppercase">Bau<br>dein<br>Bike.</h1><div class="mt-6 flex flex-wrap gap-3"><a class="rounded-2xl bg-black px-7 py-4 font-bold uppercase tracking-wide">Termin &amp; Bikefitting →</a><a class="rounded-2xl bg-white/15 ring-1 ring-white/25 px-7 py-4 font-bold uppercase tracking-wide">Bike anfragen</a></div></div>
+      <div class="heroplay relative rounded-3xl overflow-hidden ring-4 ring-black shadow-2xl aspect-video" data-id="9KIh7oOIPT4" data-cover="box"><img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="w-full h-full object-cover"><div class="heroframe"></div></div>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 mt-12"><div class="grid grid-cols-3 rounded-3xl bg-white/5 ring-1 ring-white/10 divide-x divide-white/10 text-center"><div class="py-6"><div class="font-anton text-4xl text-rp-red">80K</div><div class="text-xs text-white/50 tracking-widest">ABOS</div></div><div class="py-6"><div class="font-anton text-4xl text-rp-red">18M</div><div class="text-xs text-white/50 tracking-widest">VIEWS</div></div><div class="py-6"><div class="font-anton text-4xl text-rp-red">18J</div><div class="text-xs text-white/50 tracking-widest">MEISTER</div></div></div></div>
+
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 mt-16">
+    <h2 class="font-anton text-5xl uppercase">Latest <span class="text-rp-red">Builds</span></h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="yt relative rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 aspect-video" data-id="MHXDMPbMypQ"><img src="https://img.youtube.com/vi/MHXDMPbMypQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/MHXDMPbMypQ/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-12 w-12 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-2 left-3 font-bold uppercase text-sm drop-shadow">Tarmac SL7 · Rapid CLX</span></div>
+      <div class="yt relative rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 aspect-video" data-id="cIBBbESSOoc"><img src="https://img.youtube.com/vi/cIBBbESSOoc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/cIBBbESSOoc/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-12 w-12 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-2 left-3 font-bold uppercase text-sm drop-shadow">Crux · Gravel</span></div>
+      <div class="yt relative rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 aspect-video" data-id="WHggv7Jye4M"><img src="https://img.youtube.com/vi/WHggv7Jye4M/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/WHggv7Jye4M/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-12 w-12 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-2 left-3 font-bold uppercase text-sm drop-shadow">S-Works Shiv</span></div>
+      <div class="yt relative rounded-2xl overflow-hidden bg-white/5 ring-1 ring-white/10 aspect-video" data-id="5TcRRpUy5T4"><img src="https://img.youtube.com/vi/5TcRRpUy5T4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/5TcRRpUy5T4/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-12 w-12 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-2 left-3 font-bold uppercase text-sm drop-shadow">Cervélo S5</span></div>
+    </div>
+  </div>
+
+  <div class="relative mt-20"><div class="bg-rp-red skew-band py-16"><div class="skew-fix text-center px-6"><div class="font-anton text-5xl md:text-6xl uppercase">Komm vorbei.</div><div class="text-lg text-white/90 mt-1">Schönberg · Werkstatt vormittags</div><a class="inline-flex items-center gap-2 mt-5 rounded-full bg-black px-8 py-3.5 font-bold uppercase tracking-wide"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a></div></div></div>
+  <footer class="bg-black"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-8 flex items-center justify-between text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint</span></div></footer>
+</section>
+
+
+<!-- =================================================================== -->
+<!-- VARIANTE 6 — IMMERSIVE / STORY : dunkel, fullscreen, video-getrieben, emotional -->
+<!-- =================================================================== -->
+<section data-variant="6" class="variant bg-rp-ink text-white">
+  <header class="sticky top-0 z-40 bg-rp-ink/85 backdrop-blur"><div class="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint">
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wide text-white/80"><a class="hover:text-white">Bikes</a><a class="hover:text-white">Builds</a><a class="hover:text-white">Service</a><a class="hover:text-white">Über Achim</a><a class="hover:text-white">Kontakt</a></nav>
+    <div class="flex items-center gap-3"><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+  </div></header>
+
+  <!-- Fullscreen Hero (echtes Build-Video, laeuft automatisch) -->
+  <div class="relative h-screen min-h-[640px] w-full overflow-hidden -mt-20">
+    <div class="heroplay absolute inset-0" data-id="9KIh7oOIPT4" data-cover="full"><img src="https://img.youtube.com/vi/9KIh7oOIPT4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/9KIh7oOIPT4/hqdefault.jpg'" class="absolute inset-0 h-full w-full object-cover" alt=""><div class="heroframe"></div></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-black/75 pointer-events-none"></div>
+    <div class="relative h-full grid place-items-center text-center px-6">
+      <div>
+        <div class="text-rp-red font-bold tracking-[0.3em] uppercase text-sm">Racepoint · Ostbelgien</div>
+        <h1 class="mt-4 font-anton text-6xl md:text-8xl uppercase leading-[0.88]">Träume aus Carbon.</h1>
+        <p class="mt-5 text-white/80 max-w-xl mx-auto text-lg">80.000 Menschen schauen zu, wie hier Bikes entstehen, die wirklich passen. Deins ist der nächste.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3"><a class="rounded-xl bg-rp-red px-7 py-4 font-bold uppercase hover:bg-rp-reddark transition">Termin sichern</a><a class="rounded-xl bg-white/15 backdrop-blur ring-1 ring-white/25 px-7 py-4 font-semibold uppercase">Bike anfragen</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story: Achim + Team -->
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 py-24 grid lg:grid-cols-2 gap-12 items-center">
+    <figure class="order-2 lg:order-1"><img src="assets/achim-team.jpg" class="w-full rounded-2xl object-cover ring-1 ring-white/10" alt="Achim, Elke und das Racepoint-Team"></figure>
+    <div class="order-1 lg:order-2">
+      <div class="text-rp-red font-semibold uppercase tracking-wider text-sm">Der Mensch hinter Racepoint</div>
+      <h2 class="mt-3 font-anton text-4xl md:text-5xl uppercase leading-tight">Achim. Meister. Aus den Videos.</h2>
+      <p class="mt-4 text-white/70 text-lg">Seit 18 Jahren baut Achim Leufgen Bikes in Schönberg, gemeinsam mit Elke und dem Team. Retuel-zertifiziert, Specialized Elite Händler, und immer mit der Kamera dabei.</p>
+      <a class="mt-6 inline-block rounded-xl bg-white/10 ring-1 ring-white/20 px-6 py-3.5 font-semibold uppercase hover:bg-white/20 transition">Die ganze Geschichte</a>
+    </div>
+  </div>
+
+  <!-- Fullscreen Showroom -->
+  <section class="relative overflow-hidden">
+    <img src="assets/shop-interior.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative mx-auto max-w-7xl px-6 lg:px-10 py-32 md:py-40 text-center">
+      <h2 class="font-anton text-4xl md:text-6xl uppercase">Mehr als ein Laden.</h2>
+      <p class="mt-5 text-white/80 max-w-2xl mx-auto text-lg">Showroom, Profi-Werkstatt und Bikefitting-Studio unter einem Dach. Komm vorbei und erlebe, was du aus den Videos kennst.</p>
+      <a class="mt-8 inline-block rounded-xl bg-rp-red px-7 py-4 font-bold uppercase hover:bg-rp-reddark transition">Anfahrt &amp; Öffnungszeiten</a>
+    </div>
+  </section>
+
+  <!-- Builds (Lightbox) -->
+  <div class="mx-auto max-w-7xl px-6 lg:px-10 py-24">
+    <div class="flex items-end justify-between mb-8"><h2 class="font-anton text-4xl md:text-5xl uppercase">Die Builds</h2><a class="text-sm text-rp-red font-semibold uppercase">Alle Videos →</a></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="yt relative rounded-2xl overflow-hidden aspect-video ring-1 ring-white/10" data-id="MHXDMPbMypQ"><img src="https://img.youtube.com/vi/MHXDMPbMypQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/MHXDMPbMypQ/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-14 w-14 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-3 left-3 font-semibold drop-shadow uppercase text-sm">Tarmac SL7 · Rapid CLX</span></div>
+      <div class="yt relative rounded-2xl overflow-hidden aspect-video ring-1 ring-white/10" data-id="5TcRRpUy5T4"><img src="https://img.youtube.com/vi/5TcRRpUy5T4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/5TcRRpUy5T4/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-14 w-14 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-3 left-3 font-semibold drop-shadow uppercase text-sm">Cervélo S5 · Princeton</span></div>
+      <div class="yt relative rounded-2xl overflow-hidden aspect-video ring-1 ring-white/10" data-id="WHggv7Jye4M"><img src="https://img.youtube.com/vi/WHggv7Jye4M/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/WHggv7Jye4M/hqdefault.jpg'" class="h-full w-full object-cover"><span class="absolute inset-0 grid place-items-center"><span class="grid place-items-center h-14 w-14 rounded-full bg-rp-red text-white"><svg class="w-5 h-5 ml-0.5"><use href="#ic-play"/></svg></span></span><span class="absolute bottom-3 left-3 font-semibold drop-shadow uppercase text-sm">S-Works Shiv</span></div>
+    </div>
+  </div>
+
+  <!-- Emotionaler Vollbild-Abschluss -->
+  <section class="relative h-[72vh] min-h-[440px] overflow-hidden">
+    <img src="assets/achim-ride.jpg" class="absolute inset-0 h-full w-full object-cover brightness-110" alt="">
+    <div class="absolute inset-0 bg-black/35"></div>
+    <div class="relative h-full grid place-items-center text-center px-6">
+      <div>
+        <p class="font-anton text-4xl md:text-6xl lg:text-7xl uppercase leading-[0.95] max-w-4xl mx-auto">Dein nächstes Abenteuer<br><span class="text-rp-red">beginnt bei uns.</span></p>
+        <a class="mt-8 inline-flex items-center gap-2 rounded-full bg-green-600 px-7 py-3.5 font-semibold"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> Jetzt schreiben</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10"><div class="mx-auto max-w-7xl px-6 lg:px-10 py-10 flex items-center justify-between text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Schönberg, Ostbelgien</span></div></footer>
+</section>
+
+
+<!-- ===================== Variante 7 · Kunden-Feedback (interne Auswertung) ===================== -->
+<section data-variant="7" class="variant bg-rp-ink text-white">
+  <header class="sticky top-0 z-40 bg-rp-ink/90 backdrop-blur border-b border-white/10"><div class="mx-auto max-w-6xl px-6 lg:px-10 h-16 flex items-center justify-between">
+    <img src="assets/racepoint-logo-light.svg" class="h-5 w-auto" alt="Racepoint">
+    <span class="text-[11px] uppercase tracking-[0.25em] text-white/40">Interne Auswertung · nicht öffentlich</span>
+  </div></header>
+
+  <!-- Titel -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pt-12 pb-8">
+    <div class="text-rp-red font-bold tracking-[0.25em] uppercase text-xs">Kunden-Feedback zu den 6 Entwürfen</div>
+    <h1 class="mt-3 font-anton text-4xl md:text-6xl uppercase leading-[0.95]">Was 8 Kundentypen<br>über die Startseite sagen</h1>
+    <p class="mt-5 text-white/70 max-w-3xl text-lg">8 typische Racepoint-Kunden haben alle 6 Entwürfe durchgeklickt und <strong class="text-white">ehrliches, ungeschöntes Feedback</strong> gegeben. Hier das Ergebnis auf einen Blick · damit du, Achim, die Richtung mit echten Stimmen im Kopf entscheidest.</p>
+    <p class="mt-2 text-xs text-white/40">Bewertung je Entwurf von 1 (gar nicht) bis 5 (begeistert) Sterne. Die 8 Typen sind unten einzeln aufgeführt.</p>
+  </div>
+
+  <!-- Ranking-Balken -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-12">
+    <h2 class="font-anton text-2xl md:text-3xl uppercase mb-5">Gesamt-Ranking <span class="text-white/40 text-base normal-case font-sans">· Durchschnitt aller 8 Kunden</span></h2>
+    <div class="space-y-3">
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-rp-red px-2 py-0.5 text-xs font-bold mr-2">PLATZ 1</span><span class="font-semibold uppercase text-sm">V1 Cinematic</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-rp-red flex items-center justify-end pr-3 text-sm font-bold" style="width:72.5%">3,6 ★</div></div></div>
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-white/15 px-2 py-0.5 text-xs font-bold mr-2">PLATZ 2</span><span class="font-semibold uppercase text-sm">V4 Finde dein Bike</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-rp-red/80 flex items-center justify-end pr-3 text-sm font-bold" style="width:65%">3,3 ★</div></div></div>
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-white/15 px-2 py-0.5 text-xs font-bold mr-2">PLATZ 3</span><span class="font-semibold uppercase text-sm">V6 Minimal/Clean</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-white/40 flex items-center justify-end pr-3 text-sm font-bold" style="width:57.5%">2,9 ★</div></div></div>
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-white/10 px-2 py-0.5 text-xs font-bold mr-2 text-white/60">PLATZ 4</span><span class="font-semibold uppercase text-sm text-white/80">V3 Neueste Bikes</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-white/30 flex items-center justify-end pr-3 text-sm font-bold" style="width:55%">2,8 ★</div></div></div>
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-white/10 px-2 py-0.5 text-xs font-bold mr-2 text-white/60">PLATZ 5</span><span class="font-semibold uppercase text-sm text-white/80">V2 Emotion</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-white/25 flex items-center justify-end pr-3 text-sm font-bold" style="width:50%">2,5 ★</div></div></div>
+      <div class="flex items-center gap-4"><div class="w-40 shrink-0"><span class="inline-block rounded bg-white/10 px-2 py-0.5 text-xs font-bold mr-2 text-white/60">PLATZ 6</span><span class="font-semibold uppercase text-sm text-white/80">V5 Bold/Sportlich</span></div><div class="flex-1 h-7 rounded bg-white/10 overflow-hidden"><div class="h-full bg-white/20 flex items-center justify-end pr-3 text-sm font-bold" style="width:45%">2,3 ★</div></div></div>
+    </div>
+  </div>
+
+  <!-- Empfehlung -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-12">
+    <div class="rounded-2xl bg-rp-red/15 ring-1 ring-rp-red/40 p-6 md:p-8">
+      <div class="text-rp-red font-bold uppercase tracking-wider text-sm mb-2">Empfehlung aus dem Feedback</div>
+      <p class="text-lg md:text-xl leading-relaxed"><strong class="text-white">V1 (Cinematic) als Richtung</strong> · sie macht Achims Personenmarke und das Video sofort sichtbar, das überzeugt fast alle. <strong class="text-white">Plus die Selbst-Auswahl aus V4 ("Finde dein Bike")</strong> einbauen, damit sich auch MTBler, E-Bike-, Einsteiger- und Budget-Kunden gemeint fühlen · die fallen sonst durchs Raster. Dazu echte Eckdaten-Chips (V3) für Specialized-Sucher, "Werkstatt für alle Marken", Öffnungszeiten und eine <em>funktionierende</em> Sprachwahl früh sichtbar.</p>
+    </div>
+  </div>
+
+  <!-- Querschnitt-Befunde -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-12">
+    <h2 class="font-anton text-2xl md:text-3xl uppercase mb-5">Das sagen fast alle · die wichtigsten Muster</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="rounded-xl bg-green-500/10 ring-1 ring-green-500/30 p-5"><div class="text-green-400 text-xs font-bold uppercase tracking-wider mb-1">Stärke</div><div class="font-semibold">Achim ist der stärkste Hebel.</div><p class="text-sm text-white/70 mt-1">Wo Achim und Video früh stehen, gewinnt der Entwurf. "Der aus den Videos" wird sofort wiedererkannt und schafft Vertrauen.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-rp-red text-xs font-bold uppercase tracking-wider mb-1">Hoch · 4 von 8 betroffen</div><div class="font-semibold">Zu eng auf High-End-Rennrad.</div><p class="text-sm text-white/70 mt-1">MTBler, E-Biker, Einsteiger und Budget-Kunden fühlen sich nicht gemeint ("nichts für mich"). Die Sortiments-Breite ist unsichtbar.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-rp-red text-xs font-bold uppercase tracking-wider mb-1">Hoch</div><div class="font-semibold">MTB fast unsichtbar.</div><p class="text-sm text-white/70 mt-1">Nur V4 zeigt überhaupt ein MTB. Enduro/Downhill und Fahrwerk-Service fehlen ganz · obwohl Eifel & Ardennen vor der Tür liegen.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-rp-red text-xs font-bold uppercase tracking-wider mb-1">Hoch</div><div class="font-semibold">E-Bike kommt nirgends vor.</div><p class="text-sm text-white/70 mt-1">Das Wort steht nur im Chat · Einsteiger glauben, es gibt keine. Leasing/Finanzierung fehlt komplett.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-rp-red text-xs font-bold uppercase tracking-wider mb-1">Hoch</div><div class="font-semibold">Mehrsprachigkeit nur Deko.</div><p class="text-sm text-white/70 mt-1">Sprachumschalter meist versteckt oder ohne Funktion, CTAs & Chat sind deutsch · Frankophone springen ab. In zweisprachiger Region ein echtes Problem.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">Mittel</div><div class="font-semibold">Service "alle Marken" zu spät.</div><p class="text-sm text-white/70 mt-1">Nur V1 sagt früh, dass auch Fremdmarken repariert werden. Service-Kunden brauchen einen eigenen Einstieg oben.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">Mittel</div><div class="font-semibold">Keine Budget-Orientierung.</div><p class="text-sm text-white/70 mt-1">Bewusst keine Preise · aber Familien/Budget-Kunden brauchen ein "für jedes Budget"-Signal, sonst trauen sie sich nicht.</p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5"><div class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">Mittel</div><div class="font-semibold">Video-Asset halb genutzt.</div><p class="text-sm text-white/70 mt-1">Abo-CTA, "neuestes Video" und Kanal-Link fehlen · der Weg vom Fan zum Lead bleibt offen. Bikefitting nur als Button, nicht erklärt.</p></div>
+    </div>
+  </div>
+
+  <!-- Bewertungs-Matrix -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-12">
+    <h2 class="font-anton text-2xl md:text-3xl uppercase mb-5">Alle Bewertungen im Überblick</h2>
+    <div class="overflow-x-auto rounded-xl ring-1 ring-white/10">
+      <table class="w-full text-sm border-collapse min-w-[640px]">
+        <thead><tr class="bg-white/5 text-white/60 uppercase text-xs tracking-wider">
+          <th class="text-left font-semibold px-4 py-3">Kundentyp</th>
+          <th class="px-3 py-3">V1</th><th class="px-3 py-3">V2</th><th class="px-3 py-3">V3</th><th class="px-3 py-3">V4</th><th class="px-3 py-3">V5</th><th class="px-3 py-3">V6</th>
+          <th class="px-4 py-3 text-rp-red">Favorit</th>
+        </tr></thead>
+        <tbody class="divide-y divide-white/5">
+          <tr><td class="px-4 py-3 font-medium">1 · Lokaler Rennrad/Gravel-Enthusiast</td><td class="text-center font-bold text-rp-red">5</td><td class="text-center text-white/70">3</td><td class="text-center text-white">4</td><td class="text-center text-white">4</td><td class="text-center text-white/40">2</td><td class="text-center text-white">4</td><td class="px-4 text-center font-bold">V1</td></tr>
+          <tr><td class="px-4 py-3 font-medium">2 · Gezielter Specialized-Sucher</td><td class="text-center text-white">4</td><td class="text-center text-white/40">2</td><td class="text-center font-bold text-rp-red">5</td><td class="text-center text-white">4</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="px-4 text-center font-bold">V3</td></tr>
+          <tr><td class="px-4 py-3 font-medium">3 · Werkstatt/Service (alle Marken)</td><td class="text-center font-bold text-rp-red">4</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="text-center text-white/40">2</td><td class="text-center text-white/25">1</td><td class="text-center text-white/40">2</td><td class="px-4 text-center font-bold">V1</td></tr>
+          <tr><td class="px-4 py-3 font-medium">4 · E-Bike/Einsteiger/Pendler</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="text-center text-white/25">1</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="text-center font-bold text-rp-red">4</td><td class="px-4 text-center font-bold">V6</td></tr>
+          <tr><td class="px-4 py-3 font-medium">5 · Überregionaler YouTube-Fan</td><td class="text-center font-bold text-rp-red">5</td><td class="text-center text-white/70">3</td><td class="text-center text-white">4</td><td class="text-center text-white/40">2</td><td class="text-center text-white">4</td><td class="text-center text-white">4</td><td class="px-4 text-center font-bold">V1</td></tr>
+          <tr><td class="px-4 py-3 font-medium">6 · MTB All-Mountain/Downhill</td><td class="text-center text-white/40">2</td><td class="text-center text-white/70">3</td><td class="text-center text-white/25">1</td><td class="text-center font-bold text-rp-red">4</td><td class="text-center text-white/40">2</td><td class="text-center text-white/40">2</td><td class="px-4 text-center font-bold">V4</td></tr>
+          <tr><td class="px-4 py-3 font-medium">7 · Preisbewusste Familienradlerin</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="text-center text-white/40">2</td><td class="text-center font-bold text-rp-red">4</td><td class="text-center text-white/40">2</td><td class="text-center text-white/40">2</td><td class="px-4 text-center font-bold">V4</td></tr>
+          <tr><td class="px-4 py-3 font-medium">8 · Frankophoner/anderssprachiger Besucher</td><td class="text-center font-bold text-rp-red">3</td><td class="text-center text-white/40">2</td><td class="text-center text-white/70">3</td><td class="text-center text-white/70">3</td><td class="text-center text-white/40">2</td><td class="text-center text-white/70">3</td><td class="px-4 text-center font-bold">V1</td></tr>
+          <tr class="bg-white/5 font-bold"><td class="px-4 py-3 uppercase text-xs tracking-wider text-white/60">Durchschnitt</td><td class="text-center text-rp-red">3,6</td><td class="text-center">2,5</td><td class="text-center">2,8</td><td class="text-center">3,3</td><td class="text-center">2,3</td><td class="text-center">2,9</td><td class="px-4"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Entwurf-Verdikte -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-12">
+    <h2 class="font-anton text-2xl md:text-3xl uppercase mb-5">Kurz-Urteil je Entwurf</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="rounded-xl bg-white/5 ring-1 ring-rp-red/40 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V1 · Cinematic</span><span class="text-rp-red font-bold">Ø 3,6 · Platz 1</span></div><p class="text-sm text-white/75 mt-2">Klarer Sieger. Achim + Video sofort erkennbar, einziger Entwurf mit "Werkstatt für alle Marken" und sichtbarer Sprachwahl. <span class="text-white/50">Schwäche: nur Rennrad-Builds · MTBler fallen raus.</span></p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/15 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V4 · Finde dein Bike</span><span class="font-bold text-white/80">Ø 3,3 · Platz 2</span></div><p class="text-sm text-white/75 mt-2">Die inklusivste Variante. Selbst-Auswahl Rennrad/Gravel/MTB holt Einsteiger, MTBler & Budget-Kunden ab · die einzige, die MTB überhaupt zeigt. <span class="text-white/50">Schwäche: Fan vermisst Community/Video.</span></p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/15 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V6 · Minimal/Clean</span><span class="font-bold text-white/80">Ø 2,9 · Platz 3</span></div><p class="text-sm text-white/75 mt-2">Edel und menschlich (Achim-Story), holt Einsteiger ab. <span class="text-white/50">Aber kühl, produktarm und Service/Öffnungszeiten zu versteckt.</span></p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/15 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V3 · Neueste Bikes</span><span class="font-bold text-white/80">Ø 2,8 · Platz 4</span></div><p class="text-sm text-white/75 mt-2">Top für den gezielten Specialized-Käufer (echte Eckdaten, Video am Bike). <span class="text-white/50">Aber rein High-End-Rennrad · schliesst Einsteiger, MTB & Budget komplett aus.</span></p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/15 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V2 · Emotion</span><span class="font-bold text-white/80">Ø 2,5 · Platz 5</span></div><p class="text-sm text-white/75 mt-2">Schön, aber austauschbar: viel Gefühl, kein Achim, keine Bikes, keine Marke. <span class="text-white/50">"Könnte jeder x-beliebige Laden sein."</span></p></div>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/15 p-5"><div class="flex items-baseline justify-between"><span class="font-anton text-xl uppercase">V5 · Bold/Sportlich</span><span class="font-bold text-white/80">Ø 2,3 · Platz 6</span></div><p class="text-sm text-white/75 mt-2">Polarisiert negativ: wirkt wie Energy-Drink-/Discount-Template, deutsch-englischer Stilbruch. <span class="text-white/50">Nur der Fan mag die Stats.</span></p></div>
+    </div>
+  </div>
+
+  <!-- Die 8 Stimmen -->
+  <div class="mx-auto max-w-6xl px-6 lg:px-10 pb-20">
+    <h2 class="font-anton text-2xl md:text-3xl uppercase mb-2">Die 8 Stimmen im O-Ton</h2>
+    <p class="text-white/50 text-sm mb-6">Jeweils Bewertung, Favorit und der ehrlichste Satz an dich.</p>
+    <div class="grid md:grid-cols-2 gap-4">
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">1 · Lokaler Rennrad/Gravel-Enthusiast</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V1</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★★★ · V2 ★★★ · V3 ★★★★ · V4 ★★★★ · V5 ★★ · V6 ★★★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Dein YouTube-Kanal überzeugt mich schon lange, aber die Seite muss mir klarer zeigen, dass ich einen Termin buche und wirklich mit dir spreche · nicht mit einem Formular."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">2 · Gezielter Specialized-Sucher</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V3</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★★ · V2 ★★ · V3 ★★★★★ · V4 ★★★★ · V5 ★★★ · V6 ★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Du bist Specialized Elite Händler und weisst mehr über diese Bikes als fast jeder in der Region · zeig das in der ersten Bildschirmhälfte, nicht erst im Footer."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">3 · Werkstatt/Service (alle Marken)</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V1</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★★ · V2 ★★★ · V3 ★★ · V4 ★★ · V5 ★ · V6 ★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Schöne Seite, aber ich hätte fast abgebrochen, weil ich erst weit scrollen musste, um zu sehen, dass ihr auch mein Trek anfasst · das müsst ihr viel weiter oben sagen."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">4 · E-Bike/Einsteiger/Pendler</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V6</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★ · V2 ★★ · V3 ★ · V4 ★★★ · V5 ★★ · V6 ★★★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Du bist sympathisch und dein Laden klingt toll, aber deine Website spricht vor allem Leute an, die schon wissen, was ein Tarmac SL8 ist · ich gehöre nicht dazu."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">5 · Überregionaler YouTube-Fan</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V1</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★★★ · V2 ★★★ · V3 ★★★★ · V4 ★★ · V5 ★★★★ · V6 ★★★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Deine Website macht dein bestes Asset · den Kanal und deine Persönlichkeit · endlich sichtbar. Aber gib mir auch einen Grund wiederzukommen, bevor ich bereit bin zu kaufen."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">6 · MTB All-Mountain/Downhill</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V4</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★ · V2 ★★★ · V3 ★ · V4 ★★★★ · V5 ★★ · V6 ★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Ich weiss, dass du vor der Haustür dieselben Trails hast wie ich · aber deine Website sieht aus, als wärst du nur für Carbon-Rennräder da, nicht für mich mit meinem Enduro."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">7 · Preisbewusste Familienradlerin</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V4</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★ · V2 ★★ · V3 ★★ · V4 ★★★★ · V5 ★★ · V6 ★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Du bist eindeutig eine Marke für Leute, die Bikes lieben · aber ich brauche ein Signal, dass du auch für jemanden wie mich da bist, bevor ich nach Schönberg fahre."</blockquote>
+      </div>
+
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <div class="flex items-center justify-between"><span class="font-semibold">8 · Frankophoner/anderssprachiger Besucher</span><span class="text-xs rounded bg-rp-red px-2 py-0.5 font-bold">Favorit V1</span></div>
+        <div class="text-xs text-white/40 mt-1">V1 ★★★ · V2 ★★ · V3 ★★★ · V4 ★★★ · V5 ★★ · V6 ★★★</div>
+        <blockquote class="mt-3 text-white/80 italic border-l-2 border-rp-red pl-3">"Ostbelgien ist zweisprachig und dein Kanal hat Zuschauer in ganz Frankreich und Belgien · aber deine Website spricht mich mit keinem französischen Wort an."</blockquote>
+      </div>
+
+    </div>
+    <p class="mt-8 text-center text-white/30 text-xs">Simuliertes Kunden-Feedback auf Basis der Racepoint-Personas · 8 Kundentypen × 6 Entwürfe · interne Entscheidungshilfe.</p>
+  </div>
+
+  <footer class="border-t border-white/10"><div class="mx-auto max-w-6xl px-6 lg:px-10 py-10 flex items-center justify-between text-sm text-white/40"><img src="assets/racepoint-logo-light.svg" class="h-4 w-auto" alt="Racepoint"><span>© Racepoint · Kunden-Feedback (intern)</span></div></footer>
+</section>
+
+
+<!-- ===================== Persistenter KI-Chat ======================== -->
+<button id="chatFab" class="fixed bottom-24 right-5 z-40 flex items-center gap-2 rounded-full bg-rp-ink text-white pl-3 pr-5 py-3 shadow-2xl ring-1 ring-white/10 hover:scale-105 transition">
+  <span class="grid place-items-center h-7 w-7 rounded-full bg-rp-red text-white text-sm font-bold">AI</span><span class="text-sm font-semibold uppercase">Berater fragen</span>
+</button>
+<div id="chatPanel" class="fixed bottom-24 right-5 z-50 hidden w-[min(380px,calc(100vw-2.5rem))]">
+  <div class="rounded-3xl bg-white text-slate-900 shadow-2xl ring-1 ring-black/5 overflow-hidden">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100"><div class="flex items-center gap-2"><span class="grid place-items-center h-8 w-8 rounded-full bg-rp-ink text-rp-red text-xs font-bold">AI</span><div><div class="text-sm font-bold">Racepoint Berater</div><div class="text-[11px] text-green-600">● online · DE/FR/NL/EN</div></div></div><button id="chatClose" class="text-slate-400 text-xl">✕</button></div>
+    <div id="chatLog" class="px-5 py-4 space-y-3 h-[44vh] overflow-y-auto"></div>
+    <div id="chatQuick" class="px-5 pb-2 flex flex-wrap gap-2"></div>
+    <div class="px-5 pb-5 pt-2 flex gap-2 border-t border-slate-100"><input id="chatInput" class="flex-1 rounded-full bg-slate-100 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-rp-red/40" placeholder="Nachricht schreiben…"><button id="chatSend" class="rounded-full bg-rp-ink text-white px-4 text-sm font-bold uppercase">Senden</button></div>
+  </div>
+</div>
+
+<!-- ===================== Lightbox (Galerie-Videos) =================== -->
+<div id="lightbox" class="fixed inset-0 z-[70] hidden items-center justify-center bg-black/90 backdrop-blur p-4 sm:p-8">
+  <button id="lbClose" class="absolute top-4 right-5 text-white/80 hover:text-white text-4xl leading-none" title="Schließen">&times;</button>
+  <div class="w-full max-w-5xl aspect-video"><div id="lbFrame" class="w-full h-full rounded-xl overflow-hidden"></div></div>
+</div>
+
+<!-- ===================== Mobil-Menü ================================== -->
+<div id="mobileMenu" class="fixed inset-0 z-[65] hidden bg-rp-ink/98 backdrop-blur text-white overflow-y-auto">
+  <div class="flex items-center justify-between px-6 h-20"><img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint"><button id="menuClose" class="text-3xl leading-none" title="Schließen">&times;</button></div>
+  <nav class="px-6 mt-4 flex flex-col">
+    <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Bikes</a>
+    <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Builds &amp; Videos</a>
+    <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Service &amp; Bikefitting</a>
+    <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Über Achim</a>
+    <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Kontakt &amp; Anfahrt</a>
+  </nav>
+  <div class="px-6 mt-8 pb-10 flex flex-col gap-3">
+    <a class="rounded-xl bg-rp-red px-6 py-4 text-center font-bold uppercase">Termin · Beratung &amp; Bikefitting</a>
+    <a class="rounded-xl ring-1 ring-white/25 px-6 py-4 text-center font-semibold uppercase">Bike anfragen</a>
+    <div class="flex gap-3">
+      <a class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-3.5 font-semibold"><svg class="w-5 h-5"><use href="#ic-wa"/></svg> WhatsApp</a>
+      <a class="inline-flex items-center justify-center gap-2 rounded-xl ring-1 ring-white/25 px-5 py-3.5 font-semibold"><svg class="w-5 h-5"><use href="#ic-phone"/></svg> Anrufen</a>
+    </div>
+    <div class="mt-3 flex gap-3 justify-center text-white/70"><button class="lang text-white font-semibold">DE</button>·<button class="lang">FR</button>·<button class="lang">NL</button>·<button class="lang">EN</button></div>
+  </div>
+</div>
+
+<!-- ============ Prototyp-Auswahl (Zahnkranz, unten rechts) ========== -->
+<div class="fixed bottom-5 right-5 z-[55] flex flex-col items-end">
+  <div id="pickPanel" class="hidden mb-3 w-64 rounded-2xl bg-zinc-900/95 backdrop-blur ring-1 ring-white/10 shadow-2xl p-2">
+    <div class="px-3 py-2 text-[11px] uppercase tracking-wider text-white/40">Prototyp wählen</div>
+    <button data-go="1" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">1 · Cinematic</button>
+    <button data-go="2" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">2 · Emotion</button>
+    <button data-go="3" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">3 · Neueste Bikes</button>
+    <button data-go="4" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">4 · Finde dein Bike</button>
+    <button data-go="5" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">5 · Bold/Sportlich</button>
+    <button data-go="6" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">6 · Immersive</button>
+    <button data-go="7" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70 border-t border-white/10 mt-1 pt-3"><span class="text-rp-red">7 ·</span> Kunden-Feedback</button>
+    <div class="px-3 pt-2 pb-1 text-[11px] text-white/30 border-t border-white/10 mt-1">F12 → Mobilansicht</div>
+  </div>
+  <button id="pickBtn" title="Prototyp wählen" class="grid place-items-center h-14 w-14 rounded-full bg-rp-red text-white shadow-2xl ring-1 ring-black/20 hover:rotate-45 transition-transform duration-500">
+    <svg viewBox="0 0 24 24" class="w-7 h-7 fill-current"><path d="M19.14 12.94a7.49 7.49 0 000-1.88l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.3 7.3 0 00-1.63-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.69 8.84a.5.5 0 00.12.64l2.03 1.58a7.49 7.49 0 000 1.88l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32a.5.5 0 00.6.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54a.5.5 0 00.5.42h3.84a.5.5 0 00.5-.42l.36-2.54c.59-.24 1.13-.56 1.63-.94l2.39.96a.5.5 0 00.6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/></svg>
+  </button>
+</div>
+
+<script>
+  function heroSrc(id, muted){ return 'https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&mute='+(muted?1:0)+'&loop=1&playlist='+id+'&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&fs=0&start=5'; }
+  let soundOn = false;
+  function syncHeroes(){
+    document.querySelectorAll('.heroframe').forEach(f => f.innerHTML = '');
+    const sec = document.querySelector('.variant.active'); if(!sec) return;
+    sec.querySelectorAll('.heroplay').forEach(h => {
+      const f = h.querySelector('.heroframe'); if(!f) return;
+      const cls = h.dataset.cover === 'full' ? 'cover-full' : 'cover-box';
+      f.innerHTML = '<iframe class="'+cls+'" allow="autoplay; encrypted-media" src="'+heroSrc(h.dataset.id, !soundOn)+'"></iframe>';
+    });
+  }
+  function showVariant(v){
+    v = String(v); if(!['1','2','3','4','5','6','7'].includes(v)) v = '1';
+    document.querySelectorAll('.variant').forEach(s => s.classList.toggle('active', s.dataset.variant === v));
+    document.querySelectorAll('.vbtn').forEach(b => { const on=b.dataset.go===v; b.classList.toggle('bg-rp-red',on); b.classList.toggle('text-white',on); b.classList.toggle('text-white/70',!on); });
+    const url=new URL(location); url.searchParams.set('v',v); history.replaceState({},'',url);
+    window.scrollTo(0,0); document.title='Racepoint · Variante '+v;
+    soundOn = false; document.querySelectorAll('.soundtoggle').forEach(b => b.textContent='Ton an');
+    const hv = document.getElementById('heroVideo'); if(hv) hv.muted = true;
+    const pp = document.getElementById('pickPanel'); if(pp) pp.classList.add('hidden');
+    syncHeroes();
+    if(window.refreshSliders) requestAnimationFrame(window.refreshSliders);
+  }
+  document.querySelectorAll('.vbtn').forEach(b => b.addEventListener('click', () => showVariant(b.dataset.go)));
+  showVariant(new URL(location).searchParams.get('v') || '1');
+
+  // Zahnkranz: Auswahlfenster auf/zu
+  const pickBtn = document.getElementById('pickBtn'), pickPanel = document.getElementById('pickPanel');
+  pickBtn.addEventListener('click', e => { e.stopPropagation(); pickPanel.classList.toggle('hidden'); });
+  document.addEventListener('click', e => {
+    if (!pickPanel.classList.contains('hidden') && !pickPanel.contains(e.target) && !pickBtn.contains(e.target)) pickPanel.classList.add('hidden');
+  });
+
+  // Galerie-Videos: Klick oeffnet das echte Video in einer Lightbox
+  const lb = document.getElementById('lightbox'), lbFrame = document.getElementById('lbFrame');
+  function openLightbox(id){
+    lbFrame.innerHTML = '<iframe class="w-full h-full" style="border:0" src="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    lb.classList.remove('hidden'); lb.classList.add('flex');
+  }
+  function closeLightbox(){ lb.classList.add('hidden'); lb.classList.remove('flex'); lbFrame.innerHTML=''; }
+  document.addEventListener('click', e => { const y = e.target.closest('.yt'); if (y && y.dataset.id) openLightbox(y.dataset.id); });
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  // Ton-Schalter (nur Hero, Variante 1)
+  document.querySelectorAll('.soundtoggle').forEach(b => b.addEventListener('click', () => {
+    const v = document.getElementById('heroVideo'); if(!v) return;
+    v.muted = !v.muted; if(!v.muted){ v.play().catch(()=>{}); } b.textContent = v.muted ? 'Ton an' : 'Ton aus';
+  }));
+
+  // ===== KI-Chat: kleine, gescriptete Beratungs-Simulation =====
+  const panel = document.getElementById('chatPanel');
+  const chatLog = document.getElementById('chatLog');
+  const chatQuick = document.getElementById('chatQuick');
+  const chatInput = document.getElementById('chatInput');
+  const chatState = { cat:null, started:false, busy:false };
+  const CATLABEL = { rennrad:'Rennrad', gravel:'Gravel', mtb:'MTB', ebike:'E-Bike' };
+  const REC = {
+    rennrad:{ a:'Specialized Allez Sport · ein sauberer Einstieg ins Rennrad.', b:'Tarmac SL7 Comp · Aero-Allrounder mit elektronischer Schaltung.', c:'S-Works Aethos oder Tarmac SL8 LTD · die Träume aus den Videos.' },
+    gravel:{ a:'Specialized Diverge E5 · robust und vielseitig für den Einstieg.', b:'Crux Comp oder Diverge Carbon · leicht und für die Ardennen gemacht.', c:'S-Works Crux · das leichteste Gravelbike von Specialized.' },
+    mtb:{ a:'Rockhopper oder Chisel · solide Hardtails zum Einstieg.', b:'Stumpjumper Alloy oder Epic · vom Trail bis zum Marathon.', c:'S-Works Epic 8 oder Stumpjumper EVO · das volle Programm.' },
+    ebike:{ a:'Im Einstieg schauen wir die Modelle am besten gemeinsam im Laden an.', b:'Turbo Vado SL · leicht, für Alltag und Touren.', c:'Turbo Levo SL · E-MTB mit ganz natürlichem Fahrgefühl.' }
+  };
+  const HOURS = '<b>Öffnungszeiten</b><br>Mo, Di, Mi &amp; Fr · 13–18 Uhr<br>Sa · 9–14 Uhr<br>Do &amp; So · geschlossen<br><span class="text-slate-500">Werkstatt arbeitet vormittags · Schönberg, Ostbelgien</span>';
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function chatScroll(){ chatLog.scrollTop = chatLog.scrollHeight; }
+  function bubble(html, who){
+    const d = document.createElement('div');
+    d.className = who==='user'
+      ? 'ml-auto max-w-[85%] rounded-2xl rounded-tr-sm bg-rp-red text-white px-3 py-2 text-sm'
+      : 'max-w-[90%] rounded-2xl rounded-tl-sm bg-slate-100 px-3 py-2 text-sm leading-snug';
+    d.innerHTML = html; chatLog.appendChild(d); chatScroll();
+  }
+  function typing(){
+    const d = document.createElement('div');
+    d.className = 'max-w-[60%] rounded-2xl rounded-tl-sm bg-slate-100 px-3 py-2.5';
+    d.innerHTML = '<span class="chatdot"></span><span class="chatdot"></span><span class="chatdot"></span>';
+    chatLog.appendChild(d); chatScroll(); return d;
+  }
+  async function botSay(msgs){
+    chatState.busy = true; chatQuick.innerHTML = '';
+    for(const m of msgs){
+      const t = typing();
+      await wait(500 + Math.min(1100, m.length * 14));
+      t.remove(); bubble(m, 'bot'); await wait(180);
+    }
+    chatState.busy = false;
+  }
+  function chips(arr){
+    chatQuick.innerHTML = '';
+    arr.forEach(c => {
+      const b = document.createElement('button');
+      b.className = 'rounded-full bg-rp-ink/5 ring-1 ring-rp-ink/15 hover:bg-rp-red hover:text-white hover:ring-rp-red transition px-3 py-1.5 text-xs font-semibold';
+      b.textContent = c.label;
+      b.addEventListener('click', () => { if(chatState.busy) return; bubble(esc(c.label),'user'); chatQuick.innerHTML=''; c.run(); });
+      chatQuick.appendChild(b);
+    });
+  }
+  async function start(){
+    chatState.started = true; chatState.cat = null; chatLog.innerHTML = ''; chatQuick.innerHTML = '';
+    await botSay(['Hi, ich bin Achims digitaler Berater. 👋', 'Wobei kann ich dir helfen?']);
+    chips([
+      { label:'Bike finden', run:askCat },
+      { label:'Service & Reparatur', run:service },
+      { label:'Öffnungszeiten', run:hours },
+      { label:'Termin', run:termin },
+    ]);
+  }
+  async function askCat(){
+    await botSay(['Cool. Worauf fährst du am liebsten?']);
+    chips([
+      { label:'Rennrad', run:() => setCat('rennrad') },
+      { label:'Gravel', run:() => setCat('gravel') },
+      { label:'MTB', run:() => setCat('mtb') },
+      { label:'E-Bike', run:() => setCat('ebike') },
+    ]);
+  }
+  async function setCat(c){ chatState.cat = c; await askBudget(); }
+  async function askBudget(){
+    await botSay(['Und in welchem Budget bewegst du dich ungefähr?']);
+    chips([
+      { label:'bis 2.500 €', run:() => recommend('a') },
+      { label:'2.500–5.000 €', run:() => recommend('b') },
+      { label:'5.000 €+', run:() => recommend('c') },
+      { label:'Weiß ich noch nicht', run:recommendUnsure },
+    ]);
+  }
+  async function recommend(tier){
+    const cat = chatState.cat || 'rennrad';
+    await botSay([
+      'Bei ' + CATLABEL[cat] + ' passt da gut: ' + REC[cat][tier],
+      'Damit es wirklich passt, schaut Achim sich mit dir Größe und Sitzposition an · Retuel-Bikefitting direkt im Laden. Soll ich einen Termin vormerken?'
+    ]);
+    chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours }, { label:'Andere Frage', run:start } ]);
+  }
+  async function recommendUnsure(){
+    await botSay(['Kein Problem · das finden wir gemeinsam heraus.', 'Komm einfach zu einer kurzen Beratung vorbei, dann klären wir Budget, Größe und Einsatzzweck in 15 Minuten.']);
+    chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours } ]);
+  }
+  async function service(){
+    await botSay(['Wir warten alle Marken, nicht nur Specialized.', 'Vormittags ist bei uns Werkstatt-Fokus. Was brauchst du?']);
+    chips([
+      { label:'Inspektion', run:() => serviceInfo('Eine komplette Inspektion dauert meist 1–2 Tage · wir melden uns, sobald dein Rad fertig ist.') },
+      { label:'Reparatur', run:() => serviceInfo('Schick uns kurz, was klemmt · Kleinigkeiten machen wir oft direkt, Größeres terminieren wir.') },
+      { label:'Bikefitting', run:() => serviceInfo('Unser Retuel-Bikefitting bringt dich in die perfekte Sitzposition · plane dafür rund 1,5 Stunden ein.') },
+      { label:'Öffnungszeiten', run:hours },
+    ]);
+  }
+  async function serviceInfo(msg){
+    await botSay([msg, 'Soll ich dir einen Termin vormerken?']);
+    chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours }, { label:'Andere Frage', run:start } ]);
+  }
+  async function hours(){
+    await botSay([HOURS, 'Soll ich dir einen Termin vormerken oder die Anfahrt schicken?']);
+    chips([ { label:'Termin vormerken', run:termin }, { label:'Anfahrt', run:anfahrt }, { label:'Bike finden', run:askCat } ]);
+  }
+  async function anfahrt(){
+    await botSay(['Du findest uns in Schönberg, Ostbelgien · gut erreichbar aus DE, BE und LU.', 'Ruf am besten kurz vorher an, dann steht dein Wunschrad bereit.']);
+    chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours } ]);
+  }
+  async function termin(){
+    await botSay(['Super · sag mir kurz deinen Namen und worum es geht, dann meldet sich Achim oder Elke bei dir.', 'Direkt geht auch per WhatsApp oder Telefon · im echten Shop öffnet sich hier ein Kalender.']);
+    chips([ { label:'Öffnungszeiten', run:hours }, { label:'Bike finden', run:askCat }, { label:'Von vorn', run:start } ]);
+  }
+  function route(text){
+    const t = text.toLowerCase();
+    bubble(esc(text), 'user'); chatInput.value = ''; chatQuick.innerHTML = '';
+    if(/(offen|öffnung|oeffnung|uhr|wann.*(auf|da|offen)|geöffnet|geoeffnet|zeiten)/.test(t)) return hours();
+    if(/(service|reparat|werkstatt|wartung|inspekt|schaltung|bremse)/.test(t)) return service();
+    if(/(termin|beratung|vorbei|besuch)/.test(t)) return termin();
+    if(/(anfahrt|adresse|wo .*(ihr|seid)|wo ist|wo finde)/.test(t)) return anfahrt();
+    if(/gravel/.test(t)){ chatState.cat='gravel'; return askBudget(); }
+    if(/(rennrad|road|tarmac|aethos)/.test(t)){ chatState.cat='rennrad'; return askBudget(); }
+    if(/(mtb|mountain|trail|stumpjumper|epic)/.test(t)){ chatState.cat='mtb'; return askBudget(); }
+    if(/(e-?bike|pedelec|levo|vado|turbo)/.test(t)){ chatState.cat='ebike'; return askBudget(); }
+    if(/(bike|rad|fahrrad|kaufen|suche|brauche)/.test(t)) return askCat();
+    if(/(preis|kost|budget|teuer|euro|€)/.test(t)) return chatState.cat ? askBudget() : askCat();
+    if(/(hallo|hi|hey|moin|servus|guten|danke)/.test(t)){
+      return botSay(['👋 Gern · frag mich zu Bikes, Service oder Öffnungszeiten.']).then(() => chips([ { label:'Bike finden', run:askCat }, { label:'Service', run:service }, { label:'Öffnungszeiten', run:hours } ]));
+    }
+    return botSay(['Das gebe ich am besten direkt an Achim weiter.', 'Soll ich dir einen Termin vormerken oder die Öffnungszeiten zeigen?']).then(() => chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours }, { label:'Bike finden', run:askCat } ]));
+  }
+  function sendChat(){ if(chatState.busy) return; const v = chatInput.value.trim(); if(!v) return; route(v); }
+  document.getElementById('chatSend').addEventListener('click', sendChat);
+  chatInput.addEventListener('keydown', e => { if(e.key === 'Enter') sendChat(); });
+  function openChat(){ panel.classList.remove('hidden'); if(!chatState.started) start(); setTimeout(() => chatInput.focus(), 50); }
+  function closeChat(){ panel.classList.add('hidden'); }
+  document.getElementById('chatFab').addEventListener('click', () => panel.classList.contains('hidden') ? openChat() : closeChat());
+  document.getElementById('chatClose').addEventListener('click', closeChat);
+
+  // Mobil-Menü
+  const mobileMenu = document.getElementById('mobileMenu');
+  document.querySelectorAll('.menubtn').forEach(b => b.addEventListener('click', () => mobileMenu.classList.remove('hidden')));
+  document.getElementById('menuClose').addEventListener('click', () => mobileMenu.classList.add('hidden'));
+  document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+  // Cinematic-Header (V1): transparent ueber dem Hero, Hintergrund beim Scrollen
+  const hdr1 = document.getElementById('hdr1');
+  function onScroll(){ if(!hdr1) return; const s = window.scrollY > 40; hdr1.classList.toggle('bg-black/85', s); hdr1.classList.toggle('backdrop-blur', s); hdr1.classList.toggle('shadow-lg', s); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  document.querySelectorAll('.lang').forEach(btn => btn.addEventListener('click', e => e.preventDefault()));
+  document.querySelectorAll('a').forEach(a => { if(!a.getAttribute('href')) a.addEventListener('click', e => e.preventDefault()); });
+
+  // Bike-Slider (V3/V4): Pfeil-Steuerung + Zaehler; jede sichtbare Slide ist genau track-breit
+  function pad2(n){ return String(n).padStart(2,'0'); }
+  function sliderState(slider){
+    const track = slider.querySelector('.bstrack');
+    const visible = [...track.querySelectorAll('.bslide')].filter(s => !s.classList.contains('hidden'));
+    const w = track.clientWidth || 1;
+    const idx = Math.round(track.scrollLeft / w);
+    return { track, visible, w, idx: Math.max(0, Math.min(visible.length-1, idx)) };
+  }
+  function updateCount(slider){
+    const c = slider.querySelector('.bscount'); if(!c) return;
+    const { track, visible } = sliderState(slider);
+    if(!track.clientWidth || !visible.length){ return; }
+    c.textContent = pad2(sliderState(slider).idx + 1) + ' / ' + pad2(visible.length);
+  }
+  function goSlide(slider, dir){
+    const { track, visible, w, idx } = sliderState(slider);
+    if(!visible.length) return;
+    const ni = Math.max(0, Math.min(visible.length-1, idx + dir));
+    track.scrollTo({ left: ni * w, behavior: 'smooth' });
+  }
+  document.querySelectorAll('.bikeslider').forEach(slider => {
+    const track = slider.querySelector('.bstrack');
+    slider.querySelector('.bsprev')?.addEventListener('click', () => goSlide(slider, -1));
+    slider.querySelector('.bsnext')?.addEventListener('click', () => goSlide(slider, 1));
+    let raf; track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => updateCount(slider)); }, { passive:true });
+  });
+  function refreshSliders(){ document.querySelectorAll('.variant.active .bikeslider').forEach(updateCount); }
+  window.refreshSliders = refreshSliders;
+
+  // Kategorie-Auswahl (V4): blendet Slides der gewaehlten Kategorie ein, Rest aus
+  function applyCategory(variant, cat){
+    variant.querySelectorAll('.catpick').forEach(b => b.classList.toggle('catactive', b.dataset.cat === cat));
+    const slider = variant.querySelector('.bikeslider'); if(!slider) return;
+    slider.querySelectorAll('.bslide').forEach(s => s.classList.toggle('hidden', s.dataset.cat !== cat));
+    const track = slider.querySelector('.bstrack'); track.scrollTo({ left: 0 });
+    updateCount(slider);
+  }
+  document.querySelectorAll('.catpick').forEach(btn => btn.addEventListener('click', () => applyCategory(btn.closest('.variant'), btn.dataset.cat)));
+  // Standard-Kategorie je Variante mit Auswahl setzen
+  document.querySelectorAll('.variant').forEach(v => { const def = v.querySelector('.catpick.catactive') || v.querySelector('.catpick'); if(def) applyCategory(v, def.dataset.cat); });
+</script>
+</body>
+</html>
