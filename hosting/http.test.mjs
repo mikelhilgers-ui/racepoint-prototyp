@@ -10,7 +10,8 @@ import {createRacepointServer} from './http.mjs';
 async function fixture(options={}){
   const root=await mkdtemp(join(tmpdir(),'racepoint-http-'));await mkdir(join(root,'assets'));
   await writeFile(join(root,'assets','movie.mp4'),'0123456789');await writeFile(join(root,'server.mjs'),'private-source');
-  const server=createRacepointServer({root,publicFiles:['assets/movie.mp4'],origin:'https://racepoint.example',agentStatus:()=>({ready:true}),runAgent:async()=>({answer:'Hallo'}),...options});
+  await writeFile(join(root,'assets','decoder.wasm'),Buffer.from([0,97,115,109,1,0,0,0]));
+  const server=createRacepointServer({root,publicFiles:['assets/movie.mp4','assets/decoder.wasm'],origin:'https://racepoint.example',agentStatus:()=>({ready:true}),runAgent:async()=>({answer:'Hallo'}),...options});
   server.listen(0,'127.0.0.1');await once(server,'listening');
   const request=(path,opts={})=>new Promise((resolve,reject)=>{
     const req=http.request({hostname:'127.0.0.1',port:server.address().port,path,method:opts.method||'GET',headers:{host:'racepoint.example',...opts.headers}},res=>{let data='';res.setEncoding('utf8');res.on('data',s=>data+=s);res.on('end',()=>resolve({status:res.statusCode,headers:res.headers,data}));});req.on('error',reject);req.end(opts.body);
@@ -25,6 +26,7 @@ test('Nur öffentliche Dateien; richtige Startseite, Host und Video-Range',async
     assert.equal((await f.request('/api/status',{headers:{host:'evil.example'}})).status,403);
     const media=await f.request('/assets/movie.mp4',{headers:{range:'bytes=2-5'}});assert.equal(media.status,206);assert.equal(media.data,'2345');assert.equal(media.headers['content-range'],'bytes 2-5/10');
     assert.equal((await f.request('/assets/movie.mp4',{headers:{range:'bytes=99-'}})).status,416);
+    const wasm=await f.request('/assets/decoder.wasm');assert.equal(wasm.status,200);assert.equal(wasm.headers['content-type'],'application/wasm');assert.equal(wasm.headers['content-length'],'8');
   }finally{await f.close();}
 });
 test('Origin, Content-Type, ungültiges JSON und tatsächliche UTF-8-Bytes begrenzt',async()=>{

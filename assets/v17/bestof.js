@@ -22,7 +22,44 @@
   /* =====================================================================
      1) BASIS: Lenis, Header, Menue, Anker, Sprache -> assets/v17/site.js
      ===================================================================== */
-  const lenis = window.RP17Site ? RP17Site.lenis : null; // eslint-disable-line no-unused-vars
+  // Keep the existing homepage navigation until the shared subpages are wired in.
+  let lenis = null;
+  if (!RM && window.Lenis) {
+    lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  const mmenu = $('#mmenu'), burger = $('.burger');
+  const setMenu = on => {
+    mmenu.classList.toggle('on', on);
+    mmenu.setAttribute('aria-hidden', String(!on));
+    burger.setAttribute('aria-expanded', String(on));
+    if (lenis) on ? lenis.stop() : lenis.start();
+  };
+  burger.addEventListener('click', () => setMenu(true));
+  $('.mclose').addEventListener('click', () => setMenu(false));
+  mmenu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && mmenu.classList.contains('on')) setMenu(false); });
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const el = document.querySelector(a.getAttribute('href'));
+    if (!el) return;
+    e.preventDefault();
+    if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.4 }); else el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
+  });
+
+  const hdr = $('#hdr');
+  ScrollTrigger.create({
+    start: 0, end: 'max',
+    onUpdate: self => {
+      const y = self.scroll();
+      hdr.classList.toggle('solid', y > 60);
+      hdr.classList.toggle('hide', self.direction === 1 && y > 400 && !mmenu.classList.contains('on'));
+    },
+  });
 
   /* =====================================================================
      2) HERO
