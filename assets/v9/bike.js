@@ -521,6 +521,11 @@ export function buildBike(type, opt, M) {
   rod(at(SC, up, -.022), at(SC, up, .022), .021, M.carbon, CP, 28);
   rod(at(SC, up, .022), at(SC, up, .027), .0185, M.dark, CP, 28);
   const B = at(SC, stemDir, G.stem);
+  // Bremsleitungen: kommen unter dem Vorbau aus dem Lenker und verschwinden vorn ins Steuerrohr (kabellos geschaltet)
+  [1, -1].forEach(sd => {
+    const from = at(SC, stemDir, G.stem * .55).add(V(0, -.018, sd * .006)), into = at(HTt, sAx, .03).add(V(fwd.x * .024, fwd.y * .024, sd * .007));
+    tube([from, from.clone().lerp(into, .5).add(V(fwd.x * .028, fwd.y * .028 - .006, sd * .01)), into], { r: .0024, caps: true, seg: 16, rad: 8 }, M.black, CP);
+  });
   if (drop) {
     tube([at(SC, stemDir, -.014), at(SC, stemDir, .045), B], { r: t => [lerp(.0195, .016, t), lerp(.019, .0185, t)], caps: 'start', seg: 16 }, M.carbon, CP);
     // Aero-Oberlenker flach, dann runde, umwickelte Drops mit Flare

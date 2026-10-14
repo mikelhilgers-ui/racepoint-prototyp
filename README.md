@@ -43,6 +43,8 @@ Der öffentliche Testserver begrenzt KI-Anfragen auf zwei gleichzeitig, zwölf p
 
 Die Seite ist nur deutsch, nutzt nur lokale Bibliotheken aus `vendor/` und berücksichtigt `prefers-reduced-motion`.
 
+**Unterseiten von 17:** `v17-rennrad`, `-gravel`, `-mtb`, `-ebike`, `-familie` (echte Bikes aus dem Codex-Katalog mit Filter und Sortierung), `v17-werkstatt`, `v17-bikefitting` (große scrollgesteuerte Retül-Motion-Capture-Animation mit Live-Winkeln und „Sitzposition optimiert“), `v17-filme`, `v17-ueber-uns`, `v17-kontakt`, `v17-anfrage` und `v17-bike.html?id=…` (Bike-Detail mit Konfigurator und 3D-Vorschau aus dem prozeduralen V9-Bike). Header, Mobil-Menü und Footer setzt `assets/v17/site.js` für alle v17-Seiten ein; eine neue Seite braucht nur `<body data-page="…">` und dieselben Einbindungen.
+
 ## Neu: Prototypen 8–10 (Scroll-Motion, 3D, KI-Berater 2.0)
 
 Drei zusaetzliche Entwuerfe als eigene Seiten, ebenfalls ueber den Zahnkranz erreichbar (oder `index.html?v=8..10`):

@@ -1,0 +1,143 @@
+{
+  "_hinweis": [
+    "BEISPIELROUTEN: Achim hat seine GPX-Dateien noch nicht geschickt. Alle 6 Touren hier sind Platzhalter (\"beispiel\": true). Die Linien sind zwischen echten Orten interpoliert und folgen keinen echten Wegen.",
+    "Echte Tour einsetzen: 1) Achims GPX-Datei in diesen Ordner (assets/v17/touren/) legen, z. B. venn-klassiker.gpx überschreiben oder neu benennen. 2) Bei der Tour \"file\" auf den Dateinamen setzen. 3) Titel, Texte, Untergrund (\"surface\", Summe 100), Schwierigkeit und Stopps anpassen. 4) \"beispiel\": false setzen – dann verschwinden das Badge \"Beispielroute\" und der Hinweis oben auf der Seite automatisch.",
+    "Distanz, Höhenmeter, höchster Punkt, Höhenprofil und Karte rechnet die Seite selbst aus der GPX-Datei aus (trkpt mit lat/lon/ele). Diese Werte hier nicht eintragen.",
+    "Stopps: \"start\": true = Laden (km 0), \"ziel\": true = Ende der Strecke. Alle anderen Stopps mit \"lat\"/\"lon\" angeben – die Seite legt sie auf den nächsten Punkt der Strecke. Liegt dieser weiter als 1,5 km weg, wird \"km\" (Kilometer ab Start) genommen, sonst wird der Stopp ausgelassen.",
+    "In \"ask\" (Frage an den KI-Berater) setzt die Seite {title}, {km}, {hm} und {surface} aus der GPX-Auswertung ein. \"bike\" ist eine ID aus entwuerfe/codex-2026-10/prototype/kombi/catalogue.json (z. B. tarmac-sl9-expert-di2). Bilder: Pfade relativ zur Website, z. B. assets/gravel-ride.jpg.",
+    "Neue Datei? Vor dem Hochladen mit git add erfassen, sonst fehlt sie im Azure-Paket (hosting/build.mjs nimmt nur erfasste Dateien)."
+  ],
+  "version": 1,
+  "shop": { "name": "Racepoint", "lat": 50.2870, "lon": 6.2690, "adresse": "K.-F. Schinkel Straße 5, 4782 Schönberg (St. Vith), Belgien" },
+  "touren": [
+    {
+      "id": "venn-klassiker",
+      "file": "venn-klassiker.gpx",
+      "type": "rennrad",
+      "title": "Venn-Klassiker",
+      "teaser": "Die große Runde über das Dach Belgiens – Botrange, Bütgenbacher See und eine lange Abfahrt nach Malmedy.",
+      "description": "Vom Laden geht es über Andler und Manderfeld hinauf an die Grenze bei Losheimergraben. Danach Büllingen, Bütgenbach und Robertville, bevor du am Signal de Botrange den höchsten Punkt Belgiens erreichst. Über Malmedy, Recht und St. Vith rollst du zurück nach Schönberg. Eine Tour für einen langen Samstag – mit Pausen am See und oben im Venn.",
+      "highlights": ["Signal de Botrange – mit 694 m der höchste Punkt Belgiens", "Rampe hinauf nach Losheimergraben", "Pause am Bütgenbacher See", "Lange Abfahrt ins Tal nach Malmedy"],
+      "surface": { "asphalt": 97, "schotter": 3, "trail": 0 },
+      "difficulty": "schwer",
+      "bike": "tarmac-sl9-expert-di2",
+      "bikeWhy": "Leicht und steif für die langen Anstiege ins Venn, elektronisch geschaltet für entspannte Wechsel nach 80 km.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Espresso, Reifendruck checken, Flaschen voll – und dann los Richtung Andler. Achim kennt jede Kurve dieser Runde.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Losheimergraben", "lat": 50.3900, "lon": 6.2900, "km": 18.1, "title": "Rampe an die Grenze", "tagline": "Hoch auf fast 680 Meter.", "text": "Von der Our hinauf bis an die deutsche Grenze. Gleichmäßig, aber lang – hier zahlt sich eine leichte Übersetzung aus.", "image": "assets/roadbike-shop.jpg", "alt": "Specialized-Rennrad im Laden", "cta": "Welche Übersetzung brauche ich?", "ask": "Welche Übersetzung brauche ich für {km} km mit {hm} Höhenmetern im Venn?" },
+        { "name": "Bütgenbacher See", "lat": 50.4300, "lon": 6.2000, "km": 27.4, "title": "Am Bütgenbacher See", "tagline": "Kurz durchatmen.", "text": "Ein flaches Stück am Wasser – ideal zum Essen und Trinken, bevor es Richtung Weismes und Robertville geht.", "image": "assets/v10/see.jpg", "alt": "Fahrräder an einer Bank am See", "pause": "rast", "cta": "Was nehme ich mit?", "ask": "Was sollte ich auf eine lange Rennradtour durchs Venn mitnehmen?" },
+        { "name": "Signal de Botrange", "lat": 50.5010, "lon": 6.0930, "km": 47.0, "title": "Dach Belgiens", "tagline": "694 Meter. Höher geht es nicht.", "text": "Der höchste Punkt Belgiens: weites Venn, oft Wind von vorn. Halbzeit – gönn dir oben eine richtige Pause.", "image": "assets/gefuehl-moment.jpg", "alt": "Hügel im Morgennebel", "pause": "kaffee", "cta": "Welches Rennrad passt?", "ask": "Welches Rennrad ist für lange Touren wie den Venn-Klassiker das richtige?" },
+        { "name": "Malmedy", "lat": 50.4260, "lon": 6.0300, "km": 59.3, "title": "Abfahrt nach Malmedy", "tagline": "Schnell, kurvig, kühl.", "text": "Rund 350 Höhenmeter hinunter ins Tal. Lass die Bremsen vorher prüfen – Scheibenbremsen danken es dir auf dieser Abfahrt.", "image": "entwuerfe/codex-2026-10/prototype/assets/films/vV_rL9yq620.jpg", "alt": "Rennrad mit Scheibenbremsen in der Werkstatt", "cta": "Bremsen-Check", "ask": "Ich möchte meine Bremsen vor einer Tour im Venn prüfen lassen." },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Bike an die Wand, Kaffee in die Hand.", "text": "Über Recht und St. Vith rollt es zurück nach Schönberg. Und wenn unterwegs etwas geknarzt hat: Die Werkstatt ist direkt nebenan – für alle Marken.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches Rennrad passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    },
+    {
+      "id": "our-runde",
+      "file": "our-runde.gpx",
+      "type": "rennrad",
+      "title": "Our-Runde",
+      "teaser": "Mit der Our talabwärts bis ans Dreiländereck – und über Lützkampen zurück.",
+      "description": "Die Runde folgt erst der Our bis Steinebrück, dann geht es über Galhausen und Thommen hinüber ins Ulftal nach Burg-Reuland. In Ouren treffen Belgien, Luxemburg und Deutschland aufeinander. Zurück fährst du auf deutscher Seite über Lützkampen und Winterspelt – mit der steilsten Rampe des Tages direkt nach dem tiefsten Punkt.",
+      "highlights": ["Durchs Ourtal bis Steinebrück", "Burgruine in Burg-Reuland", "Dreiländereck bei Ouren", "Rampe hinauf nach Lützkampen"],
+      "surface": { "asphalt": 95, "schotter": 5, "trail": 0 },
+      "difficulty": "mittel",
+      "bike": "roubaix-sl8-tiagra",
+      "bikeWhy": "Future Shock und 32-mm-Reifen schlucken die kleinen Straßen im Ourtal – bequem genug für die ganze Runde.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Kurz Luft prüfen, Kette schmieren, Espresso – dann geht es mit der Our talabwärts.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Steinebrück", "lat": 50.2650, "lon": 6.1950, "km": 7.1, "title": "Durchs Ourtal", "tagline": "Die Straße folgt dem Fluss.", "text": "Die ersten Kilometer rollen sanft talabwärts – perfekt zum Warmfahren, bevor es Richtung Thommen hinaufgeht.", "image": "assets/roadbike-shop.jpg", "alt": "Specialized-Rennrad im Laden", "cta": "Welches Rennrad passt?", "ask": "Welches Rennrad passt zu mir für Runden um 60 km?" },
+        { "name": "Burg-Reuland", "lat": 50.1980, "lon": 6.1390, "km": 25.9, "title": "Burg Reuland", "tagline": "Mauern über dem Ulftal.", "text": "Ein kurzer Halt unter der Burgruine, dann geht es weiter durchs Tal Richtung Ouren.", "image": "assets/gefuehl-moment.jpg", "alt": "Hügel im Morgennebel", "cta": "Was nehme ich mit?", "ask": "Was gehört in die Satteltasche für eine Rennradrunde?" },
+        { "name": "Ouren", "lat": 50.1400, "lon": 6.1300, "km": 33.9, "title": "Dreiländereck", "tagline": "Belgien, Luxemburg, Deutschland.", "text": "Am tiefsten Punkt der Runde treffen drei Länder aufeinander. Gute Stelle für eine Pause am Wasser.", "image": "assets/v10/see.jpg", "alt": "Fahrräder an einer Bank am Wasser", "pause": "rast", "cta": "Welcher Reifen?", "ask": "Welche Reifenbreite ist für kleine, raue Straßen am besten?" },
+        { "name": "Lützkampen", "lat": 50.1550, "lon": 6.1900, "km": 43.3, "title": "Rauf nach Lützkampen", "tagline": "Die Rampe des Tages.", "text": "Vom Ourtal hinauf auf gut 500 Meter – rund 200 Höhenmeter am Stück. Wer hier locker bleibt, hat die Runde im Griff.", "image": "entwuerfe/codex-2026-10/prototype/assets/films/vV_rL9yq620.jpg", "alt": "Rennrad in der Werkstatt", "cta": "Bikefitting?", "ask": "Kann ein Bikefitting mir am Berg helfen?" },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Kaffee steht bereit.", "text": "Über Winterspelt und das Grenzland geht es zurück nach Schönberg. Danach gerne noch auf einen Kaffee in den Laden.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches Rennrad passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    },
+    {
+      "id": "schotter-im-venn",
+      "file": "schotter-im-venn.gpx",
+      "type": "gravel",
+      "title": "Schotter im Venn",
+      "teaser": "Feldwege, Heide und Seeufer – über Honsfeld ins Elsenborner Venn und am Bütgenbacher See zurück.",
+      "description": "Erst Asphalt, dann immer mehr Schotter: Über Honsfeld und Büllingen geht es hinauf ins offene Elsenborner Venn. Nach einer Schleife um die Heide rollst du am Bütgenbacher See entlang und über Amel und Meyerode zurück. Viel Weite, wenig Verkehr – die Runde für breite Reifen.",
+      "highlights": ["Offene Heide im Elsenborner Venn", "Schotterwege mit wenig Verkehr", "Pause am Bütgenbacher See", "Waldwege bei Meyerode"],
+      "surface": { "asphalt": 40, "schotter": 55, "trail": 5 },
+      "difficulty": "mittel",
+      "bike": "diverge-4-sport-alloy",
+      "bikeWhy": "Future Shock und breite Reifen für lange Schotterpassagen – komfortabel, auch wenn der Weg gröber wird.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Reifendruck für Schotter einstellen, Flaschen auffüllen und los nach Norden.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Honsfeld", "lat": 50.3700, "lon": 6.2700, "km": 11.1, "title": "Feldwege Richtung Norden", "tagline": "Erst Asphalt, dann Schotter.", "text": "Hinter Honsfeld wird der Belag gröber. Breite Reifen mit etwas weniger Druck fühlen sich hier richtig an.", "image": "assets/gravel-ride.jpg", "alt": "Gravel-Gruppe auf einem Schotterweg", "cta": "Welcher Reifendruck?", "ask": "Welcher Reifendruck ist für Schotter mit dem Gravelbike richtig?" },
+        { "name": "Elsenborner Venn", "lat": 50.4620, "lon": 6.2200, "km": 24.9, "title": "Elsenborner Venn", "tagline": "Weiter Himmel, breite Reifen.", "text": "Offene Heide, Schotterpisten, kaum Autos. Rund um das Lager können Wege gesperrt sein – Schilder vor Ort beachten.", "image": "assets/mtb-ridge.jpg", "alt": "Weite Hügellandschaft im Dunst", "cta": "Welches Gravelbike?", "ask": "Welches Gravelbike passt zu Schotter und Heide im Venn?" },
+        { "name": "Bütgenbacher See", "lat": 50.4300, "lon": 6.2000, "km": 35.5, "title": "Seeufer Bütgenbach", "tagline": "Pause mit Blick aufs Wasser.", "text": "Am See entlang ist es flach – Zeit für einen Riegel, bevor es über Amel zurückgeht.", "image": "assets/v10/see.jpg", "alt": "Fahrräder an einer Bank am See", "pause": "rast", "cta": "Was nehme ich mit?", "ask": "Was gehört bei einer Graveltour in die Rahmentasche?" },
+        { "name": "Meyerode", "lat": 50.3300, "lon": 6.2000, "km": 49.3, "title": "Waldwege bei Meyerode", "tagline": "Schatten und feiner Schotter.", "text": "Ein letzter Anstieg durch den Wald, dann rollt es zurück ins Ourtal nach Schönberg.", "image": "entwuerfe/codex-2026-10/prototype/assets/hero-mtb.jpg", "alt": "Waldweg zwischen hohen Bäumen", "cta": "Tubeless?", "ask": "Lohnt sich Tubeless für mein Gravelbike?" },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Staub abklopfen, Kaffee holen.", "text": "Nach dem Schotter freut sich der Antrieb über Pflege – wir reinigen und schmieren gern, für alle Marken.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches Gravelbike passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    },
+    {
+      "id": "schneifel-gravel",
+      "file": "schneifel-gravel.gpx",
+      "type": "gravel",
+      "title": "Schneifel-Gravel",
+      "teaser": "Über Bleialf nach Prüm und zurück über den Kamm der Schneifel am Schwarzen Mann.",
+      "description": "Kurz nach dem Laden bist du in Deutschland. Über Bleialf und Wirtschaftswege geht es nach Prüm, wo die Basilika am Markt auf eine Kaffeepause wartet. Danach klettert die Runde hinauf auf den Kamm der Schneifel – breite Forstwege bis zum Schwarzen Mann auf knapp 700 m – und rollt zurück nach Schönberg.",
+      "highlights": ["Grenzübertritt nach Bleialf", "Kaffeepause in Prüm", "Forstwege auf dem Schneifel-Kamm", "Schwarzer Mann, knapp 700 m"],
+      "surface": { "asphalt": 35, "schotter": 55, "trail": 10 },
+      "difficulty": "mittel",
+      "bike": "crux-dsw-comp",
+      "bikeWhy": "Leicht und sportlich – genau richtig für die Forstpisten am Kamm und den schnellen Asphalt dazwischen.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Schnell noch die Reifen prüfen – auf dem Kamm wird es grob. Dann über die Grenze Richtung Bleialf.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Bleialf", "lat": 50.2350, "lon": 6.2900, "km": 7.6, "title": "Über die Grenze", "tagline": "Nach Bleialf in die Eifel.", "text": "Ab Bleialf mischt sich Asphalt mit Wirtschaftswegen – entspannt rollen bis Prüm.", "image": "assets/gravel-ride.jpg", "alt": "Gravel-Gruppe auf einem Schotterweg", "cta": "Welches Gravelbike?", "ask": "Welches Gravelbike passt zu gemischten Touren in der Eifel?" },
+        { "name": "Prüm", "lat": 50.2070, "lon": 6.4240, "km": 19.8, "title": "Halbzeit in Prüm", "tagline": "Kaffee unter der Basilika.", "text": "Die Basilika am Markt ist nicht zu übersehen. Guter Ort für Kaffee und Kuchen, bevor es in den Wald geht.", "image": "assets/gefuehl-moment.jpg", "alt": "Hügel im Morgennebel", "pause": "kaffee", "cta": "Was nehme ich mit?", "ask": "Was gehört bei einer Graveltour in die Rahmentasche?" },
+        { "name": "Schwarzer Mann", "lat": 50.2500, "lon": 6.3600, "km": 34.2, "title": "Kamm der Schneifel", "tagline": "697 Meter, Fichten und Forstwege.", "text": "Breite Forstpisten auf dem Kamm, teils grob geschottert. Hier hat ein Gravelbike mit Reserven die Nase vorn.", "image": "assets/mtb-ridge.jpg", "alt": "Bewaldeter Hügelkamm im Dunst", "cta": "Welcher Reifen?", "ask": "Welche Gravel-Reifen passen zu grobem Forstschotter?" },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Vom Kamm direkt an die Theke.", "text": "Die Abfahrt bringt dich zurück ins Ourtal. Danach gibt es Kaffee – und auf Wunsch eine Wäsche für den Antrieb.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches Gravelbike passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    },
+    {
+      "id": "our-trails",
+      "file": "our-trails.gpx",
+      "type": "mtb",
+      "title": "Our-Trails",
+      "teaser": "Rauf, runter, wieder rauf: Waldwege und Pfade an den Hängen der Our.",
+      "description": "Die Runde pendelt an den Talhängen der Our hinunter nach Steinebrück und Steffeshausen. Kurze, steile Anstiege wechseln mit flowigen Waldwegen und ein paar wurzeligen Passagen. Zurück geht es über den Kamm oberhalb des Tals – mit dem längsten Anstieg am Schluss.",
+      "highlights": ["Waldwege an den Hängen der Our", "Pause am Fluss bei Steffeshausen", "Kammweg mit Blick ins Tal", "Viele kurze, knackige Anstiege"],
+      "surface": { "asphalt": 15, "schotter": 35, "trail": 50 },
+      "difficulty": "mittel",
+      "bike": "rockhopper-comp",
+      "bikeWhy": "Robustes Hardtail mit Federgabel – für flowige Waldwege und kurze Rampen genau richtig.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Gabel und Dämpfer auf dein Gewicht einstellen lassen, dann direkt hinein in den Wald.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Steinebrück", "lat": 50.2650, "lon": 6.1950, "km": 9.2, "title": "Wurzeln an der Our", "tagline": "Rauf, runter, wieder rauf.", "text": "Kurze, steile Anstiege an den Talhängen, dazwischen flowige Waldwege. Ein Hardtail reicht – ein Fully macht noch mehr Spaß.", "image": "assets/achim-ride.jpg", "alt": "Mountainbiker auf einem Waldtrail", "cta": "Hardtail oder Fully?", "ask": "Hardtail oder Fully für Waldtrails an der Our?" },
+        { "name": "Steffeshausen", "lat": 50.2150, "lon": 6.1680, "km": 17.0, "title": "Pause am Fluss", "tagline": "Tiefster Punkt der Runde.", "text": "Kurz verschnaufen, bevor der lange Anstieg zurück Richtung Schönberg beginnt.", "image": "entwuerfe/codex-2026-10/prototype/assets/hero-mtb.jpg", "alt": "Waldweg zwischen hohen Bäumen", "pause": "rast", "cta": "Was nehme ich mit?", "ask": "Was gehört bei einer MTB-Tour in den Rucksack?" },
+        { "name": "Kammweg", "lat": 50.2400, "lon": 6.2280, "km": 23.5, "title": "Kammweg über dem Tal", "tagline": "Der lange Anstieg.", "text": "Stetig bergauf über dem Ourtal. Wenn die Gabel hier nicht mehr sauber arbeitet, ist ein Fahrwerk-Service fällig.", "image": "assets/mtb-action.jpg", "alt": "Mountainbiker im Wald", "cta": "Fahrwerk-Service", "ask": "Wann braucht meine Federgabel einen Service?" },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Schlamm ab, Kaffee an.", "text": "Ab ins Tal und zurück zum Laden. Die Werkstatt kümmert sich gern um Bremsen, Fahrwerk und Antrieb – für alle Marken.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches MTB passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    },
+    {
+      "id": "schneifel-singletrails",
+      "file": "schneifel-singletrails.gpx",
+      "type": "mtb",
+      "title": "Schneifel-Singletrails",
+      "teaser": "Kurz, steil, technisch: Pfade rund um den Schwarzen Mann.",
+      "description": "Über Feldwege geht es nach Auw und dann hinauf in den Fichtenwald der Schneifel. Rund um den Schwarzen Mann warten schmale Pfade mit Wurzeln und Anliegern, danach eine lange Abfahrt über Brandscheid. Wenige Kilometer, viele Höhenmeter – eine Runde für alle, die gern technisch fahren.",
+      "highlights": ["Singletrails am Schwarzen Mann", "Wurzelpassagen im Fichtenwald", "Lange Abfahrt über Brandscheid", "Viele Höhenmeter auf wenig Strecke"],
+      "surface": { "asphalt": 10, "schotter": 30, "trail": 60 },
+      "difficulty": "schwer",
+      "bike": "stumpjumper-15-evo-expert",
+      "bikeWhy": "Fully mit Reserven für Wurzeln, Anlieger und lange Abfahrten – und trotzdem gut bergauf.",
+      "beispiel": true,
+      "stops": [
+        { "start": true, "name": "Racepoint", "title": "Kaffee bei Achim", "tagline": "Start in Schönberg.", "text": "Protektoren an, Luftdruck runter – und über die Grenze Richtung Auw.", "image": "assets/v10/film-poster.jpg", "alt": "Kaffeebar im Racepoint-Laden", "pause": "kaffee", "cta": "Welche Tour passt zu mir?", "ask": "Welche Tour ab Racepoint passt zu meiner Form?" },
+        { "name": "Auw", "lat": 50.2600, "lon": 6.3350, "km": 7.9, "title": "Anrollen nach Auw", "tagline": "Erst warm, dann wild.", "text": "Feldwege über die Grenze, die Schneifel immer vor Augen. Gut zum Einfahren, bevor es technisch wird.", "image": "assets/mtb-ridge.jpg", "alt": "Bewaldeter Hügelkamm im Dunst", "cta": "Welcher Luftdruck?", "ask": "Welchen Reifendruck fahre ich am MTB auf Singletrails?" },
+        { "name": "Schwarzer Mann", "lat": 50.2500, "lon": 6.3600, "km": 12.0, "title": "Trails am Schwarzen Mann", "tagline": "Wurzeln, Anlieger, Matsch.", "text": "Schmale Pfade durch den Fichtenwald – technisch, aber fahrbar. Protektoren und ein Tubeless-Setup lohnen sich.", "image": "assets/achim-ride.jpg", "alt": "Mountainbiker auf einem Waldtrail", "cta": "Welches MTB?", "ask": "Welches MTB passt zu technischen Singletrails?" },
+        { "name": "Brandscheid", "lat": 50.2280, "lon": 6.3550, "km": 15.3, "title": "Abfahrt Brandscheid", "tagline": "Laufen lassen.", "text": "Lange Abfahrt über Forstwege und Pfade. Vorher Bremsbeläge prüfen – wir checken das gern.", "image": "entwuerfe/codex-2026-10/prototype/assets/hero-mtb.jpg", "alt": "Waldweg zwischen hohen Bäumen", "cta": "MTB-Check", "ask": "Ich möchte mein MTB vor einer Trail-Tour checken lassen." },
+        { "ziel": true, "name": "Racepoint", "title": "Zurück bei Racepoint", "tagline": "Bike abspritzen, Kaffee trinken.", "text": "Über die Felder rollt es zurück nach Schönberg. Danach Fahrwerk und Bremsen kurz durchsehen lassen – für alle Marken.", "image": "assets/shop-interior.jpg", "alt": "Showroom von Racepoint in Schönberg", "pause": "kaffee", "cta": "Welches Bike passt?", "ask": "Welches MTB passt zur Tour {title} ({km} km, {hm} Hm, {surface})?" }
+      ]
+    }
+  ]
+}
