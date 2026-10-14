@@ -841,7 +841,7 @@ tailwind.config = {
 </button>
 <div id="chatPanel" class="fixed bottom-24 right-5 z-50 hidden w-[min(380px,calc(100vw-2.5rem))]">
   <div class="rounded-3xl bg-white text-slate-900 shadow-2xl ring-1 ring-black/5 overflow-hidden">
-    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100"><div class="flex items-center gap-2"><span class="grid place-items-center h-8 w-8 rounded-full bg-rp-ink text-rp-red text-xs font-bold">AI</span><div><div class="text-sm font-bold">Racepoint Berater</div><div class="text-[11px] text-green-600">● online · DE/FR/NL/EN</div></div></div><button id="chatClose" class="text-slate-400 text-xl">✕</button></div>
+    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100"><div class="flex items-center gap-2"><span class="grid place-items-center h-8 w-8 rounded-full bg-rp-ink text-rp-red text-xs font-bold">AI</span><div><div class="text-sm font-bold">Racepoint Berater</div><div class="text-[11px] text-slate-500" data-simulation-hint>Simulation · Beispielberatung</div></div></div><button id="chatClose" class="text-slate-400 text-xl">✕</button></div>
     <div id="chatLog" class="px-5 py-4 space-y-3 h-[44vh] overflow-y-auto"></div>
     <div id="chatQuick" class="px-5 pb-2 flex flex-wrap gap-2"></div>
     <div class="px-5 pb-5 pt-2 flex gap-2 border-t border-slate-100"><input id="chatInput" class="flex-1 rounded-full bg-slate-100 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-rp-red/40" placeholder="Nachricht schreiben…"><button id="chatSend" class="rounded-full bg-rp-ink text-white px-4 text-sm font-bold uppercase">Senden</button></div>
@@ -1034,7 +1034,7 @@ tailwind.config = {
     chips([ { label:'Termin vormerken', run:termin }, { label:'Öffnungszeiten', run:hours } ]);
   }
   async function termin(){
-    await botSay(['Super · sag mir kurz deinen Namen und worum es geht, dann meldet sich Achim oder Elke bei dir.', 'Direkt geht auch per WhatsApp oder Telefon · im echten Shop öffnet sich hier ein Kalender.']);
+    await botSay(['Hier zeigen wir beispielhaft, wie eine Terminanfrage ablaufen kann. Diese Simulation sendet keine Anfrage und reserviert keinen Termin.', 'Für einen echten Termin kontaktiere Racepoint bitte direkt per WhatsApp oder Telefon.']);
     chips([ { label:'Öffnungszeiten', run:hours }, { label:'Bike finden', run:askCat }, { label:'Von vorn', run:start } ]);
   }
   function route(text){

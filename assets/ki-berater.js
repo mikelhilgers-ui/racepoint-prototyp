@@ -90,6 +90,7 @@
   /* =================== Texte =================== */
   const S = {
     title: { de: 'Achims KI-Berater', fr: 'Conseiller IA d’Achim', nl: 'Achims AI-adviseur', en: 'Achim’s AI advisor' },
+    simulation: { de: 'Simulation', fr: 'Simulation', nl: 'Simulatie', en: 'Simulation' },
     launcher: { de: 'Frag Achims KI', fr: 'Demande à l’IA', nl: 'Vraag het de AI', en: 'Ask Achim’s AI' },
     hints: {
       de: ['Welches Gravelbike passt?', 'Meine Rahmengröße?', 'Habt ihr gerade offen?', 'Repariert ihr mein Trek?'],
@@ -100,7 +101,7 @@
     hello: { de: 'Hi, ich bin Achims KI-Berater.', fr: 'Salut, je suis le conseiller IA d’Achim.', nl: 'Hoi, ik ben Achims AI-adviseur.', en: 'Hi, I’m Achim’s AI advisor.' },
     helloSub: { de: 'Frag mich zu Bikes, Größe, Werkstatt oder Terminen – auf Deutsch, Français, Nederlands oder English.', fr: 'Pose-moi tes questions sur les vélos, la taille, l’atelier ou les rendez-vous – en français, Deutsch, Nederlands ou English.', nl: 'Vraag me alles over fietsen, maat, werkplaats of afspraken – in het Nederlands, Deutsch, Français of English.', en: 'Ask me about bikes, sizing, the workshop or appointments – in English, Deutsch, Français or Nederlands.' },
     ph: { de: 'Frag mich etwas …', fr: 'Pose ta question …', nl: 'Stel je vraag …', en: 'Ask me anything …' },
-    disclaimer: { de: 'KI-Simulation im Prototyp · Achim prüft jede Empfehlung persönlich', fr: 'Simulation IA (prototype) · Achim vérifie chaque conseil', nl: 'AI-simulatie (prototype) · Achim checkt elk advies', en: 'AI simulation (prototype) · Achim double-checks every tip' },
+    disclaimer: { de: 'Simulation · Empfehlungen und Abläufe sind Beispiele.', fr: 'Simulation · Conseils et démarches à titre d’exemple.', nl: 'Simulatie · Adviezen en stappen zijn voorbeelden.', en: 'Simulation · Recommendations and workflows are examples.' },
     thinking: { de: 'Achims KI denkt nach', fr: 'L’IA d’Achim réfléchit', nl: 'Achims AI denkt na', en: 'Achim’s AI is thinking' },
     listening: { de: 'Ich höre zu …', fr: 'J’écoute …', nl: 'Ik luister …', en: 'Listening …' },
     reset: { de: 'Neues Gespräch', fr: 'Nouvelle conversation', nl: 'Nieuw gesprek', en: 'New chat' },
@@ -188,8 +189,8 @@
     wDay: { de: 'Tag', fr: 'Jour', nl: 'Dag', en: 'Day' },
     wTime: { de: 'Uhrzeit', fr: 'Heure', nl: 'Tijd', en: 'Time' },
     wBook: { de: 'Termin vormerken', fr: 'Réserver ce créneau', nl: 'Moment vastleggen', en: 'Hold this slot' },
-    wBooked: { de: 'Vorgemerkt!', fr: 'C’est noté !', nl: 'Genoteerd!', en: 'Booked!' },
-    wBookedSub: { de: 'Achim oder Elke bestätigen dir den Termin. (Demo)', fr: 'Achim ou Elke te confirment le rendez-vous. (Démo)', nl: 'Achim of Elke bevestigen je afspraak. (Demo)', en: 'Achim or Elke will confirm your appointment. (Demo)' },
+    wBooked: { de: 'Beispieltermin ausgewählt', fr: 'Créneau de démonstration choisi', nl: 'Voorbeeldafspraak gekozen', en: 'Example appointment selected' },
+    wBookedSub: { de: 'Simulation · Kein Termin reserviert. Vereinbare deinen echten Termin direkt mit Racepoint.', fr: 'Simulation · Aucun rendez-vous réservé. Contacte Racepoint pour un vrai rendez-vous.', nl: 'Simulatie · Geen afspraak gereserveerd. Maak je echte afspraak rechtstreeks met Racepoint.', en: 'Simulation · No appointment reserved. Contact Racepoint to book a real appointment.' },
     wIcs: { de: 'In Kalender', fr: 'Ajouter au calendrier', nl: 'In agenda', en: 'Add to calendar' },
     wWa: { de: 'Per WhatsApp', fr: 'Par WhatsApp', nl: 'Via WhatsApp', en: 'Via WhatsApp' },
     wToday: { de: 'heute', fr: 'aujourd’hui', nl: 'vandaag', en: 'today' },
@@ -204,7 +205,7 @@
     wPlace: { de: 'Ort', fr: 'Lieu', nl: 'Plaats', en: 'Place' },
     wOpen: { de: 'offen', fr: 'à définir', nl: 'open', en: 'open' },
     wName: { de: 'Dein Name (optional)', fr: 'Ton prénom (optionnel)', nl: 'Je naam (optioneel)', en: 'Your name (optional)' },
-    wSent: { de: 'Gesendet ✓ Achim meldet sich – meist am selben Tag. (Demo)', fr: 'Envoyé ✓ Achim te répond – souvent le jour même. (Démo)', nl: 'Verstuurd ✓ Achim laat van zich horen – meestal dezelfde dag. (Demo)', en: 'Sent ✓ Achim will get back to you – usually the same day. (Demo)' },
+    wSent: { de: 'Simulation · Keine Anfrage gesendet. Kontaktiere Racepoint direkt für eine echte Beratung.', fr: 'Simulation · Aucune demande envoyée. Contacte Racepoint pour un vrai conseil.', nl: 'Simulatie · Geen aanvraag verstuurd. Neem rechtstreeks contact op met Racepoint voor echt advies.', en: 'Simulation · No request sent. Contact Racepoint directly for real advice.' },
     wQuestion: { de: 'Frage', fr: 'Question', nl: 'Vraag', en: 'Question' },
     wWatch: { de: 'Jetzt ansehen', fr: 'Regarder', nl: 'Nu bekijken', en: 'Watch now' },
     cities: [
@@ -327,6 +328,7 @@
   .kib-av i{position:absolute;inset:0;z-index:1;display:grid;place-items:center}.kib-av i svg{width:19px;height:19px}
   .kib-ttl{flex:1;min-width:0}
   .kib-ttl b{display:block;font-size:16px;letter-spacing:.01em}
+  .kib-simulation{display:inline-block;margin:3px 0;padding:2px 6px;border-radius:4px;background:#ffffff1f;color:#fff;font:600 10px/1.4 Arial,sans-serif;letter-spacing:.03em}
   .kib-ttl small{display:block;font-size:12px;color:rgba(255,255,255,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .kib-ttl small .rp-dot{width:7px;height:7px}
   .kib-hbtn{width:36px;height:36px;border-radius:12px;border:0;background:transparent;display:grid;place-items:center;color:rgba(255,255,255,.65);transition:background .2s,color .2s}
@@ -537,7 +539,7 @@
       '<div class="kib-label"><span></span><small></small></div></div>' +
       '<section class="kib-panel" role="dialog" aria-modal="false" aria-label="KI-Berater" data-lenis-prevent>' +
         '<header class="kib-head"><div class="kib-av"><i>' + I.spark + '</i></div>' +
-        '<div class="kib-ttl"><b></b><small data-kib-status></small></div>' +
+        '<div class="kib-ttl"><b></b><span class="kib-simulation" data-simulation-hint></span><small data-kib-status></small></div>' +
         '<button class="kib-hbtn" data-act="reset">' + I.reset + '</button><button class="kib-hbtn" data-act="close">' + I.close + '</button></header>' +
         '<div class="kib-log" aria-live="polite"></div><div class="kib-chips"></div>' +
         '<footer class="kib-foot"><form class="kib-form"><textarea class="kib-in" rows="1"></textarea>' +
@@ -590,6 +592,7 @@
 
   function applyLang() {
     titleEl.textContent = tr(S.title);
+    root.querySelector('[data-simulation-hint]').textContent = tr(S.simulation);
     input.placeholder = tr(S.ph);
     root.querySelector('.kib-disc').textContent = tr(S.disclaimer);
     label.querySelector('span').textContent = tr(S.launcher);
