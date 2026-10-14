@@ -442,9 +442,20 @@
     R.area = area;
     const bb = cur.geo.bb, pad = Math.max(bb.x1 - bb.x0, bb.y1 - bb.y0) * 0.05;
     R.sFit = Math.min(area.w / (bb.x1 - bb.x0 + pad * 2), area.h / (bb.y1 - bb.y0 + pad * 2));
-    const pinR = R.pin.getBoundingClientRect();
-    R.stamp.style.left = (r.left - pinR.left + area.cx).toFixed(1) + 'px';
-    R.stamp.style.top = (r.top - pinR.top + area.cy).toFixed(1) + 'px';
+    // Stempel dorthin, wo am Ende (ganze Strecke sichtbar) am meisten Platz ist
+    const pinR = R.pin.getBoundingClientRect(), rad = isMobile() ? 50 : 88;
+    const scr = (x, y) => [area.cx + (x - R.bbC.x) * R.sFit, area.cy + (y - R.bbC.y) * R.sFit];
+    const pts = cur.geo.pp.filter((_, i) => i % 4 === 0).map(q => scr(q[0], q[1]));
+    let best = [area.cx, area.cy], bestD = -1;
+    for (let i = 0; i <= 6; i++) for (let j = 0; j <= 6; j++) {
+      const x = area.x + rad + (area.w - 2 * rad) * i / 6, y = area.y + rad + (area.h - 2 * rad) * j / 6;
+      let d = Infinity;
+      for (let k = 0; k < pts.length; k++) { const dx = pts[k][0] - x, dy = pts[k][1] - y, dd = dx * dx + dy * dy; if (dd < d) d = dd; }
+      d = Math.sqrt(d) - Math.hypot(x - area.cx, y - area.cy) * 0.15;   // leicht zur Mitte hin bevorzugen
+      if (d > bestD) { bestD = d; best = [x, y]; }
+    }
+    R.stamp.style.left = (r.left - pinR.left + best[0]).toFixed(1) + 'px';
+    R.stamp.style.top = (r.top - pinR.top + best[1]).toFixed(1) + 'px';
     buildProfile();
     R.lastKm = -1;
     render();

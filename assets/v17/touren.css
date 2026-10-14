@@ -88,7 +88,7 @@
 .bsp{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;border:1px dashed rgba(224,164,58,.6);color:#f0cf8f;font:600 11px/1.3 var(--display);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .bsp[hidden]{display:none}
 .tc-h{margin:0;font:900 italic clamp(30px,2.5vw,38px)/.92 var(--display);text-transform:uppercase}
-.tc-h a{display:inline-block;padding:3px 0;text-decoration:none}
+.tc-h a{display:inline-block;padding:7px 0;margin:-7px 0;text-decoration:none}
 .tc-h a:hover{color:var(--c)}
 .tc-p{margin:-4px 0 0;color:var(--mute);font-size:14.5px;line-height:1.45}
 .tc-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:space-between;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
@@ -195,14 +195,16 @@
 .mf-scale{position:absolute;top:calc(var(--hd) + 32px);right:calc(var(--gut) + 50px);display:flex;flex-direction:column;align-items:flex-end;gap:5px}
 .mf-scale i{display:block;height:6px;width:80px;border:1.5px solid var(--pi);border-top:0}
 .mf-scale b{font:700 10.5px/1 var(--display);letter-spacing:.14em;text-transform:uppercase}
-.rt-mapsw{position:absolute;z-index:4;top:calc(var(--hd) + 74px);right:var(--gut);display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.rt-mapsw{position:absolute;z-index:4;top:calc(var(--hd) + 18px);right:calc(var(--gut) + 200px);display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.leaf-on .rt-mapsw{right:calc(var(--gut) + 56px)}
 .msw{display:inline-flex;padding:3px;border-radius:999px;background:rgba(244,240,232,.92);border:1px solid var(--rule);box-shadow:0 10px 24px -14px rgba(18,19,22,.5)}
 .msw button,.osm-go{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px;border:0;border-radius:999px;background:none;cursor:pointer;font:700 12.5px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--pi-2)}
 .msw button[aria-pressed="true"]{background:var(--pi);color:var(--paper)}
 .osm-go{background:rgba(244,240,232,.94);border:1px solid var(--rule);color:var(--pi);box-shadow:0 10px 24px -14px rgba(18,19,22,.5)}
 .osm-go svg{width:16px;height:16px;fill:none;stroke:var(--red);stroke-width:1.8;stroke-linejoin:round}
 .osm-go:hover{background:var(--pi);color:var(--paper)}
-.osm-note{max-width:230px;margin:0;padding:6px 10px;border-radius:10px;background:rgba(244,240,232,.9);font-size:11.5px;line-height:1.35;color:var(--pi-3);text-align:right}
+.osm-note{position:absolute;top:calc(100% + 6px);right:0;width:240px;margin:0;padding:8px 11px;border-radius:10px;background:rgba(18,19,22,.92);font-size:12px;line-height:1.4;color:#fff;text-align:left;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .2s,transform .2s,visibility .2s;pointer-events:none}
+.rt-mapsw:hover .osm-note,.rt-mapsw:focus-within .osm-note{opacity:1;visibility:visible;transform:none}
 .rt-leaf{position:absolute;inset:0;z-index:0;background:#dcd8d0}
 .rt-leaf[hidden]{display:none}
 .leaf-on .tmap{visibility:hidden}
@@ -210,7 +212,7 @@
 .leaf-on .mf-n,.leaf-on .mf-scale{display:none}
 .rt-leaf .leaflet-control-attribution{font:11px var(--body)}
 .rt-leaf .leaflet-bottom.leaflet-right{margin-bottom:0}
-.rt-leaf .leaflet-top.leaflet-right{margin-top:calc(var(--hd) + 140px)}
+.rt-leaf .leaflet-top.leaflet-right{margin-top:calc(var(--hd) + 10px)}
 .lf-pin{display:grid;place-items:center;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--red);border:2.5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.35)}
 .lf-pin b{transform:rotate(45deg);font:900 italic 14px var(--display);color:#fff}
 .lf-stop{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #121316;font:700 12px var(--display);color:#121316}
@@ -382,7 +384,7 @@
 .rm .wp-body{display:block;-webkit-line-clamp:unset;margin:0 0 12px}
 .rm .wp-ask{max-width:none;white-space:normal}
 .rm .route-profile{position:relative;inset:auto;height:104px;margin:0 var(--gut) 24px}
-.rm .rt-mapsw{top:66px}
+.rm .rt-mapsw{top:16px}
 .rm .mf-n{top:16px}.rm .mf-scale{top:26px}
 @media (min-width:1432px){.rm .route-profile{margin-inline:auto;max-width:calc(var(--max) - 2 * var(--gut))}}
 

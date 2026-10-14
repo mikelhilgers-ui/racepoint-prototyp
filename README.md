@@ -45,6 +45,26 @@ Die Seite ist nur deutsch, nutzt nur lokale Bibliotheken aus `vendor/` und berü
 
 **Unterseiten von 17:** `v17-rennrad`, `-gravel`, `-mtb`, `-ebike`, `-familie` (echte Bikes aus dem Codex-Katalog mit Filter und Sortierung), `v17-werkstatt`, `v17-bikefitting` (große scrollgesteuerte Retül-Motion-Capture-Animation mit Live-Winkeln und „Sitzposition optimiert“), `v17-filme`, `v17-ueber-uns`, `v17-kontakt`, `v17-anfrage` und `v17-bike.html?id=…` (Bike-Detail mit Konfigurator und 3D-Vorschau aus dem prozeduralen V9-Bike). Header, Mobil-Menü und Footer setzt `assets/v17/site.js` für alle v17-Seiten ein; eine neue Seite braucht nur `<body data-page="…">` und dieselben Einbindungen.
 
+## Touren (GPX)
+
+`v17-touren.html` zeigt 6 Touren ab dem Laden (2 Rennrad, 2 Gravel, 2 MTB): Filter (`#rennrad`, `#gravel`, `#mtb`), eine stilisierte Übersichtskarte mit allen Routen, Tourenkarten mit GPX-Download und darunter die gepinnte Scroll-Fahrt aus „10 · Die Runde“: Tour wählen, scrollen, die Route zeichnet sich mit Zählern, Stopp-Karten und Höhenprofil. Direktlink auf eine Tour: `v17-touren.html#tour-<id>`. Danach folgt der Steckbrief mit Distanz, Anstieg, höchstem Punkt, Fahrzeit-Schätzung, Untergrund, Bike-Empfehlung aus dem Katalog, Leihrad-Anfrage (E-Mail) und Werkstatt-Check (KI-Berater).
+
+**Alle Zahlen kommen aus der GPX-Datei.** Die Seite lädt `assets/v17/touren/touren.json` und je Tour die GPX-Datei per `fetch` (daher über einen Webserver öffnen, nicht als Datei). Sie liest die Trackpunkte (`trkpt` mit `lat`/`lon`/`ele`) und berechnet Distanz (Haversine), Anstieg (leicht geglättet, Schwelle 3 m), höchsten Punkt, Höhenprofil und Kartenlinie selbst (`assets/v17/touren-map.js`).
+
+**Beispielrouten:** Achims GPX-Dateien fehlen noch. Die 6 Dateien sind Platzhalter: Linien zwischen echten Orten, interpoliert und leicht gekrümmt, mit plausiblen Höhen. Sie folgen keinen echten Wegen und sind nicht zum Navigieren gedacht. Jede GPX-Datei trägt in den Metadaten „Beispielroute – die echte Tour von Achim folgt“. Solange `"beispiel": true` gesetzt ist, zeigt die Seite das Badge „Beispielroute“ und oben den Hinweis „Achims echte GPX-Touren folgen – die Strecken hier sind Platzhalter.“
+
+**Echte Tour von Achim einsetzen:**
+
+1. Die GPX-Datei nach `assets/v17/touren/` legen. Am einfachsten die Beispieldatei überschreiben, z. B. `venn-klassiker.gpx`. Bei einem neuen Namen in `touren.json` bei der Tour `"file"` anpassen.
+2. In `touren.json` Titel, `teaser`, `description`, `highlights`, Untergrund (`surface`, Summe 100), `difficulty` (leicht/mittel/schwer) und die Bike-Empfehlung (`bike` = ID aus `entwuerfe/codex-2026-10/prototype/kombi/catalogue.json`) prüfen.
+3. Stopps anpassen: `"start": true` ist der Laden, `"ziel": true` das Ende der Strecke. Alle anderen Stopps mit `"lat"`/`"lon"` angeben. Die Seite legt sie auf den nächsten Streckenpunkt. Liegt dieser mehr als 1,5 km entfernt, nimmt sie `"km"`, sonst lässt sie den Stopp weg. Bilder sind Pfade wie `assets/gravel-ride.jpg`. In `ask` setzt die Seite `{title}`, `{km}`, `{hm}` und `{surface}` ein.
+4. `"beispiel": false` setzen. Badge und Hinweis verschwinden dann von selbst.
+5. Neue Dateien mit `git add` erfassen, sonst fehlen sie im Azure-Paket. `npm run build` liefert `.gpx` als `application/gpx+xml` aus.
+
+Distanz und Höhenmeter nie von Hand eintragen. Die Seite rechnet sie bei jedem Laden neu aus der GPX-Datei aus. Die Anleitung steht auch als `_hinweis` oben in `touren.json`.
+
+**Karte:** Die Scroll-Fahrt läuft auf einer stilisierten Topo-Karte, die aus den GPX-Punkten projiziert wird (Höhenlinien, Wald, Wasser und Orte sind nur Andeutung). Leaflet 1.9.4 liegt in `vendor/leaflet/`. Kacheln von OpenStreetMap (oder OpenTopoMap) lädt die Seite erst nach einem Klick auf „Karte laden (OpenStreetMap)“. Danach merkt sie sich die Wahl in `localStorage`.
+
 ## Neu: Prototypen 8–10 (Scroll-Motion, 3D, KI-Berater 2.0)
 
 Drei zusaetzliche Entwuerfe als eigene Seiten, ebenfalls ueber den Zahnkranz erreichbar (oder `index.html?v=8..10`):
