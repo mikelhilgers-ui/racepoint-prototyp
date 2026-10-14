@@ -9,6 +9,16 @@
 (function () {
   'use strict';
 
+  // Lokale Schriften (assets/fonts) – greifen auch, wenn Google Fonts blockiert ist
+  try {
+    const me = document.currentScript && document.currentScript.src;
+    if (me && !document.querySelector('link[data-rp-fonts]')) {
+      const l = document.createElement('link');
+      l.rel = 'stylesheet'; l.href = new URL('fonts/fonts.css', me).href; l.setAttribute('data-rp-fonts', '');
+      document.head.appendChild(l);
+    }
+  } catch (e) {}
+
   const LANGS = ['de', 'fr', 'nl', 'en'];
   const DAY = {
     de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
