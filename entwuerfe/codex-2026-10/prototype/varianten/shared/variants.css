@@ -38,3 +38,5 @@ body:has(dialog[open]) .design-switch{display:none}
   [data-design] .advisor-fab:hover{transform:none}
 }
 @media(max-width:600px){[data-design] .advisor-dialog,[data-design] .advisor-dialog.is-maximized{border-radius:0}}
+/* Tablets: hero film controls end before the prototype gear in the bottom-right corner. */
+@media(min-width:641px) and (max-width:1100px){[data-design] .hero-bottom,[data-design] .cinema-controls{padding-right:72px}}
