@@ -1,0 +1,13 @@
+{
+  "name": "racepoint-codex-designstudien",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "preview": "node prototype/preview.mjs",
+    "test": "node --test server/agent.test.mjs server/latency.test.mjs"
+  }
+}

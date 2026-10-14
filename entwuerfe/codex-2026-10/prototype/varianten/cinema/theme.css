@@ -1,0 +1,32 @@
+/* Same Racepoint visual language, with a viewport-sized film on every page. */
+.site-header,.subpage .site-header{position:absolute;top:36px!important;left:0;background:linear-gradient(#161616e6,#1616161a);color:white;border-color:#ffffff30;z-index:30}
+.hero,.page-hero{height:calc(100svh - 36px);min-height:760px;max-height:none;position:relative;display:block;overflow:hidden;background:#1d1d1d;color:white;isolation:isolate}
+.teaser-stage{position:absolute;inset:0;overflow:hidden;background:#1d1d1d;z-index:-2;pointer-events:none}
+.teaser-poster,#teaser-local{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.teaser-stage iframe{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:0;max-width:none;pointer-events:none}
+.teaser-poster{z-index:1;transition:opacity .6s ease;filter:brightness(.72)}
+.teaser-stage.is-ready .teaser-poster{opacity:0}
+.cinema-shade{position:absolute;inset:0;background:linear-gradient(90deg,#151515e6,#1515153a 85%),linear-gradient(0deg,#151515e8,transparent 70%);z-index:-1}
+.page-hero-copy{position:absolute;left:var(--pad);right:var(--pad);bottom:135px;padding:0;max-width:850px;z-index:2}
+.page-hero h1{font-size:clamp(70px,8.6vw,135px);line-height:.94;letter-spacing:-.025em;max-width:1000px;color:white}
+.page-hero h1 span{color:var(--red)}
+.page-hero .breadcrumb{font-size:10px;color:#d7d7d7;margin-bottom:30px}
+.page-hero .eyebrow{color:#dadada;font-size:10px;margin-bottom:18px}
+.page-hero .page-lead{font-size:15px;line-height:1.8;max-width:560px;color:#e4e4e4;margin:25px 0}
+.page-hero-visual{display:none}
+.page-hero.product-hero .page-hero-visual{display:block;position:absolute;right:var(--pad);bottom:115px;width:185px;height:125px;min-height:0;border-radius:6px;background:#f7f7f7eb;z-index:2;border:1px solid #ffffff55}
+.product-hero .page-hero-visual>img{object-fit:contain}.product-hero .page-hero-visual>span{font-size:7px;bottom:6px;left:7px;padding:3px 5px}
+.product-hero .page-hero-copy{max-width:calc(100% - var(--pad)*2 - 220px)}
+.product-hero h1{font-size:clamp(58px,7.2vw,115px)}
+.cinema-controls{position:absolute;bottom:28px;left:var(--pad);right:var(--pad);display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:55px;border-top:1px solid #ffffff55;font-size:11px;color:#e0e0e0;padding-top:14px}
+.cinema-controls button{display:flex;align-items:center;gap:10px;min-height:44px;background:none;color:white;font-size:11px;padding:8px}
+.catalog-intro h1{font-size:clamp(70px,8.6vw,135px)}.catalog-intro .page-hero-copy>p:last-child{color:#e0e0e0;font-size:15px;line-height:1.8;max-width:520px;margin-top:25px}
+@media(max-width:1050px){.page-hero-copy{bottom:125px}.page-hero h1{font-size:10vw}.product-hero .page-hero-copy{max-width:calc(100% - var(--pad)*2 - 170px)}.product-hero .page-hero-visual{width:145px;height:105px}.product-hero h1{font-size:8.3vw}}
+@media(max-width:600px){.hero,.page-hero{height:calc(100svh - 44px);min-height:730px}.site-header,.subpage .site-header{top:44px!important}.page-hero-copy{left:22px;right:22px;bottom:120px;max-width:none}.page-hero h1{font-size:clamp(49px,12.8vw,76px)}.page-hero .breadcrumb{margin-bottom:25px;font-size:9px}.page-hero .eyebrow{font-size:9px}.page-hero .page-lead{font-size:13px;line-height:1.8;margin:20px 0}.cinema-controls{left:22px;right:22px;bottom:22px;font-size:9px;gap:15px}.cinema-controls>span{max-width:65%}.cinema-controls button{font-size:10px;gap:8px}.product-hero .page-hero-copy{max-width:none;bottom:225px}.product-hero h1{font-size:clamp(38px,10vw,58px)}.product-hero .page-hero-visual{right:22px;bottom:92px;width:150px;height:105px}.catalog-intro h1{font-size:clamp(52px,13vw,76px)}.catalog-intro .page-hero-copy>p:last-child{font-size:13px}.teaser-poster{object-position:60% center}.hero-bottom{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.teaser-poster{transition:none}}
+.cinema-intro .advisor-fab{visibility:hidden;pointer-events:none}
+.cinema-controls,.hero-bottom{left:max(180px,var(--pad))}
+@media(max-width:600px){.cinema-controls,.hero-bottom{left:76px}.cinema-controls>span{font-size:8px}}
+.hero,.page-hero{min-height:0;height:calc(100svh - 36px)}
+@media(max-width:600px){.hero,.page-hero{height:100svh;min-height:660px}.site-header,.subpage .site-header{top:0!important}}
+@media(max-height:740px) and (min-width:601px){.page-hero h1{font-size:8vh}.page-hero .breadcrumb{margin-bottom:14px}.page-hero .eyebrow{margin-bottom:12px}.page-hero .page-lead{margin:16px 0;font-size:13px}.page-hero-copy{bottom:110px}.hero h1{font-size:16vh}.hero-copy{bottom:110px}.hero-copy>.eyebrow{margin-bottom:14px}.hero-description{margin-top:20px}}

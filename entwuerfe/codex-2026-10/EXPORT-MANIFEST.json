@@ -1,0 +1,1146 @@
+{
+  "exportedAt": "2026-10-14T16:10:30.834Z",
+  "source": "Racepoint local design session 2026-10-14",
+  "files": [
+    {
+      "path": "prototype/preview.mjs",
+      "bytes": 5399,
+      "sha256": "69ad6f8a2fa85272b407cbf17d464f6bd2ca3953f980176e63f606ae7f288acf"
+    },
+    {
+      "path": "prototype/start-preview.ps1",
+      "bytes": 535,
+      "sha256": "ffc1b80c3aef805075f96f15aed06b8478c210615ac2c6b60d377083b8be08c6"
+    },
+    {
+      "path": "prototype/varianten/index.html",
+      "bytes": 12407,
+      "sha256": "4b5b3a1e6dcc000759147703ee99524a3feb960e4efffc566733aa0c74ffa204"
+    },
+    {
+      "path": "prototype/varianten/overview.css",
+      "bytes": 3443,
+      "sha256": "d9521a4750c767b45043936c7a4b12b63c596967f5c5e74625a96fcaecccfbaf"
+    },
+    {
+      "path": "prototype/kombi/index.html",
+      "bytes": 23514,
+      "sha256": "3f892114ccc8a21f581891c738cace579abc3893eb3b579ab61c1d407837f72f"
+    },
+    {
+      "path": "prototype/kombi/rennrad.html",
+      "bytes": 19740,
+      "sha256": "a6d735e0ae10aece86e94dc4ed9b5b5df2157c33a72d78c5cef148c1194ee7e6"
+    },
+    {
+      "path": "prototype/kombi/gravel.html",
+      "bytes": 18318,
+      "sha256": "decf09560b134efdf417c24859056761417da0b31a1af170151d2e57469b2d6a"
+    },
+    {
+      "path": "prototype/kombi/mtb.html",
+      "bytes": 18352,
+      "sha256": "7ebf19c7011d423d14880d6495ae3476ddd791a9ceae336a0e31a99b8a3318f1"
+    },
+    {
+      "path": "prototype/kombi/ebike.html",
+      "bytes": 17085,
+      "sha256": "40ad7626eb85c174048888579a3f488095453a594abfeec99666bf49021ea649"
+    },
+    {
+      "path": "prototype/kombi/familie.html",
+      "bytes": 17133,
+      "sha256": "416d561707c51fd9aa4e9136d21912c63b105fb48d03bfdce4eea5df95ad3397"
+    },
+    {
+      "path": "prototype/kombi/videos.html",
+      "bytes": 20107,
+      "sha256": "4c1ec28cf51ed62b8f258f56369bf6ac238d0988739418e69321f6e07178b5a8"
+    },
+    {
+      "path": "prototype/kombi/reparatur.html",
+      "bytes": 15085,
+      "sha256": "5e3c5b626b04de6c6e7faf2a711b8cedd26e7227e4a5bf8e3f380dc8a27620d2"
+    },
+    {
+      "path": "prototype/kombi/bikefitting.html",
+      "bytes": 13866,
+      "sha256": "62305dbfc48ce49b1c6c6c3091c73b0b5e956d7c17930491d724d2254473fb23"
+    },
+    {
+      "path": "prototype/kombi/ueber-uns.html",
+      "bytes": 14882,
+      "sha256": "74a40bd57122fae5a40f0e0459daeb52f38803849be03cdb44289d71906a9d07"
+    },
+    {
+      "path": "prototype/kombi/kontakt.html",
+      "bytes": 13344,
+      "sha256": "0d2d2f4ab4a873c2a6abd1346ef374ceeea3c96bb656941a4e79b598f6262c82"
+    },
+    {
+      "path": "prototype/kombi/anfrage.html",
+      "bytes": 14174,
+      "sha256": "023d159ab4e4805c20e221e02e0eb4cc60d1ac37e75f0184def3a9a306bfb9a3"
+    },
+    {
+      "path": "prototype/kombi/bike.html",
+      "bytes": 24561,
+      "sha256": "0676101cc2e86b3f3b19d590ea4e276f786f135032c1bcee33b9a927bc7a516d"
+    },
+    {
+      "path": "prototype/kombi/bike-allez-cues.html",
+      "bytes": 15954,
+      "sha256": "1da41783fcb5b3e993c82e4603445739e463c99a7bb3ea2a289aa3b992b183a7"
+    },
+    {
+      "path": "prototype/kombi/bike-roubaix-sl8-tiagra.html",
+      "bytes": 15999,
+      "sha256": "831ddb212a60ece337f55627c9cec00b7a06a30a8ca43a7162435628e333cb25"
+    },
+    {
+      "path": "prototype/kombi/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16059,
+      "sha256": "5a01afff403cdaf47885948fec6c5d450d5de1c20f42cf1fe88e30a3e5e25c27"
+    },
+    {
+      "path": "prototype/kombi/bike-diverge-4-sport-alloy.html",
+      "bytes": 15514,
+      "sha256": "7d6347bdf74a322d226675e7c1bba6e6f8115a876bdf2e934c74e37c4fd0817a"
+    },
+    {
+      "path": "prototype/kombi/bike-crux-dsw-comp.html",
+      "bytes": 15494,
+      "sha256": "71f2dfdcea90b81e4d4024f57ae35af38d46f60d2920edab02d5a80ea13f5b08"
+    },
+    {
+      "path": "prototype/kombi/bike-rockhopper-comp.html",
+      "bytes": 15400,
+      "sha256": "df6c719738c076b7d4349c253d83c98cf5e28b856d58a0b5ea3ed8c325c44046"
+    },
+    {
+      "path": "prototype/kombi/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 15577,
+      "sha256": "f473ad385e36eb803236bce86bfba121c340f081175b2f85d75bac8ff756f640"
+    },
+    {
+      "path": "prototype/kombi/bike-levo-4-evo-comp.html",
+      "bytes": 14799,
+      "sha256": "ac195d94c19d16d7f9821f995583db24a54b0fcbcda7ccef72012a89da297abf"
+    },
+    {
+      "path": "prototype/kombi/bike-vado-3-evo-4.html",
+      "bytes": 14831,
+      "sha256": "961ebf6edf50ad0f7a069cf6f32c0606cd861b976dbbb7ef9b301826f37f3862"
+    },
+    {
+      "path": "prototype/kombi/bike-riprock-24.html",
+      "bytes": 14758,
+      "sha256": "298d751ffaef03dcf406794e39e83b419711b57ae870b01741e6922c5e9d5ef0"
+    },
+    {
+      "path": "prototype/kombi/edition.css",
+      "bytes": 44575,
+      "sha256": "9f63ab6dbd85f99c57414ed0dc3a2d39328f85e45962954cecb01488dfdceb32"
+    },
+    {
+      "path": "prototype/kombi/pages.css",
+      "bytes": 11771,
+      "sha256": "d984ea89adc4d7abc871045054b9d71e137c0b8634cabcdf6f7b36eddfbe784b"
+    },
+    {
+      "path": "prototype/kombi/edition.js",
+      "bytes": 20863,
+      "sha256": "b723fb0162486d02bb3b9e82a89cdc10b9ed2d3ae29ef88ca61990c6f498264a"
+    },
+    {
+      "path": "prototype/kombi/effects.js",
+      "bytes": 3060,
+      "sha256": "60d1acc7a72e8744318862d883144537dd2e1dec0eb1478f723bbfe413cb75db"
+    },
+    {
+      "path": "prototype/kombi/pages.js",
+      "bytes": 1314,
+      "sha256": "ab3b01830f4f657439901557df5cf18352e1efc30e3029307ca086f85017e5b3"
+    },
+    {
+      "path": "prototype/kombi/bike-scene.js",
+      "bytes": 8325,
+      "sha256": "6b39adb4f29243d6e76d25a568e697d6a712864ed6f0e95e4cc5b238c545392a"
+    },
+    {
+      "path": "prototype/kombi/advisor.mjs",
+      "bytes": 4141,
+      "sha256": "6291a809b5a72aaa8a071438b28bc3c70b21b5c1c679dedae01746cd0c1fb59a"
+    },
+    {
+      "path": "prototype/kombi/stream.mjs",
+      "bytes": 1791,
+      "sha256": "bd8f0a033675dfba0fb951ed3236b38603ff5a59c13d903975a2ec31ebc3764e"
+    },
+    {
+      "path": "prototype/kombi/films.mjs",
+      "bytes": 1710,
+      "sha256": "355c05e849fbd8e9f0101fd7ef8f7ea6d3e693160ac492695b4c87b40f1aa8a3"
+    },
+    {
+      "path": "prototype/kombi/catalogue.json",
+      "bytes": 7831,
+      "sha256": "73747e8b270acf5fd2f3388fb1176f42553053f7246681f20b184f97e68b33b5"
+    },
+    {
+      "path": "prototype/kombi/header-access.css",
+      "bytes": 2447,
+      "sha256": "3497a8f4bf9e63e1d5818f09070fc3e1de12b3df1ed369ceccf8c5f75b73fbd7"
+    },
+    {
+      "path": "prototype/kombi/header-access.js",
+      "bytes": 315,
+      "sha256": "26a809387c1cb75c39e053ed16c341ce28bbd2d2f931bdb382f581e31ed1feb2"
+    },
+    {
+      "path": "prototype/varianten/atelier/index.html",
+      "bytes": 23903,
+      "sha256": "82809c880e7101322799bdbebb3ba7a13887cdd89cded1bbe7860309558c5db7"
+    },
+    {
+      "path": "prototype/varianten/atelier/rennrad.html",
+      "bytes": 20098,
+      "sha256": "292afd3ca51ee7d08961944044b16fee1deaab4d2ef7a51c7e90d4de637c397b"
+    },
+    {
+      "path": "prototype/varianten/atelier/gravel.html",
+      "bytes": 18673,
+      "sha256": "7ab1e25a6f09c9a5e71e17f3273d59b61d468e74746db3a1eb3b59b27da7ee9c"
+    },
+    {
+      "path": "prototype/varianten/atelier/mtb.html",
+      "bytes": 18707,
+      "sha256": "ce20f88beb1cf8aa5cc82c059ca397185fe714f7b4c1ea59aaef4def41efcdcc"
+    },
+    {
+      "path": "prototype/varianten/atelier/ebike.html",
+      "bytes": 17437,
+      "sha256": "dfbadc34a98d07283709addac16f60124243bf7d6ccf82c8c8b605fec577dafe"
+    },
+    {
+      "path": "prototype/varianten/atelier/familie.html",
+      "bytes": 17485,
+      "sha256": "a28984d845585c8a2fbfcf8f2db17abc36fbabe9d241b77f0a541d2eff494d3f"
+    },
+    {
+      "path": "prototype/varianten/atelier/videos.html",
+      "bytes": 20489,
+      "sha256": "c1a3d3fd92ecc038c98680772f2e062a32a036080150dd664809d15338babb87"
+    },
+    {
+      "path": "prototype/varianten/atelier/reparatur.html",
+      "bytes": 15440,
+      "sha256": "d0ba738980ef79bfe84232fbd07419f5ab6b25aa65af83d1f43b9ca78c10cb97"
+    },
+    {
+      "path": "prototype/varianten/atelier/bikefitting.html",
+      "bytes": 14227,
+      "sha256": "962eaa2f6b057f5669759acd4004ed8baa9840c2351b884a12c3ed0f405a47b7"
+    },
+    {
+      "path": "prototype/varianten/atelier/ueber-uns.html",
+      "bytes": 15243,
+      "sha256": "1001809b192482615dc744d7039c86f76142cfd7d97dbc4fb98b1e2b2a459223"
+    },
+    {
+      "path": "prototype/varianten/atelier/kontakt.html",
+      "bytes": 13696,
+      "sha256": "f60568d268edaf0f7887fc2b2a1875877548916c242b20967c2b6d44acfad312"
+    },
+    {
+      "path": "prototype/varianten/atelier/anfrage.html",
+      "bytes": 14526,
+      "sha256": "90b61997f8cbb80140c5f5659e6457770ac631fd1d791a65fd2706b689cdbb8e"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike.html",
+      "bytes": 24919,
+      "sha256": "ce1534a60f09e68aca4926c69ed66db2b473c76b0bfc924b86b4fc87aecfc0cb"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-allez-cues.html",
+      "bytes": 16312,
+      "sha256": "41196081f88b29bf289aae860254c93d7d2465e4f046fea4f12d21373d02d22d"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-roubaix-sl8-tiagra.html",
+      "bytes": 16357,
+      "sha256": "12d0783bc903309926827cef0f1bd7d2f9059580e5950efb36956912e38a925d"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16417,
+      "sha256": "d898ae2f77ce23709aa25ce54fb6432a7193ff787c455dbb3fbfffee16ca0914"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-diverge-4-sport-alloy.html",
+      "bytes": 15869,
+      "sha256": "4aed3912b6b750c7842ec685ae38b7c5099b9943002b454f2ffc1bf484776a19"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-crux-dsw-comp.html",
+      "bytes": 15849,
+      "sha256": "7749265da10620e7952a47fd8f5f2a7d364041b524ffaafa236307dc0c66771a"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-rockhopper-comp.html",
+      "bytes": 15755,
+      "sha256": "2a9de0a052e48479b5321b57a438498b502e5673447c589f896b94b0421a8a4e"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 15932,
+      "sha256": "0984e9ec5dda605e2978c5a5a6bd1f1a99bc06e2a7d1b6847b327cc089c56b1d"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-levo-4-evo-comp.html",
+      "bytes": 15151,
+      "sha256": "624aed4344f597b250eadfcf2613b624a63ac049103b1fb20659b5ccace4691c"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-vado-3-evo-4.html",
+      "bytes": 15183,
+      "sha256": "639460442468d2d5d1c0facfcd60f37eb2d2f6fea2d1292677e424b90a4c99fe"
+    },
+    {
+      "path": "prototype/varianten/atelier/bike-riprock-24.html",
+      "bytes": 15110,
+      "sha256": "e084b4e55c7869d2cd7b130a7a1501ff596c6e715313ae6095830a237043dd85"
+    },
+    {
+      "path": "prototype/varianten/atelier/theme.css",
+      "bytes": 11358,
+      "sha256": "7409c66a961aefcab4cefeb5045f332c3e3686ca20a785baf6660839571c116b"
+    },
+    {
+      "path": "prototype/varianten/velocity/index.html",
+      "bytes": 23914,
+      "sha256": "42dabab5e763b444e65a9b1e403e23fc8cbe73d7140aaec7e6829f25b395d175"
+    },
+    {
+      "path": "prototype/varianten/velocity/rennrad.html",
+      "bytes": 20109,
+      "sha256": "bdec1d14aafd27b0da398f0a676cd6b774de82d3b1743072b9861053f2162b2e"
+    },
+    {
+      "path": "prototype/varianten/velocity/gravel.html",
+      "bytes": 18684,
+      "sha256": "4552e70a52319e0a8bc8b5bc4750c9d792c18faef2a9d84265f7e48fc494d283"
+    },
+    {
+      "path": "prototype/varianten/velocity/mtb.html",
+      "bytes": 18718,
+      "sha256": "4b86509b329298e06bac9c3b647607213c377b6912369bf43e8df105056f2ad4"
+    },
+    {
+      "path": "prototype/varianten/velocity/ebike.html",
+      "bytes": 17448,
+      "sha256": "592b883d65b475b964822e66a21a0993fcb6bd182b809080303428107f593b59"
+    },
+    {
+      "path": "prototype/varianten/velocity/familie.html",
+      "bytes": 17496,
+      "sha256": "8edafc730d39deb0f404bfe8a72b087bc062b580a7e08716e0854b5dc33f0aa2"
+    },
+    {
+      "path": "prototype/varianten/velocity/videos.html",
+      "bytes": 20500,
+      "sha256": "86a40ca1b2ba9b77da2bd17119032f4bab12910ed2d36893f23e3cd39910058b"
+    },
+    {
+      "path": "prototype/varianten/velocity/reparatur.html",
+      "bytes": 15451,
+      "sha256": "62669bd55bdde6fcead87e60e438f1a229c729a8015a19f76940d41117d018d5"
+    },
+    {
+      "path": "prototype/varianten/velocity/bikefitting.html",
+      "bytes": 14238,
+      "sha256": "ea5c7aa5f018d7cbec3078a365790731f059845a0ecfc27cb6e23e8dac2eefed"
+    },
+    {
+      "path": "prototype/varianten/velocity/ueber-uns.html",
+      "bytes": 15254,
+      "sha256": "4594b97bd03cd0333faa18b21917d26883c9d4dfdfa5d491b6bbcb108bac07cd"
+    },
+    {
+      "path": "prototype/varianten/velocity/kontakt.html",
+      "bytes": 13707,
+      "sha256": "27ab40701e4307755efe0cbb3be20c9017e694e63e98b04adef35bc7e42b66aa"
+    },
+    {
+      "path": "prototype/varianten/velocity/anfrage.html",
+      "bytes": 14537,
+      "sha256": "19d4047a857404c7be4b30bb4d8c4c66ef7f6723c567d3307b28158f1d4c175c"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike.html",
+      "bytes": 24930,
+      "sha256": "74dca9909eea05e40c441ef3074f25cfaed39c1e47a4bee753672497dddba77c"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-allez-cues.html",
+      "bytes": 16323,
+      "sha256": "f1752be09bd64288dd34822f4f4333d4575f30226a0cfa23ae087b3a47447c57"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-roubaix-sl8-tiagra.html",
+      "bytes": 16368,
+      "sha256": "9a1d1356ad1864b7bd2a9c6bd518fc8a4e24e9ebff1d7466662557c3b278dd26"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16428,
+      "sha256": "f9ca4de54a28b57df2a389cee506fe6021cf1b2f93a0bd95d5cbbca76d0d3f9e"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-diverge-4-sport-alloy.html",
+      "bytes": 15880,
+      "sha256": "6fe40a6885536f01da4eff1aef1f12836040627f92927e6e3580cbbabda6385c"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-crux-dsw-comp.html",
+      "bytes": 15860,
+      "sha256": "d86d7e1aa483c2e76c956545dde3928c80ba73cf0db4bc8ab785e9d242c78461"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-rockhopper-comp.html",
+      "bytes": 15766,
+      "sha256": "9e7cc658edea959867c3ca853b8d947604fb2fdd6d6b351075e16ce3454fc959"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 15943,
+      "sha256": "12fbd8824617399a811dd7da0c7f3235a858c1c6801f7bbe892725f39a06232a"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-levo-4-evo-comp.html",
+      "bytes": 15162,
+      "sha256": "f3e6d2ae602fd19139d625ce912247a86d326a3f7e0de081d770052fe987c420"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-vado-3-evo-4.html",
+      "bytes": 15194,
+      "sha256": "efd0101c4b4d9149084f4e69cefc72a11b290d380ce338639005bb31b7b037cd"
+    },
+    {
+      "path": "prototype/varianten/velocity/bike-riprock-24.html",
+      "bytes": 15121,
+      "sha256": "ce467fc5a3dc9816e4b8b2ec1bde89e2b90246710bba7dd7eef8bf7ce1ed30b2"
+    },
+    {
+      "path": "prototype/varianten/velocity/theme.css",
+      "bytes": 13275,
+      "sha256": "14944c8d39c26fb68a926f65c37b8fc1662c19f5518dc1047f4232debf1bb258"
+    },
+    {
+      "path": "prototype/varianten/terrain/index.html",
+      "bytes": 23906,
+      "sha256": "3bd1bf79035d45c20be4a88b3a13f2ffa7b2dc60e7764b8dc39963bb008edc08"
+    },
+    {
+      "path": "prototype/varianten/terrain/rennrad.html",
+      "bytes": 20101,
+      "sha256": "a15d5be0c10cba7afacbd86c56f12a81d8a3bafa7f37af06b58377aef575d361"
+    },
+    {
+      "path": "prototype/varianten/terrain/gravel.html",
+      "bytes": 18676,
+      "sha256": "f838f0bbb166babadf32eef464815e3eafbb4c8c8b0235c78b556103c47669e4"
+    },
+    {
+      "path": "prototype/varianten/terrain/mtb.html",
+      "bytes": 18710,
+      "sha256": "f09987b17e2bf7dee6a870cf624f843ba80729ed278056339e0fd77bd21c363c"
+    },
+    {
+      "path": "prototype/varianten/terrain/ebike.html",
+      "bytes": 17440,
+      "sha256": "f95f558ae1253e4310929d9602f5d426011c9736e9f89fe1af6067fe9af388f1"
+    },
+    {
+      "path": "prototype/varianten/terrain/familie.html",
+      "bytes": 17488,
+      "sha256": "1051ebf891faf82030b994ff24cd864d59fb3c7c22fd6bf97058ab741db2e05a"
+    },
+    {
+      "path": "prototype/varianten/terrain/videos.html",
+      "bytes": 20492,
+      "sha256": "6513e8789e814f0a57b36481f4fd85731cc30f270c49f346e673ecd4459b18c3"
+    },
+    {
+      "path": "prototype/varianten/terrain/reparatur.html",
+      "bytes": 15443,
+      "sha256": "3d31a5c0720d2fd11d91160cc8196ab9fefb71f2992e005da5504e2627912318"
+    },
+    {
+      "path": "prototype/varianten/terrain/bikefitting.html",
+      "bytes": 14230,
+      "sha256": "b2b6b9a95c10d93dbd87e8ba6e19daeb75b1e21e1f6ab748033e00af37df4004"
+    },
+    {
+      "path": "prototype/varianten/terrain/ueber-uns.html",
+      "bytes": 15246,
+      "sha256": "08af9860612330f0a58cc524aa1fcf695ef46141347f065a8e24d4a43837a087"
+    },
+    {
+      "path": "prototype/varianten/terrain/kontakt.html",
+      "bytes": 13699,
+      "sha256": "05a7736dc02d76e1a5cb64cfd59a69f37b9bcc9118c5571aa82d5b0c2f016f7f"
+    },
+    {
+      "path": "prototype/varianten/terrain/anfrage.html",
+      "bytes": 14529,
+      "sha256": "16d47fbf061d346f8fea0d2a4542d9ba4b43cd5f31556e948b7d5a3d04f22a22"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike.html",
+      "bytes": 24922,
+      "sha256": "8dd7a7f47fa28bb61d6a5a95d6a2755edf067f8e282d76f7f740a1c5b24c10c1"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-allez-cues.html",
+      "bytes": 16315,
+      "sha256": "022dae8c0c393d9f8b98f8449865d260821babcd55a6550cd6381a965466b2c7"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-roubaix-sl8-tiagra.html",
+      "bytes": 16360,
+      "sha256": "fbfa759848ac3b5f15967dc7d5320580f832863be1a36d44ca33e4816dd702ed"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16420,
+      "sha256": "57bc92109e7205882033ac0024a4d755cdd1ab1cede2556884b8cfcfe9a33ff2"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-diverge-4-sport-alloy.html",
+      "bytes": 15872,
+      "sha256": "368bf476339dd8cac48b9631ab21cd64cba17f9b14404c8edda65ce96ae7fcb9"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-crux-dsw-comp.html",
+      "bytes": 15852,
+      "sha256": "15e011a967ac54da6946b3d637d111df3226c366ef7fec07f85cdef1b8df9783"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-rockhopper-comp.html",
+      "bytes": 15758,
+      "sha256": "3a4e366421235c529e39382f2ae17ed038659fc48090961175e7a7db44e4b16e"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 15935,
+      "sha256": "a4c410f13cd64824868d79e3cb7d4837bde4ce0d575c7ff36a1b2172c370a9fc"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-levo-4-evo-comp.html",
+      "bytes": 15154,
+      "sha256": "9be1460a33cbe5ec470b6aa5208515c2091f8e249512a387695cd16db0d86b65"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-vado-3-evo-4.html",
+      "bytes": 15186,
+      "sha256": "38b4d00e8fba3db508177518e8c22c6e3b724c63aaf7d4ee944a28ae5549c513"
+    },
+    {
+      "path": "prototype/varianten/terrain/bike-riprock-24.html",
+      "bytes": 15113,
+      "sha256": "cb6dc93ee4215464813c9d29fbd119780cf3c3a1d7f307a84390cba21e7a79c6"
+    },
+    {
+      "path": "prototype/varianten/terrain/theme.css",
+      "bytes": 13087,
+      "sha256": "f0512e3704d930c15ecdc8912c2741162a7c19ebbbf686b453e16273268d44fe"
+    },
+    {
+      "path": "prototype/varianten/cinema/index.html",
+      "bytes": 23991,
+      "sha256": "4e9a952fad3c3c5967e1aa852455fdb6aac840aa32d2c779fd103a4bc83c5554"
+    },
+    {
+      "path": "prototype/varianten/cinema/rennrad.html",
+      "bytes": 20507,
+      "sha256": "9ad62ca43944cd47bb50b46803ffea8d76b984ec06d1a223d4bc93d813ab26d4"
+    },
+    {
+      "path": "prototype/varianten/cinema/gravel.html",
+      "bytes": 19062,
+      "sha256": "5cead0968742d76112b2d227b413c62c8a6f313cd339409b9d6cb44f3816630c"
+    },
+    {
+      "path": "prototype/varianten/cinema/mtb.html",
+      "bytes": 19100,
+      "sha256": "e9f2adcc13677e3a24cfa91e15c8f80cac71362ac117b970f74bb5793a4f42bd"
+    },
+    {
+      "path": "prototype/varianten/cinema/ebike.html",
+      "bytes": 17803,
+      "sha256": "dd6c0cc8b09f92378d8254c2f5f089ada982fcb2a96a56531821a7e5cb842454"
+    },
+    {
+      "path": "prototype/varianten/cinema/familie.html",
+      "bytes": 17853,
+      "sha256": "9e1d575d6462cbfb61613bcae1a51a1abfc27a6312f59e148628e2447ab67477"
+    },
+    {
+      "path": "prototype/varianten/cinema/videos.html",
+      "bytes": 20876,
+      "sha256": "aa2d677a38aa75b36a6749d85d674b3905310ef31ea9a9132113d7a5f73a665f"
+    },
+    {
+      "path": "prototype/varianten/cinema/reparatur.html",
+      "bytes": 15833,
+      "sha256": "271d3827ff84d98dc7a21d9258f66fdb004b3c0d6b36c01a5daf12b8f4fd4437"
+    },
+    {
+      "path": "prototype/varianten/cinema/bikefitting.html",
+      "bytes": 14786,
+      "sha256": "b30b5cfda52b9b96988eb77ec487779d19738133cc6a9e05db6ced992a3172fb"
+    },
+    {
+      "path": "prototype/varianten/cinema/ueber-uns.html",
+      "bytes": 15636,
+      "sha256": "6df6044898696be1846d11d42dcfb8f56ed678a2e3a35445644e41352cbb88e5"
+    },
+    {
+      "path": "prototype/varianten/cinema/kontakt.html",
+      "bytes": 14255,
+      "sha256": "89ec88abcd52bb3ec4dd35161d318d7b94adced0937b731251cefbb034c6a2eb"
+    },
+    {
+      "path": "prototype/varianten/cinema/anfrage.html",
+      "bytes": 14894,
+      "sha256": "2b25b6362cbc282b03fbd672875fbfbb9870108da3035dbab1aca115de20cfd1"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike.html",
+      "bytes": 25358,
+      "sha256": "8bc09a2ba3e97ea8b63d00788d8b61088f8b1860607dc950949c9b88c11bce64"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-allez-cues.html",
+      "bytes": 16721,
+      "sha256": "64168915dead75d153276baaf05c1c37db01666c976fd994785b33e56ce6768d"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-roubaix-sl8-tiagra.html",
+      "bytes": 16766,
+      "sha256": "2c689a4a139c0ba7f3e9aeb5fa5ab9884eae874da9ff638f736883b7b2e1b97d"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16826,
+      "sha256": "e9630d9887c6c5e62a9a5203385d499ba9976148e49d17a2909612d74a509d08"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-diverge-4-sport-alloy.html",
+      "bytes": 16258,
+      "sha256": "fa564254c6221fc6d64679e52db1026b02449ade747d1aa4d6607e3c8261e347"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-crux-dsw-comp.html",
+      "bytes": 16238,
+      "sha256": "38fa2392d9bdf7086765cf43e7f5bb4f49703dce012b9b2a31ace145b4111e7f"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-rockhopper-comp.html",
+      "bytes": 16148,
+      "sha256": "09a76db41a7ae4a27ed2168812342cd7e1397a8b8ae4a21e2af06a4850e775b4"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 16325,
+      "sha256": "d7f8e1f5d6c62d3350e79eabb21bee785652ee2b958f6223a37cd91ce1b37260"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-levo-4-evo-comp.html",
+      "bytes": 15542,
+      "sha256": "4d73652d834c5030fd0d30c0db5dc86f4b724ad0e388d487e2eeaee6ba505575"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-vado-3-evo-4.html",
+      "bytes": 15574,
+      "sha256": "f56da1b7aac0a472bd1fe187182e5d324530a4ff0e0a5202f3f1fb405ec33cef"
+    },
+    {
+      "path": "prototype/varianten/cinema/bike-riprock-24.html",
+      "bytes": 15503,
+      "sha256": "5ef9bfa50f2d30a32b914b0175b8eb7d00dd497074d177bd11fcd849846f1d60"
+    },
+    {
+      "path": "prototype/varianten/cinema/theme.css",
+      "bytes": 4678,
+      "sha256": "a563cd1074904face684747d3570ec272615be1f3dd9e2be63de99cb501962cd"
+    },
+    {
+      "path": "prototype/varianten/motion/index.html",
+      "bytes": 23873,
+      "sha256": "221efdc50bcbe0999fcf91f6c56be7eb5e21ad9b7d4c3c7dbd45655c6e26e1dd"
+    },
+    {
+      "path": "prototype/varianten/motion/rennrad.html",
+      "bytes": 20068,
+      "sha256": "a3bd21e758c948ce482be419871d3d003b455b3ded3ebef5120060ca1d29b372"
+    },
+    {
+      "path": "prototype/varianten/motion/gravel.html",
+      "bytes": 18643,
+      "sha256": "60e9e9075c5f111b0415a92f9ac737558a84e3ec8138e4efc79a307727735dfb"
+    },
+    {
+      "path": "prototype/varianten/motion/mtb.html",
+      "bytes": 18677,
+      "sha256": "da4c95da5fa8ac1a63a4105ab231f47ca76d04297348ee836e8f3dd8324fbdda"
+    },
+    {
+      "path": "prototype/varianten/motion/ebike.html",
+      "bytes": 17407,
+      "sha256": "9452f0962884e74fd9e489f70b803fecfc1963fc3b50ad120013bf8e4c02f473"
+    },
+    {
+      "path": "prototype/varianten/motion/familie.html",
+      "bytes": 17455,
+      "sha256": "15922487bb2a01a6783db638ae855a406c7af514fa9f8aa930cbd4c7b86af04e"
+    },
+    {
+      "path": "prototype/varianten/motion/videos.html",
+      "bytes": 20459,
+      "sha256": "afbe2474876443522ad3b87f66024c3d26d033d928706d686248d34c438afd53"
+    },
+    {
+      "path": "prototype/varianten/motion/reparatur.html",
+      "bytes": 15410,
+      "sha256": "571fe99f16d720634cc5a4ae8496d26400efb2155adddac0a16d190abe12b71f"
+    },
+    {
+      "path": "prototype/varianten/motion/bikefitting.html",
+      "bytes": 14197,
+      "sha256": "9e95baa308846310e9fa30420f38be2dff9da569048c5a941c7ba46beb2fc6b5"
+    },
+    {
+      "path": "prototype/varianten/motion/ueber-uns.html",
+      "bytes": 15213,
+      "sha256": "eeb778848c410db7a5a7aa3ed4cb790e2620128acf771c02ba4fb20db9e5bb14"
+    },
+    {
+      "path": "prototype/varianten/motion/kontakt.html",
+      "bytes": 13666,
+      "sha256": "f67f4eb503d3a54f22aecc2cb15aa798a8946c4482d19fcbc8f9236c5a53bf2f"
+    },
+    {
+      "path": "prototype/varianten/motion/anfrage.html",
+      "bytes": 14496,
+      "sha256": "60dbad119146dd02de76e505f587d2599b80b5b7512395bdc4f5ea7cc0d9632a"
+    },
+    {
+      "path": "prototype/varianten/motion/bike.html",
+      "bytes": 24889,
+      "sha256": "47fefe7c4b6bbc28b81784d54de4b2ad2d605862a7eed72a1423b707aa50c008"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-allez-cues.html",
+      "bytes": 16282,
+      "sha256": "6bdd01570e3d2d4c0f62cb6591a51e8a6a780d101b31a9084caded2b4a70cf0f"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-roubaix-sl8-tiagra.html",
+      "bytes": 16327,
+      "sha256": "d37fa1ad26307baea82b6e876b84fbeac8eb833d41a4c8b4c02a6ec94ed74e4d"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-tarmac-sl9-expert-di2.html",
+      "bytes": 16387,
+      "sha256": "c6a7f1c7c21f48b7a07f6196738f02144341ff9cd1274805f14c01b2885d498c"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-diverge-4-sport-alloy.html",
+      "bytes": 15839,
+      "sha256": "0b14222b313a92090812f19f860227a9ae624fe615a0f93273401abd21881b85"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-crux-dsw-comp.html",
+      "bytes": 15819,
+      "sha256": "f8085059bf02bff3a75d520d8073398ddb2b3e6d7961eaa6d57fdb00a33fe184"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-rockhopper-comp.html",
+      "bytes": 15725,
+      "sha256": "257e6127267c5fb75e54f7b9ee55b85829791014c7d82ea153c0d6e7ce083063"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-stumpjumper-15-evo-expert.html",
+      "bytes": 15902,
+      "sha256": "8624e77fa10e1efd9f23cfc452a235cd9eb537868362834efa6b671d4b314dbd"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-levo-4-evo-comp.html",
+      "bytes": 15121,
+      "sha256": "291532cc1e3d633164a01629cb38611c6137e4e8c0e4f58f76a4842e3f48a911"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-vado-3-evo-4.html",
+      "bytes": 15153,
+      "sha256": "5acf1b28262a6b35c23abf961e17e05b4c2367fa82bcb9447b6aeb5737f307ad"
+    },
+    {
+      "path": "prototype/varianten/motion/bike-riprock-24.html",
+      "bytes": 15080,
+      "sha256": "2223a62a9bfb88db4dc11224923aecf860a96ecc1cc43eaca546d50c6716292f"
+    },
+    {
+      "path": "prototype/varianten/motion/theme.css",
+      "bytes": 9912,
+      "sha256": "d5d1aad72da782d69235e97094b80039af17154d1e40d7e9ff2958a1ad4b6d35"
+    },
+    {
+      "path": "prototype/varianten/shared/advisor.mjs",
+      "bytes": 4141,
+      "sha256": "6291a809b5a72aaa8a071438b28bc3c70b21b5c1c679dedae01746cd0c1fb59a"
+    },
+    {
+      "path": "prototype/varianten/shared/bike-scene.js",
+      "bytes": 8395,
+      "sha256": "a5a9f5d6dac7bd451491d02838d84c67d5389796edea3f0bfd011ec4094a708e"
+    },
+    {
+      "path": "prototype/varianten/shared/catalogue.json",
+      "bytes": 7831,
+      "sha256": "73747e8b270acf5fd2f3388fb1176f42553053f7246681f20b184f97e68b33b5"
+    },
+    {
+      "path": "prototype/varianten/shared/cinema.js",
+      "bytes": 4304,
+      "sha256": "b8cff58b357173434da407e6a4ddcad12bd1750cc831a8b322188f272aaa8569"
+    },
+    {
+      "path": "prototype/varianten/shared/edition.css",
+      "bytes": 44637,
+      "sha256": "55ff9a6dff7596b722e90031eafaceb22f812e9514813bba00e82d337aadb2e6"
+    },
+    {
+      "path": "prototype/varianten/shared/edition.js",
+      "bytes": 20888,
+      "sha256": "f74ee5d65ff2ccb310820a006a6722fe2218389fc9cf5f86caa3efbb90eb082e"
+    },
+    {
+      "path": "prototype/varianten/shared/effects.js",
+      "bytes": 3060,
+      "sha256": "60d1acc7a72e8744318862d883144537dd2e1dec0eb1478f723bbfe413cb75db"
+    },
+    {
+      "path": "prototype/varianten/shared/films.mjs",
+      "bytes": 1743,
+      "sha256": "7181c3bbc67371e94b9cb86e7b365a859f7e8407bd4a3c496743b5d20a5fe405"
+    },
+    {
+      "path": "prototype/varianten/shared/header-access.css",
+      "bytes": 2454,
+      "sha256": "9b4d6766e66df73f33309bd8d12f230cc999e90e067ae22aea0328382c06f494"
+    },
+    {
+      "path": "prototype/varianten/shared/header-access.js",
+      "bytes": 315,
+      "sha256": "26a809387c1cb75c39e053ed16c341ce28bbd2d2f931bdb382f581e31ed1feb2"
+    },
+    {
+      "path": "prototype/varianten/shared/motion.js",
+      "bytes": 4219,
+      "sha256": "4635af03d33cef9939f764b33914948c709eaadcea20dc67301b32f4526f775f"
+    },
+    {
+      "path": "prototype/varianten/shared/pages.css",
+      "bytes": 11777,
+      "sha256": "bdc2f81c76e93ffbbc5db244301bca484d9db92d2c42adf91b8f19f557af9777"
+    },
+    {
+      "path": "prototype/varianten/shared/pages.js",
+      "bytes": 1314,
+      "sha256": "ab3b01830f4f657439901557df5cf18352e1efc30e3029307ca086f85017e5b3"
+    },
+    {
+      "path": "prototype/varianten/shared/stream.mjs",
+      "bytes": 1791,
+      "sha256": "bd8f0a033675dfba0fb951ed3236b38603ff5a59c13d903975a2ec31ebc3764e"
+    },
+    {
+      "path": "prototype/varianten/shared/variants.css",
+      "bytes": 2990,
+      "sha256": "0bb389e8f2bbbcd9f0da58fe084e7fa7de5fba5dc8b64c9107e24d4cc686f4f1"
+    },
+    {
+      "path": "prototype/varianten/previews/original.jpg",
+      "bytes": 117770,
+      "sha256": "f3b30f11705540fcaa9d08e8df8154e7b493014d14c6805a75bb03cb3a9f5dfd"
+    },
+    {
+      "path": "prototype/varianten/previews/atelier.jpg",
+      "bytes": 111094,
+      "sha256": "3eb5e9b970aa26787d98dbe87f18d22c21ceb8e12d7b4ad2692ecee835aa4ffd"
+    },
+    {
+      "path": "prototype/varianten/previews/velocity.jpg",
+      "bytes": 109342,
+      "sha256": "322c20603a27cc9bfbf12e834bab49bcea19d2a408e327ff41493534a6862e36"
+    },
+    {
+      "path": "prototype/varianten/previews/terrain.jpg",
+      "bytes": 122235,
+      "sha256": "0e8f4cffe6c8551d0dc5294bb968e567970acb32de64700ccfae04521e93d872"
+    },
+    {
+      "path": "prototype/varianten/previews/cinema.jpg",
+      "bytes": 95222,
+      "sha256": "68035c1344b51876e98d6f89495c2143abc796979acb54a02dbfc077f28eb8eb"
+    },
+    {
+      "path": "prototype/varianten/previews/motion.jpg",
+      "bytes": 110757,
+      "sha256": "406125cbdb9eb7da0177c19035139bcfe0c85ef73a8ddc6dc5aa8949408fc225"
+    },
+    {
+      "path": "prototype/kombi/vendor/BufferGeometryUtils.js",
+      "bytes": 35558,
+      "sha256": "1b18fa0a5f5b37ad048515d03eb662b8f3c93b488b3b2ab6e06b9bdf0ff84dee"
+    },
+    {
+      "path": "prototype/kombi/vendor/GLTFLoader.js",
+      "bytes": 114751,
+      "sha256": "2ff5a91e29e95ea7bb556d3b664af9488434514e376a5432f31e7a752f0149ff"
+    },
+    {
+      "path": "prototype/kombi/vendor/package.json",
+      "bytes": 18,
+      "sha256": "1239d4d885dcad42201a27ed9324f8f0f760b78700d8db9ced39a511cffe7eae"
+    },
+    {
+      "path": "prototype/kombi/vendor/RoomEnvironment.js",
+      "bytes": 4910,
+      "sha256": "961ac058cdb22be75541a9cc968d22668d100649c4977261a1f777eb38dc2cce"
+    },
+    {
+      "path": "prototype/kombi/vendor/THREE-LICENSE.txt",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
+      "path": "prototype/kombi/vendor/three.core.min.js",
+      "bytes": 381124,
+      "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de"
+    },
+    {
+      "path": "prototype/kombi/vendor/three.module.min.js",
+      "bytes": 338908,
+      "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6"
+    },
+    {
+      "path": "prototype/kombi/models/CarbonFrameBike.glb",
+      "bytes": 12183440,
+      "sha256": "95c016737df48d1beaa7bb5d6eb4789d8102013a246c59bdf6a25021fa264373"
+    },
+    {
+      "path": "prototype/kombi/models/bike-preview.png",
+      "bytes": 363912,
+      "sha256": "744c21288e0b37e71b8caef2ce2e9fd0af3cf0fdf288d098a8bc923342ac9667"
+    },
+    {
+      "path": "prototype/kombi/models/LICENSE-NOTES.md",
+      "bytes": 1738,
+      "sha256": "39d334ff9bb2f1581df0b7ef280e609f04e59611cdca425e8cbb59c0567fe523"
+    },
+    {
+      "path": "prototype/kombi/models/SOURCE.md",
+      "bytes": 1720,
+      "sha256": "40362c6d7da247d2ecbe51a13ee78dd868c23aea82f364876bea027de5cd978e"
+    },
+    {
+      "path": "prototype/assets/achim-team.jpg",
+      "bytes": 163471,
+      "sha256": "f6d2634edadb000a0701cbb1a9bcfa7e4b23b3588662d67c424255622d3185df"
+    },
+    {
+      "path": "prototype/assets/bikefitting-1.jpg",
+      "bytes": 75687,
+      "sha256": "7cdc96c6c09710a186a7b33a575ceba1b4783c23e43e9f7f790a981ca26c1b54"
+    },
+    {
+      "path": "prototype/assets/bikefitting-2.jpg",
+      "bytes": 42716,
+      "sha256": "ac25f4a177505491c53de7448d23aa4068eed67433e489519f614a8c506990c9"
+    },
+    {
+      "path": "prototype/assets/bikefitting-3.jpg",
+      "bytes": 52171,
+      "sha256": "5dd1216c643a0106de78be3577e815be942a63e8a2a59783f9582b6388cfdff6"
+    },
+    {
+      "path": "prototype/assets/bikefitting-hero.jpg",
+      "bytes": 21463,
+      "sha256": "e71e9125d733bbec1c7c597ee0d9e65480a8ddc2d3603621d466f5fa48b206f3"
+    },
+    {
+      "path": "prototype/assets/gefuehl-moment.jpg",
+      "bytes": 36078,
+      "sha256": "3582ae829e7b2aa0520a6393010b7fa936ad15279051bdb4f64c6dfdb83133df"
+    },
+    {
+      "path": "prototype/assets/gravel-ride.jpg",
+      "bytes": 32236,
+      "sha256": "3659ed179ecd7655e01e86259366701cfbd0fa5e9234a931b0ed0db987de4a12"
+    },
+    {
+      "path": "prototype/assets/hero-ebike.jpg",
+      "bytes": 197664,
+      "sha256": "ebd3cdf130883858f457bd3dde671367234536c0fc2b8db4dfc0aeaeae0bbd50"
+    },
+    {
+      "path": "prototype/assets/hero-mtb.jpg",
+      "bytes": 137775,
+      "sha256": "1bd059e8f09071c67b6c37a422904459fc057eb2e69819af5970166c20a5d0fb"
+    },
+    {
+      "path": "prototype/assets/racepoint-logo-dark.svg",
+      "bytes": 3272,
+      "sha256": "d2aaf725b33738eca5989b80b4ea4d7862f6489e602d9aeb2022a2b32139ac06"
+    },
+    {
+      "path": "prototype/assets/racepoint-logo-light.svg",
+      "bytes": 3272,
+      "sha256": "a82fed59f22617b524cb641606c63ced07a2deda5b3a849af7be38d4e5f9cafe"
+    },
+    {
+      "path": "prototype/assets/racepoint-logo-sm.svg",
+      "bytes": 916,
+      "sha256": "a5229505fac0ffd92e023bdba8cd244ee0259a623d6e7125124180f63b38f85c"
+    },
+    {
+      "path": "prototype/assets/racepoint-teaser.mp4",
+      "bytes": 4773064,
+      "sha256": "d9166b3ea641d53637ed9918cc1a2e33279e8f2b150f0a359bca693a16848800"
+    },
+    {
+      "path": "prototype/assets/roadbike-shop.jpg",
+      "bytes": 51146,
+      "sha256": "1131989bc3ed1ed8f0607001abffeb47576a8afb08ac9bff44004054c06b81d7"
+    },
+    {
+      "path": "prototype/assets/shop-interior.jpg",
+      "bytes": 252997,
+      "sha256": "fa803b3c6158d631851cbebd9804e6cd8d4b962b3e5d476ca91ef7b0a1b65099"
+    },
+    {
+      "path": "prototype/assets/films/-84OwxUfgIQ.jpg",
+      "bytes": 110518,
+      "sha256": "665ea78b83f41d3d80979ea3761f3174aab8490d2d80db3616257a71194fd3c6"
+    },
+    {
+      "path": "prototype/assets/films/2XNKIGcNOMY.jpg",
+      "bytes": 60466,
+      "sha256": "639a71cc077c6fcf0449641ae7ecc15b4b63260e788c032062a90148311385e7"
+    },
+    {
+      "path": "prototype/assets/films/2zD31t7mWCw.jpg",
+      "bytes": 152625,
+      "sha256": "2e50bbb90b9e59f48fc133c13d7a986673cec6d0c9237eb5e723579c0f48e4bc"
+    },
+    {
+      "path": "prototype/assets/films/5TcRRpUy5T4.jpg",
+      "bytes": 133475,
+      "sha256": "b043cd6a77ba274574a295769a3888b6e77a46f2d1d77592029d927661a0da8f"
+    },
+    {
+      "path": "prototype/assets/films/9KIh7oOIPT4.jpg",
+      "bytes": 142330,
+      "sha256": "1568511662116ce927c5c8092d48bbce44f2776a53ff8086844414902fb3999c"
+    },
+    {
+      "path": "prototype/assets/films/cIBBbESSOoc.jpg",
+      "bytes": 163655,
+      "sha256": "d9d58ed5d7fe1c81ea761257050407469f74675ac3c2ea54c7d007b2d236fb33"
+    },
+    {
+      "path": "prototype/assets/films/seah_VUOGC8.jpg",
+      "bytes": 82391,
+      "sha256": "8ff4d2dd0356631f87305fffa9ea1963b04d8d9ed63d3a405f86f09b00ca2dee"
+    },
+    {
+      "path": "prototype/assets/films/SOURCES.md",
+      "bytes": 1355,
+      "sha256": "ca7f470d6e64d8854d6f49aca6ddef1349a7a9951d6126f6cc7300027adc1a1d"
+    },
+    {
+      "path": "prototype/assets/films/vV_rL9yq620.jpg",
+      "bytes": 132016,
+      "sha256": "8110dbd40331fa2ddda4b0a999cdb64d56ef3c38850f6532ee9560d4a284bc32"
+    },
+    {
+      "path": "prototype/assets/films/WHggv7Jye4M.jpg",
+      "bytes": 145582,
+      "sha256": "bb5dc979f9f3fb84318628ea5f80d08ecfe29c4863aa45128fede3eb0432af7b"
+    },
+    {
+      "path": "prototype/assets/films/Z5TqAKmey0M.jpg",
+      "bytes": 119401,
+      "sha256": "d8b37eb1bd030eedbd26716637fee815bcf8889186fbc59e0b9f867a8ae4f8c9"
+    },
+    {
+      "path": "prototype/assets/prototype-picker.js",
+      "bytes": 8003,
+      "sha256": "c6a1703bf3dc717e401ca0d61fecf8fb474f3b180bc8940c419350688b66c492"
+    },
+    {
+      "path": "server/agent.mjs",
+      "bytes": 14525,
+      "sha256": "f3d10db72b965c07ff36121af813a014a2ad576c6123ed7d09db90c208659105"
+    },
+    {
+      "path": "server/manufacturers.mjs",
+      "bytes": 5763,
+      "sha256": "ec84735e16f702513f60665a050f5f0d40697a2e3f5e0c03a11f5c404ae6dab2"
+    },
+    {
+      "path": "server/anthropic-stream.mjs",
+      "bytes": 1939,
+      "sha256": "a8af9b5c78677505486b5d7d011894d217d7bd11ce9c9869f830a6f75b240d3b"
+    },
+    {
+      "path": "server/agent.test.mjs",
+      "bytes": 4783,
+      "sha256": "34f8e9f5332e071e50f80bbd41a7bf49ddbb5816cb37d518c61e3ae7e412d180"
+    },
+    {
+      "path": "server/latency.test.mjs",
+      "bytes": 9299,
+      "sha256": "21507c8faa39bf0a63be4b5db9c4c8782a1ccf971073540d2e309a9b0001db48"
+    },
+    {
+      "path": "package.json",
+      "bytes": 283,
+      "sha256": "322bc147996f2112e3a3a8a3a6b36703a7926e798b8768208221f6d71e328560"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 56,
+      "sha256": "b118ad41671b999b93f177f2f997c6c1440380fd4404230f212a3112e44bcfdc"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 71,
+      "sha256": "0dd82b78ed4dacc1fab81abde82287d7a4dff9e66934d8f4c6c713a9f23014b1"
+    },
+    {
+      "path": "index.html",
+      "bytes": 301,
+      "sha256": "1d5e0adb7d080f883e43160ed7529e2ad4c677eb091fd0dc9dc13922b3d51cf3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3391,
+      "sha256": "dd25e10ad7648aae6f007ec54135c8bc4292d0d848343fdad261a03af72513bf"
+    }
+  ]
+}

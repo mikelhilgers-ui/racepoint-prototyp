@@ -172,27 +172,8 @@
     '<img loading="lazy" alt="" src="https://img.youtube.com/vi/' + id + '/maxresdefault.jpg" ' +
     'onerror="if(!this.dataset.f){this.dataset.f=1;this.src=\'https://img.youtube.com/vi/' + id + '/hqdefault.jpg\'}else{this.onerror=null;this.src=\'' + (fallback || 'assets/teaser-poster.jpg') + '\'}">';
 
-  /* ---------------- Prototyp-Umschalter ---------------- */
-  const PROTOS = [
-    ['index.html?v=1', '1 · Cinematic'], ['index.html?v=2', '2 · Emotion'], ['index.html?v=3', '3 · Neueste Bikes'],
-    ['index.html?v=4', '4 · Finde dein Bike'], ['index.html?v=5', '5 · Bold/Sportlich'], ['index.html?v=6', '6 · Immersive'],
-    ['v8-aufbau.html', '8 · Der Aufbau', 'neu'], ['v9-3d-studio.html', '9 · 3D-Studio', 'neu'], ['v10-die-runde.html', '10 · Die Runde', 'neu'],
-    ['index.html?v=7', '7 · Kunden-Feedback', 'fb'],
-  ];
-  RP.mountPicker = function (current) {
-    const wrap = document.createElement('div');
-    wrap.className = 'rp-picker';
-    wrap.innerHTML =
-      '<div class="rp-pick-panel" hidden><div class="rp-pick-h">Prototyp wählen</div>' +
-      PROTOS.map(p => '<a href="' + p[0] + '" class="' + (p[1].startsWith(current + ' ') ? 'on ' : '') + (p[2] || '') + '">' + p[1] +
-        (p[2] === 'neu' ? '<span>Motion</span>' : '') + '</a>').join('') +
-      '<div class="rp-pick-f">F12 → Mobilansicht</div></div>' +
-      '<button class="rp-pick-btn" title="Prototyp wählen" aria-label="Prototyp wählen"><svg viewBox="0 0 24 24"><path d="M19.14 12.94a7.49 7.49 0 000-1.88l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.3 7.3 0 00-1.63-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54c-.59.24-1.13.56-1.63.94l-2.39-.96a.5.5 0 00-.6.22L2.69 8.84a.5.5 0 00.12.64l2.03 1.58a7.49 7.49 0 000 1.88l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32a.5.5 0 00.6.22l2.39-.96c.5.38 1.04.7 1.63.94l.36 2.54a.5.5 0 00.5.42h3.84a.5.5 0 00.5-.42l.36-2.54c.59-.24 1.13-.56 1.63-.94l2.39.96a.5.5 0 00.6-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/></svg></button>';
-    document.body.appendChild(wrap);
-    const panel = wrap.querySelector('.rp-pick-panel'), btn = wrap.querySelector('.rp-pick-btn');
-    btn.addEventListener('click', e => { e.stopPropagation(); panel.hidden = !panel.hidden; });
-    document.addEventListener('click', e => { if (!panel.hidden && !wrap.contains(e.target)) panel.hidden = true; });
-  };
+  // Der gemeinsame Picker wird separat auf allen Prototypen geladen.
+  RP.mountPicker = function () {};
 
   /* ---------------- Basis-Styles (Picker, Lightbox, Status, Sprachwahl) ---------------- */
   const css = `
@@ -213,7 +194,8 @@
   .rp-pick-btn{width:56px;height:56px;border-radius:50%;border:0;background:#E83637;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.45);transition:transform .5s}
   .rp-pick-btn:hover{transform:rotate(45deg)}
   .rp-pick-btn svg{width:28px;height:28px;fill:currentColor}
-  .rp-pick-panel{width:250px;margin-bottom:12px;padding:8px;border-radius:18px;background:rgba(24,24,27,.96);border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 50px rgba(0,0,0,.5);backdrop-filter:blur(10px)}
+  .rp-pick-panel{width:250px;max-width:calc(100vw - 40px);max-height:calc(100dvh - 112px);overflow-y:auto;overscroll-behavior:contain;box-sizing:border-box;margin-bottom:12px;padding:8px;border-radius:18px;background:rgba(24,24,27,.96);border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 50px rgba(0,0,0,.5);backdrop-filter:blur(10px)}
+  .rp-pick-panel a:focus-visible{outline:2px solid #E83637;outline-offset:-2px}
   .rp-pick-panel a{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:10px;color:rgba(255,255,255,.72);font-weight:600;font-size:14px;text-transform:uppercase;text-decoration:none}
   .rp-pick-panel a:hover{background:rgba(255,255,255,.07);color:#fff}
   .rp-pick-panel a.on{background:#E83637;color:#fff}

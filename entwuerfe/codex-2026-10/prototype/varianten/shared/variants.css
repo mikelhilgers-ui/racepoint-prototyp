@@ -1,0 +1,24 @@
+/* Only the additional versions load this file. The original is not restyled. */
+/* Shared Racepoint identity: logo red, logo ink, white and neutral gray. */
+[data-design]{--red:#e83637;--ink:#13151a}
+[data-design] .button-red{background:#e83637;color:#fff}
+[data-design] .button-red:hover{background:#c72c30;color:#fff}
+[data-design] .advisor-fab{background:#13151a;color:#fff;border-color:#444}
+[data-design] .advisor-fab .spark{color:#e83637}
+[data-design] .send-wish{background:#e83637;color:#fff}
+.design-switch{position:fixed;left:20px;bottom:20px;z-index:48;font:12px/1.5 Arial,sans-serif;color:#1e1e1e}
+.design-switch summary{display:flex;align-items:center;gap:10px;background:#ffffff;border:1px solid #dbdbdb;padding:10px 14px;border-radius:30px;box-shadow:0 4px 25px #00000022;cursor:pointer;min-height:44px;list-style:none}
+.design-switch summary::-webkit-details-marker{display:none}.design-switch summary>span{font-size:10px;border-radius:50%;background:#1e1e1e;color:white;display:grid;place-items:center;width:25px;height:25px}.design-switch summary>b{font-weight:600}.design-switch summary>i{font-style:normal;margin-left:10px}
+.design-switch nav{position:absolute;left:0;bottom:calc(100% + 10px);width:275px;max-width:calc(100vw - 32px);background:white;color:#1e1e1e;border:1px solid #dbdbdb;border-radius:12px;box-shadow:0 10px 40px #00000033;padding:16px}
+.design-switch nav>p{font-size:10px;color:#6d6d6d;padding:0 8px 9px}.design-switch nav>a{display:flex;align-items:center;gap:16px;min-height:44px;padding:9px;border-radius:5px;font-size:12px}.design-switch nav>a[aria-current]{background:#ebebeb;font-weight:700}.design-switch nav>a:hover{background:#f1f1f1}.design-switch .design-overview{border-top:1px solid #dbdbdb;border-radius:0;margin-top:6px;padding-top:14px;font-size:11px}
+body:has(dialog[open]) .design-switch{display:none}
+.build-in-view .design-switch{visibility:hidden;pointer-events:none}
+@media(max-width:600px){[data-design] .quick-contact{background:transparent}[data-design="atelier"] .quick-contact,[data-design="terrain"] .quick-contact{color:var(--ink)}}
+[data-design] .page-hero-copy,[data-design] .section-heading>div{min-width:0}
+[data-design] h1,[data-design] h2{overflow-wrap:anywhere}
+[data-design] .quick-hours-panel{z-index:70}
+[data-design] .quick-contact{background:var(--access-bg,#181818);color:var(--access-color,#f4f4f4)}
+[data-design] .quick-contact a:hover,[data-design] .quick-hours summary:hover{color:inherit}
+[data-design] .quick-hours-panel{color:#1e1e1e;background:#fafafa}
+[data-design] .quick-hours-panel a{color:#3c3c3c}
+@media(max-width:600px){[data-design] .quick-contact{background:transparent}[data-design="atelier"] .quick-contact,[data-design="terrain"] .quick-contact{color:var(--ink)}.design-switch{left:14px;bottom:14px}.design-switch summary{padding:8px;gap:0}.design-switch summary>b,.design-switch summary>i{display:none}.design-switch summary>span{width:27px;height:27px}.design-switch nav{bottom:58px}}
