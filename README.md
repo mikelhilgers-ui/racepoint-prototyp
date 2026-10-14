@@ -10,13 +10,13 @@ Prototypen zur Richtungsentscheidung. Alle 14 aktiven Entwürfe sind über das Z
 
 Das Zahnrad steht auf jedem Prototyp und allen Unterseiten. **16 · Motion**, **15 · Cinema**, **14 · Terrain**, **13 · Velocity**, **11 · Original**, **10 · Die Runde**, **9 · 3D-Studio** und **8 · Der Aufbau** tragen das rote **NEW**-Badge. Atelier und Kunden-Feedback sind aus der Auswahl entfernt. Beim Wechsel zwischen den vollständigen Designs bleibt die Unterseite erhalten. Cinema startet den lokalen Shop-Teaser direkt und stumm; Pause und Ton sind bedienbar.
 
-Unser Paket unter `entwuerfe/codex-2026-10/` verwendet den echten KI-Berater mit Herstellerrecherche. Der gemeinsame lokale Server stellt dessen API bereit. Die bisherigen Berater-Simulationen der anderen Prototypen bleiben erhalten. Für eine statische Vorschau reicht weiterhin ein einfacher Webserver; dort steht die echte KI nicht zur Verfügung.
+Unser Paket unter `entwuerfe/codex-2026-10/` verwendet den echten KI-Berater mit Herstellerrecherche. Der gemeinsame lokale Server stellt dessen API bereit. Die übrigen Prototypen nutzen ihn ebenfalls über `assets/ki-berater.js`. Für eine statische Vorschau reicht weiterhin ein einfacher Webserver; dort steht die echte KI nicht zur Verfügung.
 
 ## Öffentliche Azure-Vorschau
 
 Testadresse: https://racepoint-prototypen.azurewebsites.net/
 
-Alle 14 Entwürfe teilen sich diese Adresse. Die Chats der ursprünglichen Entwürfe und V8–V10 tragen den Hinweis **Simulation**. Die fünf Designs Original, Velocity, Terrain, Cinema und Motion nutzen weiterhin den echten KI-Berater mit Herstellerrecherche. Die unterschiedlichen Abläufe bleiben absichtlich erhalten.
+Alle 14 Entwürfe teilen sich diese Adresse. Alle Chats nutzen den echten KI-Agenten (`/api/chat`), sobald `/api/status` ihn meldet: Bike-Beratung mit Katalog und Herstellerrecherche, Öffnungszeiten mit Live-Status, Kontakt und Anfahrt, Terminwunsch, Rahmengröße, Übergabe ans Team und Racepoint-Filme. Antworten können solche Elemente direkt anzeigen (`show_widget`). Termine und Anfragen werden nur als E-Mail vorbereitet, gebucht wird erst durch Racepoint. Ist die KI nicht erreichbar oder das Tageskontingent aufgebraucht, fällt der KI-Berater in V1–V10 auf die Simulation zurück und zeigt den Hinweis **Simulation**.
 
 Die Linux-App `racepoint-prototypen` liegt mit dem B1-Plan `racepoint-preview-plan` in der Ressourcengruppe `racepoint`. Sie startet mit `node server.mjs` unter Node.js 24 LTS. Der API-Schlüssel liegt ausschließlich in einer serverseitigen Azure-App-Einstellung, nicht im Repository oder im Browser. B1 wurde nach einer `QuotaExceeded`-Sperre des kostenlosen F1-Plans ausdrücklich freigegeben.
 
@@ -36,6 +36,6 @@ Drei zusaetzliche Entwuerfe als eigene Seiten, ebenfalls ueber den Zahnkranz err
 | 9 | `v9-3d-studio.html` | **3D-Studio** – Echtzeit-3D-Bike (WebGL), Kamerafahrt beim Scrollen, Konfigurator fuer Typ, Farbe, Laufraeder und Groesse. |
 | 10 | `v10-die-runde.html` | **Die Runde** – helle Editorial-Story: Video im Schriftzug, Scroll-gesteuertes Video, Route durch Venn/Ardennen/Eifel mit Hoehenprofil. |
 
-Alle drei haben den neuen **KI-Berater** (`assets/ki-berater.js`, gescriptete Simulation): Bike-Empfehlung mit Karten, Rahmengroessen-Rechner, Terminbuchung inkl. Kalender-Datei, Oeffnungszeiten live, Anfahrt, Uebergabe an Achim, Sprache DE/FR/NL/EN wird erkannt.
+Alle drei haben den neuen **KI-Berater** (`assets/ki-berater.js`, live über den Agenten, sonst Simulation): Bike-Empfehlung mit Karten, Rahmengroessen-Rechner, Terminbuchung inkl. Kalender-Datei, Oeffnungszeiten live, Anfahrt, Uebergabe an Achim, Sprache DE/FR/NL/EN wird erkannt.
 
 Gemeinsame Basis: `assets/rp-core.js` (Live-Oeffnungsstatus, Sprachumschalter DE/FR/NL/EN, Video-Lightbox, Prototyp-Umschalter). Animations-/3D-Bibliotheken liegen lokal in `vendor/` (GSAP, Lenis, Three.js).

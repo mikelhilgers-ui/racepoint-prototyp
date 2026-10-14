@@ -202,3 +202,13 @@ body:has(#advisor-dialog[open]) .advisor-fab{visibility:hidden}
 }
 @media(prefers-reduced-motion:reduce){.build-section{height:auto}.build-sticky{position:relative}.build-section:not(.model-unavailable) .build-sticky{height:max(620px,100svh)}}
 @media(max-height:540px) and (orientation:landscape) and (prefers-reduced-motion:reduce){.build-section:not(.model-unavailable) .build-sticky{height:100svh}}
+
+/* Elemente des Agenten (Öffnungszeiten, Kontakt, Terminwunsch, Größe, Übergabe, Film) */
+.chat-widget{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding:14px 16px;border:1px solid #c5c5c5;border-radius:6px;background:#ffffff;white-space:normal;line-height:1.5}
+.chat-widget strong{font-size:13px}.chat-widget small{font-size:10px;color:#6b6b6b}
+.chat-widget-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #ececec;padding:3px 0}
+.chat-widget-actions{display:flex;flex-wrap:wrap;gap:6px}
+.chat-widget-btn{display:inline-flex;align-items:center;min-height:34px;padding:6px 12px;border:1px solid #bdbdbd;border-radius:5px;font-size:11px;text-decoration:none;color:inherit}
+.chat-widget-btn.primary{background:var(--red);border-color:var(--red);color:#ffffff}
+.chat-widget input,.chat-widget textarea{width:100%;padding:8px 10px;border:1px solid #c5c5c5;border-radius:5px;font:inherit;font-size:12px}
+.chat-widget textarea{min-height:110px;resize:vertical}

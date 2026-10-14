@@ -1,9 +1,11 @@
 /* =====================================================================
-   RACEPOINT · KI-BERATER 2.0 (Simulation, THROWAWAY)
-   Gescriptete Beratung mit KI-Look: animierter Orb, Glas-Panel,
-   gestreamte Antworten, Spracherkennung DE/FR/NL/EN, Rich-Widgets
-   (Bike-Karten, Groessenrechner, Termin + .ics, Oeffnungszeiten,
-   Anfahrt, Uebergabe an Achim), Spracheingabe (falls Browser kann).
+   RACEPOINT · KI-BERATER 2.0 (THROWAWAY)
+   Live: spricht ueber /api/chat (SSE) mit dem echten Racepoint-Agenten
+   (Claude) und zeigt Text, Produktkarten, Quellen und Elemente
+   (Oeffnungszeiten, Kontakt, Terminwunsch, Groesse, Uebergabe, Video).
+   Ohne Server (statische Vorschau) oder bei erschoepftem Kontingent
+   laeuft die gescriptete Simulation mit denselben Elementen weiter.
+   Animierter Orb, Glas-Panel, Spracherkennung DE/FR/NL/EN, Spracheingabe.
    API: KIBerater.open() · KIBerater.ask(text) · KIBerater.onBike(fn)
    Global: [data-ask="Frage"] und <form data-ask-form> oeffnen den Chat.
    Benoetigt assets/rp-core.js (window.RP) – laeuft notfalls auch ohne.
@@ -22,6 +24,10 @@
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss');
+
+  // Oeffentliche Kontaktdaten laut racepoint.be/kontakt
+  const CONTACT = { address: 'K.-F. Schinkel Straße 5, 4782 Schönberg, Belgien', phone: '+32 80 54 88 98', tel: '+3280548898', email: 'info@racepoint.be' };
+  const mailto = (subject, body) => 'mailto:' + CONTACT.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body.slice(0, 1800));
 
   /* =================== Katalog =================== */
   const CATS = {
@@ -91,6 +97,30 @@
   const S = {
     title: { de: 'Achims KI-Berater', fr: 'Conseiller IA d’Achim', nl: 'Achims AI-adviseur', en: 'Achim’s AI advisor' },
     simulation: { de: 'Simulation', fr: 'Simulation', nl: 'Simulatie', en: 'Simulation' },
+    live: { de: 'Live-KI', fr: 'IA en direct', nl: 'Live-AI', en: 'Live AI' },
+    discLive: { de: 'Echte KI · kann sich irren. Herstellerpreise sind keine Angebote; gebucht oder gesendet wird nichts.', fr: 'Vraie IA · peut se tromper. Les prix fabricant ne sont pas des offres ; rien n’est réservé ni envoyé.', nl: 'Echte AI · kan zich vergissen. Fabrieksprijzen zijn geen aanbod; er wordt niets geboekt of verstuurd.', en: 'Real AI · can make mistakes. Maker prices aren’t offers; nothing gets booked or sent.' },
+    errGeneric: { de: 'Die KI-Beratung ist gerade nicht erreichbar. Versuch es gleich noch einmal.', fr: 'Le conseiller IA est momentanément indisponible. Réessaie dans un instant.', nl: 'De AI-adviseur is even niet bereikbaar. Probeer het zo opnieuw.', en: 'The AI advisor is unavailable right now. Please try again shortly.' },
+    errSlow: { de: 'Das hat zu lange gedauert. Stell die Frage gern etwas gezielter.', fr: 'C’était trop long. Pose une question plus précise.', nl: 'Dat duurde te lang. Stel je vraag iets gerichter.', en: 'That took too long. Try a more specific question.' },
+    errOffline: { de: 'Die echte KI ist hier nicht verfügbar – ich antworte mit der Offline-Simulation.', fr: 'L’IA réelle n’est pas disponible ici – je réponds avec la simulation hors ligne.', nl: 'De echte AI is hier niet beschikbaar – ik antwoord met de offline-simulatie.', en: 'The real AI isn’t available here – answering with the offline simulation.' },
+    errQuota: { de: 'Das Test-Kontingent der echten KI ist für heute aufgebraucht – ab jetzt antwortet die Simulation.', fr: 'Le quota de test de l’IA est épuisé pour aujourd’hui – la simulation prend le relais.', nl: 'Het testquotum van de echte AI is voor vandaag op – vanaf nu antwoordt de simulatie.', en: 'Today’s test quota for the real AI is used up – the simulation takes over.' },
+    retry: { de: 'Nochmal versuchen', fr: 'Réessayer', nl: 'Opnieuw proberen', en: 'Try again' },
+    sources: { de: 'Quellen', fr: 'Sources', nl: 'Bronnen', en: 'Sources' },
+    priceMaker: { de: 'Herstellerpreis', fr: 'Prix fabricant', nl: 'Fabrieksprijs', en: 'Maker price' },
+    priceOpen: { de: 'Preis noch ungeprüft', fr: 'Prix non vérifié', nl: 'Prijs niet gecontroleerd', en: 'Price not verified' },
+    tradeoff: { de: 'Kompromiss', fr: 'Compromis', nl: 'Compromis', en: 'Trade-off' },
+    makerPage: { de: 'Herstellerseite', fr: 'Page fabricant', nl: 'Fabrikantpagina', en: 'Maker page' },
+    interest: { de: 'Interesse an', fr: 'Intéressé par', nl: 'Interesse in', en: 'Interested in' },
+    lAppt: { de: 'Probefahrt oder Beratung anfragen', fr: 'Demander un essai ou un conseil', nl: 'Proefrit of advies aanvragen', en: 'Request a test ride or consultation' },
+    lTeam: { de: 'An das Racepoint-Team übergeben', fr: 'Transmettre à l’équipe Racepoint', nl: 'Doorgeven aan het Racepoint-team', en: 'Hand over to the Racepoint team' },
+    lCompare: { de: 'Vergleich die Modelle', fr: 'Compare les modèles', nl: 'Vergelijk de modellen', en: 'Compare the models' },
+    lHours: { de: 'Wann habt ihr geöffnet?', fr: 'Quand êtes-vous ouverts ?', nl: 'Wanneer zijn jullie open?', en: 'When are you open?' },
+    lFind: { de: 'Hilf mir, ein Bike zu finden', fr: 'Aide-moi à trouver un vélo', nl: 'Help me een fiets te vinden', en: 'Help me find a bike' },
+    lContact: { de: 'Wie erreiche ich euch?', fr: 'Comment vous joindre ?', nl: 'Hoe bereik ik jullie?', en: 'How do I reach you?' },
+    wCall: { de: 'Anrufen', fr: 'Appeler', nl: 'Bellen', en: 'Call' },
+    wMail: { de: 'E-Mail', fr: 'E-mail', nl: 'E-mail', en: 'Email' },
+    wMailOpen: { de: 'E-Mail an Racepoint öffnen', fr: 'Ouvrir l’e-mail pour Racepoint', nl: 'E-mail aan Racepoint openen', en: 'Open email to Racepoint' },
+    wCopy: { de: 'Text kopieren', fr: 'Copier le texte', nl: 'Tekst kopiëren', en: 'Copy text' },
+    wLeadNote: { de: 'Wird erst gesendet, wenn du die E-Mail selbst abschickst.', fr: 'Rien n’est envoyé tant que tu n’envoies pas l’e-mail toi-même.', nl: 'Er wordt pas iets verstuurd als je de e-mail zelf verstuurt.', en: 'Nothing is sent until you send the email yourself.' },
     launcher: { de: 'Frag Achims KI', fr: 'Demande à l’IA', nl: 'Vraag het de AI', en: 'Ask Achim’s AI' },
     hints: {
       de: ['Welches Gravelbike passt?', 'Meine Rahmengröße?', 'Habt ihr gerade offen?', 'Repariert ihr mein Trek?'],
@@ -136,7 +166,7 @@
     fitting: { de: 'Beim **Retül-Bikefitting** vermessen wir dich in Bewegung – Knie, Hüfte, Rücken. Plan rund **1,5 Stunden** ein. Das Ergebnis: mehr Druck aufs Pedal, weniger Schmerzen.', fr: 'Lors du **bike fitting Retül**, on te mesure en mouvement – genoux, hanches, dos. Compte environ **1 h 30**. Résultat : plus de puissance, moins de douleurs.', nl: 'Bij de **Retül-bikefitting** meten we je in beweging – knie, heup, rug. Reken op zo’n **1,5 uur**. Resultaat: meer kracht, minder pijn.', en: 'In a **Retül bike fit** we measure you in motion – knees, hips, back. Allow about **1.5 hours**. The result: more power, less pain.' },
     hoursOpen: { de: 'Ja! **{s}**. Komm einfach vorbei – hier die ganze Woche:', fr: 'Oui ! **{s}**. Passe quand tu veux – voici toute la semaine :', nl: 'Ja! **{s}**. Kom gerust langs – hier de hele week:', en: 'Yes! **{s}**. Just drop by – here’s the whole week:' },
     hoursClosed: { de: 'Gerade nicht – **{s}**. Hier die ganze Woche:', fr: 'Pas en ce moment – **{s}**. Voici toute la semaine :', nl: 'Nu even niet – **{s}**. Hier de hele week:', en: 'Not right now – **{s}**. Here’s the whole week:' },
-    where: { de: 'Du findest uns in **Schönberg, Ostbelgien** – mitten im Dreiländereck, gut erreichbar aus DE, BE und LU.', fr: 'Tu nous trouves à **Schönberg, dans les Cantons de l’Est** – au cœur des trois frontières, facile d’accès depuis l’Allemagne, la Belgique et le Luxembourg.', nl: 'Je vindt ons in **Schönberg, Oost-België** – midden in het drielandenpunt, vlot bereikbaar vanuit DE, BE en LU.', en: 'You’ll find us in **Schönberg, East Belgium** – right where Germany, Belgium and Luxembourg meet.' },
+    where: { de: 'Du findest uns in der **K.-F. Schinkel Straße 5 in Schönberg, Ostbelgien** – mitten im Dreiländereck, gut erreichbar aus DE, BE und LU.', fr: 'Tu nous trouves à **Schönberg, dans les Cantons de l’Est** – au cœur des trois frontières, facile d’accès depuis l’Allemagne, la Belgique et le Luxembourg.', nl: 'Je vindt ons in **Schönberg, Oost-België** – midden in het drielandenpunt, vlot bereikbaar vanuit DE, BE en LU.', en: 'You’ll find us in **Schönberg, East Belgium** – right where Germany, Belgium and Luxembourg meet.' },
     termin: { de: 'Such dir einen Slot aus – Achim oder Elke bestätigen ihn dir persönlich.', fr: 'Choisis un créneau – Achim ou Elke te le confirment personnellement.', nl: 'Kies een moment – Achim of Elke bevestigen het persoonlijk.', en: 'Pick a slot – Achim or Elke will confirm it personally.' },
     leasing: { de: 'Ja, sprich uns an: **Leasing über den Arbeitgeber** und **Finanzierung** sind möglich – Achim klärt mit dir, was am meisten Sinn macht.', fr: 'Oui, parles-en avec nous : **leasing via l’employeur** et **financement** sont possibles – Achim voit avec toi ce qui convient le mieux.', nl: 'Ja, spreek ons aan: **fietsleasing via je werkgever** en **financiering** zijn mogelijk – Achim bekijkt samen met jou wat het best past.', en: 'Yes, just ask: **leasing through your employer** and **financing** are possible – Achim will work out what makes most sense for you.' },
     video: { de: 'Frisch aus der Werkstatt – das neueste Build-Video:', fr: 'Tout frais de l’atelier – la dernière vidéo de montage :', nl: 'Vers uit de werkplaats – de nieuwste build-video:', en: 'Fresh from the workshop – the latest build video:' },
@@ -188,26 +218,21 @@
     ],
     wDay: { de: 'Tag', fr: 'Jour', nl: 'Dag', en: 'Day' },
     wTime: { de: 'Uhrzeit', fr: 'Heure', nl: 'Tijd', en: 'Time' },
-    wBook: { de: 'Termin vormerken', fr: 'Réserver ce créneau', nl: 'Moment vastleggen', en: 'Hold this slot' },
-    wBooked: { de: 'Beispieltermin ausgewählt', fr: 'Créneau de démonstration choisi', nl: 'Voorbeeldafspraak gekozen', en: 'Example appointment selected' },
-    wBookedSub: { de: 'Simulation · Kein Termin reserviert. Vereinbare deinen echten Termin direkt mit Racepoint.', fr: 'Simulation · Aucun rendez-vous réservé. Contacte Racepoint pour un vrai rendez-vous.', nl: 'Simulatie · Geen afspraak gereserveerd. Maak je echte afspraak rechtstreeks met Racepoint.', en: 'Simulation · No appointment reserved. Contact Racepoint to book a real appointment.' },
-    wIcs: { de: 'In Kalender', fr: 'Ajouter au calendrier', nl: 'In agenda', en: 'Add to calendar' },
-    wWa: { de: 'Per WhatsApp', fr: 'Par WhatsApp', nl: 'Via WhatsApp', en: 'Via WhatsApp' },
+    wBook: { de: 'Terminwunsch vorbereiten', fr: 'Préparer la demande', nl: 'Afspraakwens voorbereiden', en: 'Prepare request' },
+    wBooked: { de: 'Terminwunsch vorbereitet', fr: 'Demande préparée', nl: 'Afspraakwens voorbereid', en: 'Request prepared' },
+    wBookedSub: { de: 'Noch nicht gebucht: Schick die E-Mail ab oder ruf an – Racepoint bestätigt dir den Termin.', fr: 'Pas encore réservé : envoie l’e-mail ou appelle – Racepoint te confirme le rendez-vous.', nl: 'Nog niet geboekt: verstuur de e-mail of bel – Racepoint bevestigt je afspraak.', en: 'Not booked yet: send the email or call – Racepoint will confirm your appointment.' },
     wToday: { de: 'heute', fr: 'aujourd’hui', nl: 'vandaag', en: 'today' },
     wHoursT: { de: 'Öffnungszeiten', fr: 'Horaires', nl: 'Openingsuren', en: 'Opening hours' },
     wWorkshop: { de: 'Werkstatt arbeitet vormittags', fr: 'L’atelier travaille le matin', nl: 'Werkplaats werkt ’s ochtends', en: 'Workshop works mornings' },
     wRoute: { de: 'Route planen', fr: 'Planifier l’itinéraire', nl: 'Route plannen', en: 'Plan route' },
-    wLead: { de: 'Übergabe an Achim', fr: 'Transmission à Achim', nl: 'Overdracht aan Achim', en: 'Handover to Achim' },
+    wLead: { de: 'Anliegen für das Racepoint-Team', fr: 'Demande pour l’équipe Racepoint', nl: 'Vraag voor het Racepoint-team', en: 'Request for the Racepoint team' },
     wInterest: { de: 'Interesse', fr: 'Intérêt', nl: 'Interesse', en: 'Interest' },
     wBudget: { de: 'Budget', fr: 'Budget', nl: 'Budget', en: 'Budget' },
     wSizeL: { de: 'Größe', fr: 'Taille', nl: 'Maat', en: 'Size' },
     wAppt: { de: 'Termin', fr: 'Rendez-vous', nl: 'Afspraak', en: 'Appointment' },
     wPlace: { de: 'Ort', fr: 'Lieu', nl: 'Plaats', en: 'Place' },
-    wOpen: { de: 'offen', fr: 'à définir', nl: 'open', en: 'open' },
     wName: { de: 'Dein Name (optional)', fr: 'Ton prénom (optionnel)', nl: 'Je naam (optioneel)', en: 'Your name (optional)' },
-    wSent: { de: 'Simulation · Keine Anfrage gesendet. Kontaktiere Racepoint direkt für eine echte Beratung.', fr: 'Simulation · Aucune demande envoyée. Contacte Racepoint pour un vrai conseil.', nl: 'Simulatie · Geen aanvraag verstuurd. Neem rechtstreeks contact op met Racepoint voor echt advies.', en: 'Simulation · No request sent. Contact Racepoint directly for real advice.' },
     wQuestion: { de: 'Frage', fr: 'Question', nl: 'Vraag', en: 'Question' },
-    wWatch: { de: 'Jetzt ansehen', fr: 'Regarder', nl: 'Nu bekijken', en: 'Watch now' },
     cities: [
       { de: 'St. Vith', fr: 'Saint-Vith', nl: 'Sankt Vith', en: 'St. Vith', t: '~10 min', x: 30, y: 64 },
       { de: 'Aachen', fr: 'Aix-la-Chapelle', nl: 'Aken', en: 'Aachen', t: '~1 h', x: 62, y: 14 },
@@ -357,6 +382,27 @@
   .kib-bav i{position:absolute;inset:0;z-index:1;display:grid;place-items:center}.kib-bav i svg{width:13px;height:13px}
   .kib-txt{font-size:15.5px;line-height:1.5;color:#ececee}
   .kib-txt strong{color:#fff;font-weight:700}
+  .kib-txt a{color:#ffb08a;text-decoration:underline;text-underline-offset:2px}
+  .kib-txt ul,.kib-txt ol{margin:6px 0 8px;padding-left:20px}
+  .kib-txt li{margin:3px 0}
+  .kib-txt .kib-h{display:block;margin:8px 0 2px}
+  .kib-simulation.is-live{background:rgba(34,197,94,.18);color:#86efac}
+  .kib-simulation.is-live::before{content:"";display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;background:#22c55e;vertical-align:1px;box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:rpPulse 2s infinite}
+  .kib-src{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:12px;color:rgba(255,255,255,.5)}
+  .kib-src a{display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.78);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kib-src a:hover{color:#fff;border-color:rgba(255,122,69,.5)}
+  .kib-note-live{margin:2px 0 10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px dashed rgba(255,255,255,.16);font-size:13px;color:rgba(255,255,255,.66)}
+  .kib-prod .kib-bike-art{background:#f4f4f2;height:150px}
+  .kib-prod .kib-bike-art img{width:100%;height:100%;object-fit:contain;padding:10px}
+  .kib-prod .kib-bike-art svg{width:78%}
+  .kib-price{display:inline-flex;margin:6px 0 4px;padding:4px 9px;border-radius:8px;background:rgba(232,54,55,.14);border:1px solid rgba(232,54,55,.35);font-size:12.5px;font-weight:700;color:#ffc2c2}
+  .kib-prod .kib-trade{margin-top:-4px;font-size:12.5px;color:rgba(255,255,255,.5)}
+  .kib-contact{display:grid;gap:6px;padding:12px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:13.5px}
+  .kib-contact a{color:#fff;text-decoration:none}
+  .kib-contact span{color:rgba(255,255,255,.55);margin-right:6px}
+  .kib-lead textarea{width:100%;min-height:96px;margin-bottom:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:13.5px;line-height:1.45;resize:vertical;outline:0}
+  .kib-lead textarea:focus{border-color:rgba(255,122,69,.6)}
+  .kib-lead .kib-row .kib-btn{font-size:12.5px;padding:10px 12px;white-space:nowrap}
   .kib-txt .kib-caret{display:inline-block;width:8px;height:15px;margin-left:2px;vertical-align:-2px;border-radius:2px;background:var(--ko);animation:kibBlink .9s steps(2) infinite}
   @keyframes kibBlink{50%{opacity:0}}
   .kib-think{font-size:14.5px;font-weight:600;background:linear-gradient(90deg,rgba(255,255,255,.35) 0%,#fff 40%,rgba(255,255,255,.35) 80%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:kibShim 1.4s linear infinite}
@@ -397,7 +443,6 @@
   .kib-btn:hover{background:#c5282a}
   .kib-btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
   .kib-btn.ghost:hover{background:rgba(255,255,255,.14)}
-  .kib-btn.wa{background:#16a34a}.kib-btn.wa:hover{background:#15803d}
   .kib-btn svg{width:15px;height:15px}
   /* ---- Bike-Karten ---- */
   .kib-bikes{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -18px;padding:2px 18px 8px;scrollbar-width:none}
@@ -470,7 +515,7 @@
   /* ---- Karte ---- */
   .kib-map{position:relative;height:190px;background:radial-gradient(circle at 52% 58%,rgba(232,54,55,.22),rgba(232,54,55,0) 45%),linear-gradient(180deg,#1b1c20,#141518)}
   .kib-map svg{position:absolute;inset:0;width:100%;height:100%}
-  .kib-map-f{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:rgba(255,255,255,.7)}
+  .kib-map-f{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 14px;border-top:1px solid rgba(255,255,255,.07);font-size:13px;color:rgba(255,255,255,.7)}
   /* ---- Lead ---- */
   .kib-lead{padding:14px}
   .kib-lead dl{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;margin:0 0 12px;font-size:14px}
@@ -479,7 +524,6 @@
   .kib-lead dd.muted{color:rgba(255,255,255,.4);font-weight:400}
   .kib-lead input{width:100%;margin-bottom:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:14px;outline:0}
   .kib-lead input:focus{border-color:rgba(255,122,69,.6)}
-  .kib-sent{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);font-size:13.5px;color:#bbf7d0;animation:kibUp .4s both}
   /* ---- Video ---- */
   .kib-vid{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.1)}
   .kib-vid img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
@@ -513,7 +557,6 @@
     up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v11M15 5.9L14 10h5.8a2 2 0 012 2.3l-1.4 7A2 2 0 0118.4 21H7V10l4.3-7.1A1.9 1.9 0 0115 5.9z"/></svg>',
     down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V3M9 18.1L10 14H4.2a2 2 0 01-2-2.3l1.4-7A2 2 0 015.6 3H17v11l-4.3 7.1A1.9 1.9 0 019 18.1z"/></svg>',
     play: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
-    wa: '<svg viewBox="0 0 32 32"><path fill="currentColor" d="M16.04 4C9.9 4 4.92 8.98 4.92 15.12c0 2.06.56 4.06 1.6 5.82L4.8 27l6.2-1.62c1.7.93 3.6 1.42 5.04 1.42 6.14 0 11.12-4.98 11.12-11.12C27.17 8.98 22.18 4 16.04 4zm5.01 13.47c-.27-.14-1.62-.8-1.87-.89-.25-.09-.43-.14-.62.14-.18.27-.71.89-.87 1.07-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.36-.81-.72-1.36-1.62-1.52-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.12 2.84c.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.52-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32z"/></svg>',
     cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>',
     bike: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="16.5" r="3.5"/><circle cx="18.5" cy="16.5" r="3.5"/><path d="M5.5 16.5l4-7h6l3 7M9.5 9.5L12 16.5h-2M14 6h3"/></svg>',
     ruler: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></svg>',
@@ -559,13 +602,14 @@
 
     root.querySelector('.kib-orb').addEventListener('click', open);
     root.querySelector('[data-act="close"]').addEventListener('click', close);
-    root.querySelector('[data-act="reset"]').addEventListener('click', () => { if (!state.busy) welcome(); });
+    root.querySelector('[data-act="reset"]').addEventListener('click', () => { if (live.ctrl) { live.ctrl.abort(); live.ctrl = null; state.busy = false; } if (!state.busy) welcome(); });
     root.querySelector('.kib-form').addEventListener('submit', e => { e.preventDefault(); submit(); });
     input.addEventListener('input', () => { autoGrow(); sendBtn.disabled = !input.value.trim(); });
     input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); } });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && root.classList.contains('kib-open')) close(); });
     setupVoice();
     applyLang();
+    checkLive();
 
     // Launcher-Label mit wechselnden Beispiel-Fragen
     setTimeout(() => label.classList.add('on'), 1800);
@@ -592,9 +636,11 @@
 
   function applyLang() {
     titleEl.textContent = tr(S.title);
-    root.querySelector('[data-simulation-hint]').textContent = tr(S.simulation);
+    const hint = root.querySelector('[data-simulation-hint]');
+    hint.textContent = tr(live.ready ? S.live : S.simulation);
+    hint.classList.toggle('is-live', live.ready);
     input.placeholder = tr(S.ph);
-    root.querySelector('.kib-disc').textContent = tr(S.disclaimer);
+    root.querySelector('.kib-disc').textContent = tr(live.ready ? S.discLive : S.disclaimer);
     label.querySelector('span').textContent = tr(S.launcher);
     root.querySelector('[data-act="reset"]').title = tr(S.reset);
     root.querySelector('[data-act="close"]').title = tr(S.close);
@@ -632,19 +678,40 @@
     while (state.busy) await wait(120);
     await wait(state.started && log.querySelector('.kib-msg') ? 50 : 450);
     userSays(text);
-    route(text);
+    handle(text);
   }
   function submit() {
     const v = input.value.trim();
     if (!v || state.busy) return;
     input.value = ''; autoGrow(); sendBtn.disabled = true;
     userSays(v);
-    route(v);
+    handle(v);
   }
+  // Live-Agent wenn verfuegbar, sonst Simulation
+  function handle(text) { return live.ready ? askLive(text) : route(text); }
 
   /* =================== Rendering =================== */
+  // Kleines, sicheres Markdown: fett, Links (nur https), Listen, Zwischentitel
   function md(s) {
-    return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    const inline = t => t.replace(/\[([^\]]+)\]\((https:\/\/[^\s)]+)\)|(https:\/\/[^\s<)]+[^\s<).,;:!?])/g, (m, label, href, bare) =>
+      '<a href="' + (href || bare) + '" target="_blank" rel="noopener">' + (label || bare.replace(/^https:\/\/(www\.)?/, '')) + '</a>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    const out = [];
+    let list = null;
+    esc(s).split('\n').forEach(line => {
+      const li = line.match(/^\s*(?:[-*•]|(\d+)\.)\s+(.*)$/);
+      if (li) {
+        const tag = li[1] ? 'ol' : 'ul';
+        if (!list || list !== tag) { if (list) out.push('</' + list + '>'); list = tag; out.push('<' + tag + '>'); }
+        out.push('<li>' + inline(li[2]) + '</li>');
+        return;
+      }
+      if (list) { out.push('</' + list + '>'); list = null; }
+      const h = line.match(/^\s*#{1,4}\s+(.*)$/);
+      if (h) out.push('<strong class="kib-h">' + inline(h[1]) + '</strong>');
+      else out.push(line.trim() ? inline(line) + '<br>' : '<br>');
+    });
+    if (list) out.push('</' + list + '>');
+    return out.join('').replace(/(<br>){3,}/g, '<br><br>').replace(/(<br>)+$/, '');
   }
   function scrollDown() { log.scrollTop = log.scrollHeight; }
   function userSays(text) {
@@ -658,7 +725,8 @@
   }
   function welcome() {
     state.started = true;
-    state.cat = state.tier = state.height = state.inseam = state.brand = state.termin = null;
+    state.cat = state.tier = state.height = state.inseam = state.brand = state.termin = state.bike = null;
+    live.conversation = []; live.profile = null;
     log.innerHTML = ''; chipsBox.innerHTML = '';
     const h = document.createElement('div');
     h.className = 'kib-hello';
@@ -673,7 +741,7 @@
       b.className = 'kib-sug'; b.type = 'button';
       b.style.animationDelay = (120 + i * 60) + 'ms';
       b.innerHTML = I[s.i] + '<span>' + esc(tr(s)) + '</span>';
-      b.addEventListener('click', () => { if (state.busy) return; const t = tr(s); userSays(t); route(t); });
+      b.addEventListener('click', () => { if (state.busy) return; const t = tr(s); userSays(t); handle(t); });
       box.appendChild(b);
     });
     log.appendChild(h);
@@ -707,7 +775,13 @@
       await stream(txt, p);
       plain += (plain ? '\n' : '') + p.replace(/\*\*/g, '');
     }
-    // Aktionen unter der Antwort
+    addActs(body, plain);
+    state.busy = false;
+    if (opts.chips) chips(opts.chips);
+    scrollDown();
+  }
+  // Aktionen unter einer Antwort (kopieren, Daumen)
+  function addActs(body, plain) {
     const acts = document.createElement('div');
     acts.className = 'kib-acts';
     acts.innerHTML = '<button title="' + esc(tr(S.copy)) + '" data-a="copy">' + I.copy + '</button><button data-a="up">' + I.up + '</button><button data-a="down">' + I.down + '</button>';
@@ -718,9 +792,6 @@
       b.classList.add('on'); acts.classList.add('on');
     });
     body.appendChild(acts);
-    state.busy = false;
-    if (opts.chips) chips(opts.chips);
-    scrollDown();
   }
   async function stream(el, text) {
     const words = text.split(/(\s+)/);
@@ -861,7 +932,7 @@
           state.termin = { date: d.date, h: time, kind: t };
           card.replaceWith(ticket(state.termin));
           scrollDown();
-          setTimeout(() => chips([chip(S.cSend, doHandoff), chip(S.cWhere, doWhere), chip(S.cRestart, welcome, { alt: true, silent: true })]), 300);
+          if (!live.ready) setTimeout(() => chips([chip(S.cWhere, doWhere), chip(S.cRestart, welcome, { alt: true, silent: true })]), 300);
         }
       });
       render();
@@ -872,27 +943,16 @@
     try { return d.toLocaleDateString({ de: 'de-DE', fr: 'fr-BE', nl: 'nl-BE', en: 'en-GB' }[state.lang], { weekday: 'long', day: 'numeric', month: 'long' }); }
     catch (e) { return d.toDateString(); }
   }
+  // Terminwunsch als E-Mail-Entwurf – gebucht wird erst durch Racepoint
   function ticket(tm) {
     const el = document.createElement('div');
     el.className = 'kib-ticket';
     const when = dateLabel(tm.date) + ' · ' + tm.h + ':00';
+    const body = 'Hallo Racepoint-Team,\n\nich hätte gern einen Termin:\n' + tr(tm.kind) + ' · Wunschtermin ' + when + '\n\nBitte bestätigt mir den Termin oder schlagt eine Alternative vor.\n\nViele Grüße';
     el.innerHTML = '<h5><i>✓</i>' + esc(tr(S.wBooked)) + '</h5><dl><dt>' + esc(tr(S.wWhat)) + '</dt><dd>' + esc(tr(tm.kind)) + '</dd><dt>' + esc(tr(S.wAppt)) + '</dt><dd>' + esc(when) + '</dd><dt>' + esc(tr(S.wPlace)) + '</dt><dd>Racepoint · Schönberg</dd></dl>' +
-      '<p>' + esc(tr(S.wBookedSub)) + '</p><div class="kib-row"><button class="kib-btn ghost" data-ics>' + I.cal + esc(tr(S.wIcs)) + '</button><a class="kib-btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' +
-      encodeURIComponent('Racepoint – ' + tr(tm.kind) + ': ' + when) + '">' + I.wa + esc(tr(S.wWa)) + '</a></div>';
-    el.querySelector('[data-ics]').addEventListener('click', () => downloadIcs(tm));
+      '<p>' + esc(tr(S.wBookedSub)) + '</p><div class="kib-row"><a class="kib-btn" href="' + esc(mailto('Terminwunsch: ' + tr(tm.kind) + ' · ' + when, body)) + '">' + I.send + esc(tr(S.wMailOpen)) + '</a>' +
+      '<a class="kib-btn ghost" href="tel:' + CONTACT.tel + '">' + esc(tr(S.wCall)) + '</a></div>';
     return el;
-  }
-  function downloadIcs(tm) {
-    const p = n => String(n).padStart(2, '0');
-    const d = tm.date, start = d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + 'T' + p(tm.h) + '0000';
-    const endMin = tm.h * 60 + tm.kind.min, end = d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + 'T' + p(Math.floor(endMin / 60)) + p(endMin % 60) + '00';
-    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Racepoint//Prototyp//DE', 'BEGIN:VEVENT', 'UID:' + Date.now() + '@racepoint-prototyp',
-      'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z', 'DTSTART;TZID=Europe/Brussels:' + start, 'DTEND;TZID=Europe/Brussels:' + end,
-      'SUMMARY:Racepoint · ' + tr(tm.kind), 'LOCATION:Racepoint\\, Schönberg (Ostbelgien)', 'DESCRIPTION:Demo-Termin aus dem KI-Berater (Prototyp)', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
-    a.download = 'racepoint-termin.ics';
-    document.body.appendChild(a); a.click(); a.remove();
   }
 
   function wHours() {
@@ -926,39 +986,40 @@
       });
       labels += '<div style="position:absolute;left:' + sx + '%;top:' + sy + '%;transform:translate(-50%,-100%);text-align:center"><span style="display:grid;place-items:center;width:30px;height:30px;margin:0 auto;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#E83637;box-shadow:0 8px 20px rgba(232,54,55,.55)"><span style="width:10px;height:10px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></div>' +
         '<div style="position:absolute;left:' + sx + '%;top:' + (sy + 4) + '%;transform:translateX(-50%);font-family:Anton,Impact,sans-serif;font-size:14px;letter-spacing:.04em;white-space:nowrap">RACEPOINT</div>';
-      card.innerHTML = '<div class="kib-map">' + svg + labels + '</div><div class="kib-map-f"><span>Schönberg · Ostbelgien</span><a class="kib-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Racepoint Schönberg Belgien') + '">' + I.pin + esc(tr(S.wRoute)) + '</a></div>';
+      card.innerHTML = '<div class="kib-map">' + svg + labels + '</div>' +
+        '<div class="kib-contact"><div><span>' + I.pin.replace('<svg', '<svg width="13" height="13"') + '</span>' + esc(CONTACT.address) + '</div>' +
+        '<div><span>' + esc(tr(S.wCall)) + '</span><a href="tel:' + CONTACT.tel + '">' + esc(CONTACT.phone) + '</a></div>' +
+        '<div><span>' + esc(tr(S.wMail)) + '</span><a href="mailto:' + CONTACT.email + '">' + esc(CONTACT.email) + '</a></div></div>' +
+        '<div class="kib-map-f"><a class="kib-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Racepoint, ' + CONTACT.address) + '">' + I.pin + esc(tr(S.wRoute)) + '</a>' +
+        '<a class="kib-btn ghost" href="tel:' + CONTACT.tel + '">' + esc(tr(S.wCall)) + '</a></div>';
       w.appendChild(card);
     };
   }
 
-  function wLead(question) {
+  // Anliegen fuer das Team: editierbarer Text -> E-Mail-Entwurf (nichts wird automatisch gesendet)
+  function wLead(question, summaryText) {
     return w => {
       const card = document.createElement('div');
       card.className = 'kib-card kib-lead';
-      const rows = [];
-      const b = state.bike;
-      if (question) rows.push([tr(S.wQuestion), question]);
-      rows.push([tr(S.wInterest), b ? b.name : state.cat ? tr(CATS[state.cat].label) : null]);
-      rows.push([tr(S.wBudget), state.tier ? tr(TIERS[state.tier]) : null]);
-      rows.push([tr(S.wSizeL), state.height ? state.height + ' cm · ' + frameSize(state.height, state.sizeCat || state.cat || 'rennrad') : null]);
-      rows.push([tr(S.wAppt), state.termin ? dateLabel(state.termin.date) + ' · ' + state.termin.h + ':00' : null]);
-      card.innerHTML = '<div class="kib-lbl">' + esc(tr(S.wLead)) + '</div><dl>' +
-        rows.map(r => '<dt>' + esc(r[0]) + '</dt><dd class="' + (r[1] ? '' : 'muted') + '">' + esc(r[1] || tr(S.wOpen)) + '</dd>').join('') + '</dl>' +
-        '<input type="text" autocomplete="given-name" placeholder="' + esc(tr(S.wName)) + '"><div class="kib-row"><button class="kib-btn" data-send style="flex:1">' + I.send + esc(tr(S.cSend)) + '</button>' +
-        '<a class="kib-btn wa" target="_blank" rel="noopener">' + I.wa + 'WhatsApp</a></div>';
-      const summary = () => 'Racepoint-Anfrage\n' + rows.filter(r => r[1]).map(r => r[0] + ': ' + r[1]).join('\n') + (card.querySelector('input').value ? '\nName: ' + card.querySelector('input').value : '');
-      const wa = card.querySelector('.wa');
-      const updWa = () => { wa.href = 'https://wa.me/?text=' + encodeURIComponent(summary()); };
-      card.querySelector('input').addEventListener('input', updWa); updWa();
-      card.querySelector('[data-send]').addEventListener('click', () => {
-        const ok = document.createElement('div');
-        ok.className = 'kib-sent';
-        ok.innerHTML = '<span style="font-size:18px">✓</span><span>' + esc(tr(S.wSent)) + '</span>';
-        card.querySelector('.kib-row').replaceWith(ok);
-        card.querySelector('input').disabled = true;
-        scrollDown();
-        setTimeout(() => chips([chip(S.cHours, doHours), chip(S.cVideo, doVideo), chip(S.cRestart, welcome, { alt: true, silent: true })]), 400);
-      });
+      let text = summaryText;
+      if (!text) {
+        const b = state.bike, rows = [];
+        if (question) rows.push([tr(S.wQuestion), question]);
+        rows.push([tr(S.wInterest), b ? b.name : state.cat ? tr(CATS[state.cat].label) : null]);
+        rows.push([tr(S.wBudget), state.tier ? tr(TIERS[state.tier]) : null]);
+        rows.push([tr(S.wSizeL), state.height ? state.height + ' cm · ' + frameSize(state.height, state.sizeCat || state.cat || 'rennrad') : null]);
+        rows.push([tr(S.wAppt), state.termin ? dateLabel(state.termin.date) + ' · ' + state.termin.h + ':00' : null]);
+        text = rows.filter(r => r[1]).map(r => r[0] + ': ' + r[1]).join('\n');
+      }
+      card.innerHTML = '<div class="kib-lbl">' + esc(tr(S.wLead)) + '</div><textarea aria-label="' + esc(tr(S.wLead)) + '"></textarea>' +
+        '<input type="text" autocomplete="given-name" placeholder="' + esc(tr(S.wName)) + '"><div class="kib-row"><a class="kib-btn" data-mail style="flex:1">' + I.send + esc(tr(S.wMailOpen)) + '</a>' +
+        '<button class="kib-btn ghost" data-copy>' + I.copy + esc(tr(S.wCopy)) + '</button></div><p class="kib-note" style="margin-top:8px">' + esc(tr(S.wLeadNote)) + '</p>';
+      const ta = card.querySelector('textarea'), name = card.querySelector('input'), mail = card.querySelector('[data-mail]');
+      ta.value = 'Hallo Racepoint-Team,\n\n' + (text || '') + '\n\nBitte meldet euch bei mir.';
+      const full = () => ta.value + (name.value.trim() ? '\n\n' + name.value.trim() : '');
+      const upd = () => { mail.href = mailto('Anfrage über den Racepoint-Berater', full()); };
+      ta.addEventListener('input', upd); name.addEventListener('input', upd); upd();
+      card.querySelector('[data-copy]').addEventListener('click', e => { try { navigator.clipboard.writeText(full()); e.currentTarget.lastChild.textContent = tr(S.copied); } catch (err) { /* kein Clipboard */ } });
       w.appendChild(card);
     };
   }
@@ -1127,6 +1188,182 @@
   }
   function doHandoff() { return bot([tr(S.handoff), wLead()], { fast: true }); }
 
+  /* =================== Live-KI (Racepoint-Agent auf dem Server) =================== */
+  const live = { ready: false, conversation: [], profile: null, ctrl: null };
+  async function checkLive() {
+    try {
+      const r = await fetch('/api/status', { headers: { Accept: 'application/json' }, cache: 'no-store' });
+      const j = r.ok && /json/.test(r.headers.get('content-type') || '') ? await r.json() : null;
+      live.ready = !!(j && j.ready);
+    } catch (e) { live.ready = false; }
+    if (root) applyLang();
+  }
+  // Server-Sent Events zeilenweise lesen (auch geteilte UTF-8-Zeichen)
+  function parseFrame(frame) {
+    const lines = frame.split(/\r?\n/);
+    const data = lines.filter(l => l.startsWith('data:')).map(l => l.slice(5).trimStart()).join('\n');
+    if (!data) return null;
+    const ev = lines.find(l => l.startsWith('event:'));
+    try { return { event: ev ? ev.slice(6).trim() : 'message', data: JSON.parse(data) }; } catch (e) { return null; }
+  }
+  async function* sseEvents(stream) {
+    const reader = stream.getReader(), dec = new TextDecoder();
+    let buf = '';
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        buf += dec.decode(value || new Uint8Array(), { stream: !done });
+        let m;
+        while ((m = /\r?\n\r?\n/.exec(buf))) {
+          const ev = parseFrame(buf.slice(0, m.index));
+          buf = buf.slice(m.index + m[0].length);
+          if (ev) yield ev;
+        }
+        if (done) { const ev = buf.trim() && parseFrame(buf); if (ev) yield ev; return; }
+      }
+    } finally { reader.cancel().catch(() => {}); }
+  }
+  // Verlauf innerhalb der Server-Grenzen halten (max. 18 Nachrichten, 24.000 Zeichen)
+  function trimConversation() {
+    const c = live.conversation;
+    while (c.length > 16 || c.reduce((n, m) => n + m.content.length, 0) > 20000) c.splice(0, 2);
+    while (c.length && c[0].role !== 'user') c.shift();
+  }
+  const fmtEUR = v => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
+  const catOf = c => ({ kind: 'kids', familie: 'alltag' }[c] || (CATS[c] ? c : 'rennrad'));
+  const liveChip = (label, extra) => chip(label, () => askLive(tr(label)), extra);
+
+  async function askLive(text) {
+    state.busy = true; chipsBox.innerHTML = '';
+    live.conversation.push({ role: 'user', content: String(text).slice(0, 4000) });
+    trimConversation();
+    const d = document.createElement('div');
+    d.className = 'kib-msg';
+    d.innerHTML = '<div class="kib-bav"><i>' + I.spark + '</i></div><div class="kib-b"><div class="kib-think">' + esc(tr(S.thinking)) + '</div></div>';
+    log.appendChild(d); scrollDown();
+    const body = d.querySelector('.kib-b'), think = body.querySelector('.kib-think');
+    let txt = null;
+    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 125000);
+    live.ctrl = ctrl;
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+        body: JSON.stringify({ messages: live.conversation, profile: live.profile || undefined }), signal: ctrl.signal,
+      });
+      let result = null;
+      if (!res.ok || !/event-stream/.test(res.headers.get('content-type') || '')) {
+        const j = await res.json().catch(() => ({}));
+        if (!res.ok) throw Object.assign(new Error(j.error || tr(S.errGeneric)), { status: res.status });
+        result = j;
+      } else {
+        for await (const { event, data } of sseEvents(res.body)) {
+          if (event === 'progress' && data.text && think.isConnected) think.textContent = data.text;
+          else if (event === 'text' && data.text) {
+            if (!txt) { think.remove(); txt = document.createElement('div'); txt.className = 'kib-txt'; body.appendChild(txt); }
+            txt.innerHTML = md(data.text) + '<span class="kib-caret"></span>';
+            scrollDown();
+          } else if (event === 'error') throw new Error((data && data.error) || tr(S.errGeneric));
+          else if (event === 'result') { result = data; break; }
+        }
+        if (!result) throw new Error(tr(S.errGeneric));
+      }
+      if (live.ctrl !== ctrl) return;
+      renderLive(body, think, txt, result);
+      live.conversation.push({ role: 'assistant', content: String(result.text || '').slice(0, 4000) });
+      live.profile = result.profile || live.profile;
+    } catch (err) {
+      if (live.ctrl !== ctrl) return;
+      live.conversation.pop();
+      think.remove(); if (txt) txt.remove();
+      const quota = err.status === 429 && /Kontingent|aufgebraucht/i.test(err.message);
+      const offline = [404, 405, 503].includes(err.status) || err.name === 'TypeError';
+      if (quota || offline) {
+        // Ohne echte KI: ehrlich sagen und mit der Simulation weitermachen
+        live.ready = false; applyLang(); d.remove();
+        const note = document.createElement('div');
+        note.className = 'kib-note-live'; note.textContent = tr(quota ? S.errQuota : S.errOffline);
+        log.appendChild(note);
+        clearTimeout(timer); live.ctrl = null; state.busy = false;
+        return route(text);
+      }
+      const t = document.createElement('div');
+      t.className = 'kib-txt'; t.textContent = err.name === 'AbortError' ? tr(S.errSlow) : err.message || tr(S.errGeneric);
+      body.appendChild(t);
+      setTimeout(() => chips([chip(S.retry, () => askLive(text), { silent: true }), liveChip(S.lContact, { alt: true })]), 50);
+    } finally {
+      clearTimeout(timer);
+      if (live.ctrl === ctrl) { live.ctrl = null; state.busy = false; }
+    }
+  }
+
+  function renderLive(body, think, txt, result) {
+    think.remove();
+    if (!txt) { txt = document.createElement('div'); txt.className = 'kib-txt'; body.appendChild(txt); }
+    txt.innerHTML = md(result.text || '');
+    const add = fn => { const w = document.createElement('div'); w.className = 'kib-w'; fn(w); body.appendChild(w); };
+    if (result.cards && result.cards.length) add(wCards(result.cards));
+    (result.widgets || []).forEach(x => {
+      if (x.type === 'hours') add(wHours());
+      else if (x.type === 'contact') add(wMap());
+      else if (x.type === 'appointment') add(wTermin({ bikefitting: 'fitting', werkstatt: 'service' }[x.kind] || 'beratung'));
+      else if (x.type === 'size') { state.cat = catOf(x.category); add(wSize()); }
+      else if (x.type === 'handoff') add(wLead(null, x.summary));
+      else if (x.type === 'video') add(wVideo(x.video_id, x.title + (x.subtitle ? ' · ' + x.subtitle : '')));
+    });
+    if (result.sources && result.sources.length) {
+      const src = document.createElement('div');
+      src.className = 'kib-src';
+      src.innerHTML = esc(tr(S.sources)) + ': ' + result.sources.slice(0, 5).map(s => '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.title || new URL(s.url).hostname) + ' ↗</a>').join('');
+      body.appendChild(src);
+    }
+    addActs(body, result.text || '');
+    scrollDown();
+    const types = (result.widgets || []).map(w => w.type);
+    const next = result.cards && result.cards.length
+      ? [liveChip(S.lAppt), liveChip(S.lCompare), liveChip(S.lTeam, { alt: true })]
+      : types.length ? [liveChip(S.lFind), liveChip(S.lTeam, { alt: true })]
+        : [liveChip(S.lFind), liveChip(S.lHours), liveChip(S.lContact, { alt: true })];
+    setTimeout(() => chips(next), 120);
+  }
+
+  // Echte Produktkarten aus dem Herstellerkatalog (Bild, Preis, Begruendung, Quelle)
+  function wCards(cards) {
+    return w => {
+      const box = document.createElement('div');
+      box.className = 'kib-bikes';
+      cards.forEach((c, i) => {
+        const cat = catOf(c.cat), color = CATS[cat].color;
+        const el = document.createElement('article');
+        el.className = 'kib-bike kib-prod';
+        el.style.setProperty('--c', color);
+        el.style.animationDelay = (i * 90) + 'ms';
+        const price = c.price ? fmtEUR(c.price) + ' · ' + tr(S.priceMaker) + (c.market ? ' ' + c.market : '') : tr(S.priceOpen);
+        el.innerHTML =
+          '<div class="kib-bike-art"><span class="kib-cat">' + esc(tr(CATS[cat].label)) + '</span>' +
+          (c.image ? '<img src="' + esc(c.image) + '" alt="' + esc(c.name) + '" loading="lazy" referrerpolicy="no-referrer">' : bikeSVG(cat)) + '</div>' +
+          '<div class="kib-bike-b"><h4>' + esc(c.name) + '</h4><span class="kib-price">' + esc(price) + '</span>' +
+          (c.reason ? '<p>' + esc(c.reason) + '</p>' : '') + (c.tradeoff ? '<p class="kib-trade">' + esc(tr(S.tradeoff)) + ': ' + esc(c.tradeoff) + '</p>' : '') +
+          ((c.specs || []).length ? '<div class="kib-specs">' + c.specs.slice(0, 3).map(s => '<span>' + esc(s) + '</span>').join('') + '</div>' : '') +
+          '<div class="kib-bike-btns"><button class="kib-btn" data-b="ask">' + esc(tr(S.wAsk)) + '</button>' +
+          (c.source ? '<a class="kib-btn ghost" data-b="src" href="' + esc(c.source) + '" target="_blank" rel="noopener">' + esc(tr(S.makerPage)) + ' ↗</a>' : '') +
+          (bikeFns.length ? '<button class="kib-btn ghost" data-b="3d">' + I.cube + esc(tr(S.w3d)) + '</button>' : '') +
+          '</div></div>';
+        const img = el.querySelector('img');
+        if (img) img.addEventListener('error', () => { img.outerHTML = bikeSVG(cat); }, { once: true });
+        el.addEventListener('click', e => {
+          const t = e.target.closest('[data-b]'); if (!t || t.dataset.b === 'src') return;
+          if (t.dataset.b === 'ask') {
+            userSays(tr(S.wAsk) + ': ' + c.name);
+            bot([tr(S.handoff), wLead(null, tr(S.interest) + ': ' + c.name + (c.price ? ' (' + price + ')' : '') + (c.source ? '\n' + c.source : ''))], { fast: true });
+          }
+          if (t.dataset.b === '3d') { bikeFns.forEach(fn => { try { fn({ id: c.id, name: c.name, cat }); } catch (err) { console.error(err); } }); if (matchMedia('(max-width:640px)').matches) close(); }
+        });
+        box.appendChild(el);
+      });
+      w.appendChild(box);
+    };
+  }
+
   /* =================== Spracheingabe =================== */
   function setupVoice() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1154,6 +1391,7 @@
   window.KIBerater = {
     open, close, ask,
     onBike(fn) { bikeFns.push(fn); },
+    isLive: () => live.ready,
     BIKES, CATS, bikeSVG,
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);

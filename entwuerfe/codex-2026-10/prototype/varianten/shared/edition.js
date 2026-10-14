@@ -64,6 +64,22 @@ function fillChat(entry,text,sources=[]){
   for(const paragraph of text.split(/\n\s*\n/)){const p=node('p');paragraph.split(/(\*\*[^*]+\*\*)/g).forEach(part=>p.append(part.startsWith('**')?node('strong',part.slice(2,-2)):document.createTextNode(part)));entry.append(p);}
   if(sources.length){const links=node('div',undefined,'chat-sources');sources.forEach(source=>{const a=node('a',source.title+' ↗');a.href=source.url;a.target='_blank';a.rel='noopener';links.append(a);});entry.append(links);}
 }
+// Elemente des Agenten (show_widget): Öffnungszeiten, Kontakt, Terminwunsch, Größe, Übergabe, Film. Nur DOM-Knoten, kein innerHTML aus Antworten.
+const shopContact={address:'K.-F. Schinkel Straße 5, 4782 Schönberg, Belgien',phone:'+32 80 54 88 98',tel:'+3280548898',email:'info@racepoint.be'};
+const shopMail=(subject,body)=>'mailto:'+shopContact.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body.slice(0,1800));
+function widgetLink(text,href,primary){const a=node('a',text,'chat-widget-btn'+(primary?' primary':''));a.href=href;if(href.startsWith('https:')){a.target='_blank';a.rel='noopener';}return a;}
+function widgetNode(w){
+  const box=node('div',undefined,'chat-widget');
+  if(w.type==='hours'){box.append(node('strong','Öffnungszeiten'));[['Mo, Di, Mi, Fr','13–18 Uhr'],['Samstag','9–14 Uhr'],['Do & So','geschlossen']].forEach(([d,t])=>{const r=node('div',undefined,'chat-widget-row');r.append(node('span',d),node('span',t));box.append(r);});box.append(node('small','Werkstatt arbeitet vormittags.'));}
+  else if(w.type==='contact'){box.append(node('strong','Kontakt & Anfahrt'),node('span',shopContact.address));const row=node('div',undefined,'chat-widget-actions');row.append(widgetLink('Route planen','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('Racepoint, '+shopContact.address),true),widgetLink(shopContact.phone,'tel:'+shopContact.tel),widgetLink(shopContact.email,'mailto:'+shopContact.email));box.append(row);}
+  else if(w.type==='appointment'){const kind={beratung:'Beratung',bikefitting:'Bikefitting',werkstatt:'Werkstatt'}[w.kind]||'Beratung';box.append(node('strong','Terminwunsch: '+kind),node('span','Noch nicht gebucht. Schick deinen Wunschtermin per E-Mail oder ruf an, Racepoint bestätigt ihn.'));const row=node('div',undefined,'chat-widget-actions');row.append(widgetLink('E-Mail vorbereiten',shopMail('Terminwunsch: '+kind,'Hallo Racepoint-Team,\n\nich hätte gern einen Termin ('+kind+').\nMein Wunschtermin: \n\nViele Grüße'),true),widgetLink('Anrufen','tel:'+shopContact.tel));box.append(row);}
+  else if(w.type==='size'){box.append(node('strong','Rahmengröße · Richtwert'));const input=node('input');input.type='number';input.min='140';input.max='210';input.placeholder='Körpergröße in cm';const out=node('span','Exakt wird es beim Retül-Bikefitting.');input.addEventListener('input',()=>{const h=Number(input.value);if(h<140||h>210){out.textContent='Exakt wird es beim Retül-Bikefitting.';return;}const road=w.category==='rennrad'||w.category==='gravel';const t=road?[[155,'44'],[163,'49'],[170,'52'],[176,'54'],[183,'56'],[190,'58'],[999,'61']]:[[160,'S1'],[170,'S2'],[178,'S3'],[186,'S4'],[194,'S5'],[999,'S6']];out.textContent='Richtwert: '+t.find(x=>h<x[0])[1]+(road?' cm':'')+' · exakt beim Retül-Bikefitting.';});box.append(input,out);}
+  else if(w.type==='handoff'){box.append(node('strong','Anliegen für das Racepoint-Team'));const ta=node('textarea');ta.value='Hallo Racepoint-Team,\n\n'+(w.summary||'')+'\n\nBitte meldet euch bei mir.';const mail=widgetLink('E-Mail an Racepoint öffnen','#',true);const sync=()=>{mail.href=shopMail('Anfrage über den Racepoint-Berater',ta.value);};ta.addEventListener('input',sync);sync();const row=node('div',undefined,'chat-widget-actions');row.append(mail);box.append(ta,row,node('small','Gesendet wird erst, wenn du die E-Mail selbst abschickst.'));}
+  else if(w.type==='video'&&/^[\w-]{11}$/.test(w.video_id||'')){box.append(node('strong',w.title||'Racepoint-Film'));if(w.subtitle)box.append(node('span',w.subtitle));const row=node('div',undefined,'chat-widget-actions');row.append(widgetLink('Auf YouTube ansehen','https://www.youtube.com/watch?v='+w.video_id,true));box.append(row);}
+  else return null;
+  return box;
+}
+function appendWidgets(entry,widgets=[]){widgets.forEach(w=>{const el=widgetNode(w);if(el)entry.append(el);});}
 function newResults(){
   // Retain previous cards in their original chronological position.
   activeResults?.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
@@ -98,6 +114,7 @@ async function applyWish(value){
     const previousProfile=JSON.stringify(profile);profile={...initialProfile(),...result.profile};syncFields();
     const answer=streamedAnswer||appendChat(result.text,'assistant',result.sources||[]);
     if(streamedAnswer){fillChat(answer,result.text,result.sources||[]);answer.classList.remove('is-streaming');}
+    appendWidgets(answer,result.widgets);
     if(result.cards?.length){agentCards=result.cards;result.cards.forEach(b=>knownBikes.set(b.id,b));hasRecommendations=true;newResults();renderResults();}
     else if(previousProfile!==JSON.stringify(profile)){agentCards=[];currentResults=[];hasRecommendations=false;}
     $('.chat-handoff').hidden=false;scrollToMessage(answer);
