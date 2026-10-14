@@ -352,5 +352,7 @@
   /* ---- Öffnungszeiten (live, belgische Zeit) ---- */
   $('#hours').innerHTML = RP.hoursRows('de').map(r => '<li class="' + (r.today ? 'today ' : '') + (r.open ? '' : 'closed') + '"><span>' + r.day + '</span><span>' + r.text + '</span></li>').join('');
 
-  window.addEventListener('load', () => ScrollTrigger.refresh());
+  /* Abschnitte sind umsortiert (Aufbau weiter unten): Trigger nach Seitenposition ordnen */
+  ScrollTrigger.sort();
+  window.addEventListener('load', () => { ScrollTrigger.sort(); ScrollTrigger.refresh(); });
 })();
