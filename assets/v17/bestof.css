@@ -381,7 +381,7 @@ button{font:inherit;color:inherit}
   .cat-n{left:14px;top:13px;font-size:12px}
   .cat-go{width:34px;height:34px;right:10px;top:10px}
   .cat-b{left:14px;right:12px;bottom:14px}
-  .cat-b h3{font-size:34px}
+  .cat-b h3{font-size:clamp(26px,8vw,34px)}
   .cat-b p{font-size:13px;margin:6px 0 10px}
   .price{font-size:12px;padding:5px 9px}
   .film-grid{gap:10px}
