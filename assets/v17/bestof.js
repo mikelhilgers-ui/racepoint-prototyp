@@ -90,7 +90,7 @@
   // Film nur abspielen, solange der Hero sichtbar ist
   ScrollTrigger.create({
     trigger: '.hero', start: 'top bottom', end: 'bottom top',
-    onToggle: self => { if (self.isActive) { if (!userPaused) vid.play().catch(() => {}); } else vid.pause(); },
+    onToggle: self => { document.documentElement.classList.toggle('v17-hero', self.isActive); if (self.isActive) { if (!userPaused) vid.play().catch(() => {}); } else vid.pause(); },
   });
 
   // Schriftzug RACEPOINT als Maske: der Film läuft in den Buchstaben weiter
@@ -127,7 +127,7 @@
 
   if (!RM) {
     // Headline-Reveal beim Laden
-    const split = SplitText.create('#heroH span', { type: 'chars', mask: 'chars' });
+    const split = SplitText.create('#heroH span', { type: 'words,chars', mask: 'chars' });
     gsap.from(split.chars, { yPercent: 110, rotate: 4, duration: 1.05, ease: 'power4.out', stagger: 0.028, delay: 0.15 });
     gsap.from(['#heroContent .kicker', '.hero-row', '.hero-pills', '.hero-badge', '#heroCtrl'], { autoAlpha: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.55 });
     $('#cue').style.display = 'flex';
@@ -138,8 +138,8 @@
     });
     htl.to('#heroContent', { autoAlpha: 0, y: -70, duration: 0.32, ease: 'power2.in' }, 0)
       .to(['.hero-badge', '#heroCtrl', '#cue'], { autoAlpha: 0, duration: 0.18 }, 0)
-      .to('.hero-shade', { opacity: 0.35, duration: 0.4 }, 0)
-      .fromTo('#heroMedia', { scale: 1 }, { scale: 1.14, duration: 1 }, 0)
+      .to('.hero-shade', { opacity: 0, duration: 0.5 }, 0)
+      .fromTo('#heroMedia', { scale: 1, filter: 'brightness(1) saturate(1)' }, { scale: 1.14, filter: 'brightness(1.45) saturate(1.15)', duration: 1 }, 0)
       .fromTo(knock, { autoAlpha: 0, scale: 2.8 }, { autoAlpha: 1, scale: 1, duration: 0.72, ease: 'power2.out', transformOrigin: '50% 50%' }, 0.12)
       .fromTo('#knockSub', { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.2, ease: 'power2.out' }, 0.74)
       .to({}, { duration: 0.12 });
