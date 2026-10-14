@@ -88,8 +88,8 @@
   S('defs', {}, svg).innerHTML =
     '<radialGradient id="rtGlow"><stop offset="0" stop-color="#E83637" stop-opacity=".9"/><stop offset="1" stop-color="#E83637" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="rtShadow"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>' +
-    '<linearGradient id="rtBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3b44"/><stop offset=".55" stop-color="#24252b"/><stop offset="1" stop-color="#17181c"/></linearGradient>' +
-    '<linearGradient id="rtFar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c1d22"/><stop offset="1" stop-color="#101114"/></linearGradient>' +
+    '<linearGradient id="rtBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#55575f"/><stop offset=".5" stop-color="#34353c"/><stop offset="1" stop-color="#202126"/></linearGradient>' +
+    '<linearGradient id="rtFar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26272d"/><stop offset="1" stop-color="#16171a"/></linearGradient>' +
     '<linearGradient id="rtShoe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9c5bd"/></linearGradient>' +
     '<linearGradient id="rtScan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E83637" stop-opacity="0"/><stop offset=".5" stop-color="#E83637" stop-opacity=".55"/><stop offset="1" stop-color="#E83637" stop-opacity="0"/></linearGradient>';
 
@@ -101,7 +101,7 @@
 
   // ferne Koerperseite (hinter dem Rad)
   const far = S('g', { fill: 'url(#rtFar)', stroke: 'rgba(255,255,255,.04)', 'stroke-width': 3 }, svg);
-  const farThigh = S('path', {}, far), farShin = S('path', {}, far), farFoot = S('path', { fill: '#3b3a37' }, far);
+  const farThigh = S('path', {}, far), farShin = S('path', {}, far), farFoot = S('path', { fill: '#2c2d31' }, far);
   const farCrank = S('line', { stroke: '#3a3d44', 'stroke-width': 16, 'stroke-linecap': 'round' }, svg);
 
   // Rad
@@ -139,13 +139,12 @@
   const ghostSeat = S('path', { 'stroke-dasharray': 'none', 'stroke-width': 4, opacity: 0.8 }, ghost);
 
   // nahe Koerperseite (Silhouette)
-  const body = S('g', { fill: 'url(#rtBody)', stroke: 'rgba(255,255,255,.08)', 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+  const body = S('g', { fill: 'url(#rtBody)', stroke: 'rgba(255,255,255,.16)', 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
   const thigh = S('path', {}, body), shin = S('path', {}, body);
   const sock = S('path', { fill: '#e9e6df', stroke: 'none' }, body);
   const shoe = S('path', { fill: 'url(#rtShoe)', stroke: 'none' }, body);
   const torso = S('path', {}, body), neck = S('path', {}, body);
-  const stripe = S('path', { fill: 'none', stroke: '#E83637', 'stroke-width': 12, 'stroke-linecap': 'round' }, body);
-  const face = S('circle', { r: 56 }, body);
+  const face = S('circle', { r: 56, fill: '#3a3b42' }, body);
   const helmet = S('path', { fill: '#E83637', stroke: 'rgba(0,0,0,.25)' }, body);
   const visor = S('path', { fill: '#0b0b0d', stroke: 'none' }, body);
   const uArm = S('path', {}, body), fArm = S('path', {}, body);
@@ -238,10 +237,8 @@
     const mid = [lerp(q.K[0], q.A[0], 0.72), lerp(q.K[1], q.A[1], 0.72)];
     sock.setAttribute('d', capsule(mid, q.A, 31, 27));
     shoe.setAttribute('d', capsule(q.heel, q.toe, 26, 17));
-    // Rumpf: leicht gerundeter Ruecken (Kapsel + Bogen), Trikot-Streifen auf der Ruecken-Seite
+    // Rumpf
     torso.setAttribute('d', capsule(q.H, q.SH, 78, 60));
-    const tv = sub(q.SH, q.H), tl = len(tv), tn = [tv[1] / tl, -tv[0] / tl];   // Normale Richtung Ruecken (oben)
-    stripe.setAttribute('d', 'M' + pt([q.H[0] + tn[0] * 50 + tv[0] * 0.12, q.H[1] + tn[1] * 50 + tv[1] * 0.12]) + ' L' + pt([q.SH[0] + tn[0] * 40 - tv[0] * 0.08, q.SH[1] + tn[1] * 40 - tv[1] * 0.08]));
     const hc = [q.SH[0] + 118, q.SH[1] - 86];
     neck.setAttribute('d', capsule(q.SH, hc, 40, 30));
     face.setAttribute('cx', r1(hc[0])); face.setAttribute('cy', r1(hc[1]));
@@ -315,6 +312,7 @@
     hud.state.classList.toggle('ok', ok);
     hud.state.textContent = p < 0.2 ? 'Kalibrierung' : p < 0.5 ? 'Vorher · Sattel zu tief' : p < 0.74 ? 'Anpassung läuft' : 'Sitzposition optimiert ✓';
     if (cmp && !RM) { cmp.style.opacity = fin; cmp.style.visibility = fin > 0.01 ? 'visible' : 'hidden'; }
+    sec.classList.toggle('fin', fin > 0.5);
     const sec2 = Math.floor((performance.now() - st.t0) / 1000);
     hud.time.textContent = String(Math.floor(sec2 / 60)).padStart(2, '0') + ':' + String(sec2 % 60).padStart(2, '0');
   }
