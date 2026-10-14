@@ -662,7 +662,8 @@ body::after {
   background: conic-gradient(var(--ink) 25%, var(--paper) 0 50%, var(--ink) 0 75%, var(--paper) 0) 0 0 / 16px 16px;
 }
 .fin-head { margin-bottom: clamp(44px, 6vw, 90px); }
-.h-fin { font: 400 clamp(54px, 9.4vw, 168px)/.98 var(--f-display); text-transform: uppercase; margin: 16px 0 0; letter-spacing: .004em; }
+/* Zeilenabstand 1.1: die Ö-Punkte in SCHÖNBERG (Anton: 1,06 em hoch) beruehren sonst Zeile 1 */
+.h-fin { font: 400 clamp(54px, 9.4vw, 168px)/1.1 var(--f-display); text-transform: uppercase; margin: 16px 0 0; letter-spacing: .004em; }
 .fin-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
 .fin-photo { grid-column: 1 / span 7; margin: 0; }
 .fp-in { overflow: hidden; aspect-ratio: 3 / 2; border-radius: 4px; background: var(--paper-3); }
