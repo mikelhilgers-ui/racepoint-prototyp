@@ -75,7 +75,7 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 .phero-fig::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,13,0) 55%,rgba(11,11,13,.75))}
 .phero-fig figcaption{position:absolute;z-index:2;left:18px;bottom:16px;right:120px;font:600 12px var(--display);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.88)}
 .phero-word{position:absolute;z-index:1;left:0;bottom:-.12em;white-space:nowrap;font:900 italic clamp(120px,22vw,360px)/1 var(--display);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.08);pointer-events:none;user-select:none}
-.phero-badge{position:absolute;z-index:3;right:14px;bottom:14px;width:104px;height:104px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
+.phero .phero-badge{position:absolute;z-index:3;top:auto;right:14px;bottom:14px;width:104px;height:104px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
 .phero-badge .hb-core{width:50px;height:50px}
 .phero-badge .hb-core svg{width:19px;height:19px}
 .phero-badge .hb-ring text{font-size:10.6px}
