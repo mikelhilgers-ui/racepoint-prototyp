@@ -290,6 +290,8 @@
 .prof-read.on{opacity:1}
 .prof-read em{font-style:normal;color:#ffb3b3}
 
+/* Waehrend der Scroll-Fahrt: nur der KI-Orb, ohne Sprechblase ueber dem Profil */
+html.tr-pinned .kib-label{opacity:0!important}
 /* Stempel am Ende */
 .route-stamp{position:absolute;z-index:2;width:170px;pointer-events:none;visibility:hidden;opacity:0}
 .route-stamp svg{width:100%;height:auto;overflow:visible}
@@ -350,7 +352,7 @@
   .wp-card h3{grid-row:1;grid-column:2;align-self:end;font-size:24px;margin:0 0 4px}
   .wp-sub{display:none}
   .wp-body{grid-column:1/-1;font-size:14.5px;margin:12px 0 12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .wp-ask{grid-column:1/-1;justify-self:start;max-width:calc(100% - 64px);font-size:12px;letter-spacing:.06em;white-space:nowrap;padding:0 16px}
+  .wp-ask{grid-column:1/-1;justify-self:start;max-width:100%;font-size:12px;letter-spacing:.06em;white-space:nowrap;padding:0 16px}
   .route-profile{left:12px;right:12px;bottom:calc(47% + 10px);height:62px;padding:4px 10px 2px;border-radius:12px}
   .prof-read{top:-34px}
   .route-stamp{width:96px}
