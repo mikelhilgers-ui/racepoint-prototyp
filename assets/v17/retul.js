@@ -31,6 +31,17 @@
     return e;
   }
 
+  // verjuengte Kapsel von a (Radius ra) nach b (Radius rb) – Gliedmassen mit Volumen
+  function capsule(a, b, ra, rb) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+    const s = clamp((ra - rb) / L, -0.95, 0.95), c = Math.sqrt(1 - s * s);
+    // Tangentenpunkte der beiden Kreise
+    const t = (p, r, sg) => [p[0] + r * (nx * c * sg + ux * s), p[1] + r * (ny * c * sg + uy * s)];
+    const a1 = t(a, ra, 1), b1 = t(b, rb, 1), b2 = t(b, rb, -1), a2 = t(a, ra, -1);
+    const f = v => r1(v[0]) + ',' + r1(v[1]);
+    return 'M' + f(a1) + ' L' + f(b1) + ' A' + r1(rb) + ',' + r1(rb) + ' 0 ' + (s > 0 ? 0 : 1) + ' 0 ' + f(b2) + ' L' + f(a2) + ' A' + r1(ra) + ',' + r1(ra) + ' 0 ' + (s > 0 ? 1 : 0) + ' 0 ' + f(a1) + 'Z';
+  }
+
   /* ---------------- Geometrie (mm, Tretlager = Ursprung, y nach unten) ---------------- */
   const G = { R: [-404, -72], F: [593, -72], ST: [-148, -500], HTt: [395, -572], HTb: [441, -414], TTs: [-138, -466], TTh: [390, -548] };
   const WR = 336, CRANK = 172.5, FLOOR = WR - 72;
@@ -73,11 +84,13 @@
 
   /* ---------------- SVG-Szene ---------------- */
   const stage = $('#rtStage');
-  const svg = S('svg', { viewBox: '-800 -1390 1820 1720', preserveAspectRatio: 'xMidYMid meet', role: 'img', 'aria-label': 'Animierte Retül-Messung: Fahrer mit Markern an den Gelenken, Kniewinkel und Sattelhöhe werden live gemessen' }, stage);
+  const svg = S('svg', { viewBox: '-770 -1360 1760 1650', preserveAspectRatio: 'xMidYMid meet', role: 'img', 'aria-label': 'Animierte Retül-Messung: Fahrer mit Markern an den Gelenken, Kniewinkel und Sattelhöhe werden live gemessen' }, stage);
   S('defs', {}, svg).innerHTML =
     '<radialGradient id="rtGlow"><stop offset="0" stop-color="#E83637" stop-opacity=".9"/><stop offset="1" stop-color="#E83637" stop-opacity="0"/></radialGradient>' +
     '<radialGradient id="rtShadow"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>' +
-    '<linearGradient id="rtBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e2f36"/><stop offset="1" stop-color="#1b1c21"/></linearGradient>' +
+    '<linearGradient id="rtBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3b44"/><stop offset=".55" stop-color="#24252b"/><stop offset="1" stop-color="#17181c"/></linearGradient>' +
+    '<linearGradient id="rtFar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1c1d22"/><stop offset="1" stop-color="#101114"/></linearGradient>' +
+    '<linearGradient id="rtShoe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9c5bd"/></linearGradient>' +
     '<linearGradient id="rtScan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E83637" stop-opacity="0"/><stop offset=".5" stop-color="#E83637" stop-opacity=".55"/><stop offset="1" stop-color="#E83637" stop-opacity="0"/></linearGradient>';
 
   // Boden + Schatten + Messraster
@@ -87,10 +100,8 @@
   for (let x = -760; x <= 980; x += 40) S('line', { x1: x, y1: FLOOR, x2: x, y2: FLOOR + (x % 200 === 0 ? 22 : 10) }, ticks);
 
   // ferne Koerperseite (hinter dem Rad)
-  const far = S('g', { opacity: 0.55 }, svg);
-  const farThigh = S('line', { stroke: '#15161a', 'stroke-width': 92, 'stroke-linecap': 'round' }, far);
-  const farShin = S('line', { stroke: '#15161a', 'stroke-width': 66, 'stroke-linecap': 'round' }, far);
-  const farFoot = S('line', { stroke: '#121316', 'stroke-width': 40, 'stroke-linecap': 'round' }, far);
+  const far = S('g', { fill: 'url(#rtFar)', stroke: 'rgba(255,255,255,.04)', 'stroke-width': 3 }, svg);
+  const farThigh = S('path', {}, far), farShin = S('path', {}, far), farFoot = S('path', { fill: '#3b3a37' }, far);
   const farCrank = S('line', { stroke: '#3a3d44', 'stroke-width': 16, 'stroke-linecap': 'round' }, svg);
 
   // Rad
@@ -124,19 +135,21 @@
   // Geist „vorher“ (gestrichelt)
   const ghost = S('g', { opacity: 0, fill: 'none', stroke: '#fbbf24', 'stroke-width': 7, 'stroke-dasharray': '16 12', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, svg);
   const ghostBones = S('path', {}, ghost);
-  const ghostHead = S('circle', { r: 84 }, ghost);
+  const ghostHead = S('circle', { r: 70 }, ghost);
   const ghostSeat = S('path', { 'stroke-dasharray': 'none', 'stroke-width': 4, opacity: 0.8 }, ghost);
 
   // nahe Koerperseite (Silhouette)
-  const body = S('g', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }, svg);
-  const torso = S('line', { stroke: 'url(#rtBody)', 'stroke-width': 150 }, body);
-  const uArm = S('line', { stroke: '#24252b', 'stroke-width': 58 }, body);
-  const fArm = S('line', { stroke: '#24252b', 'stroke-width': 46 }, body);
-  const thigh = S('line', { stroke: '#2a2b31', 'stroke-width': 104 }, body);
-  const shin = S('line', { stroke: '#26272d', 'stroke-width': 72 }, body);
-  const shoe = S('line', { stroke: '#e8e4dc', 'stroke-width': 44 }, body);
-  const helmet = S('path', { fill: '#E83637', stroke: 'none' }, body);
-  const face = S('circle', { r: 62, fill: '#2a2b31' }, body);
+  const body = S('g', { fill: 'url(#rtBody)', stroke: 'rgba(255,255,255,.08)', 'stroke-width': 3, 'stroke-linejoin': 'round' }, svg);
+  const thigh = S('path', {}, body), shin = S('path', {}, body);
+  const sock = S('path', { fill: '#e9e6df', stroke: 'none' }, body);
+  const shoe = S('path', { fill: 'url(#rtShoe)', stroke: 'none' }, body);
+  const torso = S('path', {}, body), neck = S('path', {}, body);
+  const stripe = S('path', { fill: 'none', stroke: '#E83637', 'stroke-width': 12, 'stroke-linecap': 'round' }, body);
+  const face = S('circle', { r: 56 }, body);
+  const helmet = S('path', { fill: '#E83637', stroke: 'rgba(0,0,0,.25)' }, body);
+  const visor = S('path', { fill: '#0b0b0d', stroke: 'none' }, body);
+  const uArm = S('path', {}, body), fArm = S('path', {}, body);
+  const hand = S('circle', { r: 24, fill: '#1c1d22' }, body);
   const crankLine = S('line', { stroke: '#a7adb6', 'stroke-width': 18, 'stroke-linecap': 'round' }, svg);
   const pedal = S('rect', { width: 90, height: 18, rx: 6, fill: '#55595f' }, svg);
 
@@ -216,16 +229,27 @@
     const q = pose(th, d), qf = pose(th + Math.PI, d);
 
     // ferne Seite
-    setL(farThigh, q.H, qf.K); setL(farShin, qf.K, qf.A); setL(farFoot, qf.heel, qf.toe);
+    farThigh.setAttribute('d', capsule(q.H, qf.K, 62, 44)); farShin.setAttribute('d', capsule(qf.K, qf.A, 42, 28)); farFoot.setAttribute('d', capsule(qf.heel, qf.toe, 24, 16));
     setL(farCrank, [0, 0], qf.P);
     // Sattel
     seat.setAttribute('transform', 'translate(' + r1(U[0] * d) + ' ' + r1(U[1] * d) + ')');
     // Koerper
-    setL(torso, q.H, q.SH); setL(uArm, q.SH, q.E); setL(fArm, q.E, q.W);
-    setL(thigh, q.H, q.K); setL(shin, q.K, q.A); setL(shoe, q.heel, q.toe);
-    const hc = [q.SH[0] + 104, q.SH[1] - 112];
-    helmet.setAttribute('d', 'M' + r1(hc[0] - 100) + ',' + r1(hc[1] + 6) + ' C' + r1(hc[0] - 96) + ',' + r1(hc[1] - 92) + ' ' + r1(hc[0] + 40) + ',' + r1(hc[1] - 120) + ' ' + r1(hc[0] + 104) + ',' + r1(hc[1] - 20) + ' L' + r1(hc[0] + 60) + ',' + r1(hc[1] - 4) + ' Z');
-    face.setAttribute('cx', r1(hc[0] + 14)); face.setAttribute('cy', r1(hc[1] + 30));
+    thigh.setAttribute('d', capsule(q.H, q.K, 66, 46)); shin.setAttribute('d', capsule(q.K, q.A, 44, 28));
+    const mid = [lerp(q.K[0], q.A[0], 0.72), lerp(q.K[1], q.A[1], 0.72)];
+    sock.setAttribute('d', capsule(mid, q.A, 31, 27));
+    shoe.setAttribute('d', capsule(q.heel, q.toe, 26, 17));
+    // Rumpf: leicht gerundeter Ruecken (Kapsel + Bogen), Trikot-Streifen auf der Ruecken-Seite
+    torso.setAttribute('d', capsule(q.H, q.SH, 78, 60));
+    const tv = sub(q.SH, q.H), tl = len(tv), tn = [tv[1] / tl, -tv[0] / tl];   // Normale Richtung Ruecken (oben)
+    stripe.setAttribute('d', 'M' + pt([q.H[0] + tn[0] * 50 + tv[0] * 0.12, q.H[1] + tn[1] * 50 + tv[1] * 0.12]) + ' L' + pt([q.SH[0] + tn[0] * 40 - tv[0] * 0.08, q.SH[1] + tn[1] * 40 - tv[1] * 0.08]));
+    const hc = [q.SH[0] + 118, q.SH[1] - 86];
+    neck.setAttribute('d', capsule(q.SH, hc, 40, 30));
+    face.setAttribute('cx', r1(hc[0])); face.setAttribute('cy', r1(hc[1]));
+    const hp = (x, y) => r1(hc[0] + x) + ',' + r1(hc[1] + y);
+    helmet.setAttribute('d', 'M' + hp(-78, 4) + ' C' + hp(-92, -50) + ' ' + hp(-40, -88) + ' ' + hp(14, -82) + ' C' + hp(58, -78) + ' ' + hp(80, -46) + ' ' + hp(74, -8) + ' L' + hp(30, -14) + ' L' + hp(-20, -6) + ' Z');
+    visor.setAttribute('d', 'M' + hp(30, -14) + ' L' + hp(74, -8) + ' C' + hp(76, 8) + ' ' + hp(64, 22) + ' ' + hp(46, 22) + ' L' + hp(30, 8) + ' Z');
+    uArm.setAttribute('d', capsule(q.SH, q.E, 36, 28)); fArm.setAttribute('d', capsule(q.E, q.W, 28, 21));
+    hand.setAttribute('cx', r1(q.W[0])); hand.setAttribute('cy', r1(q.W[1]));
     setL(crankLine, [0, 0], q.P);
     pedal.setAttribute('x', r1(q.P[0] - 45)); pedal.setAttribute('y', r1(q.P[1] - 9));
 
@@ -270,7 +294,7 @@
     const gq = pose(th, DELTA);
     ghost.setAttribute('opacity', r1(fin * 0.75));
     ghostBones.setAttribute('d', 'M' + pt(gq.W) + ' L' + pt(gq.E) + ' L' + pt(gq.SH) + ' L' + pt(gq.H) + ' L' + pt(gq.K) + ' L' + pt(gq.A));
-    ghostHead.setAttribute('cx', r1(gq.SH[0] + 118)); ghostHead.setAttribute('cy', r1(gq.SH[1] - 96));
+    ghostHead.setAttribute('cx', r1(gq.SH[0] + 118)); ghostHead.setAttribute('cy', r1(gq.SH[1] - 86));
     ghostSeat.setAttribute('d', 'M' + r1(-334 + U[0] * DELTA) + ',' + r1(-704 + U[1] * DELTA) + ' L' + r1(-76 + U[0] * DELTA) + ',' + r1(-712 + U[1] * DELTA));
 
     // HUD

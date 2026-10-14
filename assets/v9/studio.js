@@ -117,7 +117,7 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     active: true,    // rendern ja/nein
   };
   const rot = { spin: 0, user: 0, vel: 0, drag: false, x: 0, t: 0, time: 0 };
-  let wheelAngle = 0, crankAngle = 0;
+  let wheelAngle = 0, crankAngle = 0, chainPos = 0;
 
   /* ---------------- Kamera mit Lens-Shift ---------------- */
   const camera = new THREE.PerspectiveCamera(30, 1, .05, 60);
@@ -252,9 +252,15 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     crankAngle += state.pedal * dt;
     wheelAngle += (state.pedal * ratio + state.wheel) * dt;
     M.chain.map.offset.x += state.pedal * dt * (.0127 / (2 * Math.sin(Math.PI / G.rings[0]))) / .0254;
+    // Kette: Glieder laufen mit (Kettenlaenge pro Kurbel-Radiant = Teilkreisradius des Blatts)
+    const chainMoved = state.pedal !== 0;
+    chainPos += state.pedal * dt * (.0127 / (2 * Math.sin(Math.PI / G.rings[0])));
     for (const b of bikes) {
       b.spin.wheels.forEach(s => { s.rotation.z = -wheelAngle; });
       b.spin.crank.forEach(s => { s.rotation.z = -crankAngle; });
+      (b.spin.pedals || []).forEach(p => { p.g.rotation.z = p.base + crankAngle; });   // Pedale bleiben waagerecht
+      (b.spin.jockeys || []).forEach(j => { j.g.rotation.z = -chainPos / j.r; });
+      if (chainMoved || b.chainPos !== chainPos) { (b.chains || []).forEach(c => c.set(-chainPos)); b.chainPos = chainPos; }
       applyParts(b);
     }
     updateCamera(dt);
