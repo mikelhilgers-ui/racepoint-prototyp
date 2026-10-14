@@ -1,21 +1,23 @@
 /* =====================================================================
-   RACEPOINT · 17 · BEST OF — drehbares 3D-Rennrad (THROWAWAY)
-   „Road Bike“ von tanity (Sketchfab), CC BY 4.0 – assets/models/road-bike.LICENSE.txt
+   RACEPOINT · 17 · BEST OF — drehbares 3D-Bike (THROWAWAY)
+   Nutzt das prozedurale, moderne Bike aus Prototyp 9 (assets/v9/bike.js:
+   buildBike / makeMaterials / PAINTS, nur gelesen – Scheibenbremsen, tiefe
+   Carbonfelgen, Tan-Wall). Typen: rennrad · gravel · mtb · ebike.
    - ES-Modul (Import-Map wie v9-3d-studio.html), stellt window.RP17Bike3D
      bereit und meldet sich per Event „rp17:3d“
-   - mount(el, opt) -> Promise<ctl>; ctl.setColor(hex) · setTyres('tan'|'black')
-     · setActive(bool) · dispose()
-   - sanfte Eigendrehung, Ziehen dreht (horizontal = Gieren, vertikal begrenzt),
+   - mount(el, opt) -> Promise<ctl>
+       opt: { type, paint (PAINTS-Schluessel), tyres 'tan'|'black', baseYaw, hint }
+       ctl: setPaint(k) · setTyres(t) · setType(t) · setActive(bool) · dispose()
+   - sanftes Pendeln, Ziehen dreht (horizontal = Gieren, vertikal begrenzt),
      mit Traegheit; touch-action: pan-y laesst das Seiten-Scrollen in Ruhe
    - stromsparend: low-power, Pixelratio <= 1,75, rendert nur sichtbar/aktiv
-   Modell: Y oben, faehrt nach +X, Antriebsseite +Z
    ===================================================================== */
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
+import { PAINTS, makeMaterials, buildBike, disposeBike } from '../v9/bike.js';
 
-const URL_GLB = new URL('../models/road-bike.glb', import.meta.url).href;
-const URL_DRACO = new URL('../../vendor/three/addons/libs/draco/gltf/', import.meta.url).href;
-const CREDIT = '3D-Modell „Road Bike“ von tanity, CC BY 4.0';
-const CREDIT_URL = 'https://sketchfab.com/3d-models/road-bike-cb03b0657fbc4693b59194124ba713db';
+const DEG = Math.PI / 180;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 function webglOK() {
   try {
@@ -23,138 +25,119 @@ function webglOK() {
     return !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl')));
   } catch (e) { return false; }
 }
-
-let pending = null;
-function loadModel() {
-  if (pending) return pending;
-  pending = (async () => {
-    const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
-      import('three/addons/loaders/GLTFLoader.js'), import('three/addons/loaders/DRACOLoader.js')]);
-    const draco = new DRACOLoader().setDecoderPath(URL_DRACO);
-    try {
-      const gltf = await new GLTFLoader().setDRACOLoader(draco).loadAsync(URL_GLB);
-      return gltf.scene;
-    } finally { draco.dispose(); }
-  })();
-  pending.catch(() => { pending = null; });
-  return pending;
-}
-
-function makeMaterials(color, tyres) {
-  const P = o => new THREE.MeshPhysicalMaterial(o), S = o => new THREE.MeshStandardMaterial(o);
-  const M = {
-    paint: P({ color: new THREE.Color(color), metalness: 0.35, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.08 }),
-    carbon: P({ color: 0x15161a, metalness: 0.4, roughness: 0.3, clearcoat: 0.8, clearcoatRoughness: 0.15 }),
-    black: P({ color: 0x0f1013, metalness: 0.45, roughness: 0.3, clearcoat: 0.7, clearcoatRoughness: 0.2 }),
-    rim: P({ color: 0x101114, metalness: 0.3, roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.12 }),
-    silver: S({ color: 0xb9bec6, metalness: 1, roughness: 0.32 }),
-    silver2: S({ color: 0x5b6069, metalness: 1, roughness: 0.26 }),
-    saddle: S({ color: 0x18191c, roughness: 0.74 }),
-    plastic: S({ color: 0x15161a, roughness: 0.55, metalness: 0.1 }),
-    rubber: S({ color: 0x141416, roughness: 0.82 }),
-    tyreBlack: S({ color: 0x1a1b1e, roughness: 0.78 }),
-    tyreTan: S({ color: 0xb98a55, roughness: 0.72 }),
-    accent: S({ color: 0xE83637, roughness: 0.5 }),
-    light: S({ color: 0xff6a1a, roughness: 0.5, emissive: 0x401000 }),
-    spoke: S({ color: 0x2a2c31, metalness: 0.8, roughness: 0.35 }),
-  };
-  M.tyre = tyres === 'black' ? M.tyreBlack : M.tyreTan;
-  return M;
+function radialTex(stops, size = 256) {
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'), gr = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  stops.forEach(([o, col]) => gr.addColorStop(o, col));
+  g.fillStyle = gr; g.fillRect(0, 0, size, size);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
 }
 
 async function mount(el, opt = {}) {
   if (!webglOK()) throw new Error('kein WebGL');
-  const { RoomEnvironment } = await import('three/addons/RoomEnvironment.js');
-  const src = await loadModel();
+  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cfg = { type: opt.type || 'rennrad', paint: opt.paint || 'rot', tyres: opt.tyres || 'tan' };
 
+  /* ---------------- Renderer, Umgebung, Licht (angelehnt an das V9-Studio) ---------------- */
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.05;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  el.appendChild(renderer.domElement);
-  renderer.domElement.setAttribute('aria-hidden', 'true');
+  renderer.setClearColor(0x000000, 0);
+  const cv = renderer.domElement;
+  cv.setAttribute('aria-hidden', 'true');
+  el.appendChild(cv);
 
   const scene = new THREE.Scene();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x221416, 0.5));
-  const key = new THREE.DirectionalLight(0xffffff, 1.6);
-  key.position.set(1.5, 3.2, 2.2); key.castShadow = true;
+  const pmrem = new THREE.PMREMGenerator(renderer), room = new RoomEnvironment();
+  room.traverse(o => { if (o.isMesh && o.material.side === THREE.BackSide) o.material.color.setScalar(0.28); });
+  const strip = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xE83637).multiplyScalar(36) }));
+  strip.position.set(3, 5, -12); strip.scale.set(16, 0.45, 0.1);
+  room.add(strip);
+  scene.environment = pmrem.fromScene(room, 0.035).texture;
+  scene.environmentIntensity = 0.85;
+  room.dispose(); pmrem.dispose();
+
+  const key = new THREE.DirectionalLight(0xffffff, 2.3);
+  key.position.set(-1.4, 3.4, 2.1);
+  key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024);
-  Object.assign(key.shadow.camera, { left: -1.4, right: 1.4, top: 1.4, bottom: -1.4, near: 0.5, far: 8 });
-  key.shadow.radius = 6;
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0xff4a3d, 1.3);
-  rim.position.set(-2.5, 1.2, -2.2); scene.add(rim);
+  Object.assign(key.shadow.camera, { left: -1.4, right: 1.4, top: 1.4, bottom: -1.4, near: 0.5, far: 9 });
+  key.shadow.bias = -0.0004; key.shadow.normalBias = 0.012;
+  const rim = new THREE.DirectionalLight(0xff3537, 3.2); rim.position.set(1.7, 1.5, -2.8);
+  const rim2 = new THREE.DirectionalLight(0xff4a3c, 1.3); rim2.position.set(-2.6, 0.9, -1.9);
+  const fill = new THREE.DirectionalLight(0xbfd0ff, 0.55); fill.position.set(2.8, 1.1, 2.4);
+  scene.add(key, rim, rim2, fill, new THREE.HemisphereLight(0xffffff, 0x0b0c0e, 0.3));
 
-  // Modell klonen, einfaerben, auf Boden stellen und auf ~1,8 Einheiten Laenge normieren
-  const M = makeMaterials(opt.color || '#E83637', opt.tyres || 'tan');
-  const model = src.clone(true);
-  model.updateMatrixWorld(true);
-  const box = new THREE.Box3(), size = new THREE.Vector3();
-  const tyreMeshes = [];
-  model.traverse(o => {
-    if (!o.isMesh) return;
-    o.geometry.computeBoundingBox();
-    box.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld).getSize(size);
-    const k = o.material && o.material.name;
-    let m = M.black;
-    if (k === 'rama' || k === 'orange.metal') m = M.paint;
-    else if (k === 'Blue') m = M.carbon;
-    else if (k === 'wheel.black') m = M.rubber;
-    else if (k === 'wheel.orange') { if (size.x > 1) { m = M.tyre; tyreMeshes.push(o); } else m = M.accent; }
-    else if (k === 'metal.black') m = size.x > 1.3 ? M.rim : M.black;
-    else if (k === 'metal.silver') m = M.silver;
-    else if (k === 'metal.silver2') m = M.silver2;
-    else if (k === 'seat.skin') m = size.x > 1 ? M.rubber : M.saddle;
-    else if (k === 'seat.plastic') m = M.plastic;
-    else if (k === 'light.orange') m = M.light;
-    else if (k === 'spitsi1.004__0') m = M.spoke;
-    o.material = m;
-    o.castShadow = Math.max(size.x, size.y) > 0.2;
-  });
-  const bb = new THREE.Box3().setFromObject(model), bs = bb.getSize(new THREE.Vector3()), bc = bb.getCenter(new THREE.Vector3());
-  const k = 1.8 / bs.x;
-  const holder = new THREE.Group();
-  model.position.set(-bc.x, -bb.min.y, -bc.z);
-  holder.add(model);
-  holder.scale.setScalar(k);
-  const pivot = new THREE.Group();
-  pivot.add(holder);
-  scene.add(pivot);
-  const H = bs.y * k;
+  const flat = m => { m.rotation.x = -Math.PI / 2; return m; };
+  const pool = flat(new THREE.Mesh(new THREE.CircleGeometry(2.4, 96), new THREE.MeshBasicMaterial({
+    map: radialTex([[0, 'rgba(255,255,255,.10)'], [0.45, 'rgba(255,255,255,.035)'], [1, 'rgba(255,255,255,0)']]), transparent: true, depthWrite: false })));
+  scene.add(pool);
+  const catcher = flat(new THREE.Mesh(new THREE.PlaneGeometry(6, 6), new THREE.ShadowMaterial({ opacity: 0.5 })));
+  catcher.position.y = 0.001; catcher.receiveShadow = true; scene.add(catcher);
+  const ring = flat(new THREE.Mesh(new THREE.RingGeometry(1.06, 1.066, 160), new THREE.MeshBasicMaterial({ color: 0xE83637, transparent: true, opacity: 0.45, depthWrite: false })));
+  ring.position.y = 0.003; scene.add(ring);
 
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), new THREE.ShadowMaterial({ opacity: 0.45 }));
-  ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
-  scene.add(ground);
+  const pivot = new THREE.Group(); scene.add(pivot);
+  const contact = flat(new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({
+    map: radialTex([[0, 'rgba(0,0,0,.8)'], [0.55, 'rgba(0,0,0,.3)'], [1, 'rgba(0,0,0,0)']]), transparent: true, depthWrite: false })));
+  contact.position.y = 0.002; pivot.add(contact);
 
-  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
-  const target = new THREE.Vector3(0, H * 0.5, 0);
+  /* ---------------- Bike ---------------- */
+  const M = makeMaterials();
+  let bike = null;
+  const wheelsOpt = () => (cfg.tyres === 'tan' ? 'tan' : 'tief');
+  function applyPaint(k, instant) {
+    const p = PAINTS[k] || PAINTS.rot, c = new THREE.Color(p.color), dc = new THREE.Color(p.decal);
+    const g = window.gsap, d = instant || rm || !g ? 0 : 0.8;
+    if (!d) {
+      M.paint.color.copy(c); M.decal.color.copy(dc);
+      Object.assign(M.paint, { metalness: p.metalness, roughness: p.roughness, clearcoatRoughness: p.clearcoatRoughness, iridescence: p.iridescence, bumpScale: p.bump * 1.4 });
+      M.paint.userData.flip.value = p.flip;
+      return;
+    }
+    g.to(M.paint.color, { r: c.r, g: c.g, b: c.b, duration: d, ease: 'power2.inOut', overwrite: true, onUpdate: kick });
+    g.to(M.paint, { metalness: p.metalness, roughness: p.roughness, clearcoatRoughness: p.clearcoatRoughness, iridescence: p.iridescence, bumpScale: p.bump * 1.4, duration: d, ease: 'power2.inOut', overwrite: true });
+    g.to(M.decal.color, { r: dc.r, g: dc.g, b: dc.b, duration: d, overwrite: true });
+    g.to(M.paint.userData.flip, { value: p.flip, duration: d, ease: 'power2.inOut', overwrite: true });
+  }
+  function build() {
+    if (bike) disposeBike(bike);
+    bike = buildBike(cfg.type, { wheels: wheelsOpt(), paint: cfg.paint }, M);
+    bike.root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
+    pivot.add(bike.root);
+    contact.scale.set(bike.size.len * 1.08, 0.44, 1);
+    resize();
+  }
+
+  /* ---------------- Kamera ---------------- */
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 60);
   function resize() {
     const w = Math.max(1, el.clientWidth), h = Math.max(1, el.clientHeight);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // Bike passt in Breite und Hoehe, plus Luft fuer die Drehung
-    const fit = Math.max(2.15 / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect), (H * 1.6) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))));
-    camera.position.set(0, H * 0.62, fit * (opt.zoom || 1));
-    camera.lookAt(target);
+    if (!bike) return;
+    const tanH = Math.tan(camera.fov * DEG / 2), len = bike.size.len, hh = bike.size.h;
+    const fit = opt.fit || 0.9;
+    const dist = Math.max((hh * 0.62) / tanH, (len * 0.56) / (tanH * camera.aspect)) / fit;
+    const el2 = 0.1;
+    camera.position.set(0, hh * 0.5 + Math.sin(el2) * dist, Math.cos(el2) * dist);
+    camera.lookAt(0, hh * 0.46, 0);
     camera.updateProjectionMatrix();
     dirty = true;
   }
 
-  // Drehung: Eigenbewegung + Ziehen mit Traegheit
+  /* ---------------- Drehen: Eigenbewegung + Ziehen mit Traegheit ---------------- */
   const st = { yaw: 0, pitch: 0, vy: 0, vp: 0, user: 0, t: 0, drag: false };
-  const base = opt.baseYaw != null ? opt.baseYaw : -0.32;
-  let dirty = true, active = true, visible = true, raf = 0, last = 0, ptr = null;
-  const cv = renderer.domElement;
+  const base = opt.baseYaw != null ? opt.baseYaw : -0.35;
+  let dirty = true, active = true, visible = true, raf = 0, last = 0, ptr = null, hint = null;
   el.addEventListener('pointerdown', e => {
     if (e.button && e.button !== 0) return;
     ptr = { id: e.pointerId, x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, on: e.pointerType === 'mouse' };
-    if (ptr.on) { el.setPointerCapture(e.pointerId); st.drag = true; }
+    if (ptr.on) { el.setPointerCapture(e.pointerId); st.drag = true; kick(); }
   });
   el.addEventListener('pointermove', e => {
     if (!ptr || e.pointerId !== ptr.id) return;
@@ -167,26 +150,20 @@ async function mount(el, opt = {}) {
     }
     const mx = e.clientX - ptr.lx, my = e.clientY - ptr.ly;
     ptr.lx = e.clientX; ptr.ly = e.clientY;
-    st.vy = mx * 0.009; st.vp = my * 0.006;
-    st.yaw += st.vy; st.pitch = THREE.MathUtils.clamp(st.pitch + st.vp, -0.28, 0.32);
+    st.vy = mx * 0.009; st.vp = my * 0.005;
+    st.yaw += st.vy; st.pitch = clamp(st.pitch + st.vp, -0.22, 0.3);
     st.user = 1; dirty = true;
     if (hint) hint.classList.add('gone');
+    kick();
   });
   const up = e => { if (ptr && e.pointerId === ptr.id) { ptr = null; st.drag = false; } };
   el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
-
-  // Hinweis + Lizenz sichtbar
-  let hint = null;
   if (opt.hint !== false) {
     hint = document.createElement('span');
     hint.className = 'hint3d'; hint.textContent = '↻ Ziehen zum Drehen';
     el.appendChild(hint);
   }
-  const cr = document.createElement('a');
-  cr.className = 'credit3d'; cr.href = CREDIT_URL; cr.target = '_blank'; cr.rel = 'noopener'; cr.textContent = CREDIT;
-  el.appendChild(cr);
 
-  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function frame(now) {
     raf = 0;
     if (!active || !visible) return;
@@ -194,43 +171,45 @@ async function mount(el, opt = {}) {
     st.t += dt;
     if (!st.drag) {
       st.vy *= 0.93; st.vp *= 0.9;
-      st.yaw += st.vy; st.pitch = THREE.MathUtils.clamp(st.pitch + st.vp, -0.28, 0.32);
-      st.pitch *= 0.985; // langsam zurueck in die Seitenansicht
+      st.yaw += st.vy; st.pitch = clamp(st.pitch + st.vp, -0.22, 0.3);
+      st.pitch *= 0.985;                       // langsam zurueck in die Seitenansicht
       st.user = Math.max(0, st.user - dt * 0.25);
     }
-    // Eigenbewegung: sanftes Pendeln (oder Drehteller), nimmt nach Nutzer-Eingriff ab
-    const auto = rm ? 0 : (opt.turntable ? st.t * 0.25 : Math.sin(st.t * 0.45) * 0.42);
+    const auto = rm ? 0 : Math.sin(st.t * 0.42) * 0.45;   // sanftes Pendeln
     pivot.rotation.y = base + auto * (1 - st.user) + st.yaw;
     pivot.rotation.x = st.pitch;
     renderer.render(scene, camera);
     dirty = false;
-    if (!rm || st.drag || Math.abs(st.vy) > 1e-4 || dirty) raf = requestAnimationFrame(frame);
+    const moving = st.drag || Math.abs(st.vy) > 1e-4 || Math.abs(st.vp) > 1e-4;
+    if (!rm || moving) raf = requestAnimationFrame(frame);
   }
-  const kick = () => { if (!raf && active && visible) { last = 0; raf = requestAnimationFrame(frame); } };
-  el.addEventListener('pointerdown', kick);
-  el.addEventListener('pointermove', () => { if (st.drag) kick(); });
+  function kick() {
+    if (!active || !visible) return;
+    if (!raf) { last = 0; raf = requestAnimationFrame(frame); }
+  }
   const io = new IntersectionObserver(es => { visible = es[0].isIntersecting; kick(); });
   io.observe(el);
   const ro = new ResizeObserver(() => { resize(); kick(); });
   ro.observe(el);
-  resize();
+
+  applyPaint(cfg.paint, true);
+  build();
   renderer.render(scene, camera);
   kick();
 
-  const ctl = {
-    el, credit: CREDIT,
-    setColor(hex) { M.paint.color.set(hex); dirty = true; if (!raf) renderer.render(scene, camera); },
-    setTyres(t) { const m = t === 'black' ? M.tyreBlack : M.tyreTan; tyreMeshes.forEach(o => { o.material = m; }); if (!raf) renderer.render(scene, camera); },
+  return {
+    el,
+    setPaint(k) { cfg.paint = k; applyPaint(k); kick(); if (rm) renderer.render(scene, camera); },
+    setTyres(t) { if (t === cfg.tyres) return; cfg.tyres = t; build(); kick(); renderer.render(scene, camera); },
+    setType(t) { if (t === cfg.type) return; cfg.type = t; build(); kick(); renderer.render(scene, camera); },
     setActive(on) { active = !!on; if (active) kick(); },
-    render() { renderer.render(scene, camera); },
     dispose() {
       active = false; io.disconnect(); ro.disconnect(); cancelAnimationFrame(raf);
-      renderer.dispose(); Object.values(M).forEach(m => m.dispose && m.dispose());
-      cv.remove(); if (hint) hint.remove(); cr.remove();
+      if (bike) disposeBike(bike);
+      renderer.dispose(); cv.remove(); if (hint) hint.remove();
     },
   };
-  return ctl;
 }
 
-window.RP17Bike3D = { mount, webglOK, credit: CREDIT, creditUrl: CREDIT_URL };
+window.RP17Bike3D = { mount, webglOK, PAINTS };
 window.dispatchEvent(new Event('rp17:3d'));

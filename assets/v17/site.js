@@ -31,6 +31,7 @@
   const PAGES = [
     { id: 'werkstatt', href: 'v17-werkstatt.html', name: 'Werkstatt' },
     { id: 'bikefitting', href: 'v17-bikefitting.html', name: 'Bikefitting' },
+    { id: 'touren', href: 'v17-touren.html', name: 'Touren' },
     { id: 'filme', href: 'v17-filme.html', name: 'Filme' },
     { id: 'ueber-uns', href: 'v17-ueber-uns.html', name: 'Über uns' },
     { id: 'kontakt', href: 'v17-kontakt.html', name: 'Kontakt' },
@@ -84,7 +85,7 @@
         '<p>Dein Bike. Dein Moment.<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
       '<nav aria-label="Bikes"><b>Bikes</b>' + CATS.map(c => '<a href="' + c.href + '"' + cur(c.id) + '>' + c.name + '</a>').join('') + '</nav>' +
-      '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.slice(0, 4).map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v17-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
+      '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v17-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v17-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +
     '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><a href="https://www.youtube.com/@racepointbikeshop" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/racepoint.be/" target="_blank" rel="noopener">Instagram</a><span>Prototyp 17 · Best of</span></div></footer>';

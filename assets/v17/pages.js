@@ -24,6 +24,13 @@
   const playSvg = '<span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>';
   const lineBike = '<svg viewBox="0 0 120 70" aria-hidden="true"><circle cx="26" cy="46" r="20"/><circle cx="94" cy="46" r="20"/><path d="M26 46l18-26h34l16 26M44 20l18 26h-36M62 46l16-26M40 14h12M74 12l4 8"/></svg>';
 
+  /* ---------------- Konfigurator-Daten (Lacke wie im 3D-Studio V9, assets/v9/bike.js PAINTS) ---------------- */
+  const PAINT = [
+    ['rot', 'Racepoint-Rot', '#d3242a'], ['black', 'Gloss Black', '#0a0b0d'], ['carbon', 'Carbon', '#1d1e22'],
+    ['white', 'Weiß', '#e9e9e4'], ['chameleon', 'Chameleon', 'linear-gradient(135deg,#10a07e,#4b25c8)'],
+  ];
+  const SIZES = [[160, 'XS', 49], [168, 'S', 52], [176, 'M', 54], [184, 'L', 56], [192, 'XL', 58], [206, 'XXL', 61]];
+
   /* ---------------- Katalog ---------------- */
   const CAT_NAME = { rennrad: 'Rennrad', gravel: 'Gravel', mtb: 'MTB', ebike: 'E-Bike', familie: 'Kids & Familie', kind: 'Kids & Familie' };
   const CAT_PAGE = { rennrad: 'v17-rennrad.html', gravel: 'v17-gravel.html', mtb: 'v17-mtb.html', ebike: 'v17-ebike.html', kind: 'v17-familie.html', familie: 'v17-familie.html' };
@@ -139,7 +146,6 @@
 
   function renderBike(b) {
     const cat = b.cat === 'kind' ? 'familie' : b.cat;
-    const road = b.cat === 'rennrad' || b.cat === 'gravel';
     document.title = 'Racepoint · ' + b.name;
     const catHref = CAT_PAGE[b.cat];
     const films = (D.pageFilms[cat] || D.pageFilms.bike);
@@ -184,51 +190,48 @@
     const sim = D.bikes.filter(x => x.id !== b.id).sort((x, y) => (inCat(y, cat) - inCat(x, cat)) || Math.abs(x.price - b.price) - Math.abs(y.price - b.price)).slice(0, 3);
     $('#simGrid').innerHTML = sim.map(x => card(x)).join('');
     guardImgs($('#simGrid'));
-    config(b, road, cat);
+    config(b, cat);
   }
 
-  /* ---------------- Konfigurator ---------------- */
-  const PAINT = [
-    ['Racepoint-Rot', '#E83637'], ['Gloss Black', '#141519'], ['Dune White', '#e7e2d8'],
-    ['Deep Lake', '#1f5c63'], ['Cobalt', '#27448f'], ['Sand Gold', '#b38b4d'],
-  ];
-  const SIZES = [[160, 'XS', 49], [168, 'S', 52], [176, 'M', 54], [184, 'L', 56], [192, 'XL', 58], [206, 'XXL', 61]];
-  function config(b, road, cat) {
+  function config(b, cat) {
     const kids = b.cat === 'kind';
+    const road = b.cat === 'rennrad' || b.cat === 'gravel';
+    // 3D nur, wenn der prozedurale Typ passt: Rennrad, Gravel, MTB, E-MTB (nicht Stadt-E-Bike, nicht Kinderrad)
+    const type3d = road || b.cat === 'mtb' ? b.cat : b.cat === 'ebike' && b.terrain.includes('trail') ? 'ebike' : null;
     const cfg = { paint: 0, tyres: 'tan', h: 176 };
     const stage = $('#cfgStage');
-    $('#cfgNote').textContent = road
-      ? '3D-Vorschau: Symbol-Modell eines Rennrads – nicht das exakte ' + b.name.split(' · ')[0] + '. Farben zeigen die Richtung, verfügbare Herstellerfarben bestätigen wir persönlich.'
-      : 'Für ' + CAT_NAME[b.cat] + ' zeigen wir bewusst das echte Herstellerbild statt eines unpassenden 3D-Modells. Wunschfarbe und Größe nehmen wir in deine Anfrage auf.';
-    if (!road) {
-      stage.classList.add('photo-mode');
-      stage.innerHTML = '<div class="bd-stage" id="cfgPhoto"><img data-guard src="' + esc(b.image) + '" alt="Specialized ' + esc(b.name) + '" referrerpolicy="no-referrer">' + ph + '<span class="tag3d" id="cfgChip">Wunschfarbe: Racepoint-Rot</span></div>';
+    $('#cfgNote').textContent = type3d
+      ? '3D-Vorschau, nicht das exakte Modell: ein ' + (type3d === 'ebike' ? 'E-MTB' : CAT_NAME[b.cat]) + ' als Symbol für deinen Build. Verfügbare Herstellerfarben bestätigen wir persönlich.'
+      : 'Für dieses Modell zeigen wir bewusst das echte Herstellerbild statt eines unpassenden 3D-Modells. Wunschfarbe und Größe nehmen wir in deine Anfrage auf.';
+    if (!type3d) {
+      stage.innerHTML = '<div class="bd-stage" id="cfgPhoto"><img data-guard src="' + esc(b.image) + '" alt="Specialized ' + esc(b.name) + '" referrerpolicy="no-referrer">' + ph + '<span class="tag3d" id="cfgChip"></span></div>';
       guardImgs(stage);
-      $('#rowTyres').remove();
     } else {
-      stage.innerHTML = '<div class="bd-stage v3wrap"><img data-guard src="' + esc(b.image) + '" alt="" referrerpolicy="no-referrer">' + ph + '<div class="v3d" id="v3d" aria-label="3D-Ansicht, mit Ziehen drehbar"></div><span class="tag3d">3D-Vorschau: Symbol-Modell</span></div>';
+      stage.innerHTML = '<div class="bd-stage v3wrap"><img data-guard src="' + esc(b.image) + '" alt="" referrerpolicy="no-referrer">' + ph + '<div class="v3d" id="v3d" aria-label="3D-Ansicht, mit Ziehen drehbar"></div><span class="tag3d">3D-Vorschau · nicht das exakte Modell</span></div>';
       guardImgs(stage);
     }
+    if (!type3d || !road) $('#rowTyres').remove();
     if (kids) $('#rowSize').querySelector('p').innerHTML = 'Größe <b id="cfgSize">nach Schrittlänge</b>';
-    $('#cfgSw').innerHTML = PAINT.map((p, i) => '<button type="button" style="--c:' + p[1] + '" aria-pressed="' + (i === 0) + '" aria-label="' + p[0] + '" title="' + p[0] + '" data-i="' + i + '"></button>').join('');
+    $('#cfgSw').innerHTML = PAINT.map((p, i) => '<button type="button" style="--c:' + p[2] + '" aria-pressed="' + (i === 0) + '" aria-label="' + p[1] + '" title="' + p[1] + '" data-i="' + i + '"></button>').join('');
     const h = $('#cfgH'), out = $('#cfgHOut');
     let ctl = null;
     const sizeOf = v => SIZES.find(s => v < s[0]) || SIZES[SIZES.length - 1];
     function sync() {
       const p = PAINT[cfg.paint], s = sizeOf(cfg.h);
-      $('#cfgPaint').textContent = p[0];
+      $('#cfgPaint').textContent = p[1];
       out.textContent = cfg.h + ' cm';
       const sizeTxt = kids ? 'Probesitzen im Laden' : s[1] + (road ? ' · ca. ' + s[2] + ' cm' : '') + ' (Richtwert)';
       if (!kids) $('#cfgSize').textContent = s[1] + (road ? ' · ' + s[2] : '');
       const tyreTxt = cfg.tyres === 'tan' ? 'Tan-Wall' : 'Schwarz';
-      $('#sumList').innerHTML = '<dt>Modell</dt><dd>Specialized ' + esc(b.name) + '</dd><dt>Farbe</dt><dd>' + p[0] + ' (Wunsch)</dd>' +
-        (road ? '<dt>Reifen</dt><dd>' + tyreTxt + '</dd>' : '') +
+      const withTyres = !!(type3d && road);
+      $('#sumList').innerHTML = '<dt>Modell</dt><dd>Specialized ' + esc(b.name) + '</dd><dt>Farbe</dt><dd>' + p[1] + ' (Wunsch)</dd>' +
+        (withTyres ? '<dt>Reifen</dt><dd>' + tyreTxt + '</dd>' : '') +
         '<dt>Größe</dt><dd>' + sizeTxt + ' · bei ' + cfg.h + ' cm</dd><dt>Preis</dt><dd>' + eur(b.price) + ' Herstellerpreis</dd>';
-      const txt = 'Mein Racepoint-Build: Specialized ' + b.name + ', Wunschfarbe ' + p[0] + (road ? ', Reifen ' + tyreTxt : '') + ', Körpergröße ' + cfg.h + ' cm (Größen-Richtwert ' + (kids ? 'offen' : s[1]) + '). Ist das so machbar und verfügbar?';
+      const txt = 'Mein Racepoint-Build: Specialized ' + b.name + ', Wunschfarbe ' + p[1] + (withTyres ? ', Reifen ' + tyreTxt : '') + ', Körpergröße ' + cfg.h + ' cm (Größen-Richtwert ' + (kids ? 'offen' : s[1]) + '). Ist das so machbar und verfügbar?';
       $('#sumAsk').setAttribute('data-ask', txt);
       $('#sumMail').href = mailto('Mein Build: Specialized ' + b.name, 'Hallo Racepoint-Team,\n\n' + txt + '\n\nIch würde gern einen Termin für Beratung bzw. Retül-Bikefitting vereinbaren.\n\nViele Grüße\n');
-      const chip = $('#cfgChip'); if (chip) chip.textContent = 'Wunschfarbe: ' + p[0];
-      if (ctl) { ctl.setColor(p[1]); ctl.setTyres(cfg.tyres); }
+      const chip = $('#cfgChip'); if (chip) chip.textContent = 'Wunschfarbe: ' + p[1];
+      if (ctl) { ctl.setPaint(p[0]); ctl.setTyres(cfg.tyres); }
     }
     $('#cfgSw').addEventListener('click', e => {
       const t = e.target.closest('button'); if (!t) return;
@@ -245,11 +248,11 @@
     });
     h.addEventListener('input', () => { cfg.h = +h.value; sync(); });
     sync();
-    if (road) {
+    if (type3d) {
       // 3D erst laden, wenn der Konfigurator in die Naehe kommt
       const box = $('#v3d');
       const start = () => {
-        const go = () => window.RP17Bike3D.mount(box, { color: PAINT[cfg.paint][1], tyres: cfg.tyres, baseYaw: -0.5 })
+        const go = () => window.RP17Bike3D.mount(box, { type: type3d, paint: PAINT[cfg.paint][0], tyres: road ? cfg.tyres : 'black', baseYaw: -0.45 })
           .then(c => { ctl = c; box.parentElement.classList.add('has3d'); sync(); })
           .catch(err => { console.info('3D nicht verfügbar, Foto bleibt:', err && err.message); box.remove(); });
         if (window.RP17Bike3D) go(); else window.addEventListener('rp17:3d', go, { once: true });
