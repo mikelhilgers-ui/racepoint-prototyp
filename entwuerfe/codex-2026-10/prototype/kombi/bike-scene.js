@@ -1,6 +1,7 @@
 import * as THREE from './vendor/three.module.min.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
+import { MeshoptDecoder } from './vendor/meshopt_decoder.module.js';
 
 export async function initBikeScene(){
   const section=document.getElementById('dreambuild'),host=document.getElementById('bike-scene');
@@ -25,7 +26,7 @@ export async function initBikeScene(){
   const ctx=ground.getContext('2d');const gradient=ctx.createRadialGradient(64,64,4,64,64,64);gradient.addColorStop(0,'rgba(37,48,23,0.23)');gradient.addColorStop(1,'rgba(37,48,23,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
   const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.5,1.6),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(ground),transparent:true,depthWrite:false}));shadow.rotation.x=-Math.PI/2;shadow.position.set(0,-.07,0);scene.add(shadow);
   let gltf;
-  try {gltf=await new GLTFLoader().loadAsync('./models/CarbonFrameBike.glb',event=>{if(event.total)status.textContent='Dein 3D-Build lädt · '+Math.round(event.loaded/event.total*100)+' %';});}catch(error){renderer.dispose();renderer.domElement.remove();env.dispose();fail();return;}
+  try {gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync('./models/CarbonFrameBike.glb',event=>{if(event.total)status.textContent='Dein 3D-Build lädt · '+Math.round(event.loaded/event.total*100)+' %';});}catch(error){renderer.dispose();renderer.domElement.remove();env.dispose();fail();return;}
   const bike=new THREE.Group();bike.add(gltf.scene);scene.add(bike);
   const mixer=new THREE.AnimationMixer(gltf.scene);const clip=gltf.animations.find(a=>a.name==='Holobike_Loop')||gltf.animations[0];
   if(!clip){fail();renderer.dispose();return;}

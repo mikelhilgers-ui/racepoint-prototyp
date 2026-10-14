@@ -40,3 +40,7 @@ Realtime version and animation by Felix Herbst / [prefrontal cortex](https://pre
 
 > [![CC-BY-SA](https://licensebuttons.net/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
 "Carbon Frame Bike" by [Robert Schweier](http://www.roberts-bikes.de/) and [prefrontal cortex](https://prefrontalcortex.de) is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-sa/4.0/).
+
+## Optimierung für das Web
+
+Für die Prototypen verkleinert (12,2 MB → 2,9 MB) mit glTF-Transform: Texturen höchstens 1024 px, WebP, Geometrie und Animation mit meshopt komprimiert (`EXT_meshopt_compression`). Decoder: `vendor/meshopt_decoder.module.js` (three.js r180, MIT). Inhalt und Animation sind unverändert.
