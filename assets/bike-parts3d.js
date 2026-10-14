@@ -530,7 +530,7 @@ export function makeSaddle(o = {}) {
   const shapeY = (x, z) => {
     const u = x / L;                                      // -.5 .. .5
     let y = -.022 * sstep(.12, .5, u) ** 1.4;            // Nase runter
-    y -= .004 * Math.exp(-((u - .05) / .14) ** 2);        // Mulde in der Mitte
+    y -= .004 * Math.exp(-(((u - .05) / .14) ** 2));        // Mulde in der Mitte
     y += .003 * sstep(-.3, -.5, u);                       // Heck minimal hoch
     const hw = Math.max(.02, W / 2 * (u < -.3 ? 1 : lerp(.3, 1, sstep(.45, -.2, u))));
     y -= .012 * Math.pow(Math.min(1, Math.abs(z) / hw), 4);   // Kanten rund nach unten
