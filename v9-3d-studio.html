@@ -417,7 +417,9 @@
     .hero-slot{height:64vw;min-height:230px;margin-top:-10vw}
     .hero-title .o{-webkit-text-stroke-width:1.5px}
     .seg-v button{padding:10px 13px;font-size:12px}
-    .hero-ui{gap:14px}
+    /* untere rechte Ecke bleibt fuer KI-Orb + Zahnrad frei: Satz, KI-Eingabe und Chips linksbuendig mit Abstand */
+    .hero-ui{gap:14px;align-items:flex-start;text-align:left;padding-right:72px}
+    .hero-ui .chips{justify-content:flex-start}
     .hero-ui p{font-size:17px}
     .ask{height:56px;padding-left:16px;gap:10px}
     .hint-scroll{display:none!important}
@@ -429,7 +431,8 @@
     .chapter h2{font-size:30px;margin-bottom:10px}
     .chapter p{font-size:15px;margin-bottom:14px}
     .spec li{padding:9px 10px 8px}
-    .spec b{font-size:16px}
+    .spec b{font-size:15px;overflow-wrap:anywhere}
+    .spec li{min-width:0}
     .spec span{font-size:10px}
     .tour-prog{display:none}
     .explode-title p{font-size:15px}
@@ -449,7 +452,8 @@
     .cfg-sum strong{font-size:15px}
     .cfg-cta .btn{min-height:44px;font-size:12px;letter-spacing:.04em}
     .cfg-cta .btn-glass{min-height:40px}
-    .cfg-note{font-size:12px;margin-top:8px;padding-right:64px}
+    .cfg-cta{margin-right:66px}
+    .cfg-note{font-size:12px;margin-top:8px;padding-right:66px}
     .cfg-on .kib-launch{opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
     .toast{top:calc(var(--hdr) + 12px);bottom:auto;transform:translate(-50%,-16px)}
     .achim-grid,.visit-grid,.svc-grid{grid-template-columns:1fr}
@@ -466,7 +470,7 @@
     .dist li:nth-child(-n+2){border-bottom:1px solid var(--line)}
     .hours{padding:22px 18px 18px}
     .visit .row .btn{flex:1 1 150px}
-    .foot small{padding-right:0;padding-bottom:70px}
+    .foot small{padding-right:76px;padding-bottom:70px}
   }
 
   /* ---------------- Reduzierte Bewegung: keine Kamerafahrt, Kapitel als normale Bloecke ---------------- */
