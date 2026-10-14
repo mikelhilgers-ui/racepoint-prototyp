@@ -127,3 +127,24 @@ test('Zwei unabhängige Herstellerseiten werden gleichzeitig gelesen',async t=>{
   });
   const result=await runAgent(input);assert.equal(peak,2);assert.equal(result.sources.length,2);
 });
+
+test('Ladenfragen: Element wird angezeigt und die Runde endet ohne zweiten Modellaufruf',async t=>{
+  let calls=0,body;
+  t.mock.method(globalThis,'fetch',async(url,options)=>{calls++;body=JSON.parse(options.body);
+    return provider([{type:'text',text:'Heute ab 13 Uhr geöffnet.'},tool('show_widget',{widgets:[{type:'hours'},{type:'contact'},{type:'video',video_id:'9KIh7oOIPT4'}]})],'tool_use');});
+  const result=await runAgent({messages:[{role:'user',content:'Wann habt ihr offen?'}]});
+  assert.equal(calls,1);assert.deepEqual(result.widgets.map(w=>w.type),['hours','contact','video']);
+  assert.equal(result.widgets[2].title,'S-Works Tarmac SL8 LTD');assert.match(result.text,/13 Uhr/);
+  assert.match(body.system,/Jetzt in Schönberg: /);assert.match(body.system,/info@racepoint\.be/);
+  assert.ok(body.tools.some(tool=>tool.name==='show_widget'));
+});
+
+test('Ungültige Elemente werden verworfen und als Fehler gemeldet',async t=>{
+  let calls=0;
+  t.mock.method(globalThis,'fetch',async(url,options)=>{calls++;
+    if(calls===1)return provider([{type:'text',text:'Schau mal.'},tool('show_widget',{widgets:[{type:'video',video_id:'erfunden'}]})],'tool_use');
+    assert.equal(JSON.parse(options.body).messages.at(-1).content[0].is_error,true);
+    return provider([{type:'text',text:'Den Film habe ich nicht gefunden.'}]);});
+  const result=await runAgent({messages:[{role:'user',content:'Zeig ein Video'}]});
+  assert.equal(calls,2);assert.deepEqual(result.widgets,[]);
+});

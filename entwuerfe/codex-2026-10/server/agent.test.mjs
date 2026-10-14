@@ -56,3 +56,17 @@ test('Alle kuratierten Produkte haben Herstellerquelle, Datum und sinnvolle Type
   assert.equal(new Set(catalogue.map(b=>b.id)).size,catalogue.length);
   for(const bike of catalogue){assert.ok(sourceUrl(bike.source));assert.ok(imageUrl(bike.image));assert.equal(bike.market,'BE');assert.ok(bike.price>0);assert.ok(bike.specs.length>=2);assert.equal(bike.availability,'unknown');}
 });
+test('Ladenuhr rechnet in Ostbelgien und kennt Ruhetage',async()=>{
+  const {shopClock}=await import('./agent.mjs');
+  assert.equal(shopClock(new Date('2026-10-14T12:30:00Z')).status,'jetzt geöffnet bis 18 Uhr');
+  assert.equal(shopClock(new Date('2026-10-15T12:00:00Z')).status,'jetzt geschlossen, öffnet morgen um 13 Uhr');
+  assert.equal(shopClock(new Date('2026-10-17T07:30:00Z')).status,'jetzt geöffnet bis 14 Uhr');
+  assert.equal(shopClock(new Date('2026-10-17T13:00:00Z')).status,'jetzt geschlossen, öffnet Montag um 13 Uhr');
+});
+test('Widget-Prüfung lässt nur bekannte Typen, Werte und Filme durch',async()=>{
+  const {validWidgets}=await import('./agent.mjs');
+  assert.deepEqual(validWidgets([{type:'appointment',kind:'<b>'},{type:'size',category:'tandem'},{type:'hours'},{type:'hours'}]),[{type:'appointment',kind:'beratung'},{type:'size',category:'rennrad'},{type:'hours'}]);
+  assert.deepEqual(validWidgets([{type:'video',video_id:'gibtsnicht'},{type:'script'}]),[]);
+  assert.equal(validWidgets([{type:'handoff',summary:'x'.repeat(2000)}])[0].summary.length,900);
+  assert.deepEqual(validWidgets('kaputt'),[]);
+});
