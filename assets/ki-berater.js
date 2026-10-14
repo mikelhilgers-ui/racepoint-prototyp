@@ -543,9 +543,9 @@
     .kib-orb i svg{width:22px;height:22px}
     .kib-orb b{inset:10px}
     .kib-orb .kib-ping{right:0;top:0;width:11px;height:11px}
-    .kib-label span{padding:7px 11px;font-size:13px}
-    .kib-label small{display:none}
+    .kib-label{display:none}
     .kib-in,.kib-lead input,.kib-lead textarea{font-size:16px}
+    .kib-head{padding-top:calc(16px + env(safe-area-inset-top))}
     .kib-acts{opacity:1}
     .kib-hello h3{font-size:30px}
     .kib-bike{flex-basis:84%}
@@ -620,13 +620,14 @@
     checkLive();
 
     // Launcher-Label mit wechselnden Beispiel-Fragen
-    setTimeout(() => label.classList.add('on'), 1800);
+    // Mobil bleibt es beim kompakten Orb: das Label wuerde sonst CTAs ueberdecken
+    const compact = matchMedia('(max-width:640px)');
+    setTimeout(() => { if (!compact.matches) label.classList.add('on'); }, 1800);
     let hi = 0;
     const cycle = () => { const h = S.hints[state.lang] || S.hints.de; hintEl.textContent = '„' + h[hi++ % h.length] + '“'; };
     cycle(); setInterval(cycle, 3200);
-    // Mobil: Label nur kurz als Hinweis zeigen, damit es keine Inhalte verdeckt
-    setTimeout(() => label.classList.remove('on'), matchMedia('(max-width:640px)').matches ? 6500 : 16000);
-    root.querySelector('.kib-orb').addEventListener('mouseenter', () => label.classList.add('on'));
+    setTimeout(() => label.classList.remove('on'), 16000);
+    root.querySelector('.kib-orb').addEventListener('mouseenter', () => { if (!compact.matches) label.classList.add('on'); });
 
     // Globale Einstiege: [data-ask] und <form data-ask-form>
     document.addEventListener('click', e => {

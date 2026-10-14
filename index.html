@@ -63,11 +63,14 @@ tailwind.config = {
   @media (max-width:767px){
     /* V1: Hero-Inhalt im Fluss, damit Info-Badge und Headline nicht unter Logo/Ton-Button rutschen */
     .v1hero{ height:auto; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end; }
-    .v1hero .v1copy{ position:relative; padding-top:9.5rem; }
-    .v1hero .v1copy h1{ font-size:2.75rem; line-height:.95; }
-    .v1hero .v1copy p{ font-size:1.0625rem; }
+    .v1hero .v1copy{ position:relative; padding-top:8.5rem; }
+    /* CTAs ueber den schwebenden Buttons halten (KI-Orb + Zahnrad rechts unten) */
+    .v1hero .v1copy > div{ padding-bottom:calc(8.25rem + env(safe-area-inset-bottom)); }
+    .v1hero .v1copy > div > .inline-flex:first-child{ display:none; }
+    .v1hero .v1copy h1{ font-size:2.6rem; line-height:.95; }
+    .v1hero .v1copy p{ font-size:1rem; line-height:1.5; }
     .v1hero .v1copy .flex-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:.625rem; }
-    .v1hero .v1copy .flex-wrap > a{ padding:.95rem .75rem; text-align:center; font-size:.875rem; }
+    .v1hero .v1copy .flex-wrap > a{ padding:.95rem .5rem; text-align:center; font-size:.8125rem; white-space:nowrap; }
     .v1hero .v1copy .flex-wrap > a:first-child{ grid-column:1 / -1; font-size:.9375rem; }
     /* Video-Karten: Querformat statt sehr hoher Hochkant-Kacheln */
     .variant .yt.aspect-\[3\/4\]{ aspect-ratio:4/3; }
@@ -80,7 +83,14 @@ tailwind.config = {
     .bikeslider .bsnext{ left:4.75rem; right:auto; }
     .bikeslider .bscount{ bottom:1.5rem; right:1.5rem; }
     /* Footer: gestapelt + Luft fuer die schwebenden Buttons (KI-Berater, Prototyp-Wahl) */
-    .variant > footer > div{ flex-direction:column; align-items:center; gap:.75rem; text-align:center; padding-bottom:calc(5.5rem + env(safe-area-inset-bottom)); }
+    .variant > footer > div{ flex-direction:column; align-items:center; gap:.75rem; text-align:center; padding-bottom:calc(8.5rem + env(safe-area-inset-bottom)); }
+  }
+  @media (min-width:768px) and (max-width:1023px){
+    /* Tablet: Desktop-Navigation passt nicht in eine Zeile -> Burger-Menue wie mobil */
+    .variant header nav, .variant header .sm\:flex.text-xs{ display:none !important; }
+    .variant header .menubtn{ display:grid; }
+    /* Info-Footer zweispaltig statt vier gequetschte Spalten */
+    .variant .py-14.md\:grid-cols-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
   }
 </style>
 <script src="assets/prototype-picker.js" defer></script>
