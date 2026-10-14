@@ -459,7 +459,7 @@ textReady.then(() => {
   mm.add('(max-width:1180px)', () => {
     // Fluss-Layout: der Hero ist hoeher als der Bildschirm – Reste ausblenden, bevor Kapitel 01 kommt
     gsap.to(['.hero-types', '.hero-ui', '.hero-left'], { autoAlpha: 0, ease: 'none',
-      scrollTrigger: { trigger: '#tour', start: 'top 80%', end: 'top 45%', scrub: true } });
+      scrollTrigger: { trigger: '#tour', start: 'top 48%', end: 'top 30%', scrub: true } });
   });
 
   // Ueberschriften: Zeilen gleiten aus einer Maske
