@@ -84,6 +84,23 @@ tailwind.config = {
     .bikeslider .bscount{ bottom:1.5rem; right:1.5rem; }
     /* Footer: gestapelt + Luft fuer die schwebenden Buttons (KI-Berater, Prototyp-Wahl) */
     .variant > footer > div{ flex-direction:column; align-items:center; gap:.75rem; text-align:center; padding-bottom:calc(8.5rem + env(safe-area-inset-bottom)); }
+    /* Tap-Flaechen >= 40px: Ton-Schalter, "Alle ansehen", Footer-Links */
+    .v1hero .soundtoggle{ top:5.25rem; min-height:2.5rem; }
+    .variant .items-end.justify-between > a{ min-height:2.5rem; display:inline-flex; align-items:flex-end; }
+    .variant .md\:grid-cols-4 ul.space-y-2 > li{ margin-top:0; }
+    .variant .md\:grid-cols-4 ul.space-y-2 > li > a{ display:inline-block; padding:.6rem 0; }
+    .variant .md\:grid-cols-4 ul.space-y-2{ margin-top:.4rem; }
+    /* Rote Zeilen/Labels ueber Fotos lesbar halten */
+    .variant p.font-anton > span.text-rp-red, [data-variant="2"] p.text-rp-red.tracking-wider{ text-shadow:0 1px 3px rgba(0,0,0,.6), 0 2px 18px rgba(0,0,0,.85); }
+    /* V5: Kicker ohne verwaisten Punkt am Zeilenende */
+    [data-variant="5"] .tracking-\[0\.25em\]{ font-size:.75rem; letter-spacing:.18em; }
+  }
+  @media (max-width:767px) and (max-height:720px){
+    /* Kurze Displays (z. B. iPhone mit Browserleisten): V1-Hero kompakter, CTAs bleiben ueber KI-Orb/Zahnrad */
+    .v1hero .v1copy{ padding-top:7.75rem; }
+    .v1hero .v1copy h1{ font-size:2.35rem; }
+    .v1hero .v1copy p{ margin-top:.75rem; }
+    .v1hero .v1copy .flex-wrap{ margin-top:1.25rem; }
   }
   @media (min-width:768px) and (max-width:1023px){
     /* Tablet: Desktop-Navigation passt nicht in eine Zeile -> Burger-Menue wie mobil */
