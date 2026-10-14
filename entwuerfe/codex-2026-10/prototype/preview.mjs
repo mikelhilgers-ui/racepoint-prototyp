@@ -4,7 +4,7 @@ import { dirname, resolve, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { agentStatus, runAgent } from '../server/agent.mjs';
 
-const root = dirname(fileURLToPath(import.meta.url));
+const root = process.env.RACEPOINT_PREVIEW_ROOT ? resolve(process.env.RACEPOINT_PREVIEW_ROOT) : dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.PORT || 8102);
 let activeRequests = 0;
 const requestTimes = [];
@@ -15,6 +15,7 @@ http.createServer(async (req, res) => {
   try {
     if (!allowedHosts.has(req.headers.host)) { res.writeHead(403).end(); return; }
     const url = new URL(req.url, 'http://localhost');
+    if (url.pathname === '/' && process.env.RACEPOINT_PREVIEW_HOME) { res.writeHead(302, { Location: process.env.RACEPOINT_PREVIEW_HOME, 'Cache-Control':'no-store' }).end(); return; }
     if (url.pathname === '/api/status' && req.method === 'GET') { json(res,200,agentStatus()); return; }
     if (url.pathname === '/api/chat') {
       if(req.method!=='POST'){json(res,405,{error:'POST erforderlich.'});return;}
@@ -43,6 +44,7 @@ http.createServer(async (req, res) => {
       return;
     }
     if(req.method!=='GET'&&req.method!=='HEAD'){res.writeHead(405).end();return;}
+    if (decodeURIComponent(url.pathname).split(/[\\/]/).some(part => part.startsWith('.'))) { res.writeHead(403).end(); return; }
     let path = resolve(root, '.' + decodeURIComponent(url.pathname));
     if (path !== root && !path.startsWith(root + sep)) { res.writeHead(403).end(); return; }
     if ((await stat(path)).isDirectory()) path = resolve(path, 'index.html');

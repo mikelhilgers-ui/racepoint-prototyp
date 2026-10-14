@@ -23,7 +23,10 @@ reduced.addEventListener('change',()=>{if(reduced.matches)userPaused=true;sync()
 state(false);
 if(local){
   ready=true;local.muted=true;
-  local.addEventListener('play',()=>state(true));local.addEventListener('pause',()=>state(false));local.addEventListener('error',fail);sync();
+  const sound=document.createElement('button');sound.type='button';sound.className='teaser-sound';sound.textContent='Ton an';sound.setAttribute('aria-label','Hintergrundvideo mit Ton abspielen');sound.setAttribute('aria-pressed','false');button.after(sound);
+  sound.addEventListener('click',()=>{local.muted=!local.muted;sound.textContent=local.muted?'Ton an':'Ton aus';sound.setAttribute('aria-pressed',String(!local.muted));sound.setAttribute('aria-label',local.muted?'Hintergrundvideo mit Ton abspielen':'Hintergrundvideo stummschalten');});
+  local.addEventListener('playing',()=>state(true));local.addEventListener('pause',()=>state(false));local.addEventListener('error',fail);sync();
+  if(!local.paused&&local.readyState>=2)state(true);
 }else{
   const id=stage.dataset.teaserId;
   const iframe=document.createElement('iframe');iframe.id='teaser-player';iframe.title=stage.dataset.teaserTitle+' · stummer Hintergrundfilm';iframe.tabIndex=-1;iframe.setAttribute('aria-hidden','true');iframe.allow='autoplay; encrypted-media';iframe.referrerPolicy='strict-origin-when-cross-origin';
