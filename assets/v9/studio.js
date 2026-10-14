@@ -9,7 +9,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
 import { GEO, PAINTS, makeMaterials, buildBike, disposeBike } from './bike.js';
-import { loadRoadBike, buildModelBike } from './model.js';
 
 const gsap = window.gsap;
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
@@ -97,15 +96,15 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   const M = makeMaterials();
   const cfg = { type: 'rennrad', paint: 'rot', wheels: 'tief' };
   const bikes = [];
-  let bike = null, road = null;   // road = Vorlage des echten Rennrad-Modells, sobald geladen
+  let bike = null;
   function spawn() {
-    const b = cfg.type === 'rennrad' && road ? buildModelBike(road, cfg, M) : buildBike(cfg.type, cfg, M);
+    const b = buildBike(cfg.type, cfg, M);
     b.parts.forEach(p => { p.m = 0; });
     holder.add(b.root); bikes.push(b);
     contact.scale.set(b.size.len * 1.08, .44, 1);
     return b;
   }
-  function retire(b) { if (b.shared) b.root.removeFromParent(); else disposeBike(b); bikes.splice(bikes.indexOf(b), 1); }
+  function retire(b) { disposeBike(b); bikes.splice(bikes.indexOf(b), 1); }
   bike = spawn();
 
   /* ---------------- Zustand (wird von der Seite gesetzt) ---------------- */
@@ -224,16 +223,6 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     gsap.to(bike.parts, { m: 0, duration: 1.5, ease: 'expo.out', delay, stagger: { amount: Math.min(bike.parts.length * .04, 1.1), from: 'random' } });
   }
 
-  // Echtes Rennrad nachladen: bis es da ist (oder wenn es scheitert) steht das prozedurale Bike.
-  // Ist gerade das Rennrad gewaehlt, setzt es sich aus seinen Teilen neu zusammen.
-  function loadModel() {
-    return loadRoadBike().then(tpl => {
-      road = tpl;
-      if (cfg.type === 'rennrad') rebuild();
-      return true;
-    }, () => false);
-  }
-
   /* ---------------- Projektion fuer HUD ---------------- */
   function project(name) {
     const a = bike.anchors[name];
@@ -288,9 +277,8 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); state.active = false; if (onLost) onLost(); });
 
   return {
-    cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, loadModel, frame, setGoal, snap, project, tick, resize,
+    cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, frame, setGoal, snap, project, tick, resize,
     get partCount() { return bike.count; },
-    get real() { return !!bike.shared; },
     set onDrag(fn) { onDrag = fn; },
     set onLost(fn) { onLost = fn; },
   };

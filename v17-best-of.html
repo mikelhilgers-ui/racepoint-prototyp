@@ -21,39 +21,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800;1,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v17/bestof.css">
+<link rel="stylesheet" href="assets/v17/site.css">
 <script src="assets/prototype-picker.js" defer></script>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/":"./vendor/three/addons/"}}</script>
 </head>
-<body>
+<body data-page="home">
 
 <a class="skip" href="#bikes">Zum Inhalt springen</a>
 
-<!-- ===================== Header ===================== -->
-<header class="hdr" id="hdr">
-  <div class="hdr-in">
-    <a class="logo" href="v17-best-of.html" aria-label="Racepoint · Startseite"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"></a>
-    <nav class="hdr-nav" aria-label="Hauptnavigation">
-      <a href="#bikes">Bikes</a>
-      <a href="#service">Werkstatt</a>
-      <a href="#service">Bikefitting</a>
-      <a href="#filme">Filme</a>
-      <a href="#kontakt">Kontakt</a>
-    </nav>
-    <div class="hdr-r">
-      <span class="pill pill-status" data-open-status></span>
-      <a class="btn btn-sm" data-ask="Ich möchte einen Termin vereinbaren.">Termin</a>
-      <button class="burger" type="button" aria-label="Menü öffnen" aria-controls="mmenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
-    </div>
-  </div>
-</header>
-<div class="mmenu" id="mmenu" aria-hidden="true">
-  <button class="mclose" type="button" aria-label="Menü schließen">&times;</button>
-  <a href="#bikes">Bikes</a><a href="#berater">KI-Berater</a><a href="#service">Werkstatt</a><a href="#service">Bikefitting</a><a href="#filme">Filme</a><a href="#kontakt">Kontakt</a>
-  <div class="mmenu-f">
-    <span class="pill pill-status" data-open-status></span>
-    <a class="btn" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
-  </div>
-</div>
-
+<!-- Header, Mobil-Menü und Footer setzt assets/v17/site.js ein (gemeinsam für alle v17-Seiten) -->
 <main>
 <!-- ===================== 1 · Hero: Film + Video im Schriftzug ===================== -->
 <section class="hero" id="top" aria-label="Racepoint – Dein Bike. Dein Moment.">
@@ -123,6 +99,7 @@
 <section class="build" id="aufbau" aria-label="Ein Rennrad wird aus Einzelteilen aufgebaut">
   <div class="build-spot" id="buildSpot" aria-hidden="true"></div>
   <div class="build-bike" id="bikebox"></div>
+  <div class="build-3d" id="build3d" role="img" aria-label="3D-Ansicht des fertigen Rennrads, mit Ziehen drehbar"></div>
   <div class="build-col" id="buildCol">
     <div class="build-intro" id="buildIntro">
       <p class="kicker">Meisterwerkstatt · Build Nº 01</p>
@@ -167,25 +144,25 @@
       <p class="lead rv">Vom ersten Rad bis zum Traum-Build: Achim berät dich so ehrlich wie in seinen Videos – auch wenn du noch nicht weißt, was ein Tarmac ist.</p>
     </div>
     <div class="cats">
-      <a class="cat rv" href="entwuerfe/codex-2026-10/prototype/kombi/rennrad.html">
+      <a class="cat rv" href="v17-rennrad.html">
         <img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern im Showroom" loading="lazy">
         <span class="cat-n">01</span>
         <div class="cat-b"><h3>Rennrad</h3><p>Allez, Roubaix, Tarmac – und Cervélo.</p><span class="price">ab 1.499 €</span></div>
         <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
       </a>
-      <a class="cat rv" href="entwuerfe/codex-2026-10/prototype/kombi/gravel.html">
+      <a class="cat rv" href="v17-gravel.html">
         <img src="assets/gravel-ride.jpg" alt="Drei Gravelbiker auf einem Schotterweg" loading="lazy">
         <span class="cat-n">02</span>
         <div class="cat-b"><h3>Gravel</h3><p>Diverge &amp; Crux für Schotter im Venn.</p><span class="price">ab 2.299 €</span></div>
         <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
       </a>
-      <a class="cat rv" href="entwuerfe/codex-2026-10/prototype/kombi/mtb.html">
+      <a class="cat rv" href="v17-mtb.html">
         <img src="assets/mtb-action.jpg" alt="Mountainbiker im Wald auf einem Trail" loading="lazy">
         <span class="cat-n">03</span>
         <div class="cat-b"><h3>MTB</h3><p>Rockhopper bis Stumpjumper – plus Fahrwerk-Service.</p><span class="price">ab 949 €</span></div>
         <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
       </a>
-      <a class="cat rv" href="entwuerfe/codex-2026-10/prototype/kombi/ebike.html">
+      <a class="cat rv" href="v17-ebike.html">
         <img src="entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg" alt="E-Mountainbike auf einem Felsen in den Bergen" loading="lazy">
         <span class="cat-n">04</span>
         <div class="cat-b"><h3>E-Bike</h3><p>Turbo Vado &amp; Levo – mit Probefahrt.</p><span class="price">ab 4.199 €</span></div>
@@ -193,9 +170,9 @@
       </a>
     </div>
     <div class="cat-more">
-      <a class="mini rv" href="entwuerfe/codex-2026-10/prototype/kombi/familie.html"><b>Kids &amp; Familie</b><span>Riprock, Hotwalk &amp; Co. · ab 749 €</span><i aria-hidden="true">↗</i></a>
+      <a class="mini rv" href="v17-familie.html"><b>Kids &amp; Familie</b><span>Riprock, Hotwalk &amp; Co. · ab 749 €</span><i aria-hidden="true">↗</i></a>
       <button class="mini rv" type="button" data-ask="Bietet ihr Leasing oder Finanzierung an?"><b>Leasing &amp; Finanzierung</b><span>Fahr jetzt, zahl in Raten – frag uns</span><i aria-hidden="true">✶</i></button>
-      <a class="mini rv" href="entwuerfe/codex-2026-10/prototype/kombi/reparatur.html"><b>Werkstatt für alle Marken</b><span>Trek, Canyon, Cube … wir schrauben an allem</span><i aria-hidden="true">↗</i></a>
+      <a class="mini rv" href="v17-werkstatt.html"><b>Werkstatt für alle Marken</b><span>Trek, Canyon, Cube … wir schrauben an allem</span><i aria-hidden="true">↗</i></a>
     </div>
     <p class="fine rv">Preise: unverbindliche Herstellerpreise ausgewählter Modelle, Stand 14.10.2026.</p>
   </div>
@@ -241,6 +218,7 @@
         <div><b data-count="18">18</b><span>Jahre Erfahrung</span></div>
         <div><b>Elite</b><span>Specialized-Händler</span></div>
       </div>
+      <a class="txt-link" href="v17-ueber-uns.html">Lerne das Team kennen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
     </div>
   </div>
 </section>
@@ -263,7 +241,7 @@
           <p class="kicker">Meisterwerkstatt</p>
           <h3 class="h3">Werkstatt für alle Marken</h3>
           <ul class="ticks"><li>Inspektion &amp; Reparatur</li><li>Fahrwerk-Service für Gabel &amp; Dämpfer</li><li>E-Bike-Service: Motor, Akku, Software</li><li>Kleinigkeiten oft sofort</li></ul>
-          <a class="btn" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Werkstatt-Termin</a>
+          <div class="btns"><a class="btn" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Werkstatt-Termin</a><a class="btn ghost" href="v17-werkstatt.html">Alle Leistungen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
         </div>
       </article>
       <article class="svc svc-fit rv">
@@ -276,7 +254,7 @@
             <li><b>02</b><span><strong>3D-Messung</strong>Motion-Capture auf deinem eigenen Rad.</span></li>
             <li><b>03</b><span><strong>Anpassung</strong>Sattel, Cockpit, Cleats – ca. 1,5 h.</span></li>
           </ol>
-          <a class="btn" data-ask="Ich möchte einen Termin für ein Retül-Bikefitting.">Fitting-Termin</a>
+          <div class="btns"><a class="btn" data-ask="Ich möchte einen Termin für ein Retül-Bikefitting.">Fitting-Termin</a><a class="btn ghost" href="v17-bikefitting.html">So läuft Retül <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
         </div>
       </article>
     </div>
@@ -321,7 +299,10 @@
       </div>
       <div class="films-cta rv">
         <p class="lead">Builds, Unboxings und Werkstatt-Wissen – direkt aus dem Laden in Schönberg.</p>
+        <div class="btns">
         <a class="btn ghost" href="https://www.youtube.com/@racepointbikeshop?sub_confirmation=1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" stroke="none"/></svg>Kanal abonnieren</a>
+        <a class="btn ghost" href="v17-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </div>
       </div>
     </div>
     <div class="film-grid">
@@ -350,6 +331,7 @@
         <a class="btn" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
         <a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Racepoint%2C%20K.-F.%20Schinkel%20Stra%C3%9Fe%205%2C%204782%20Sch%C3%B6nberg%2C%20Belgien" target="_blank" rel="noopener">Route planen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </div>
+      <a class="txt-link" href="v17-kontakt.html">Kontakt, Anfahrt &amp; Nachricht <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       <div class="drive"><span class="pill">Aachen ~1 h</span><span class="pill">Lüttich ~1 h</span><span class="pill">Luxemburg ~1 h 15</span><span class="pill">Köln ~1 h 45</span></div>
     </div>
     <div class="hours-card">
@@ -361,18 +343,7 @@
 </section>
 </main>
 
-<footer class="ftr">
-  <div class="wrap ftr-grid">
-    <div class="ftr-brand">
-      <img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">
-      <p>Dein Bike. Dein Moment.<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>
-    </div>
-    <nav aria-label="Bikes"><b>Bikes</b><a href="entwuerfe/codex-2026-10/prototype/kombi/rennrad.html">Rennrad</a><a href="entwuerfe/codex-2026-10/prototype/kombi/gravel.html">Gravel</a><a href="entwuerfe/codex-2026-10/prototype/kombi/mtb.html">MTB</a><a href="entwuerfe/codex-2026-10/prototype/kombi/ebike.html">E-Bike</a><a href="entwuerfe/codex-2026-10/prototype/kombi/familie.html">Kids &amp; Familie</a></nav>
-    <nav aria-label="Service"><b>Service</b><a href="entwuerfe/codex-2026-10/prototype/kombi/reparatur.html">Werkstatt</a><a href="entwuerfe/codex-2026-10/prototype/kombi/bikefitting.html">Bikefitting</a><a href="entwuerfe/codex-2026-10/prototype/kombi/videos.html">Videos</a><a href="entwuerfe/codex-2026-10/prototype/kombi/ueber-uns.html">Über uns</a></nav>
-    <div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a></div>
-  </div>
-  <div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><span>Prototyp 17 · Best of</span></div>
-</footer>
+
 
 <script src="vendor/gsap/gsap.min.js"></script>
 <script src="vendor/gsap/ScrollTrigger.min.js"></script>
@@ -381,7 +352,9 @@
 <script src="vendor/lenis/lenis.min.js"></script>
 <script src="assets/rp-core.js"></script>
 <script src="assets/ki-berater.js"></script>
+<script src="assets/v17/site.js"></script>
 <script src="assets/v17/bike.js"></script>
 <script src="assets/v17/bestof.js"></script>
+<script type="module" src="assets/v17/bike3d.js"></script>
 </body>
 </html>

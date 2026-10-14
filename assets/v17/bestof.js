@@ -128,7 +128,7 @@
     kassette: sAt(3), kurbel: sAt(3) + 0.15, schaltwerk: sAt(3) + 0.3, kette: sAt(3) + 0.5,
     cockpit: sAt(4), sattel: sAt(4) + 0.2,
   };
-  const FIN = sAt(4) + 1.75, END = FIN + 2.4;
+  const FIN = sAt(4) + 1.75, X3D = FIN + 2.2, END = FIN + 3.4;
   const EXPLODE = {
     wide: {
       rahmen: [0, -30, -4, 1], gabel: [300, -230, 18, 1], wheelR: [-300, 150, -10, 0.95], wheelF: [330, 180, 12, 0.95],
@@ -176,6 +176,26 @@
       b.el.setAttribute('transform', f > 0 ? 'translate(0 ' + (Math.sin(time * b.sp + b.ph) * 12 * f).toFixed(1) + ') rotate(' + (Math.sin(time * b.sp * 0.7 + b.ph) * 1.2 * f).toFixed(2) + ')' : '');
     });
   });
+
+  /* ---- 3D am Ende: SVG-Bike blendet in ein drehbares WebGL-Modell (assets/v17/bike3d.js) ---- */
+  const box3d = $('#build3d'), x3 = { p: 0 };
+  let ctl3d = null, load3d = false;
+  function apply3d() {
+    const p = ctl3d ? x3.p : 0;
+    gsap.set(box3d, { autoAlpha: p, scale: 0.94 + 0.06 * p });
+    gsap.set('#bikebox', { autoAlpha: 1 - p, scale: 1 + 0.03 * p });
+    box3d.style.pointerEvents = p > 0.5 ? 'auto' : 'none';
+    if (ctl3d) ctl3d.setActive(p > 0.01);
+  }
+  function want3d() {
+    if (load3d || RM) return;
+    load3d = true;
+    const go = () => window.RP17Bike3D.mount(box3d, { color: '#E83637', tyres: 'tan', baseYaw: 0 })
+      .then(c => { ctl3d = c; apply3d(); })
+      .catch(err => console.info('3D nicht verfügbar, SVG-Bike bleibt:', err && err.message));
+    if (window.RP17Bike3D) go(); else window.addEventListener('rp17:3d', go, { once: true });
+  }
+  if (!RM) ScrollTrigger.create({ trigger: '#aufbau', start: 'top 250%', once: true, onEnter: want3d });
 
   const mm = gsap.matchMedia();
   mm.add({ wide: '(min-width: 821px)', narrow: '(max-width: 820px)', reduce: '(prefers-reduced-motion: reduce)' }, ctx => {
@@ -227,6 +247,8 @@
     tl.to(B.spinF, { rotation: 540, svgOrigin: G.F.join(' '), duration: 2.3, ease: 'power1.in' }, FIN);
     tl.fromTo('#finTxt', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, FIN + 0.6);
     tl.to('#buildHud', { autoAlpha: 0.45, duration: 0.4 }, FIN + 0.5);
+    // Uebergang ins echte 3D-Modell (nur wenn WebGL + Modell geladen sind)
+    tl.to(x3, { p: 1, duration: 0.7, ease: 'power2.inOut', onUpdate: apply3d }, X3D);
     update(0, 0);
     return () => { bstate.active = false; };
   });
