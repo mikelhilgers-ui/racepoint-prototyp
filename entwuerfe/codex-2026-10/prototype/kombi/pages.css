@@ -118,3 +118,7 @@
   .breadcrumb{display:inline-flex;align-items:center;min-height:40px}
   .category-nav>a{min-height:44px;display:inline-flex;align-items:center}
 }
+/* Kategorie-Reiter: auf schmalen Handys alle fünf in einer Zeile statt eines verwaisten Umbruchs. */
+@media(max-width:420px){
+  .category-nav{gap:4px 10px;justify-content:space-between;padding-left:18px;padding-right:18px}
+}
