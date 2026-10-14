@@ -50,13 +50,15 @@ export const GEO = {
 };
 
 /* ---------------- Lacke (werden im Studio weich ueberblendet) ---------------- */
+// flip = Farbwechsel nach Blickwinkel (Chameleon): frontal FLIP_A, an den Flanken FLIP_B
 export const PAINTS = {
-  rot:       { color: 0xd3242a, metalness: .5,  roughness: .3,  clearcoatRoughness: .04, iridescence: .001, bump: 0, decal: 0xffffff },
-  black:     { color: 0x0a0b0d, metalness: .35, roughness: .32, clearcoatRoughness: .03, iridescence: .001, bump: 0, decal: 0xE83637 },
-  carbon:    { color: 0x1d1e22, metalness: .4,  roughness: .44, clearcoatRoughness: .3,  iridescence: .001, bump: 1, decal: 0xc9ccd2 },
-  white:     { color: 0xe9e9e4, metalness: .05, roughness: .3,  clearcoatRoughness: .04, iridescence: .001, bump: 0, decal: 0xE83637 },
-  chameleon: { color: 0x0d4a3f, metalness: .9,  roughness: .26, clearcoatRoughness: .04, iridescence: 1,    bump: 0, decal: 0xdff5ee },
+  rot:       { color: 0xd3242a, metalness: .5,  roughness: .3,  clearcoatRoughness: .04, iridescence: .001, bump: 0, flip: 0, decal: 0xffffff },
+  black:     { color: 0x0a0b0d, metalness: .35, roughness: .32, clearcoatRoughness: .03, iridescence: .001, bump: 0, flip: 0, decal: 0xE83637 },
+  carbon:    { color: 0x1d1e22, metalness: .4,  roughness: .44, clearcoatRoughness: .3,  iridescence: .001, bump: 1, flip: 0, decal: 0xc9ccd2 },
+  white:     { color: 0xe9e9e4, metalness: .05, roughness: .3,  clearcoatRoughness: .04, iridescence: .001, bump: 0, flip: 0, decal: 0xE83637 },
+  chameleon: { color: 0x0f6f60, metalness: .45, roughness: .22, clearcoatRoughness: .04, iridescence: 1,    bump: 0, flip: 1, decal: 0xf3f0ff },
 };
+const FLIP_A = 0x10a07e, FLIP_B = 0x4b25c8;
 
 /* ---------------- Texturen (Canvas, einmalig) ---------------- */
 function canvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
@@ -133,9 +135,21 @@ export function makeMaterials() {
     polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, side: THREE.DoubleSide });
   const glow = color => new THREE.SpriteMaterial({ map: glowTex(), color, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true });
   const p = PAINTS.rot;
+  const paint = P({ color: p.color, metalness: p.metalness, roughness: p.roughness, clearcoat: 1, clearcoatRoughness: p.clearcoatRoughness,
+    iridescence: p.iridescence, iridescenceIOR: 1.9, iridescenceThicknessRange: [260, 820], bumpMap: weave, bumpScale: 0 });
+  // Chameleon: Grundfarbe kippt mit dem Blickwinkel (Fresnel) von Smaragd nach Violett
+  const flip = { value: 0 }, flipA = { value: new THREE.Color(FLIP_A) }, flipB = { value: new THREE.Color(FLIP_B) };
+  paint.userData.flip = flip;
+  paint.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, { uFlip: flip, uFlipA: flipA, uFlipB: flipB });
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform float uFlip;\nuniform vec3 uFlipA, uFlipB;')
+      .replace('#include <color_fragment>', `#include <color_fragment>
+        float facing = abs(dot(normalize(vNormal), normalize(vViewPosition)));
+        diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFlipB, uFlipA, smoothstep(.4, .97, facing)), uFlip);`);
+  };
   return {
-    paint: P({ color: p.color, metalness: p.metalness, roughness: p.roughness, clearcoat: 1, clearcoatRoughness: p.clearcoatRoughness,
-      iridescence: p.iridescence, iridescenceIOR: 1.9, iridescenceThicknessRange: [260, 820], bumpMap: weave, bumpScale: 0 }),
+    paint,
     carbon: P({ color: 0x17181c, metalness: .35, roughness: .4, clearcoat: .6, clearcoatRoughness: .25, bumpMap: weave, bumpScale: .25 }),
     rim: P({ color: 0x141518, metalness: .3, roughness: .36, clearcoat: .8, clearcoatRoughness: .18, bumpMap: rimWeave, bumpScale: .35 }),
     black: S({ color: 0x121316, metalness: .25, roughness: .46 }),
@@ -659,7 +673,7 @@ export function buildBike(type, opt, M) {
   });
 
   /* ---------- Cockpit ---------- */
-  const CP = part('cockpit', [.35, 1, 0], .42, .12);
+  const CP = part('cockpit', [.35, 1, 0], .32, .12);
   const spTop = at(HTt, up, G.futureShock ? .045 : .025);
   if (G.futureShock) {
     // Future Shock: Faltenbalg ueber dem Steuerrohr
@@ -725,7 +739,7 @@ export function buildBike(type, opt, M) {
   }
 
   /* ---------- Sattelstuetze + Sattel ---------- */
-  const SP = part('seatpost', [-.25, 1, 0], .28, .1), seatTop = at(BB, stDir, G.seat);
+  const SP = part('seatpost', [-.25, 1, 0], .22, .1), seatTop = at(BB, stDir, G.seat);
   if (G.dropper) {
     rod(at(STt, stDir, -.05), at(STt, stDir, .12), .0172, M.black, SP, 28);
     rod(at(STt, stDir, .118), at(seatTop, stDir, -.035), .0152, M.dark, SP, 28);
@@ -734,7 +748,7 @@ export function buildBike(type, opt, M) {
     tube([at(STt, stDir, -.06), at(seatTop, stDir, -.03)], { r: [.0165, .0118], caps: true, seg: 6 }, M.carbon, SP);
   }
   mesh(rbox(.05, .016, .03, .005), M.dark, SP, at(seatTop, stDir, -.03));
-  const SD = part('saddle', [-.2, 1, 0], .52, .16);
+  const SD = part('saddle', [-.2, 1, 0], .38, .16);
   const sg = mesh(saddleGeo(drop ? .245 : .26, drop ? .143 : .14), M.saddle, SD, seatTop.clone().add(V(.012, -.021)));
   [1, -1].forEach(s => tube([V(-.075, -.011), V(-.03, -.022), V(.03, -.022), V(.08, -.008)].map(p => p.add(sg.position).add(zSide(s * .021))),
     { r: .0034, rmf: true, seg: 20, rad: 8 }, M.dark, SD));

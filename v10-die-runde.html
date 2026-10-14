@@ -199,8 +199,17 @@
     <div class="kin-row kin-row--red" data-row="2"></div>
   </div>
   <div class="wrap kin-foot">
-    <span class="kin-arrow" aria-hidden="true"><svg><use href="#ic-down"/></svg></span>
-    <p class="lede" data-reveal data-i18n='{"fr":"58 kilomètres autour de Schönberg, sept arrêts, un café. Fais défiler – et trouve ton vélo en route.","nl":"58 kilometer rond Schönberg, zeven stops, één koffie. Scroll mee – en vind onderweg je fiets.","en":"58 kilometres around Schönberg, seven stops, one coffee. Scroll along – and find your bike on the way."}'>58 Kilometer rund um Schönberg, sieben Stopps, ein Kaffee. Scroll mit – und finde unterwegs dein Rad.</p>
+    <div class="kin-intro">
+      <span class="kin-arrow" aria-hidden="true"><svg><use href="#ic-down"/></svg></span>
+      <p class="lede" data-reveal data-i18n='{"fr":"58 kilomètres autour de Schönberg, sept arrêts, un café. Fais défiler – et trouve ton vélo en route.","nl":"58 kilometer rond Schönberg, zeven stops, één koffie. Scroll mee – en vind onderweg je fiets.","en":"58 kilometres around Schönberg, seven stops, one coffee. Scroll along – and find your bike on the way."}'>58 Kilometer rund um Schönberg, sieben Stopps, ein Kaffee. Scroll mit – und finde unterwegs dein Rad.</p>
+    </div>
+    <!-- Die Runde in Zahlen -->
+    <ul class="kin-facts" data-reveal aria-label="Die Runde in Zahlen">
+      <li><b>58</b><span>Kilometer</span></li>
+      <li><b>640</b><span>Höhenmeter</span></li>
+      <li><b>7</b><span>Stopps</span></li>
+      <li><b>1</b><span>Kaffee</span></li>
+    </ul>
   </div>
 </section>
 
@@ -415,7 +424,7 @@
   <div class="wrap">
     <div class="bud-head">
       <span class="kicker" data-i18n='{"fr":"Chapitre 4 · Pour tous les budgets","nl":"Hoofdstuk 4 · Voor elk budget","en":"Chapter 4 · For every budget"}'>Kapitel 4 · Für jedes Budget</span>
-      <h2 class="h-display" data-split data-i18n='{"fr":"Pour tous les budgets.<br><em>Du premier vélo au build de rêve.</em>","nl":"Voor elk budget.<br><em>Van eerste fiets tot droombuild.</em>","en":"For every budget.<br><em>From first bike to dream build.</em>"}'>Für jedes Budget.<br><em>Vom ersten Rad bis zum Traum-Build.</em></h2>
+      <h2 class="h-display" data-split data-i18n='{"fr":"Pour tous les budgets.<br><em>Du premier vélo au build de rêve.</em>","nl":"Voor elk budget.<br><em>Van eerste fiets tot droombuild.</em>","en":"For every budget.<br><em>From first bike to dream build.</em>"}'>Für jedes Budget.<br><em>Vom ersten Rad bis zum Traum‑Build.</em></h2>
       <p class="lede" data-reveal data-i18n='{"fr":"Pas peur des S-Works en vitrine&nbsp;: chez nous, tu commences là où tu en es. Nous conseillons pour un vélo d’enfant avec autant de soin que pour un build de rêve.","nl":"Geen schrik van de S-Works in de etalage: bij ons begin je waar je nu staat. We adviseren bij een kinderfiets net zo grondig als bij een droombuild.","en":"Don’t be shy of the S-Works in the window: with us, you start where you are. We advise on a kid’s bike just as carefully as on a dream build."}'>Keine Scheu vor den S-Works im Schaufenster: Bei uns startest du da, wo du gerade stehst. Wir beraten beim Kinderrad genauso gründlich wie beim Dreambuild.</p>
     </div>
 
@@ -478,7 +487,7 @@
 
       <div class="fin-quote">
         <blockquote class="fr-it" data-reveal data-i18n='{"fr":"«&nbsp;Je suis Achim, celui des vidéos. Passe nous voir, on trouvera le vélo qui te va. Le café est prêt.&nbsp;»","nl":"„Ik ben Achim uit de video’s. Kom langs, dan vinden we de fiets die bij je past. De koffie staat klaar.”","en":"“I’m Achim from the videos. Drop by and we’ll find the bike that fits you. The coffee’s on.”"}'>„Ich bin der Achim aus den Videos. Komm vorbei, wir finden das Rad, das zu dir passt. Der Kaffee steht.“</blockquote>
-        <p class="fin-cite" data-i18n='{"fr":"Achim Leufgen · maître mécanicien cycle, fitter Retül","nl":"Achim Leufgen · meester-fietstechnicus, Retül-fitter","en":"Achim Leufgen · master bike mechanic, Retül fitter"}'>Achim Leufgen · Meister Zweiradmechanik, Retül-Fitter</p>
+        <p class="fin-cite" data-i18n='{"fr":"Achim Leufgen · maître mécanicien cycle, fitter Retül","nl":"Achim Leufgen · meester-fietstechnicus, Retül-fitter","en":"Achim Leufgen · master bike mechanic, Retül fitter"}'>Achim Leufgen · Meister Zweiradmechanik, Retül‑Fitter</p>
         <div class="fin-ctas">
           <a class="btn btn-red" href="" data-magnetic><span data-i18n='{"fr":"Prendre rendez-vous","nl":"Afspraak maken","en":"Book an appointment"}'>Termin buchen</span><svg><use href="#ic-arrow"/></svg></a>
           <a class="btn btn-wa" href="" data-magnetic><svg><use href="#ic-wa"/></svg>WhatsApp</a>
@@ -501,6 +510,10 @@
           <li style="--t:1"><span data-i18n='{"fr":"Cologne","nl":"Keulen","en":"Cologne"}'>Köln</span><small>DE</small><i></i><b>ca. 1 h 45</b></li>
         </ul>
         <p class="fc-note">Racepoint · Schönberg (St. Vith) · <span data-i18n='{"fr":"Est de la Belgique · temps en voiture, env.","nl":"Oost-België · rijtijd met de auto, ca.","en":"East Belgium · approx. drive times"}'>Ostbelgien · Fahrzeit mit dem Auto, ca.</span></p>
+        <div class="fc-ctas">
+          <a class="btn btn-ink" href=""><svg><use href="#ic-arrow"/></svg><span>Route planen</span></a>
+          <button class="btn btn-ghost" type="button" data-ask="Wo finde ich Racepoint in Schönberg?"><svg><use href="#ic-spark"/></svg><span>Weg erfragen</span></button>
+        </div>
       </div>
     </div>
   </div>

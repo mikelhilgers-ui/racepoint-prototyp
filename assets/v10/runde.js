@@ -132,10 +132,10 @@
     const film = $('.film-ui'), shade = $('.stage-shade');
     const caps = $$('.film-cap'), bars = $$('.film-bar'), tc = $('.film-tc'), num = $('.film-num span');
     const PAPER = '#f5f2ec';
-    const CH = [0, 6.4, 12.0, 17.8];      // Kapitel-Startzeiten im Video (s)
+    const CH = [0, 6.4, 12.0, 19.35];     // Kapitel-Startzeiten im Video (s)
+    const END = 22.4;                     // letztes Bild vor der Abblende ins Schwarz
     const LOOP_END = 5.2;                 // Hero: Beratungs-Szenen in Schleife
     const PA = 0.2;                       // Anteil des Pins fuer den Zoom
-    let DUR = 23.55;
     let L = null, z = -1, P = 0, mode = 'play', t0 = 0, curT = 0, targetT = 0, chap = -1;
     const easeS = gsap.parseEase('power3.in'), easeP = gsap.parseEase('power2.inOut');
 
@@ -230,13 +230,14 @@
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    // Scroll -> Videozeit (stueckweise linear; Startpunkt = wo das Video gerade war)
+    // Scroll -> Videozeit (stueckweise linear; Startpunkt = wo das Video gerade war).
+    // 16,4–19,35 s (Werkstatt-Details) wird im Zeitraffer durchfahren.
     function timeAt(p) {
-      const K = [[0, t0], [PA, Math.min(t0 + 0.8, 6.1)], [0.36, 6.4], [0.55, 12.0], [0.73, 16.6], [0.79, 19.3], [1, DUR - 0.06]];
+      const K = [[0, t0], [PA, Math.min(t0 + 0.8, 6.1)], [0.36, 6.4], [0.55, 12.0], [0.72, 16.4], [0.77, 19.35], [1, END]];
       for (let i = 1; i < K.length; i++) {
         if (p <= K[i][0]) return lerp(K[i - 1][1], K[i][1], (p - K[i - 1][0]) / (K[i][0] - K[i - 1][0]));
       }
-      return DUR - 0.06;
+      return END;
     }
     const chapterOf = t => (t >= CH[3] ? 3 : t >= CH[2] ? 2 : t >= CH[1] ? 1 : 0);
     const fmtTC = t => {
@@ -244,18 +245,34 @@
       return '00:' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0') + ':' + String(f).padStart(2, '0');
     };
 
+    // Kapitelwechsel als eine Timeline: alte Zeilen nach oben raus, erst dann die neuen
+    // von unten rein. Ein neuer Wechsel bricht die laufende Timeline ab und setzt alle
+    // Zustaende neu – so steht nie eine halbe Caption im Bild.
+    const capLines = c => c.querySelectorAll('.li');
+    const capRest = c => c.querySelectorAll(':scope > .kicker, :scope > p');
+    let capTl = null;
     function setChapter(i) {
       if (i === chap) return;
       const prev = caps[chap], next = caps[i];
-      if (prev) gsap.to(prev, { autoAlpha: 0, y: -26, duration: 0.35, ease: 'power2.in', overwrite: true });
-      if (next) {
-        gsap.set(next, { autoAlpha: 1, y: 0, overwrite: true });
-        gsap.fromTo(next.querySelectorAll('.li'), { yPercent: 112 }, { yPercent: 0, duration: 1.05, ease: 'expo.out', stagger: 0.09, delay: prev ? 0.18 : 0, overwrite: true });
-        gsap.fromTo(next.querySelectorAll(':scope > .kicker, :scope > p'), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.08, delay: prev ? 0.3 : 0.1, overwrite: true });
-        num.textContent = '0' + (i + 1);
-        gsap.fromTo(num, { yPercent: 100 }, { yPercent: 0, duration: 1, ease: 'expo.out', overwrite: true });
-      }
       chap = i;
+      if (capTl) capTl.kill();
+      // nur eine sichtbare Caption muss erst raus
+      const out = prev && +gsap.getProperty(prev, 'opacity') > 0 ? prev : null;
+      caps.forEach(c => { if (c !== out) gsap.set(c, { autoAlpha: 0 }); });
+      const tl = capTl = gsap.timeline();
+      const inAt = out ? 0.42 : 0;
+      if (out) {
+        tl.to(capLines(out), { yPercent: -140, duration: 0.4, ease: 'power3.in', stagger: 0.04 }, 0)
+          .to(capRest(out), { autoAlpha: 0, y: -10, duration: 0.3, ease: 'power2.in' }, 0)
+          .set(out, { autoAlpha: 0 }, inAt);
+        if (next) tl.to(num, { yPercent: -105, duration: 0.35, ease: 'power3.in' }, 0);
+      }
+      if (!next) return;
+      tl.set(next, { autoAlpha: 1 }, inAt)
+        .fromTo(capLines(next), { yPercent: 140 }, { yPercent: 0, duration: 0.95, ease: 'expo.out', stagger: 0.08, immediateRender: false }, inAt)
+        .fromTo(capRest(next), { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.06, immediateRender: false }, inAt + 0.12)
+        .call(() => { num.textContent = '0' + (i + 1); }, null, inAt)
+        .fromTo(num, { yPercent: 105 }, { yPercent: 0, duration: 1, ease: 'expo.out', immediateRender: false }, inAt);
     }
 
     let lastT = -1, lastP = -1;
@@ -265,7 +282,7 @@
       setChapter(P < PA * 0.95 ? -1 : chapterOf(curT));
       const ci = chapterOf(curT);
       for (let i = 0; i < bars.length; i++) {
-        const a = CH[i], e = CH[i + 1] || DUR;
+        const a = CH[i], e = CH[i + 1] || END;
         bars[i].style.setProperty('--p', clamp((curT - a) / (e - a), 0, 1).toFixed(4));
         bars[i].classList.toggle('on', i === ci);
       }
@@ -302,7 +319,6 @@
 
     stage.layout = layout;
     video.muted = true;
-    video.addEventListener('loadedmetadata', () => { if (video.duration) DUR = video.duration - 0.05; });
 
     if (RM) {
       // Reduzierte Bewegung: kein Pin, kein Zoom. Film-Kapitel als Standbild-Raster.
@@ -514,6 +530,7 @@
     }
 
     // --- Kamera ---
+    const stamp = $('.route-stamp');
     const cam = { f: 0, zoom: 2.9, fit: 0 };
     let W = 0, H = 0, area = null, sFit = 1, bbC = { x: 0, y: 0 };
     const pts = M.ROUTE_PTS;
@@ -537,6 +554,10 @@
       area.cx = area.x + area.w / 2; area.cy = area.y + area.h / 2;
       const pad = 70;
       sFit = Math.min(area.w / (bb.x1 - bb.x0 + pad * 2), area.h / (bb.y1 - bb.y0 + pad * 2));
+      // Stempel: im Ueberblick liegt die Mitte der Runde genau auf area.cx/cy
+      const pinR = $('.route-pin').getBoundingClientRect();
+      stamp.style.left = (r.left - pinR.left + area.cx).toFixed(1) + 'px';
+      stamp.style.top = (r.top - pinR.top + area.cy).toFixed(1) + 'px';
       buildProfile();
       render();
     }
@@ -593,11 +614,12 @@
       const prev = cards[curCard], next = cards[k];
       curCard = k;
       if (!RM) {
-        if (prev) gsap.to(prev, { autoAlpha: 0, y: -14, duration: 0.3, ease: 'power2.in', overwrite: true });
-        gsap.set(next, { autoAlpha: 1, y: 0, overwrite: true });
-        gsap.fromTo($('.wp-img', next), { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.out', delay: 0.08, overwrite: true });
-        gsap.fromTo($('.wp-img img', next), { scale: 1.25 }, { scale: 1, duration: 1.4, ease: 'expo.out', delay: 0.08, overwrite: true });
-        gsap.fromTo($$('.wp-k, h3, .wp-sub, .wp-body, .wp-ask', next), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out', delay: 0.14, overwrite: true });
+        const d = prev ? 0.14 : 0;
+        if (prev) gsap.to(prev, { autoAlpha: 0, y: -12, duration: 0.24, ease: 'power2.in', overwrite: true });
+        gsap.fromTo(next, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out', delay: d, overwrite: true });
+        gsap.fromTo($('.wp-img', next), { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.out', delay: d, overwrite: true });
+        gsap.fromTo($('.wp-img img', next), { scale: 1.25 }, { scale: 1, duration: 1.4, ease: 'expo.out', delay: d, overwrite: true });
+        gsap.fromTo($$('.wp-k, h3, .wp-sub, .wp-body, .wp-ask', next), { y: 14 }, { y: 0, duration: 0.7, stagger: 0.04, ease: 'power3.out', delay: d, overwrite: true });
         const o = $('.o', wpM[k]);
         gsap.fromTo(o, { attr: { r: 22 } }, { attr: { r: 12 }, duration: 0.7, ease: 'back.out(3)', overwrite: true });
       }
@@ -642,13 +664,15 @@
     tl.to(cam, { fit: 1, duration: 1.7, ease: 'power2.inOut' }, arrive[N - 1] + 0.15);
     tl.to({}, { duration: 1.2 }, arrive[N - 1] + 1.85);
 
-    const stamp = $('.route-stamp');
+    const sec = $('.route');
     let stampOn = false;
+    gsap.set(stamp, { xPercent: -50, yPercent: -50 });
     function onTime() {
       const time = tl.time();
       let k = 0;
       for (let i = 1; i < arrive.length; i++) if (time >= arrive[i] - 0.06) k = i;
       showCard(k);
+      sec.classList.toggle('is-done', time > arrive[N - 1] + 0.6);
       const on = time > arrive[N - 1] + 1.4;
       if (on !== stampOn) {
         stampOn = on;

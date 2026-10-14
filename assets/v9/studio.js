@@ -84,7 +84,7 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   }
   floor.add(ticks);
   const pulseMat = new THREE.MeshBasicMaterial({ color: 0xE83637, transparent: true, opacity: 0, depthWrite: false });
-  const pulse = flat(new THREE.Mesh(new THREE.RingGeometry(.96, 1, 128), pulseMat)); pulse.position.y = .004; floor.add(pulse);
+  const pulseRing = flat(new THREE.Mesh(new THREE.RingGeometry(.96, 1, 128), pulseMat)); pulseRing.position.y = .004; floor.add(pulseRing);
 
   /* ---------------- Drehteller + Bike ---------------- */
   const turntable = new THREE.Group(), holder = new THREE.Group();
@@ -139,6 +139,8 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   function updateCamera(dt) {
     const k = reduced ? 60 : 4.2;
     for (const key in goal) cam[key] = damp(cam[key], goal[key], k, dt);
+    // Nebel wandert mit: der Boden verlaeuft weich ins Dunkel, das Bike bleibt immer klar
+    scene.fog.near = cam.dist + 1.2; scene.fog.far = cam.dist + 9;
     const ce = Math.cos(cam.el);
     camera.position.set(cam.tx + cam.dist * Math.sin(cam.az) * ce, cam.ty + cam.dist * Math.sin(cam.el), cam.tz + cam.dist * Math.cos(cam.az) * ce);
     camera.lookAt(cam.tx, cam.ty, cam.tz);
@@ -188,8 +190,7 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     old.parts.forEach(p => { if (!filter(p)) p.m = 1; });
     gsap.to(old.parts.filter(filter), { m: 1, duration: .55, ease: 'power2.in', overwrite: true, stagger: { each: .018, from: 'random' }, onComplete: () => retire(old) });
     gsap.to(nb.parts.filter(filter), { m: 0, duration: 1, ease: 'expo.out', delay: .38, stagger: { each: .03, from: 'random' } });
-    gsap.fromTo(pulse.scale, { x: .4, y: .4 }, { x: 1.7, y: 1.7, duration: 1.3, ease: 'expo.out', delay: .3 });
-    gsap.fromTo(pulseMat, { opacity: .8 }, { opacity: 0, duration: 1.3, ease: 'power2.out', delay: .3 });
+    pulse(.3);
   }
 
   /* ---------------- API: Typ, Lack, Laufraeder, Groesse ---------------- */
@@ -203,8 +204,15 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     gsap.to(M.paint, { metalness: p.metalness, roughness: p.roughness, clearcoatRoughness: p.clearcoatRoughness, iridescence: p.iridescence,
       bumpScale: p.bump * 1.4, duration: d, ease: 'power2.inOut', overwrite: true });
     gsap.to(M.decal.color, { r: dc.r, g: dc.g, b: dc.b, duration: d, overwrite: true });
+    gsap.to(M.paint.userData.flip, { value: p.flip, duration: d, ease: 'power2.inOut', overwrite: true });
   }
   function setSize(s) { gsap.to(holder.scale, { x: s, y: s, z: s, duration: reduced ? 0 : .8, ease: 'power3.out', overwrite: true }); }
+  // roter Ring laeuft ueber den Boden (Bestaetigung, z. B. "An Achim gesendet")
+  function pulse(delay = 0) {
+    if (reduced) return;
+    gsap.fromTo(pulseRing.scale, { x: .4, y: .4 }, { x: 1.7, y: 1.7, duration: 1.3, ease: 'expo.out', delay });
+    gsap.fromTo(pulseMat, { opacity: .8 }, { opacity: 0, duration: 1.3, ease: 'power2.out', delay });
+  }
   // Auftakt: Bike setzt sich beim Laden aus seinen Teilen zusammen
   function intro(delay = 0) {
     if (reduced) return;
@@ -257,9 +265,18 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   }
   resize();
 
+  // Shader vorab kompilieren, damit der erste Frame nicht ruckelt – parallel im Hintergrund, wo der Browser das kann
+  const prepare = () => renderer.getContext().getExtension('KHR_parallel_shader_compile')
+    ? renderer.compileAsync(scene, camera) : Promise.resolve(renderer.compile(scene, camera));
+
+  // GPU-Kontext verloren (Treiber-Reset, Speicher voll): Seite faellt aufs Foto zurueck
+  let onLost = null;
+  canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); state.active = false; if (onLost) onLost(); });
+
   return {
-    cfg, state, M, setType, setWheels, setPaint, setSize, intro, frame, setGoal, snap, project, tick, resize,
+    cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, frame, setGoal, snap, project, tick, resize,
     get partCount() { return bike.count; },
     set onDrag(fn) { onDrag = fn; },
+    set onLost(fn) { onLost = fn; },
   };
 }
