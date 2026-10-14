@@ -148,3 +148,24 @@ test('Ungültige Elemente werden verworfen und als Fehler gemeldet',async t=>{
   const result=await runAgent({messages:[{role:'user',content:'Zeig ein Video'}]});
   assert.equal(calls,2);assert.deepEqual(result.widgets,[]);
 });
+
+test('Zitat-Textblöcke werden ohne Absatz zusammengesetzt, nach Werkzeugen mit Absatz',async()=>{
+  const {joinText}=await import('./anthropic-stream.mjs');
+  assert.equal(joinText([{type:'text',text:'Das Vado SL kostet '},{type:'text',text:'3.799 €',citations:[{}]},{type:'text',text:' und ist leicht.'}]),'Das Vado SL kostet 3.799 € und ist leicht.');
+  assert.equal(joinText([{type:'text',text:'Ich suche.'},{type:'server_tool_use',id:'s'},{type:'web_search_tool_result'},{type:'text',text:'Gefunden.'}]),'Ich suche.\n\nGefunden.');
+});
+
+test('Ohne Katalogtreffer: Hinweis auf Herstellerseiten und Karten über gelesene source_url',async t=>{
+  let calls=0;const url='https://www.specialized.com/be/nl/turbo-vado-sl-2-5-0-eq/p/1000';
+  const html='<html><head><title>Turbo Vado SL 2 5.0 EQ</title><script type="application/ld+json">'+JSON.stringify({'@type':'Product',name:'Turbo Vado SL 2 5.0 EQ',image:'https://assets.specialized.com/i/vado.jpg',offers:{price:'3799',priceCurrency:'EUR'}})+'</script></head><body>Productgegevens</body></html>';
+  t.mock.method(globalThis,'fetch',async(target,options)=>{
+    if(target!=='https://api.anthropic.com/v1/messages')return new Response(html,{headers:{'content-type':'text/html'}});
+    calls++;const body=JSON.parse(options.body);
+    if(calls===1)return provider([tool('find_bikes',{profile:validProfile({category:'ebike',budget:4000})})],'tool_use');
+    if(calls===2){const notice=body.messages.at(-1).content[0].content;assert.match(notice,/keinen Treffer/);assert.match(notice,/source_url/);return provider([tool('read_manufacturer_page',{url})],'tool_use');}
+    return provider([{type:'text',text:'Das Turbo Vado SL 2 '},{type:'text',text:'passt gut für Touren.'},tool('present_recommendations',{items:[{source_url:url,reason:'Leicht und tourentauglich.',tradeoff:'Kleinerer Akku.'}]})],'tool_use');
+  });
+  const result=await runAgent({messages:[{role:'user',content:'E-Bike bis 4.000 € für Touren'}],profile:validProfile({category:'ebike',budget:4000})});
+  assert.equal(calls,3);assert.equal(result.cards.length,1);assert.equal(result.cards[0].price,3799);assert.equal(result.cards[0].image,'https://assets.specialized.com/i/vado.jpg');
+  assert.equal(result.text,'Das Turbo Vado SL 2 passt gut für Touren.');
+});

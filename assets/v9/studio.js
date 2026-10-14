@@ -285,6 +285,8 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   return {
     cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, frame, setGoal, snap, project, tick, resize,
     get partCount() { return bike.count; },
+    // nur fuer Tests/Konsole: Dreiecke + Draw-Calls des letzten Frames
+    renderInfo: () => ({ ...renderer.info.render }),
     set onDrag(fn) { onDrag = fn; },
     set onLost(fn) { onLost = fn; },
   };

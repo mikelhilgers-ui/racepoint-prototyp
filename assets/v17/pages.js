@@ -161,7 +161,7 @@
     $('#bdGal').innerHTML =
       '<div class="bd-stage" id="bdStage"><img data-guard src="' + esc(b.image) + '" alt="' + esc(shots[0].alt) + '" referrerpolicy="no-referrer">' + ph.replace('Herstellerbild', 'Herstellerbild nicht erreichbar') + '</div>' +
       '<div class="bd-thumbs" role="group" aria-label="Bilder">' + shots.map((s, i) =>
-        '<button type="button" class="t-' + s.k + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"' + (s.video ? ' data-video="' + s.video + '"' : '') + ' aria-label="' + esc(s.alt) + '"><img src="' + esc(s.img) + '" alt="" loading="lazy" referrerpolicy="no-referrer"></button>').join('') + '</div>';
+        '<button type="button" class="t-' + s.k + '" aria-pressed="' + (i === 0) + '" data-i="' + i + '"' + (s.video ? ' data-video="' + s.video + '"' : '') + ' aria-label="' + esc(s.alt) + '"><img' + (s.k === 'prod' ? ' data-guard' : '') + ' src="' + esc(s.img) + '" alt="" loading="lazy" referrerpolicy="no-referrer"></button>').join('') + '</div>';
     guardImgs($('#bdGal'));
     $('#bdGal .bd-thumbs').addEventListener('click', e => {
       const t = e.target.closest('button'); if (!t || t.dataset.video) return;
@@ -198,7 +198,7 @@
     const road = b.cat === 'rennrad' || b.cat === 'gravel';
     // 3D nur, wenn der prozedurale Typ passt: Rennrad, Gravel, MTB, E-MTB (nicht Stadt-E-Bike, nicht Kinderrad)
     const type3d = road || b.cat === 'mtb' ? b.cat : b.cat === 'ebike' && b.terrain.includes('trail') ? 'ebike' : null;
-    const cfg = { paint: 0, tyres: 'tan', h: 176 };
+    const cfg = { paint: 0, tyres: 'tan', h: 175 };
     const stage = $('#cfgStage');
     $('#cfgNote').textContent = type3d
       ? '3D-Vorschau, nicht das exakte Modell: ein ' + (type3d === 'ebike' ? 'E-MTB' : CAT_NAME[b.cat]) + ' als Symbol für deinen Build. Verfügbare Herstellerfarben bestätigen wir persönlich.'
@@ -231,7 +231,7 @@
       $('#sumAsk').setAttribute('data-ask', txt);
       $('#sumMail').href = mailto('Mein Build: Specialized ' + b.name, 'Hallo Racepoint-Team,\n\n' + txt + '\n\nIch würde gern einen Termin für Beratung bzw. Retül-Bikefitting vereinbaren.\n\nViele Grüße\n');
       const chip = $('#cfgChip'); if (chip) chip.textContent = 'Wunschfarbe: ' + p[1];
-      if (ctl) { ctl.setPaint(p[0]); ctl.setTyres(cfg.tyres); }
+      if (ctl) { ctl.setPaint(p[0]); ctl.setTyres(withTyres ? cfg.tyres : 'black'); }
     }
     $('#cfgSw').addEventListener('click', e => {
       const t = e.target.closest('button'); if (!t) return;
