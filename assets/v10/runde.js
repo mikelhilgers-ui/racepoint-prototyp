@@ -611,11 +611,13 @@
     // --- Karten-Wechsel (Wegpunkt erreicht) ---
     function showCard(k) {
       if (k === curCard) return;
-      const prev = cards[curCard], next = cards[k];
+      const next = cards[k];
       curCard = k;
       if (!RM) {
-        const d = prev ? 0.14 : 0;
-        if (prev) gsap.to(prev, { autoAlpha: 0, y: -12, duration: 0.24, ease: 'power2.in', overwrite: true });
+        // alle anderen Karten raus – auch eine, deren Einblendung bei schnellem Scrollen noch wartet
+        const out = cards.filter(c => c !== next && (gsap.getTweensOf(c).length || +gsap.getProperty(c, 'opacity') > 0));
+        if (out.length) gsap.to(out, { autoAlpha: 0, y: -12, duration: 0.24, ease: 'power2.in', overwrite: true });
+        const d = out.length ? 0.14 : 0;
         gsap.fromTo(next, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out', delay: d, overwrite: true });
         gsap.fromTo($('.wp-img', next), { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.9, ease: 'expo.out', delay: d, overwrite: true });
         gsap.fromTo($('.wp-img img', next), { scale: 1.25 }, { scale: 1, duration: 1.4, ease: 'expo.out', delay: d, overwrite: true });

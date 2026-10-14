@@ -436,7 +436,7 @@ body::after {
 }
 .wp-img { margin: 0; aspect-ratio: 16 / 10; overflow: hidden; background: var(--paper-3); }
 .wp-img img { width: 100%; height: 100%; object-fit: cover; }
-.wp-card[data-wp="5"] .wp-img img { filter: contrast(1.7) brightness(.8); }   /* Nebel-See: sehr hell -> mehr Tiefe */
+.wp-img--see img { object-position: 50% 78%; }   /* Raeder + Bank im Bild halten */
 .wp-txt { padding: 18px 22px 22px; }
 .wp-k b { color: var(--red); }
 .wp-card h3 { font: 400 34px/.95 var(--f-display); text-transform: uppercase; margin: 10px 0 4px; letter-spacing: .005em; }
