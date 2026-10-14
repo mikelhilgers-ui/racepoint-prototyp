@@ -134,6 +134,9 @@
     disclaimer: { de: 'Simulation · Empfehlungen und Abläufe sind Beispiele.', fr: 'Simulation · Conseils et démarches à titre d’exemple.', nl: 'Simulatie · Adviezen en stappen zijn voorbeelden.', en: 'Simulation · Recommendations and workflows are examples.' },
     thinking: { de: 'Achims KI denkt nach', fr: 'L’IA d’Achim réfléchit', nl: 'Achims AI denkt na', en: 'Achim’s AI is thinking' },
     listening: { de: 'Ich höre zu …', fr: 'J’écoute …', nl: 'Ik luister …', en: 'Listening …' },
+    grow: { de: 'Fenster vergrößern', fr: 'Agrandir la fenêtre', nl: 'Venster vergroten', en: 'Enlarge window' },
+    shrink: { de: 'Fenster verkleinern', fr: 'Réduire la fenêtre', nl: 'Venster verkleinen', en: 'Shrink window' },
+    drag: { de: 'Ziehen, um die Breite zu ändern', fr: 'Glisser pour changer la largeur', nl: 'Sleep om de breedte te wijzigen', en: 'Drag to resize' },
     reset: { de: 'Neues Gespräch', fr: 'Nouvelle conversation', nl: 'Nieuw gesprek', en: 'New chat' },
     close: { de: 'Schließen', fr: 'Fermer', nl: 'Sluiten', en: 'Close' },
     copy: { de: 'Kopieren', fr: 'Copier', nl: 'Kopiëren', en: 'Copy' },
@@ -340,7 +343,7 @@
   .kib-open .kib-launch{opacity:0;pointer-events:none;transform:scale(.6)}
   .kib-launch{transition:opacity .3s,transform .3s}
   /* ---- Panel ---- */
-  .kib-panel{position:fixed;z-index:80;right:20px;top:20px;bottom:20px;width:min(430px,calc(100vw - 40px));display:flex;flex-direction:column;border-radius:28px;overflow:hidden;
+  .kib-panel{position:fixed;z-index:80;right:20px;top:20px;bottom:20px;width:min(var(--kib-w,430px),calc(100vw - 40px));display:flex;flex-direction:column;border-radius:28px;overflow:hidden;
     background:linear-gradient(180deg,rgba(26,27,31,.92),rgba(13,14,16,.94));backdrop-filter:blur(26px) saturate(140%);-webkit-backdrop-filter:blur(26px) saturate(140%);
     border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.4);
     transform-origin:calc(100% - 29px) calc(100% - 97px);transform:scale(.2);opacity:0;pointer-events:none;transition:transform .55s cubic-bezier(.2,.9,.25,1),opacity .35s}
@@ -356,6 +359,13 @@
   .kib-simulation{display:inline-block;margin:3px 0;padding:2px 6px;border-radius:4px;background:#ffffff1f;color:#fff;font:600 10px/1.4 Arial,sans-serif;letter-spacing:.03em}
   .kib-ttl small{display:block;font-size:12px;color:rgba(255,255,255,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .kib-ttl small .rp-dot{width:7px;height:7px}
+  .kib-resize{position:absolute;left:0;top:28px;bottom:28px;width:12px;z-index:3;cursor:ew-resize;touch-action:none}
+  .kib-resize::after{content:"";position:absolute;left:4px;top:50%;width:4px;height:54px;margin-top:-27px;border-radius:4px;background:rgba(255,255,255,.18);opacity:0;transition:opacity .2s}
+  .kib-panel:hover .kib-resize::after,.kib-resize:focus-visible::after,.kib-resizing .kib-resize::after{opacity:1}
+  .kib-resizing{transition:none!important;user-select:none}
+  .kib-big .kib-log{padding-inline:clamp(18px,4%,48px)}
+  .kib-big .kib-bike{flex-basis:calc(50% - 5px)}
+  @media (min-width:1300px){.kib-big .kib-bike{flex-basis:calc(33.333% - 7px)}}
   .kib-hbtn{width:36px;height:36px;border-radius:12px;border:0;background:transparent;display:grid;place-items:center;color:rgba(255,255,255,.65);transition:background .2s,color .2s}
   .kib-hbtn:hover{background:rgba(255,255,255,.08);color:#fff}
   .kib-hbtn svg{width:18px;height:18px}
@@ -537,6 +547,7 @@
   @media (max-width:640px){
     .kib-panel{inset:0;width:auto;border-radius:0;transform-origin:50% 100%;transform:translateY(100%);opacity:1;padding-bottom:env(safe-area-inset-bottom)}
     .kib-open .kib-panel{transform:none}
+    .kib-resize,.kib-grow{display:none}
     /* Kompakter runder Launcher, sauber ueber dem Prototyp-Zahnrad (48px, rechts 14px, unten 14px) */
     .kib-launch{right:calc(14px + env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));gap:8px}
     .kib-orb{width:48px;height:48px;box-shadow:0 10px 26px rgba(232,54,55,.32),0 3px 10px rgba(0,0,0,.5)}
@@ -558,6 +569,8 @@
   const I = {
     spark: '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l1.9 5.6a3 3 0 001.9 1.9l5.7 2-5.7 2a3 3 0 00-1.9 1.9L12 21.5l-1.9-5.6a3 3 0 00-1.9-1.9L2.5 12l5.7-2a3 3 0 001.9-1.9z" fill="url(#kibg)"/><defs><linearGradient id="kibg" x1="3" y1="3" x2="21" y2="21"><stop stop-color="#fff"/><stop offset=".55" stop-color="#ffb08a"/><stop offset="1" stop-color="#E83637"/></linearGradient></defs></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    grow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>',
+    shrink: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/></svg>',
     reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9.7 9.7 0 00-6.7 2.8L3 8"/><path d="M3 3v5h5"/></svg>',
     send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
     mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>',
@@ -591,8 +604,8 @@
       '<section class="kib-panel" role="dialog" aria-modal="false" aria-label="KI-Berater" data-lenis-prevent>' +
         '<header class="kib-head"><div class="kib-av"><i>' + I.spark + '</i></div>' +
         '<div class="kib-ttl"><b></b><span class="kib-simulation" data-simulation-hint></span><small data-kib-status></small></div>' +
-        '<button class="kib-hbtn" data-act="reset">' + I.reset + '</button><button class="kib-hbtn" data-act="close">' + I.close + '</button></header>' +
-        '<div class="kib-log" aria-live="polite"></div><div class="kib-chips"></div>' +
+        '<button class="kib-hbtn kib-grow" data-act="size">' + I.grow + '</button><button class="kib-hbtn" data-act="reset">' + I.reset + '</button><button class="kib-hbtn" data-act="close">' + I.close + '</button></header>' +
+        '<div class="kib-resize" role="separator" aria-orientation="vertical"></div><div class="kib-log" aria-live="polite"></div><div class="kib-chips"></div>' +
         '<footer class="kib-foot"><form class="kib-form"><textarea class="kib-in" rows="1"></textarea>' +
         '<button type="button" class="kib-mic" hidden>' + I.mic + '</button><button type="submit" class="kib-send" disabled aria-label="Senden">' + I.send + '</button></form>' +
         '<p class="kib-disc"></p></footer>' +
@@ -610,6 +623,20 @@
 
     root.querySelector('.kib-orb').addEventListener('click', open);
     root.querySelector('[data-act="close"]').addEventListener('click', close);
+    // Fenstergröße: Vergrößern-Knopf und ziehbarer linker Rand (Desktop), gemerkt pro Browser
+    const panel = root.querySelector('.kib-panel'), sizeBtn = root.querySelector('[data-act="size"]'), grip = root.querySelector('.kib-resize');
+    const maxW = () => Math.max(360, window.innerWidth - 40);
+    const setW = (w, keep) => { w = Math.round(Math.min(maxW(), Math.max(360, w))); panel.style.setProperty('--kib-w', w + 'px'); const big = w > 600; root.classList.toggle('kib-big', big); sizeBtn.innerHTML = big ? I.shrink : I.grow; sizeBtn.title = tr(big ? S.shrink : S.grow); sizeBtn.setAttribute('aria-label', sizeBtn.title); if (keep) { try { localStorage.setItem('kib-width', String(w)); } catch (e) {} } };
+    let savedW = 430; try { savedW = Number(localStorage.getItem('kib-width')) || 430; } catch (e) {}
+    setW(savedW);
+    sizeBtn.addEventListener('click', () => setW(root.classList.contains('kib-big') ? 430 : Math.min(980, maxW()), true));
+    grip.addEventListener('pointerdown', ev => { if (window.innerWidth <= 640) return; ev.preventDefault(); grip.setPointerCapture(ev.pointerId); panel.classList.add('kib-resizing');
+      const move = e => setW(window.innerWidth - 20 - e.clientX, false);
+      const up = e => { grip.removeEventListener('pointermove', move); grip.removeEventListener('pointerup', up); grip.removeEventListener('pointercancel', up); panel.classList.remove('kib-resizing'); setW(window.innerWidth - 20 - e.clientX, true); };
+      grip.addEventListener('pointermove', move); grip.addEventListener('pointerup', up); grip.addEventListener('pointercancel', up); });
+    grip.addEventListener('keydown', ev => { if (ev.key === 'ArrowLeft' || ev.key === 'ArrowRight') { ev.preventDefault(); setW(panel.getBoundingClientRect().width + (ev.key === 'ArrowLeft' ? 40 : -40), true); } });
+    grip.tabIndex = 0; grip.title = tr(S.drag); grip.setAttribute('aria-label', grip.title);
+    window.addEventListener('resize', () => { const w = parseFloat(panel.style.getPropertyValue('--kib-w')) || 430; if (w > maxW()) setW(maxW()); });
     root.querySelector('[data-act="reset"]').addEventListener('click', () => { if (live.ctrl) { live.ctrl.abort(); live.ctrl = null; state.busy = false; } if (!state.busy) welcome(); });
     root.querySelector('.kib-form').addEventListener('submit', e => { e.preventDefault(); submit(); });
     input.addEventListener('input', () => { autoGrow(); sendBtn.disabled = !input.value.trim(); });
