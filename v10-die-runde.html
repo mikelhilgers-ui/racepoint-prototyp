@@ -4,18 +4,18 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Racepoint · 10 · Die Runde</title>
-<meta name="description" content="Racepoint in Schönberg, Ostbelgien: Specialized Elite Händler, Retül-Bikefitting und Werkstatt für alle Marken. Eine Samstagsrunde zum Mitscrollen." />
+<meta name="description" content="Die Samstagsrunde von Racepoint in Schönberg, Ostbelgien: 58 km durch Venn, Eifel und Ardennen – Start und Ziel mit Kaffee bei Achim. Specialized Elite Händler, Werkstatt für alle Marken, Retül-Bikefitting." />
+<link rel="icon" href="assets/racepoint-logo-sm.svg">
 
-<!-- ============================================================= -->
-<!--  RACEPOINT — PROTOTYP 10 · DIE RUNDE (THROWAWAY)              -->
-<!--  Editoriales Scrollytelling: eine Samstagsrunde, die bei       -->
-<!--  Achim mit Kaffee startet und endet. Hell, warm, Magazin-Look. -->
-<!--  Hero: Video durch Buchstaben · Film per Scroll gescrubbt ·    -->
-<!--  Route auf prozeduraler Topo-Karte · Builds-Galerie quer ·     -->
-<!--  Kreis-Reveal · Budget-Stufen · Ziel mit Live-Öffnungszeiten.  -->
-<!--  Libs lokal: GSAP 3.13 (+ScrollTrigger, SplitText, DrawSVG,     -->
-<!--  MotionPath) + Lenis. Gemeinsame Basis: assets/rp-core.js.     -->
-<!-- ============================================================= -->
+<!-- ================================================================= -->
+<!--  RACEPOINT — PROTOTYP 10 · DIE RUNDE (THROWAWAY)                    -->
+<!--  Konzept: die Samstagsrunde, die bei Achim mit Kaffee startet und   -->
+<!--  endet. Jeder Stopp = ein Radtyp = eine Frage an den KI-Berater.    -->
+<!--  Aufbau: Film-Hero · gepinnte Topo-Karte (Herzstück) · Dein Rad ·   -->
+<!--  Filme · Werkstatt & Retül · Besuch · Footer.                       -->
+<!--  Libs lokal: GSAP 3.13 (+ScrollTrigger, SplitText, DrawSVG,          -->
+<!--  MotionPath) + Lenis. Basis: assets/rp-core.js + ki-berater.js.     -->
+<!-- ================================================================= -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,528 +23,435 @@
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v10/runde.css">
 <script>
-  // Motion-Modus frueh setzen (vermeidet Aufblitzen versteckter Elemente)
-  document.documentElement.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'rm' : 'motion');
+  // Motion-Modus früh setzen (vermeidet Aufblitzen versteckter Elemente); Hero-Zustand für den KI-Launcher
+  document.documentElement.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'rm' : 'motion', 'v10-hero');
 </script>
 <script src="assets/prototype-picker.js" defer></script>
 </head>
 
 <body>
 
-<!-- Icons als wiederverwendbare SVG-Symbole -->
+<!-- Icons -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="ic-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></symbol>
+  <symbol id="ic-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></symbol>
+  <symbol id="ic-pause" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></symbol>
   <symbol id="ic-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="ic-out" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M9 7h8v8"/></symbol>
   <symbol id="ic-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M6 13l6 6 6-6"/></symbol>
   <symbol id="ic-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
-  <symbol id="ic-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></symbol>
-  <symbol id="ic-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></symbol>
-  <symbol id="ic-wa" viewBox="0 0 32 32"><path fill="currentColor" d="M16.04 4C9.9 4 4.92 8.98 4.92 15.12c0 2.06.56 4.06 1.6 5.82L4.8 27l6.2-1.62c1.7.93 3.6 1.42 5.04 1.42h.01c6.14 0 11.12-4.98 11.12-11.12C27.17 8.98 22.18 4 16.04 4zm0 20.3c-1.5 0-2.97-.4-4.26-1.16l-.3-.18-3.68.96.98-3.59-.2-.31a9.1 9.1 0 01-1.4-4.84c0-5.03 4.1-9.12 9.13-9.12 2.44 0 4.73.95 6.45 2.68a9.06 9.06 0 012.67 6.45c0 5.03-4.1 9.12-9.12 9.12zm5.01-6.83c-.27-.14-1.62-.8-1.87-.89-.25-.09-.43-.14-.62.14-.18.27-.71.89-.87 1.07-.16.18-.32.2-.59.07-.27-.14-1.16-.43-2.2-1.36-.81-.72-1.36-1.62-1.52-1.89-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.49-.85-2.04-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.35.98 2.65 1.12 2.84.14.18 1.93 2.95 4.68 4.13.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.52-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32z"/></symbol>
-  <symbol id="ic-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M6 16V11a6 6 0 1112 0v5l1.5 2h-15zM10 20.5a2.2 2.2 0 004 0"/></symbol>
+  <symbol id="ic-spark" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.5l1.9 5.6a3 3 0 001.9 1.9l5.7 2-5.7 2a3 3 0 00-1.9 1.9L12 21.5l-1.9-5.6a3 3 0 00-1.9-1.9L2.5 12l5.7-2a3 3 0 001.9-1.9z"/></symbol>
+  <symbol id="ic-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M6.5 3.5h3l1.5 4.5-2 1.5a12 12 0 006 6l1.5-2 4.5 1.5v3a2 2 0 01-2 2A16.5 16.5 0 014.5 5.5a2 2 0 012-2z"/></symbol>
+  <symbol id="ic-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></g></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></g></symbol>
+  <symbol id="ic-cup" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h12v5a5 5 0 01-5 5H9a5 5 0 01-5-5z"/><path d="M16 10.5h1.5a2.5 2.5 0 010 5H16M8 3.5c0 1.5 1.5 1.5 1.5 3M12 3.5c0 1.5 1.5 1.5 1.5 3"/></g></symbol>
+  <symbol id="ic-chev-l" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></symbol>
+  <symbol id="ic-chev-r" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></symbol>
 </svg>
 
+<a class="skip" href="#runde">Zur Runde springen</a>
 
-<!-- =================================================================== -->
-<!-- HEADER — Logo, Navigation, Live-Status, Sprachwahl, Termin          -->
-<!-- versteckt sich beim Runterscrollen, kommt beim Hochscrollen zurück  -->
-<!-- =================================================================== -->
+<!-- ===================== Header ===================== -->
 <header class="hd" id="hd">
   <div class="hd-in">
-    <a class="hd-logo" href="#top" aria-label="Racepoint – nach oben">
-      <img class="lg-dark" src="assets/racepoint-logo-dark.svg" alt="Racepoint">
-      <img class="lg-light" src="assets/racepoint-logo-light.svg" alt="" aria-hidden="true">
-    </a>
+    <a class="hd-logo" href="#top" aria-label="Racepoint – nach oben"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"></a>
     <nav class="hd-nav" aria-label="Hauptnavigation">
-      <a href="#laden" data-i18n='{"fr":"La boutique","nl":"De winkel","en":"The shop"}'>Der Laden</a>
-      <a href="#runde" data-i18n='{"fr":"La sortie","nl":"De ronde","en":"The ride"}'>Die Runde</a>
-      <a href="#videos" data-i18n='{"fr":"Vidéos","nl":"Video’s","en":"Videos"}'>Videos</a>
-      <a href="#budget" data-i18n='{"fr":"Budget","nl":"Budget","en":"Budget"}'>Budget</a>
-      <a href="#ziel" data-i18n='{"fr":"Visite","nl":"Bezoek","en":"Visit"}'>Besuch</a>
+      <a href="#runde">Die Runde</a>
+      <a href="#raeder">Räder</a>
+      <a href="#filme">Filme</a>
+      <a href="#werkstatt">Werkstatt</a>
+      <a href="#besuch">Besuch</a>
     </nav>
-    <div class="hd-right">
-      <span class="pill-status hd-status" data-open-status></span>
-      <div class="ls" data-lang-switch aria-label="Sprache"></div>
-      <a class="btn-pill" href="#ziel" data-magnetic data-i18n='{"fr":"Rendez-vous","nl":"Afspraak","en":"Book"}'>Termin</a>
-      <button class="hd-burger" type="button" aria-label="Menü" aria-expanded="false"><i></i><i></i></button>
+    <div class="hd-r">
+      <span class="pill pill-status hd-status" data-open-status></span>
+      <a class="btn btn-red btn-sm" data-ask="Ich möchte einen Termin vereinbaren.">Termin</a>
+      <button class="hd-burger" type="button" aria-label="Menü öffnen" aria-controls="mnav" aria-expanded="false"><i></i><i></i></button>
     </div>
   </div>
-  <div class="hd-progress" aria-hidden="true"><i></i></div>
 </header>
 
-<!-- Mobil-Menü (Vollbild, Papier) -->
 <div class="mnav" id="mnav" aria-hidden="true">
-  <nav class="mnav-links">
-    <a href="#laden"><span>01</span><b data-i18n='{"fr":"La boutique","nl":"De winkel","en":"The shop"}'>Der Laden</b></a>
-    <a href="#runde"><span>02</span><b data-i18n='{"fr":"La sortie","nl":"De ronde","en":"The ride"}'>Die Runde</b></a>
-    <a href="#videos"><span>03</span><b data-i18n='{"fr":"Vidéos","nl":"Video’s","en":"Videos"}'>Videos</b></a>
-    <a href="#budget"><span>04</span><b data-i18n='{"fr":"Budget","nl":"Budget","en":"Budget"}'>Budget</b></a>
-    <a href="#ziel"><span>05</span><b data-i18n='{"fr":"Visite","nl":"Bezoek","en":"Visit"}'>Besuch</b></a>
+  <nav class="mnav-links" aria-label="Mobile Navigation">
+    <a href="#runde"><span>01</span>Die Runde</a>
+    <a href="#raeder"><span>02</span>Räder</a>
+    <a href="#filme"><span>03</span>Filme</a>
+    <a href="#werkstatt"><span>04</span>Werkstatt</a>
+    <a href="#besuch"><span>05</span>Besuch</a>
   </nav>
   <div class="mnav-foot">
-    <span class="pill-status" data-open-status></span>
-    <div class="ls" data-lang-switch></div>
-    <a class="btn btn-red" href="#ziel" data-i18n='{"fr":"Prendre rendez-vous","nl":"Afspraak maken","en":"Book an appointment"}'>Termin vereinbaren</a>
+    <span class="pill pill-status" data-open-status></span>
+    <a class="btn btn-red" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
   </div>
 </div>
 
 <main id="top">
 
-<!-- =================================================================== -->
-<!-- 1 · STAGE — Hero „Text als Fenster“ + gescrubbter Film (gepinnt)   -->
-<!-- Das Teaser-Video läuft hinter riesigen Buchstaben (Canvas-Maske).  -->
-<!-- Beim Scrollen fliegen wir durch das „I“ – dann steuert der Scroll  -->
-<!-- das Video, Kapitel-Captions laufen synchron mit.                   -->
-<!-- =================================================================== -->
-<section class="stage" id="laden" aria-label="Racepoint – der Laden">
-  <div class="stage-pin">
-    <video class="stage-video" muted playsinline preload="auto" poster="assets/v10/film-poster.jpg" aria-hidden="true">
-      <source src="assets/racepoint-teaser-scrub.mp4" type="video/mp4">
+<!-- ===================== 1 · Hero: Shop-Film vollflächig ===================== -->
+<section class="hero" aria-label="Die Runde – Racepoint, Schönberg">
+  <div class="hero-media">
+    <video class="hero-vid" id="heroVid" muted loop playsinline preload="auto" poster="assets/v10/film-poster.jpg" aria-hidden="true">
+      <source src="assets/racepoint-teaser.mp4" type="video/mp4">
     </video>
-    <div class="stage-shade" aria-hidden="true"></div>
-    <canvas class="stage-mask" aria-hidden="true"></canvas>
+  </div>
+  <div class="hero-shade" aria-hidden="true"></div>
 
-    <!-- Hero-Oberfläche (über der Maske) -->
-    <div class="hero-ui">
-      <div class="hero-meta wrap">
-        <span class="kicker" data-i18n='{"fr":"Chapitre 0 · Rendez-vous","nl":"Hoofdstuk 0 · Verzamelpunt","en":"Chapter 0 · Meeting point"}'>Kapitel 0 · Treffpunkt</span>
-        <span class="kicker hide-sm" data-i18n='{"fr":"Revendeur Specialized Elite · depuis 18 ans","nl":"Specialized Elite-dealer · al 18 jaar","en":"Specialized Elite dealer · for 18 years"}'>Specialized Elite Händler · seit 18 Jahren</span>
-        <span class="kicker hero-coords"><span data-i18n='{"fr":"Schönberg · Est de la Belgique","nl":"Schönberg · Oost-België","en":"Schönberg · East Belgium"}'>Schönberg · Ostbelgien</span><span class="hide-sm"> · 50°17′ N 6°16′ O</span></span>
-      </div>
-      <h1 class="hero-word" aria-label="Die Runde – Racepoint, Schönberg"><span class="sr-only">Die Runde</span></h1>
-      <div class="hero-bottom wrap">
-        <div class="hero-col1">
-          <p class="hero-lead fr-it" data-i18n='{"fr":"Samedi, 9 h.<br>Un café chez Achim.<br><em>Et on roule.</em>","nl":"Zaterdag, 9 uur.<br>Koffie bij Achim.<br><em>En dan naar buiten.</em>","en":"Saturday, 9 a.m.<br>Coffee at Achim’s.<br><em>Then out we go.</em>"}'>Samstag, 9 Uhr.<br>Kaffee bei Achim.<br><em>Dann raus.</em></p>
-          <div class="hero-ctas">
-            <a class="btn btn-red" href="#ziel" data-magnetic><span data-i18n='{"fr":"Prendre rendez-vous","nl":"Afspraak maken","en":"Book an appointment"}'>Termin vereinbaren</span></a>
-            <a class="btn btn-ghost btn-ride" href="#runde" data-magnetic aria-label="Mitfahren"><span data-i18n='{"fr":"On y va","nl":"Rij mee","en":"Ride along"}'>Mitfahren</span><svg><use href="#ic-down"/></svg></a>
-          </div>
+  <div class="hero-in wrap">
+    <p class="kicker hero-k"><i class="dot" aria-hidden="true"></i>Jeden Samstag · 9:00 Uhr<span class="hide-sm"> · ab Racepoint Schönberg</span></p>
+    <h1 class="hero-h" id="heroH"><span class="hl">Die</span> <span class="hl">Runde<b>.</b></span></h1>
+    <div class="hero-row">
+      <div class="hero-txt">
+        <p class="hero-sub">Startet mit Kaffee. Endet mit Kaffee. <em>Dazwischen: Venn, Eifel, Ardennen.</em></p>
+        <p class="hero-lead">Racepoint ist der Bikeshop von Achim aus den Videos – Specialized Elite Händler, Werkstatt für alle Marken und Retül-Bikefitting in Ostbelgien. Fahr mit und finde unterwegs dein Rad.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-red btn-lg" href="#runde">Mitfahren<svg aria-hidden="true"><use href="#ic-down"/></svg></a>
+          <a class="btn btn-glass btn-lg" data-ask="Welches Rad passt zu mir? Ich hätte gern eine Beratung."><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches Rad passt zu mir?</a>
         </div>
-        <div class="hero-col2">
-          <p class="hero-body" data-i18n='{"fr":"Racepoint, c’est le magasin d’Achim, l’expert des vidéos. Route, gravel, VTT, vélo électrique ou premier vélo d’enfant&nbsp;: on conseille, on répare, on fait l’étude posturale – pour tous les budgets.","nl":"Racepoint is de fietsenwinkel van Achim uit de video’s. Racefiets, gravel, MTB, e-bike of de eerste kinderfiets: wij adviseren, sleutelen en fitten – voor elk budget.","en":"Racepoint is the bike shop of Achim from the videos. Road, gravel, MTB, e-bike or a kid’s first bike: we advise, wrench and fit – for every budget."}'>Racepoint ist der Bikeshop vom Achim aus den Videos. Rennrad, Gravel, MTB, E-Bike oder das erste Kinderrad: Wir beraten, schrauben und fitten – für jedes Budget.</p>
-          <div class="hero-chips">
-            <span class="pill-status" data-open-status></span>
-            <span class="chip"><svg><use href="#ic-check"/></svg><span data-i18n='{"fr":"Atelier toutes marques","nl":"Werkplaats voor alle merken","en":"Workshop for all brands"}'>Werkstatt für alle Marken</span></span>
-          </div>
+        <div class="hero-pills">
+          <span class="pill pill-status pill-dark" data-open-status></span>
+          <span class="pill pill-dark"><svg aria-hidden="true"><use href="#ic-check"/></svg>Werkstatt für alle Marken</span>
         </div>
-        <div class="hero-col3 kicker" aria-hidden="true"><span data-i18n='{"fr":"Fais défiler<br>– c’est parti","nl":"Scroll<br>– we vertrekken","en":"Scroll<br>– let’s roll"}'>Scrollen<br>– wir fahren los</span><i></i></div>
       </div>
-      <!-- rotierender Video-Badge: Achim aus den Videos -->
-      <button class="hero-badge" type="button" data-video="9KIh7oOIPT4" data-cursor="Play" aria-label="Achim im Video ansehen">
-        <svg class="hb-ring" viewBox="0 0 120 120" aria-hidden="true">
-          <defs><path id="hbCircle" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0"/></defs>
-          <text><textPath href="#hbCircle" data-i18n='{"fr":"L’EXPERT DES VIDÉOS · 80 000 ABONNÉS · ","nl":"DE EXPERT UIT DE VIDEO’S · 80.000 ABONNEES · ","en":"THE EXPERT FROM THE VIDEOS · 80,000 SUBSCRIBERS · "}'>DER EXPERTE AUS DEN VIDEOS · 80.000 ABOS · </textPath></text>
-        </svg>
-        <span class="hb-core"><svg><use href="#ic-play"/></svg></span>
-      </button>
-    </div>
 
-    <!-- Film-Oberfläche: Kapitel-Captions synchron zum Video -->
-    <div class="film-ui" aria-live="polite">
-      <div class="film-top wrap">
-        <span class="kicker" data-i18n='{"fr":"Chapitre 1 · La boutique","nl":"Hoofdstuk 1 · De winkel","en":"Chapter 1 · The shop"}'>Kapitel 1 · Der Laden</span>
-        <span class="kicker film-tc">TC 00:00:00</span>
-      </div>
-      <div class="film-num" aria-hidden="true"><span>01</span></div>
-      <div class="film-caps wrap">
-        <article class="film-cap" data-ch="0">
-          <span class="kicker"><b>01</b> / 04 · <span data-i18n='{"fr":"Conseil","nl":"Advies","en":"Advice"}'>Beratung</span></span>
-          <h2 class="film-h" data-i18n='{"fr":"<span class=\"ln\"><span class=\"li\">Des conseils</span></span><span class=\"ln\"><span class=\"li\"><em>qui écoutent.</em></span></span>","nl":"<span class=\"ln\"><span class=\"li\">Advies dat</span></span><span class=\"ln\"><span class=\"li\"><em>echt luistert.</em></span></span>","en":"<span class=\"ln\"><span class=\"li\">Advice</span></span><span class=\"ln\"><span class=\"li\"><em>that listens.</em></span></span>"}'><span class="ln"><span class="li">Beratung,</span></span><span class="ln"><span class="li"><em>die zuhört.</em></span></span></h2>
-          <p data-i18n='{"fr":"D’abord parler, ensuite visser. On te demande comment tu roules – pas combien tu veux dépenser.","nl":"Eerst praten, dan sleutelen. We vragen hoe je rijdt – niet wat je wilt uitgeven.","en":"Talk first, wrench later. We ask how you ride – not what you want to spend."}'>Erst reden, dann schrauben. Wir fragen, wie du fährst – nicht, was du ausgeben willst.</p>
-        </article>
-        <article class="film-cap" data-ch="1">
-          <span class="kicker"><b>02</b> / 04 · <span data-i18n='{"fr":"Atelier","nl":"Werkplaats","en":"Workshop"}'>Werkstatt</span></span>
-          <h2 class="film-h" data-i18n='{"fr":"<span class=\"ln\"><span class=\"li\">Atelier&nbsp;:</span></span><span class=\"ln\"><span class=\"li\"><em>chaque roulement vérifié.</em></span></span>","nl":"<span class=\"ln\"><span class=\"li\">Werkplaats:</span></span><span class=\"ln\"><span class=\"li\"><em>elk lager gecheckt.</em></span></span>","en":"<span class=\"ln\"><span class=\"li\">Workshop:</span></span><span class=\"ln\"><span class=\"li\"><em>every bearing checked.</em></span></span>"}'><span class="ln"><span class="li">Werkstatt:</span></span><span class="ln"><span class="li"><em>jedes Lager geprüft.</em></span></span></h2>
-          <p data-i18n='{"fr":"Specialized, Trek, Canyon ou le vieux vélo de mamie – on répare toutes les marques. Le matin, l’atelier est tout à ton vélo.","nl":"Specialized, Trek, Canyon of oma’s omafiets – wij sleutelen aan alle merken. ’s Ochtends is de werkplaats helemaal voor jouw fiets.","en":"Specialized, Trek, Canyon or grandma’s city bike – we service all brands. Mornings, the workshop is all about your bike."}'>Specialized, Trek, Canyon oder Omas Hollandrad – wir schrauben an allen Marken. Vormittags gehört die Werkstatt ganz deinem Bike.</p>
-        </article>
-        <article class="film-cap" data-ch="2">
-          <span class="kicker"><b>03</b> / 04 · Showroom</span>
-          <h2 class="film-h" data-i18n='{"fr":"<span class=\"ln\"><span class=\"li\">Un showroom</span></span><span class=\"ln\"><span class=\"li\"><em>plein de rêves.</em></span></span>","nl":"<span class=\"ln\"><span class=\"li\">Showroom</span></span><span class=\"ln\"><span class=\"li\"><em>vol dromen.</em></span></span>","en":"<span class=\"ln\"><span class=\"li\">A showroom</span></span><span class=\"ln\"><span class=\"li\"><em>full of dreams.</em></span></span>"}'><span class="ln"><span class="li">Showroom</span></span><span class="ln"><span class="li"><em>voller Träume.</em></span></span></h2>
-          <p data-i18n='{"fr":"Du vélo d’enfant au S-Works&nbsp;: route, gravel, VTT et vélo électrique à toucher et à essayer.","nl":"Van kinderfiets tot S-Works: racefiets, gravel, MTB en e-bike om aan te raken en te testen.","en":"From kids’ bikes to S-Works: road, gravel, MTB and e-bike to touch and test-ride."}'>Vom Kinderrad bis zum S-Works: Rennrad, Gravel, MTB und E-Bike zum Anfassen und Probefahren.</p>
-        </article>
-        <article class="film-cap" data-ch="3">
-          <span class="kicker"><b>04</b> / 04 · <span data-i18n='{"fr":"Étude posturale","nl":"Bikefitting","en":"Bike fitting"}'>Bikefitting</span></span>
-          <h2 class="film-h" data-i18n='{"fr":"<span class=\"ln\"><span class=\"li\">Étude posturale</span></span><span class=\"ln\"><span class=\"li\"><em>au millimètre.</em></span></span>","nl":"<span class=\"ln\"><span class=\"li\">Bikefitting</span></span><span class=\"ln\"><span class=\"li\"><em>op de millimeter.</em></span></span>","en":"<span class=\"ln\"><span class=\"li\">Bike fitting</span></span><span class=\"ln\"><span class=\"li\"><em>to the millimetre.</em></span></span>"}'><span class="ln"><span class="li">Bikefitting</span></span><span class="ln"><span class="li"><em>auf den Millimeter.</em></span></span></h2>
-          <p data-i18n='{"fr":"Bike fitting Retül&nbsp;: on te mesure en 3D pour que rien ne gêne – sur 30&nbsp;km comme sur 300.","nl":"Retül-fitting: we meten je in 3D op, zodat niets knelt – op 30 kilometer én op 300.","en":"Retül fitting: we measure you in 3D so nothing pinches – over 30 kilometres or 300."}'>Retül-Fitting: Wir vermessen dich in 3D, damit nichts zwickt – auf 30 Kilometern wie auf 300.</p>
-        </article>
-      </div>
-      <div class="film-bars wrap" aria-hidden="true">
-        <div class="film-bar"><i></i><span data-i18n='{"fr":"Conseil","nl":"Advies","en":"Advice"}'>Beratung</span></div>
-        <div class="film-bar"><i></i><span data-i18n='{"fr":"Atelier","nl":"Werkplaats","en":"Workshop"}'>Werkstatt</span></div>
-        <div class="film-bar"><i></i><span>Showroom</span></div>
-        <div class="film-bar"><i></i><span data-i18n='{"fr":"Bike fitting","nl":"Bikefitting","en":"Bike fitting"}'>Bikefitting</span></div>
-      </div>
+      <aside class="ticket" aria-label="Nächste Runde">
+        <div class="ticket-top">
+          <span class="kicker">Nächste Runde</span>
+          <svg class="ticket-cup" aria-hidden="true"><use href="#ic-cup"/></svg>
+        </div>
+        <p class="ticket-date" id="nextRide">Samstag · 9:00</p>
+        <dl class="ticket-facts">
+          <div><dt>Distanz</dt><dd>58 km</dd></div>
+          <div><dt>Anstieg</dt><dd>640 Hm</dd></div>
+          <div><dt>Stopps</dt><dd>7</dd></div>
+        </dl>
+        <p class="ticket-foot">Treffpunkt: K.-F. Schinkel Straße 5 · Tempo: plaudern erlaubt</p>
+      </aside>
     </div>
   </div>
+
+  <button class="hero-vc" type="button" id="heroVc" aria-label="Film pausieren"><svg class="i-pause" aria-hidden="true"><use href="#ic-pause"/></svg><svg class="i-play" aria-hidden="true"><use href="#ic-play"/></svg></button>
+  <a class="hero-cue" href="#runde" aria-label="Zur Runde scrollen"><span>Los geht’s</span><i aria-hidden="true"></i></a>
 </section>
 
-
-<!-- =================================================================== -->
-<!-- 2 · TICKER — Laufband, Tempo reagiert auf Scroll-Geschwindigkeit   -->
-<!-- =================================================================== -->
-<div class="mq" aria-label="Specialized Elite Händler · Retül-Bikefitting · Werkstatt für alle Marken · Leasing & Finanzierung">
-  <div class="mq-track" aria-hidden="true"></div>
-</div>
-
-
-<!-- =================================================================== -->
-<!-- 3 · KINETISCHE TYPO — alle Fahrertypen, Zeilen laufen gegeneinander -->
-<!-- =================================================================== -->
-<section class="kin" aria-label="Für alle, die fahren">
-  <div class="wrap kin-head">
-    <span class="kicker" data-i18n='{"fr":"Chapitre 2 · La sortie","nl":"Hoofdstuk 2 · De ronde","en":"Chapter 2 · The ride"}'>Kapitel 2 · Die Runde</span>
-    <h2 class="h-display" data-split data-i18n='{"fr":"Une sortie.<br><em>Pour tous ceux qui roulent.</em>","nl":"Eén ronde.<br><em>Voor iedereen die fietst.</em>","en":"One ride.<br><em>For everyone who rides.</em>"}'>Eine Runde.<br><em>Für alle, die fahren.</em></h2>
-  </div>
-  <div class="kin-rows" aria-hidden="true">
-    <div class="kin-row" data-row="0"></div>
-    <div class="kin-row kin-row--out" data-row="1"></div>
-    <div class="kin-row kin-row--red" data-row="2"></div>
-  </div>
-  <div class="wrap kin-foot">
-    <div class="kin-intro">
-      <span class="kin-arrow" aria-hidden="true"><svg><use href="#ic-down"/></svg></span>
-      <p class="lede" data-reveal data-i18n='{"fr":"58 kilomètres autour de Schönberg, sept arrêts, un café. Fais défiler – et trouve ton vélo en route.","nl":"58 kilometer rond Schönberg, zeven stops, één koffie. Scroll mee – en vind onderweg je fiets.","en":"58 kilometres around Schönberg, seven stops, one coffee. Scroll along – and find your bike on the way."}'>58 Kilometer rund um Schönberg, sieben Stopps, ein Kaffee. Scroll mit – und finde unterwegs dein Rad.</p>
-    </div>
-    <!-- Die Runde in Zahlen -->
-    <ul class="kin-facts" data-reveal aria-label="Die Runde in Zahlen">
-      <li><b>58</b><span>Kilometer</span></li>
-      <li><b>640</b><span>Höhenmeter</span></li>
-      <li><b>7</b><span>Stopps</span></li>
-      <li><b>1</b><span>Kaffee</span></li>
-    </ul>
-  </div>
-</section>
-
-
-<!-- =================================================================== -->
-<!-- 4 · DIE RUNDE — gepinnte Topo-Karte, Route zeichnet sich selbst,   -->
-<!-- Fahrer-Marker folgt, Wegpunkte = Fahrertypen, Zähler + Profil      -->
-<!-- =================================================================== -->
+<!-- ===================== 2 · Die Runde: gepinnte Topo-Karte ===================== -->
 <section class="route" id="runde" aria-label="Die Samstagsrunde">
   <div class="route-pin">
     <div class="route-map">
-      <svg class="map" aria-hidden="true">
-        <g class="cam"></g>
-      </svg>
-      <div class="map-frame" aria-hidden="true">
+      <svg class="map" aria-hidden="true"><g class="cam"></g></svg>
+      <div class="map-ui" aria-hidden="true">
         <span class="mf-n">N<i></i></span>
-        <span class="mf-dir mf-top">↑ Aachen · Lüttich</span>
-        <span class="mf-dir mf-left">← St. Vith</span>
-        <span class="mf-dir mf-bottom">↓ Luxemburg</span>
-        <span class="mf-dir mf-right">Köln →</span>
         <span class="mf-scale"><i></i><b>2 km</b></span>
       </div>
     </div>
 
-    <div class="route-head">
-      <span class="kicker" data-i18n='{"fr":"Chapitre 2 · La sortie","nl":"Hoofdstuk 2 · De ronde","en":"Chapter 2 · The ride"}'>Kapitel 2 · Die Runde</span>
-      <h2 class="h-route" data-i18n='{"fr":"La sortie du samedi","nl":"Het zaterdagrondje","en":"The Saturday ride"}'>Die Samstagsrunde</h2>
-      <p class="route-meta"><span class="rm-total">58 km · 640 Hm</span> · <span data-i18n='{"fr":"7 arrêts · carte stylisée","nl":"7 stops · gestileerde kaart","en":"7 stops · stylised map"}'>7 Stopps · Karte stilisiert</span></p>
-    </div>
-
-    <div class="route-stats" aria-hidden="true">
-      <div><b class="st-km">0,0</b><span data-i18n='{"fr":"Kilomètres","nl":"Kilometer","en":"Kilometres"}'>Kilometer</span></div>
-      <div><b class="st-hm">0</b><span data-i18n='{"fr":"Dénivelé","nl":"Hoogtemeters","en":"Elevation"}'>Höhenmeter</span></div>
-      <div><b class="st-wp">1/7</b><span data-i18n='{"fr":"Étape","nl":"Stop","en":"Stop"}'>Stopp</span></div>
-    </div>
-
-    <div class="route-cards">
-      <article class="wp-card" data-wp="0">
-        <figure class="wp-img"><img src="assets/achim-team.jpg" alt="Achim, Elke und das Racepoint-Team im Laden" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 0</b> · <span data-i18n='{"fr":"Pour tous","nl":"Voor iedereen","en":"For everyone"}'>Für alle</span></span>
-          <h3 data-i18n='{"fr":"Un café chez Achim","nl":"Koffie bij Achim","en":"Coffee at Achim’s"}'>Kaffee bei Achim</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Départ à Schönberg.","nl":"Start in Schönberg.","en":"Start in Schönberg."}'>Start in Schönberg.</p>
-          <p class="wp-body" data-i18n='{"fr":"Rendez-vous au magasin. Un expresso, la pression des pneus, un brin de causette – et c’est parti. Achim connaît chaque boucle du coin. Et chaque vis.","nl":"Verzamelen in de winkel. Espresso, bandenspanning checken, even bijpraten – en weg. Achim kent elke ronde hier. En elke schroef.","en":"We meet at the shop. Espresso, check tyre pressure, a quick chat – and off. Achim knows every loop around here. And every bolt."}'>Treffpunkt ist der Laden. Espresso, Reifendruck checken, kurz schnacken – und los. Achim kennt jede Runde hier. Und jede Schraube.</p>
-          <button class="wp-ask" type="button" data-ask="Welche Runde rund um Schönberg passt zu mir?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quelle sortie me convient&nbsp;?","nl":"Welke ronde past bij mij?","en":"Which ride suits me?"}'>Welche Runde passt zu mir?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="1">
-        <figure class="wp-img"><img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 9</b> · <span data-i18n='{"fr":"Vélo de route","nl":"Racefiets","en":"Road"}'>Rennrad</span></span>
-          <h3 data-i18n='{"fr":"Rampes d’asphalte","nl":"Asfalt-hellingen","en":"Tarmac ramps"}'>Asphalt-Rampen</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Courtes, raides, lisses.","nl":"Kort, steil, glad.","en":"Short, steep, smooth."}'>Kurz, steil, glatt.</p>
-          <p class="wp-body" data-i18n='{"fr":"Des rampes jusqu’à 12&nbsp;%, des virages comme dessinés. Ici, un vélo de route léger montre ce qu’il a dans le ventre – de l’Allez au S-Works Tarmac.","nl":"Hellingen tot 12 %, bochten als getekend. Hier laat een lichte racefiets zien wat hij kan – van Allez tot S-Works Tarmac.","en":"Ramps up to 12 %, corners like they were drawn. This is where a light road bike shows what it can do – from Allez to S-Works Tarmac."}'>Rampen bis 12 %, Kurven wie gemalt. Hier zeigt ein leichtes Rennrad, was es kann – vom Allez bis zum S-Works Tarmac.</p>
-          <button class="wp-ask" type="button" data-ask="Welches Rennrad passt zu mir?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quel vélo de route pour moi&nbsp;?","nl":"Welke racefiets past bij mij?","en":"Which road bike suits me?"}'>Welches Rennrad passt zu mir?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="2">
-        <figure class="wp-img"><img src="assets/gravel-ride.jpg" alt="Gravel-Gruppe auf Schotter" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 21</b> · Gravel</span>
-          <h3 data-i18n='{"fr":"Gravier dans les Hautes Fagnes","nl":"Grind in de Hoge Venen","en":"Gravel in the High Fens"}'>Schotter im Hohen Venn</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Grand ciel, pneus larges.","nl":"Wijde lucht, brede banden.","en":"Big sky, wide tyres."}'>Weiter Himmel, breite Reifen.</p>
-          <p class="wp-body" data-i18n='{"fr":"Fagne à gauche, fagne à droite, gravier sous les roues. Le gravel, c’est rouler là où aucune carte route ne va. Diverge ou Crux – avec de la place pour les bagages.","nl":"Veen links, veen rechts, grind onder je. Gravel betekent: wegen rijden die op geen enkele wegkaart staan. Diverge of Crux – met plek voor bagage.","en":"Moor to the left, moor to the right, gravel underneath. Gravel means riding roads no road map shows. Diverge or Crux – with room for luggage."}'>Moor links, Moor rechts, Schotter unter dir. Gravel heißt: Wege fahren, die auf keiner Rennradkarte stehen. Diverge oder Crux – mit Platz für Gepäck.</p>
-          <button class="wp-ask" type="button" data-ask="Welches Gravelbike passt zu mir?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quel gravel pour moi&nbsp;?","nl":"Welke gravelbike past bij mij?","en":"Which gravel bike suits me?"}'>Welches Gravelbike passt zu mir?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="3">
-        <figure class="wp-img"><img src="assets/achim-ride.jpg" alt="Mountainbiker im Wald" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 33</b> · <span data-i18n='{"fr":"VTT &amp; Enduro","nl":"MTB &amp; Enduro","en":"MTB &amp; Enduro"}'>MTB &amp; Enduro</span></span>
-          <h3 data-i18n='{"fr":"Sentiers dans l’Eifel","nl":"Trails in de Eifel","en":"Trails in the Eifel"}'>Trails in der Eifel</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Racines, virages relevés, boue.","nl":"Wortels, kombochten, modder.","en":"Roots, berms, mud."}'>Wurzeln, Anlieger, Matsch.</p>
-          <p class="wp-body" data-i18n='{"fr":"Les sentiers commencent devant la porte. Stumpjumper, Enduro, Epic – et quand la fourche réclame un service&nbsp;: on s’occupe aussi des suspensions. Toutes marques.","nl":"De trails liggen voor de deur. Stumpjumper, Enduro, Epic – en als de vork om onderhoud vraagt: veringservice doen we ook. Voor alle merken.","en":"The trails start right outside the door. Stumpjumper, Enduro, Epic – and when the fork needs love: we do suspension service too. All brands."}'>Die Trails liegen direkt vor der Tür. Stumpjumper, Enduro, Epic – und wenn die Gabel nach Service ruft: Fahrwerk-Service machen wir auch. Für alle Marken.</p>
-          <button class="wp-ask" type="button" data-ask="Welches MTB passt zu meinen Trails?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quel VTT pour mes sentiers&nbsp;?","nl":"Welke MTB past bij mijn trails?","en":"Which MTB for my trails?"}'>Welches MTB passt zu meinen Trails?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="4">
-        <figure class="wp-img"><img src="assets/gefuehl-moment.jpg" alt="Fahrer auf einem Bergrücken bei Sonnenuntergang" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 42</b> · E-Bike</span>
-          <h3 data-i18n='{"fr":"La longue montée","nl":"De lange klim","en":"The long climb"}'>Der lange Anstieg</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Plus de montagnes, le même sourire.","nl":"Meer bergen, dezelfde glimlach.","en":"More mountains, same smile."}'>Mehr Berge, gleiches Lächeln.</p>
-          <p class="wp-body" data-i18n='{"fr":"Sept kilomètres de montée – et encore du souffle pour bavarder en haut. Turbo Levo, Vado ou Creo&nbsp;: viens faire un essai.","nl":"Zeven kilometer bergop – en boven nog adem om te praten. Turbo Levo, Vado of Creo: kom een proefrit maken.","en":"Seven kilometres uphill – and still enough breath to chat at the top. Turbo Levo, Vado or Creo: come for a test ride."}'>Sieben Kilometer bergauf – und oben noch Luft zum Reden. Turbo Levo, Vado oder Creo: Komm zur Probefahrt.</p>
-          <button class="wp-ask" type="button" data-ask="Welches E-Bike passt zu mir?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quel vélo électrique pour moi&nbsp;?","nl":"Welke e-bike past bij mij?","en":"Which e-bike suits me?"}'>Welches E-Bike passt zu mir?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="5">
-        <figure class="wp-img wp-img--see"><img src="assets/v10/see.jpg" alt="Fahrräder an einer Bank am See" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 51</b> · <span data-i18n='{"fr":"Enfants &amp; débutants","nl":"Kids &amp; starters","en":"Kids &amp; beginners"}'>Kids &amp; Einsteiger</span></span>
-          <h3 data-i18n='{"fr":"Pause en famille au lac","nl":"Gezinsstop aan het meer","en":"Family stop at the lake"}'>Familienstopp am See</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Une glace pour tout le monde.","nl":"IJsje voor iedereen.","en":"Ice cream for everyone."}'>Eis für alle.</p>
-          <p class="wp-body" data-i18n='{"fr":"Les petits sur la rive, les grands au kiosque. Vélos enfants, vélos pour débuter, trekking&nbsp;: chez nous, il y a le bon vélo – pour tous les budgets.","nl":"De kleintjes aan de oever, de groten bij de kiosk. Kinderfietsen, instapfietsen, trekking: bij ons vind je de juiste fiets – voor elk budget.","en":"The little ones on the shore, the grown-ups at the kiosk. Kids’ bikes, beginner bikes, trekking: we’ve got the right bike – for every budget."}'>Die Kleinen am Ufer, die Großen am Kiosk. Kinderräder, Einsteiger-Bikes, Trekking: Bei uns gibt’s das passende Rad – für jedes Budget.</p>
-          <button class="wp-ask" type="button" data-ask="Welches Rad passt für mein Kind oder als Einstieg?" data-cursor="Frag"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Un vélo pour mon enfant&nbsp;?","nl":"Een fiets voor mijn kind?","en":"A bike for my kid?"}'>Welches Rad für mein Kind?</span></button>
-        </div>
-      </article>
-      <article class="wp-card" data-wp="6">
-        <figure class="wp-img"><img src="assets/shop-interior.jpg" alt="Showroom von Racepoint" loading="lazy"></figure>
-        <div class="wp-txt">
-          <span class="kicker wp-k"><b>km 58</b> · <span data-i18n='{"fr":"Arrivée","nl":"Finish","en":"Finish"}'>Ziel</span></span>
-          <h3 data-i18n='{"fr":"Retour chez Racepoint","nl":"Terug bij Racepoint","en":"Back at Racepoint"}'>Zurück bei Racepoint</h3>
-          <p class="wp-sub fr-it" data-i18n='{"fr":"Le vélo au mur, le café en main.","nl":"Fiets aan de muur, koffie in de hand.","en":"Bike on the wall, coffee in hand."}'>Bike an die Wand, Kaffee in die Hand.</p>
-          <p class="wp-body" data-i18n='{"fr":"Et si quelque chose a grincé en route&nbsp;: l’atelier est juste à côté. On répare toutes les marques.","nl":"En als er onderweg iets kraakte: de werkplaats is direct ernaast. Wij sleutelen aan alle merken.","en":"And if something creaked on the way: the workshop is right next door. We fix all brands."}'>Und wenn unterwegs was geknarzt hat: Die Werkstatt ist direkt nebenan. Wir schrauben an allen Marken.</p>
-          <a class="wp-ask wp-ask--red" href="#ziel"><svg><use href="#ic-arrow"/></svg><span data-i18n='{"fr":"Rendez-vous pour ton vélo","nl":"Afspraak voor je fiets","en":"Book your bike in"}'>Termin für dein Bike</span></a>
-        </div>
-      </article>
-    </div>
-
-    <div class="route-profile" aria-hidden="true">
-      <svg class="prof"></svg>
-    </div>
     <div class="route-stamp" aria-hidden="true">
       <svg viewBox="0 0 200 200">
         <defs><path id="stCircle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs>
         <circle cx="100" cy="100" r="94" class="s1"/><circle cx="100" cy="100" r="60" class="s2"/>
-        <text class="st-ring"><textPath href="#stCircle" data-i18n='{"fr":"SORTIE TERMINÉE · RACEPOINT · SCHÖNBERG · ","nl":"RONDE VOLBRACHT · RACEPOINT · SCHÖNBERG · ","en":"RIDE COMPLETE · RACEPOINT · SCHÖNBERG · "}'>RUNDE GESCHAFFT · RACEPOINT · SCHÖNBERG · </textPath></text>
+        <text class="st-ring"><textPath href="#stCircle">RUNDE GESCHAFFT · RACEPOINT · SCHÖNBERG · </textPath></text>
         <text x="100" y="98" class="st-big" text-anchor="middle">58 KM</text>
-        <text x="100" y="122" class="st-small" text-anchor="middle" data-i18n='{"fr":"+ 1 café","nl":"+ 1 koffie","en":"+ 1 coffee"}'>+ 1 Kaffee</text>
+        <text x="100" y="122" class="st-small" text-anchor="middle">+ 1 Kaffee</text>
       </svg>
     </div>
-  </div>
-</section>
 
-
-<!-- =================================================================== -->
-<!-- 5 · BUILDS AUS DEN VIDEOS — horizontale Galerie (gepinnt, dunkel)  -->
-<!-- =================================================================== -->
-<section class="gal" id="videos" aria-label="Builds aus den Videos">
-  <div class="gal-pin">
-    <div class="gal-track">
-      <div class="gal-intro">
-        <span class="kicker" data-i18n='{"fr":"Chapitre 3 · Les builds des vidéos","nl":"Hoofdstuk 3 · Builds uit de video’s","en":"Chapter 3 · Builds from the videos"}'>Kapitel 3 · Builds aus den Videos</span>
-        <h2 class="h-display" data-i18n='{"fr":"80 000 regardent.<br><em>Et toi&nbsp;?</em>","nl":"80.000 kijken mee.<br><em>Jij ook?</em>","en":"80,000 are watching.<br><em>Are you?</em>"}'>80.000<br>schauen zu.<br><em>Du auch?</em></h2>
-        <p data-i18n='{"fr":"Achim monte des vélos de rêve – et explique chaque geste. Du déballage à la dernière vis, en direct de l’atelier de Schönberg.","nl":"Achim bouwt droomfietsen – en legt elke handeling uit. Van unboxing tot de laatste schroef, rechtstreeks uit de werkplaats in Schönberg.","en":"Achim builds dream bikes – and explains every step. From unboxing to the last bolt, straight from the workshop in Schönberg."}'>Achim baut Traumräder – und erklärt jeden Handgriff. Vom Unboxing bis zur letzten Schraube, direkt aus der Werkstatt in Schönberg.</p>
-        <div class="gal-stats">
-          <div><b>~80.000</b><span data-i18n='{"fr":"abonnés","nl":"abonnees","en":"subscribers"}'>Abos</span></div>
-          <div><b>~18 Mio.</b><span data-i18n='{"fr":"vues","nl":"weergaven","en":"views"}'>Aufrufe</span></div>
+    <div class="route-panel">
+      <header class="rp-head">
+        <p class="kicker"><b>Die Samstagsrunde</b> · Karte stilisiert</p>
+        <h2 class="rp-h">58 km.<br><em>Sieben Stopps.</em></h2>
+        <div class="rp-stats" aria-hidden="true">
+          <div><b class="st-km">0,0</b><span>km</span></div>
+          <div><b class="st-hm">0</b><span>Hm</span></div>
+          <div><b class="st-wp">1/7</b><span>Stopp</span></div>
         </div>
-      </div>
+        <ol class="rp-dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+      </header>
 
-      <article class="yt-card" data-video="9KIh7oOIPT4" data-thumb="assets/roadbike-shop.jpg" data-cursor="Play">
-        <span class="yt-num">01</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker" data-i18n='{"fr":"Route · Unboxing","nl":"Racefiets · Unboxing","en":"Road · Unboxing"}'>Rennrad · Unboxing</span><h3>S-Works Tarmac SL8 LTD</h3><p class="fr-it" data-i18n='{"fr":"Édition limitée, déballée.","nl":"Limited edition, uitgepakt.","en":"Limited edition, unboxed."}'>Limited Edition, ausgepackt.</p></div>
-      </article>
-      <article class="yt-card" data-video="MHXDMPbMypQ" data-thumb="assets/v10/film-3.jpg" data-cursor="Play">
-        <span class="yt-num">02</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker" data-i18n='{"fr":"Route · Dreambuild","nl":"Racefiets · Dreambuild","en":"Road · Dream build"}'>Rennrad · Dreambuild</span><h3>Tarmac SL7 · Rapid CLX</h3><p class="fr-it" data-i18n='{"fr":"Avec des roues Roval qu’on entend.","nl":"Met Roval-wielen die je hoort.","en":"With Roval wheels you can hear."}'>Mit Roval-Laufrädern, die man hört.</p></div>
-      </article>
-      <article class="yt-card" data-video="vV_rL9yq620" data-thumb="assets/shop-interior.jpg" data-cursor="Play">
-        <span class="yt-num">03</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker" data-i18n='{"fr":"Route · Build","nl":"Racefiets · Build","en":"Road · Build"}'>Rennrad · Build</span><h3>Aethos S-Works</h3><p class="fr-it" data-i18n='{"fr":"Léger. Plus léger. Aethos.","nl":"Licht. Lichter. Aethos.","en":"Light. Lighter. Aethos."}'>Leicht. Leichter. Aethos.</p></div>
-      </article>
-      <article class="yt-card" data-video="5TcRRpUy5T4" data-thumb="assets/v10/film-2.jpg" data-cursor="Play">
-        <span class="yt-num">04</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker" data-i18n='{"fr":"Aéro · autre marque","nl":"Aero · ander merk","en":"Aero · other brand"}'>Aero · andere Marke</span><h3>Cervélo S5 · Princeton</h3><p class="fr-it" data-i18n='{"fr":"Achim monte aussi d’autres marques.","nl":"Achim bouwt ook andere merken op.","en":"Achim builds other brands, too."}'>Achim baut auch andere Marken auf.</p></div>
-      </article>
-      <article class="yt-card" data-video="cIBBbESSOoc" data-thumb="assets/gravel-ride.jpg" data-cursor="Play">
-        <span class="yt-num">05</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker">Gravel</span><h3>S-Works Crux</h3><p class="fr-it" data-i18n='{"fr":"Pour le gravier des Fagnes.","nl":"Voor het grind in de Venen.","en":"For the gravel in the Fens."}'>Für den Schotter im Venn.</p></div>
-      </article>
-      <article class="yt-card" data-video="WHggv7Jye4M" data-thumb="assets/v10/film-4.jpg" data-cursor="Play">
-        <span class="yt-num">06</span>
-        <div class="yt-frame"><div class="yt-img"></div><span class="yt-play"><svg><use href="#ic-play"/></svg></span></div>
-        <div class="yt-meta"><span class="kicker" data-i18n='{"fr":"Triathlon · Chrono","nl":"Triatlon · Tijdrit","en":"Triathlon · TT"}'>Triathlon · Zeitfahren</span><h3>S-Works Shiv</h3><p class="fr-it" data-i18n='{"fr":"Aéro jusque dans le détail.","nl":"Aero tot in het detail.","en":"Aero down to the detail."}'>Aero bis ins Detail.</p></div>
-      </article>
-
-      <!-- Fan-Haken: Grund wiederzukommen -->
-      <div class="gal-fan">
-        <span class="fan-bell"><svg><use href="#ic-bell"/></svg></span>
-        <h3 class="h-fan" data-i18n='{"fr":"Du nouveau<br><em>de l’atelier.</em>","nl":"Nieuws<br><em>uit de werkplaats.</em>","en":"Fresh from<br><em>the workshop.</em>"}'>Neues<br><em>aus der Werkstatt.</em></h3>
-        <p data-i18n='{"fr":"Builds, unboxings, astuces de mécano&nbsp;: régulièrement du nouveau sur YouTube. Active la cloche – et passe voir le vélo en vrai.","nl":"Builds, unboxings, sleuteltips: regelmatig nieuw op YouTube. Zet de bel aan – en kom de fiets in het echt bekijken.","en":"Builds, unboxings, wrenching tips: regularly new on YouTube. Hit the bell – and come see the bike for real."}'>Builds, Unboxings, Schrauber-Tipps: regelmäßig neu auf YouTube. Glocke an – und dann komm vorbei und schau dir das Rad in echt an.</p>
-        <div class="fan-ctas">
-          <a class="btn btn-red" href="" data-magnetic><svg><use href="#ic-play"/></svg><span data-i18n='{"fr":"S’abonner à la chaîne","nl":"Abonneer op het kanaal","en":"Subscribe to the channel"}'>Kanal abonnieren</span></a>
-          <button class="btn btn-ghost-light" type="button" data-ask="Welches Bike aus den Videos passt zu mir?"><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Quel build pour moi&nbsp;?","nl":"Welke build past bij mij?","en":"Which build suits me?"}'>Welcher Build passt zu mir?</span></button>
-        </div>
+      <div class="route-cards">
+        <article class="wp-card" data-wp="0">
+          <figure class="wp-img"><img src="assets/v10/film-poster.jpg" alt="Kaffeebar im Racepoint-Laden" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 0</b> · Für alle</p>
+            <h3>Kaffee bei Achim</h3>
+            <p class="wp-sub">Start in Schönberg.</p>
+            <p class="wp-body">Espresso, Reifendruck checken, kurz schnacken – und los. Achim kennt jede Runde hier. Und jede Schraube.</p>
+            <button class="wp-ask" type="button" data-ask="Welche Runde rund um Schönberg passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welche Runde passt zu mir?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="1">
+          <figure class="wp-img"><img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 9</b> · Rennrad</p>
+            <h3>Asphalt-Rampen</h3>
+            <p class="wp-sub">Kurz, steil, glatt.</p>
+            <p class="wp-body">Rampen bis 12 %, Kurven wie gemalt. Hier zeigt ein leichtes Rennrad, was es kann – vom Allez bis zum S-Works Tarmac.</p>
+            <button class="wp-ask" type="button" data-ask="Welches Rennrad passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches Rennrad passt zu mir?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="2">
+          <figure class="wp-img"><img src="assets/gravel-ride.jpg" alt="Gravel-Gruppe auf einem Schotterweg" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 21</b> · Gravel</p>
+            <h3>Schotter im Hohen Venn</h3>
+            <p class="wp-sub">Weiter Himmel, breite Reifen.</p>
+            <p class="wp-body">Moor links, Moor rechts, Schotter unter dir. Diverge oder Crux – für Wege, die auf keiner Rennradkarte stehen.</p>
+            <button class="wp-ask" type="button" data-ask="Welches Gravelbike passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches Gravelbike passt zu mir?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="3">
+          <figure class="wp-img"><img src="assets/achim-ride.jpg" alt="Mountainbiker auf einem Waldtrail" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 33</b> · MTB &amp; Enduro</p>
+            <h3>Trails in der Eifel</h3>
+            <p class="wp-sub">Wurzeln, Anlieger, Matsch.</p>
+            <p class="wp-body">Stumpjumper, Enduro, Epic – und wenn die Gabel nach Service ruft: Fahrwerk-Service machen wir für alle Marken.</p>
+            <button class="wp-ask" type="button" data-ask="Welches MTB passt zu meinen Trails?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches MTB passt zu mir?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="4">
+          <figure class="wp-img"><img src="entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg" alt="E-Mountainbike auf einem Felsen" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 42</b> · E-Bike</p>
+            <h3>Der lange Anstieg</h3>
+            <p class="wp-sub">Mehr Berge, gleiches Lächeln.</p>
+            <p class="wp-body">Sieben Kilometer bergauf – und oben noch Luft zum Reden. Turbo Levo, Vado oder Creo: Komm zur Probefahrt.</p>
+            <button class="wp-ask" type="button" data-ask="Welches E-Bike passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches E-Bike passt zu mir?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="5">
+          <figure class="wp-img wp-img--see"><img src="assets/v10/see.jpg" alt="Fahrräder an einer Bank am See" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 51</b> · Kids &amp; Einsteiger</p>
+            <h3>Familienstopp am See</h3>
+            <p class="wp-sub">Eis für alle.</p>
+            <p class="wp-body">Die Kleinen am Ufer, die Großen am Kiosk. Kinderräder, Einsteiger-Bikes, Trekking – für jedes Budget.</p>
+            <button class="wp-ask" type="button" data-ask="Welches Rad passt für mein Kind oder als Einstieg?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Welches Rad für mein Kind?</button>
+          </div>
+        </article>
+        <article class="wp-card" data-wp="6">
+          <figure class="wp-img"><img src="assets/shop-interior.jpg" alt="Showroom von Racepoint in Schönberg" loading="lazy"></figure>
+          <div class="wp-txt">
+            <p class="kicker wp-k"><b>km 58</b> · Ziel</p>
+            <h3>Zurück bei Racepoint</h3>
+            <p class="wp-sub">Bike an die Wand, Kaffee in die Hand.</p>
+            <p class="wp-body">Und wenn unterwegs was geknarzt hat: Die Werkstatt ist direkt nebenan – für alle Marken.</p>
+            <a class="wp-ask wp-ask--red" href="#raeder"><svg aria-hidden="true"><use href="#ic-arrow"/></svg>Dein Rad für die Runde</a>
+          </div>
+        </article>
       </div>
     </div>
-    <div class="gal-bar wrap" aria-hidden="true"><span class="gal-count">01 / 06</span><span class="gal-line"><i></i></span><span class="kicker gal-hint" data-i18n='{"fr":"Défile →","nl":"Scroll →","en":"Scroll →"}'>Weiterscrollen →</span></div>
+
+    <div class="route-profile" aria-hidden="true"><svg class="prof"></svg></div>
   </div>
 </section>
 
-
-<!-- =================================================================== -->
-<!-- 6 · DER MOMENT — Kreis-Reveal eines Vollbild-Fotos                 -->
-<!-- =================================================================== -->
-<section class="emo" aria-label="Das Gefühl">
-  <div class="emo-pin">
-    <div class="emo-base">
-      <span class="emo-dot" aria-hidden="true"></span>
-      <p class="emo-l1" data-i18n='{"fr":"Ce n’est pas<br>le vélo.","nl":"Het gaat niet<br>om de fiets.","en":"It isn’t<br>the bike."}'>Es geht nicht<br>ums Rad.</p>
-    </div>
-    <div class="emo-reveal">
-      <img src="assets/gefuehl-moment.jpg" alt="Fahrer auf einem Bergrücken im Abendlicht" loading="lazy">
-      <div class="emo-shade"></div>
-      <p class="emo-l1 emo-l1--inv" aria-hidden="true" data-i18n='{"fr":"Ce n’est pas<br>le vélo.","nl":"Het gaat niet<br>om de fiets.","en":"It isn’t<br>the bike."}'>Es geht nicht<br>ums Rad.</p>
-      <p class="emo-l2 fr-it" data-i18n='{"fr":"C’est la sensation, quand tout est juste.","nl":"Het gaat om het gevoel als alles klopt.","en":"It’s the feeling when everything fits."}'>Es geht um das Gefühl, wenn alles passt.</p>
-    </div>
-  </div>
-</section>
-
-
-<!-- =================================================================== -->
-<!-- 7 · FÜR JEDES BUDGET — drei Stufen fächern sich auf + Leasing      -->
-<!-- =================================================================== -->
-<section class="bud" id="budget" aria-label="Für jedes Budget">
+<!-- ===================== 3 · Dein Rad für die Runde ===================== -->
+<section class="sec bikes" id="raeder">
   <div class="wrap">
-    <div class="bud-head">
-      <span class="kicker" data-i18n='{"fr":"Chapitre 4 · Pour tous les budgets","nl":"Hoofdstuk 4 · Voor elk budget","en":"Chapter 4 · For every budget"}'>Kapitel 4 · Für jedes Budget</span>
-      <h2 class="h-display" data-split data-i18n='{"fr":"Pour tous les budgets.<br><em>Du premier vélo au build de rêve.</em>","nl":"Voor elk budget.<br><em>Van eerste fiets tot droombuild.</em>","en":"For every budget.<br><em>From first bike to dream build.</em>"}'>Für jedes Budget.<br><em>Vom ersten Rad<br>bis zum Traum‑Build.</em></h2>
-      <p class="lede" data-reveal data-i18n='{"fr":"Pas peur des S-Works en vitrine&nbsp;: chez nous, tu commences là où tu en es. Nous conseillons pour un vélo d’enfant avec autant de soin que pour un build de rêve.","nl":"Geen schrik van de S-Works in de etalage: bij ons begin je waar je nu staat. We adviseren bij een kinderfiets net zo grondig als bij een droombuild.","en":"Don’t be shy of the S-Works in the window: with us, you start where you are. We advise on a kid’s bike just as carefully as on a dream build."}'>Keine Scheu vor den S-Works im Schaufenster: Bei uns startest du da, wo du gerade stehst. Wir beraten beim Kinderrad genauso gründlich wie beim Dreambuild.</p>
-    </div>
-
-    <div class="tiers">
-      <article class="tier">
-        <div class="tier-top"><span class="kicker">01 · <span data-i18n='{"fr":"Débuter","nl":"Instap","en":"Entry"}'>Einstieg</span></span><span class="tier-eur" aria-label="Budget niedrig"><b>€</b><i>€€</i></span></div>
-        <h3 data-i18n='{"fr":"Ton premier vrai vélo.","nl":"Je eerste echte fiets.","en":"Your first proper bike."}'>Dein erstes richtiges Rad.</h3>
-        <p class="tier-ex">Rockhopper · Allez · Sirrus · Turbo Vado SL · <span data-i18n='{"fr":"vélos enfants","nl":"kinderfietsen","en":"kids’ bikes"}'>Kinderräder</span></p>
-        <p class="tier-for" data-i18n='{"fr":"Pour débutants, familles, vélotaf","nl":"Voor starters, gezinnen, pendelaars","en":"For beginners, families, commuters"}'>Für Einsteiger, Familien, Pendler</p>
-        <button class="tier-cta" type="button" data-ask="Ich suche ein gutes Einsteigerrad – was passt zu mir?"><span data-i18n='{"fr":"Trouver mon premier vélo","nl":"Instapfiets vinden","en":"Find an entry bike"}'>Einstieg finden</span><svg><use href="#ic-arrow"/></svg></button>
-      </article>
-      <article class="tier tier--mid">
-        <div class="tier-top"><span class="kicker">02 · <span data-i18n='{"fr":"Milieu de gamme","nl":"Middenklasse","en":"Mid-range"}'>Mittelklasse</span></span><span class="tier-eur" aria-label="Budget mittel"><b>€€</b><i>€</i></span></div>
-        <h3 data-i18n='{"fr":"Plus de plaisir au kilomètre.","nl":"Meer plezier per kilometer.","en":"More fun per kilometre."}'>Mehr Spaß pro Kilometer.</h3>
-        <p class="tier-ex">Tarmac · Diverge · Stumpjumper · Turbo Levo · Turbo Creo</p>
-        <p class="tier-for" data-i18n='{"fr":"Pour coureurs du dimanche, fans de gravel, amoureux des sentiers","nl":"Voor hobbyracers, gravelfans, trailliefhebbers","en":"For weekend racers, gravel fans, trail lovers"}'>Für Hobby-Racer, Gravel-Fans, Trail-Liebhaber</p>
-        <button class="tier-cta" type="button" data-ask="Welches Mittelklasse-Bike passt zu mir?"><span data-i18n='{"fr":"Comparer","nl":"Vergelijken","en":"Compare"}'>Mittelklasse vergleichen</span><svg><use href="#ic-arrow"/></svg></button>
-      </article>
-      <article class="tier tier--dream">
-        <div class="tier-top"><span class="kicker">03 · <span data-i18n='{"fr":"Build de rêve","nl":"Droombuild","en":"Dream build"}'>Traum-Build</span></span><span class="tier-eur" aria-label="Budget hoch"><b>€€€</b></span></div>
-        <h3 data-i18n='{"fr":"Le vélo de la vidéo.","nl":"De fiets uit de video.","en":"The bike from the video."}'>Das Bike aus dem Video.</h3>
-        <p class="tier-ex">S-Works Tarmac · Epic · Levo · Aethos · Crux · <span data-i18n='{"fr":"montage sur mesure","nl":"custom opbouw","en":"custom build"}'>Custom-Aufbau</span></p>
-        <p class="tier-for" data-i18n='{"fr":"Pour ceux qui veulent tout savoir","nl":"Voor wie het precies wil weten","en":"For those who want every detail right"}'>Für alle, die es genau wissen wollen</p>
-        <button class="tier-cta" type="button" data-ask="Ich möchte einen Dreambuild planen – wie läuft das ab?"><span data-i18n='{"fr":"Planifier un build","nl":"Droombuild plannen","en":"Plan a dream build"}'>Dreambuild planen</span><svg><use href="#ic-arrow"/></svg></button>
-      </article>
-    </div>
-
-    <div class="lease" data-reveal>
-      <div class="lease-l">
-        <h3 class="h-lease" data-i18n='{"fr":"Leasing &amp; financement –<br><em>demande-nous.</em>","nl":"Leasing &amp; financiering –<br><em>vraag het ons.</em>","en":"Leasing &amp; financing –<br><em>just ask.</em>"}'>Leasing &amp; Finanzierung –<br><em>frag uns.</em></h3>
+    <div class="sec-h">
+      <div>
+        <p class="kicker rv">Dein Rad für die Runde · Specialized &amp; Cervélo</p>
+        <h2 class="h2 rv">Jeder Stopp.<br><em>Ein anderes Rad.</em></h2>
       </div>
-      <div class="lease-r">
-        <p data-i18n='{"fr":"Leaser ton vélo via ton employeur ou payer en plusieurs fois&nbsp;: on te calcule les options, honnêtement.","nl":"Je fiets leasen via je werkgever of in termijnen betalen: we rekenen de mogelijkheden eerlijk voor je door.","en":"Lease your bike through your employer or pay in instalments: we’ll work out the options with you, honestly."}'>Bike übers Unternehmen leasen oder bequem in Raten zahlen: Wir rechnen dir die Möglichkeiten ehrlich durch.</p>
-        <div class="lease-ctas">
-          <button class="btn btn-ink" type="button" data-ask="Wie funktionieren Leasing und Finanzierung bei Racepoint?" data-magnetic><svg><use href="#ic-spark"/></svg><span data-i18n='{"fr":"Se faire conseiller","nl":"Laat je adviseren","en":"Get advice"}'>Lass dich beraten</span></button>
-          <span class="lease-note"><svg><use href="#ic-check"/></svg><span data-i18n='{"fr":"Déjà un vélo&nbsp;? On entretient toutes les marques.","nl":"Al een fiets? Wij onderhouden alle merken.","en":"Already have a bike? We service all brands."}'>Schon ein Rad? Wir warten alle Marken.</span></span>
+      <p class="lead rv">Vom ersten Kinderrad bis zum S-Works: Achim berät so ehrlich wie in seinen Videos. Wähl deinen Abschnitt der Runde – oder frag die KI, wenn du noch nicht weißt, was ein Tarmac ist.</p>
+    </div>
+
+    <div class="cats">
+      <article class="cat rv">
+        <figure><img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad im Showroom" loading="lazy"></figure>
+        <div class="cat-b">
+          <p class="kicker"><b>02</b> · km 9 · Asphalt-Rampen</p>
+          <h3><a href="entwuerfe/codex-2026-10/prototype/kombi/rennrad.html">Rennrad</a></h3>
+          <p>Allez, Roubaix, Tarmac, Aethos – und Cervélo.</p>
+          <div class="cat-f"><span class="price">ab 1.499 €</span><button class="cat-ask" type="button" data-ask="Welches Rennrad passt zu mir?" aria-label="KI fragen: Welches Rennrad passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Frag die KI</button></div>
+        </div>
+        <span class="cat-go" aria-hidden="true"><svg><use href="#ic-out"/></svg></span>
+      </article>
+      <article class="cat rv">
+        <figure><img src="assets/gravel-ride.jpg" alt="Drei Gravelbiker auf Schotter" loading="lazy"></figure>
+        <div class="cat-b">
+          <p class="kicker"><b>03</b> · km 21 · Hohes Venn</p>
+          <h3><a href="entwuerfe/codex-2026-10/prototype/kombi/gravel.html">Gravel</a></h3>
+          <p>Diverge &amp; Crux – für Schotter, Moor und lange Tage.</p>
+          <div class="cat-f"><span class="price">ab 2.299 €</span><button class="cat-ask" type="button" data-ask="Welches Gravelbike passt zu mir?" aria-label="KI fragen: Welches Gravelbike passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Frag die KI</button></div>
+        </div>
+        <span class="cat-go" aria-hidden="true"><svg><use href="#ic-out"/></svg></span>
+      </article>
+      <article class="cat rv">
+        <figure><img src="assets/achim-ride.jpg" alt="Mountainbiker im Wald" loading="lazy"></figure>
+        <div class="cat-b">
+          <p class="kicker"><b>04</b> · km 33 · Eifel-Trails</p>
+          <h3><a href="entwuerfe/codex-2026-10/prototype/kombi/mtb.html">MTB</a></h3>
+          <p>Rockhopper bis Stumpjumper – plus Fahrwerk-Service.</p>
+          <div class="cat-f"><span class="price">ab 949 €</span><button class="cat-ask" type="button" data-ask="Welches MTB passt zu meinen Trails?" aria-label="KI fragen: Welches MTB passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Frag die KI</button></div>
+        </div>
+        <span class="cat-go" aria-hidden="true"><svg><use href="#ic-out"/></svg></span>
+      </article>
+      <article class="cat rv">
+        <figure><img src="entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg" alt="E-Mountainbike in den Bergen" loading="lazy"></figure>
+        <div class="cat-b">
+          <p class="kicker"><b>05</b> · km 42 · Langer Anstieg</p>
+          <h3><a href="entwuerfe/codex-2026-10/prototype/kombi/ebike.html">E-Bike</a></h3>
+          <p>Turbo Vado, Levo &amp; Creo – mit Probefahrt.</p>
+          <div class="cat-f"><span class="price">ab 4.199 €</span><button class="cat-ask" type="button" data-ask="Welches E-Bike passt zu mir?" aria-label="KI fragen: Welches E-Bike passt zu mir?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Frag die KI</button></div>
+        </div>
+        <span class="cat-go" aria-hidden="true"><svg><use href="#ic-out"/></svg></span>
+      </article>
+      <article class="cat rv">
+        <figure class="cat-see"><img src="assets/v10/see.jpg" alt="Fahrräder an einer Bank am See" loading="lazy"></figure>
+        <div class="cat-b">
+          <p class="kicker"><b>06</b> · km 51 · Am See</p>
+          <h3><a href="entwuerfe/codex-2026-10/prototype/kombi/familie.html">Kids &amp; Familie</a></h3>
+          <p>Hotwalk, Riprock &amp; Co. – das erste richtige Rad.</p>
+          <div class="cat-f"><span class="price">ab 749 €</span><button class="cat-ask" type="button" data-ask="Welches Rad passt für mein Kind?" aria-label="KI fragen: Welches Rad passt für mein Kind?"><svg aria-hidden="true"><use href="#ic-spark"/></svg>Frag die KI</button></div>
+        </div>
+        <span class="cat-go" aria-hidden="true"><svg><use href="#ic-out"/></svg></span>
+      </article>
+      <article class="cat cat-ai rv">
+        <div class="cat-ai-orb" aria-hidden="true"><i><svg><use href="#ic-spark"/></svg></i></div>
+        <div class="cat-b">
+          <p class="kicker">KI-Berater · rund um die Uhr</p>
+          <h3>Noch unsicher?<br><em>Frag Achims KI.</em></h3>
+          <p>Empfehlung aus dem echten Katalog, Rahmengröße, Budget – wenn’s persönlich wird, übernimmt Achim.</p>
+          <form class="ai-ask" data-ask-form>
+            <label class="sr-only" for="aiInput">Frage an den KI-Berater</label>
+            <input id="aiInput" type="text" autocomplete="off" placeholder="z. B. Gravelbike bis 3.000 €">
+            <button type="submit" aria-label="Frage senden"><svg aria-hidden="true"><use href="#ic-arrow"/></svg></button>
+          </form>
+          <div class="ai-chips">
+            <button type="button" data-ask="Welche Rahmengröße brauche ich?">Rahmengröße</button>
+            <button type="button" data-ask="Bietet ihr Leasing oder Finanzierung an?">Leasing</button>
+            <button type="button" data-ask="Kann ich ein Bike probefahren?">Probefahrt</button>
+          </div>
+        </div>
+      </article>
+    </div>
+    <p class="fine rv">Preise: unverbindliche Herstellerpreise ausgewählter Modelle, Stand 14.10.2026. Leasing &amp; Finanzierung auf Anfrage.</p>
+  </div>
+</section>
+
+<!-- ===================== 4 · Filme ===================== -->
+<section class="sec films" id="filme">
+  <div class="wrap">
+    <div class="sec-h">
+      <div>
+        <p class="kicker rv">YouTube · @racepointbikeshop · ~80.000 Abos</p>
+        <h2 class="h2 rv">Aus der Werkstatt.<br><em>Auf deinen Bildschirm.</em></h2>
+      </div>
+      <div class="films-side rv">
+        <p class="lead">Builds, Unboxings und Schrauber-Wissen – Achim erklärt jeden Handgriff, direkt aus Schönberg.</p>
+        <div class="films-ctl">
+          <a class="btn btn-line" href="https://www.youtube.com/@racepointbikeshop?sub_confirmation=1" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#ic-play"/></svg>Kanal abonnieren</a>
+          <button class="fbtn" type="button" data-film-dir="-1" aria-label="Vorherige Filme"><svg aria-hidden="true"><use href="#ic-chev-l"/></svg></button>
+          <button class="fbtn" type="button" data-film-dir="1" aria-label="Nächste Filme"><svg aria-hidden="true"><use href="#ic-chev-r"/></svg></button>
         </div>
       </div>
     </div>
   </div>
+  <div class="wrap"><div class="film-strip" id="filmStrip" tabindex="0" aria-label="Filme von Racepoint">
+    <button class="film" type="button" data-video="9KIh7oOIPT4"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/9KIh7oOIPT4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>01</b> · Rennrad · Unboxing</span><span class="film-t">Tarmac SL8 LTD Forward 50</span></span></button>
+    <button class="film" type="button" data-video="vV_rL9yq620"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/vV_rL9yq620.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>02</b> · Rennrad · Build</span><span class="film-t">S-Works Aethos</span></span></button>
+    <button class="film" type="button" data-video="cIBBbESSOoc"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/cIBBbESSOoc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>03</b> · Gravel · Build</span><span class="film-t">Specialized Crux</span></span></button>
+    <button class="film" type="button" data-video="2zD31t7mWCw"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/2zD31t7mWCw.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>04</b> · MTB · Unboxing</span><span class="film-t">Epic 8 Pro LTD</span></span></button>
+    <button class="film" type="button" data-video="-84OwxUfgIQ"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/-84OwxUfgIQ.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>05</b> · E-MTB · Build</span><span class="film-t">Turbo Levo SL</span></span></button>
+    <button class="film" type="button" data-video="5TcRRpUy5T4"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/5TcRRpUy5T4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>06</b> · Aero · andere Marke</span><span class="film-t">Cervélo S5</span></span></button>
+    <button class="film" type="button" data-video="Z5TqAKmey0M"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/Z5TqAKmey0M.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>07</b> · Kids · Build</span><span class="film-t">Hotwalk Carbon</span></span></button>
+    <button class="film" type="button" data-video="WHggv7Jye4M"><span class="film-th"><img src="entwuerfe/codex-2026-10/prototype/assets/films/WHggv7Jye4M.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg><use href="#ic-play"/></svg></span></span><span class="film-m"><span class="kicker"><b>08</b> · Triathlon · Build</span><span class="film-t">S-Works Shiv</span></span></button>
+  </div>
+  <div class="film-foot"><div class="film-bar" aria-hidden="true"><i id="filmBar"></i></div><span class="film-count" id="filmCount" aria-hidden="true">01 / 08</span></div></div>
 </section>
 
-
-<!-- =================================================================== -->
-<!-- 8 · ZIEL — Racepoint, Schönberg: Achim + Team, Zeiten, Anfahrt     -->
-<!-- =================================================================== -->
-<section class="fin" id="ziel" aria-label="Besuch in Schönberg">
-  <div class="finish-line" aria-hidden="true"></div>
+<!-- ===================== 5 · Werkstatt & Retül ===================== -->
+<section class="sec service" id="werkstatt">
   <div class="wrap">
-    <div class="fin-head">
-      <span class="kicker" data-i18n='{"fr":"Chapitre 5 · Arrivée","nl":"Hoofdstuk 5 · Finish","en":"Chapter 5 · Finish"}'>Kapitel 5 · Ziel</span>
-      <h2 class="h-fin" data-split data-i18n='{"fr":"<em>Arrivée&nbsp;:</em> Racepoint, Schönberg.","nl":"<em>Finish:</em> Racepoint, Schönberg.","en":"<em>Finish:</em> Racepoint, Schönberg."}'><em>Ziel:</em> Racepoint, Schönberg.</h2>
+    <div class="sec-h">
+      <div>
+        <p class="kicker rv">Werkstatt &amp; Bikefitting</p>
+        <h2 class="h2 rv">Nach der Runde<br><em>ist vor der Runde.</em></h2>
+      </div>
+      <p class="lead rv">Nicht nur Specialized: Wir schrauben an allem, was zwei Räder hat. Und mit Retül sitzt du danach wirklich richtig.</p>
     </div>
-
-    <div class="fin-grid">
-      <figure class="fin-photo">
-        <div class="fp-in"><img src="assets/achim-team.jpg" alt="Achim, Elke und das Racepoint-Team" loading="lazy"></div>
-        <figcaption class="kicker" data-i18n='{"fr":"Achim, Elke &amp; l’équipe · depuis 18 ans à Schönberg","nl":"Achim, Elke &amp; team · al 18 jaar in Schönberg","en":"Achim, Elke &amp; team · 18 years in Schönberg"}'>Achim, Elke &amp; Team · seit 18 Jahren in Schönberg</figcaption>
-      </figure>
-
-      <div class="fin-quote">
-        <blockquote class="fr-it" data-reveal data-i18n='{"fr":"«&nbsp;Je suis Achim, celui des vidéos. Passe nous voir, on trouvera le vélo qui te va. Le café est prêt.&nbsp;»","nl":"„Ik ben Achim uit de video’s. Kom langs, dan vinden we de fiets die bij je past. De koffie staat klaar.”","en":"“I’m Achim from the videos. Drop by and we’ll find the bike that fits you. The coffee’s on.”"}'>„Ich bin der Achim aus den Videos. Komm vorbei, wir finden das Rad, das zu dir passt. Der Kaffee steht.“</blockquote>
-        <p class="fin-cite" data-i18n='{"fr":"Achim Leufgen · maître mécanicien cycle, fitter Retül","nl":"Achim Leufgen · meester-fietstechnicus, Retül-fitter","en":"Achim Leufgen · master bike mechanic, Retül fitter"}'>Achim Leufgen · Meister Zweiradmechanik, Retül‑Fitter</p>
-        <div class="fin-ctas">
-          <a class="btn btn-red" href="" data-magnetic><span data-i18n='{"fr":"Prendre rendez-vous","nl":"Afspraak maken","en":"Book an appointment"}'>Termin buchen</span><svg><use href="#ic-arrow"/></svg></a>
-          <a class="btn btn-wa" href="" data-magnetic><svg><use href="#ic-wa"/></svg>WhatsApp</a>
-          <a class="btn btn-ghost" href="" data-magnetic><svg><use href="#ic-phone"/></svg><span data-i18n='{"fr":"Appeler","nl":"Bellen","en":"Call"}'>Anrufen</span></a>
+    <div class="svc-grid">
+      <article class="svc rv">
+        <figure><img src="assets/v10/film-2.jpg" alt="Achim montiert ein Rad im Montageständer" loading="lazy"><figcaption>Meisterwerkstatt · Schönberg</figcaption></figure>
+        <div class="svc-b">
+          <h3>Werkstatt für alle Marken</h3>
+          <ul class="ticks">
+            <li><svg aria-hidden="true"><use href="#ic-check"/></svg>Inspektion &amp; Reparatur</li>
+            <li><svg aria-hidden="true"><use href="#ic-check"/></svg>Fahrwerk-Service für Gabel &amp; Dämpfer</li>
+            <li><svg aria-hidden="true"><use href="#ic-check"/></svg>E-Bike-Service: Motor, Akku, Software</li>
+            <li><svg aria-hidden="true"><use href="#ic-check"/></svg>Kleinigkeiten oft sofort</li>
+          </ul>
+          <p class="brands">Specialized · Cervélo · Trek · Canyon · Cube · Giant · Scott · Orbea · KTM …</p>
+          <a class="btn btn-ink" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Werkstatt-Termin<svg aria-hidden="true"><use href="#ic-arrow"/></svg></a>
         </div>
-      </div>
+      </article>
+      <article class="svc rv">
+        <figure><img src="entwuerfe/codex-2026-10/prototype/assets/bikefitting-1.jpg" alt="Retül-Bikefitting auf dem Rollentrainer" loading="lazy"><figcaption><i class="rec" aria-hidden="true"></i>Retül · 3D-Messung live</figcaption></figure>
+        <div class="svc-b">
+          <h3>Retül-Bikefitting</h3>
+          <ol class="steps">
+            <li><b>01</b><span><strong>Gespräch</strong> Ziele, Beschwerden, Fußvermessung.</span></li>
+            <li><b>02</b><span><strong>3D-Messung</strong> Motion-Capture auf deinem eigenen Rad.</span></li>
+            <li><b>03</b><span><strong>Anpassung</strong> Sattel, Cockpit, Cleats – ca. 1,5 h.</span></li>
+          </ol>
+          <a class="btn btn-ink" data-ask="Ich möchte einen Termin für ein Retül-Bikefitting.">Fitting-Termin<svg aria-hidden="true"><use href="#ic-arrow"/></svg></a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
 
-      <div class="fin-card fin-hours">
-        <div class="fc-head"><h3 data-i18n='{"fr":"Horaires","nl":"Openingsuren","en":"Opening hours"}'>Öffnungszeiten</h3><span class="pill-status" data-open-status></span></div>
-        <ul class="hours"></ul>
-        <p class="fc-note" data-i18n='{"fr":"L’atelier travaille le matin – réparations de préférence sur rendez-vous.","nl":"De werkplaats werkt ’s ochtends – reparaties bij voorkeur op afspraak.","en":"The workshop works mornings – repairs best by appointment."}'>Werkstatt arbeitet vormittags – Reparaturen am besten mit Termin.</p>
-      </div>
+<!-- ===================== 6 · Besuch / Kontakt ===================== -->
+<section class="sec visit" id="besuch">
+  <div class="wrap">
+    <figure class="visit-fig rv">
+      <img src="assets/achim-team.jpg" alt="Achim, Elke und das Racepoint-Team im Laden" loading="lazy">
+      <figcaption>
+        <p class="kicker">Ziel · km 58</p>
+        <blockquote>„Komm vorbei, wir finden das Rad, das zu dir passt. <em>Der Kaffee steht.</em>“</blockquote>
+        <span>Achim Leufgen · Zweiradmechaniker-Meister &amp; Retül-Fitter</span>
+      </figcaption>
+    </figure>
 
-      <div class="fin-card fin-drive">
-        <div class="fc-head"><h3 data-i18n='{"fr":"Accès","nl":"Route","en":"Getting here"}'>Anfahrt</h3><span class="kicker" data-i18n='{"fr":"Depuis DE, BE &amp; LU","nl":"Vanuit DE, BE &amp; LU","en":"From DE, BE &amp; LU"}'>Aus DE, BE &amp; LU</span></div>
-        <ul class="drive">
-          <li style="--t:.53"><span>Aachen</span><small>DE</small><i></i><b>ca. 1 h</b></li>
-          <li style="--t:.55"><span data-i18n='{"fr":"Liège","nl":"Luik","en":"Liège"}'>Lüttich</span><small>BE</small><i></i><b>ca. 1 h</b></li>
-          <li style="--t:.68"><span data-i18n='{"fr":"Luxembourg","nl":"Luxemburg","en":"Luxembourg"}'>Luxemburg</span><small>LU</small><i></i><b>ca. 1 h 15</b></li>
-          <li style="--t:1"><span data-i18n='{"fr":"Cologne","nl":"Keulen","en":"Cologne"}'>Köln</span><small>DE</small><i></i><b>ca. 1 h 45</b></li>
+    <div class="visit-card rv">
+      <div class="visit-info">
+        <h2 class="h2">Racepoint,<br><em>Schönberg.</em></h2>
+        <span class="pill pill-status" data-open-status></span>
+        <address>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</address>
+        <div class="vlinks">
+          <a href="tel:+3280548898"><svg aria-hidden="true"><use href="#ic-phone"/></svg>+32 80 54 88 98</a>
+          <a href="mailto:info@racepoint.be"><svg aria-hidden="true"><use href="#ic-mail"/></svg>info@racepoint.be</a>
+        </div>
+        <div class="vbtns">
+          <a class="btn btn-red" href="https://www.google.com/maps/search/?api=1&amp;query=Racepoint%2C%20K.-F.%20Schinkel%20Stra%C3%9Fe%205%2C%204782%20Sch%C3%B6nberg%2C%20Belgien" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#ic-pin"/></svg>Route planen</a>
+          <a class="btn btn-line-ink" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
+        </div>
+        <ul class="drive" aria-label="Fahrzeiten mit dem Auto, ca.">
+          <li>Aachen <b>~1 h</b></li><li>Lüttich <b>~1 h</b></li><li>Luxemburg <b>~1 h 15</b></li><li>Köln <b>~1 h 45</b></li>
         </ul>
-        <p class="fc-note">Racepoint · Schönberg (St. Vith) · <span data-i18n='{"fr":"Est de la Belgique · temps en voiture, env.","nl":"Oost-België · rijtijd met de auto, ca.","en":"East Belgium · approx. drive times"}'>Ostbelgien · Fahrzeit mit dem Auto, ca.</span></p>
-        <div class="fc-ctas">
-          <a class="btn btn-ink" href=""><svg><use href="#ic-arrow"/></svg><span>Route planen</span></a>
-          <button class="btn btn-ghost" type="button" data-ask="Wo finde ich Racepoint in Schönberg?"><svg><use href="#ic-spark"/></svg><span>Weg erfragen</span></button>
-        </div>
+      </div>
+      <div class="hours-box">
+        <p class="kicker">Öffnungszeiten</p>
+        <ul class="hours" id="hours"></ul>
+        <p class="fine">Live-Status nach belgischer Zeit. Werkstatt- und Fitting-Termine nach Absprache.</p>
       </div>
     </div>
   </div>
 </section>
-
 </main>
 
-
-<!-- =================================================================== -->
-<!-- FOOTER — „Bis Samstag.“ + Logo + Sprachwahl                         -->
-<!-- =================================================================== -->
+<!-- ===================== Footer ===================== -->
 <footer class="ft">
   <div class="wrap">
-    <p class="ft-big" data-i18n='{"fr":"À samedi.","nl":"Tot zaterdag.","en":"See you Saturday."}'>Bis Samstag.</p>
-    <p class="ft-sub fr-it" data-i18n='{"fr":"Le café est prêt.","nl":"De koffie staat klaar.","en":"The coffee’s on."}'>Der Kaffee steht.</p>
-    <div class="ft-row">
-      <img src="assets/racepoint-logo-dark.svg" alt="Racepoint" class="ft-logo">
-      <nav class="ft-nav">
-        <a href="#laden" data-i18n='{"fr":"La boutique","nl":"De winkel","en":"The shop"}'>Der Laden</a>
-        <a href="#runde" data-i18n='{"fr":"La sortie","nl":"De ronde","en":"The ride"}'>Die Runde</a>
-        <a href="#videos" data-i18n='{"fr":"Vidéos","nl":"Video’s","en":"Videos"}'>Videos</a>
-        <a href="#budget">Budget</a>
-        <a href="#ziel" data-i18n='{"fr":"Visite","nl":"Bezoek","en":"Visit"}'>Besuch</a>
-      </nav>
-      <div class="ls" data-lang-switch></div>
+    <p class="ft-big">Bis Samstag. <em>Der Kaffee steht.</em></p>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">
+        <p>Specialized Elite Händler · Cervélo · Werkstatt für alle Marken · Retül-Bikefitting</p>
+      </div>
+      <nav aria-label="Räder"><b>Räder</b><a href="entwuerfe/codex-2026-10/prototype/kombi/rennrad.html">Rennrad</a><a href="entwuerfe/codex-2026-10/prototype/kombi/gravel.html">Gravel</a><a href="entwuerfe/codex-2026-10/prototype/kombi/mtb.html">MTB</a><a href="entwuerfe/codex-2026-10/prototype/kombi/ebike.html">E-Bike</a><a href="entwuerfe/codex-2026-10/prototype/kombi/familie.html">Kids &amp; Familie</a></nav>
+      <nav aria-label="Service"><b>Service</b><a href="entwuerfe/codex-2026-10/prototype/kombi/reparatur.html">Werkstatt</a><a href="entwuerfe/codex-2026-10/prototype/kombi/bikefitting.html">Bikefitting</a><a href="entwuerfe/codex-2026-10/prototype/kombi/videos.html">Videos</a><a href="entwuerfe/codex-2026-10/prototype/kombi/ueber-uns.html">Über uns</a></nav>
+      <div class="ft-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a></div>
     </div>
-    <div class="ft-legal">
-      <span data-i18n='{"fr":"© Racepoint · Schönberg, Est de la Belgique · Revendeur Specialized Elite","nl":"© Racepoint · Schönberg, Oost-België · Specialized Elite-dealer","en":"© Racepoint · Schönberg, East Belgium · Specialized Elite dealer"}'>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler</span>
-      <span>Prototyp 10 · Die Runde · Fotos &amp; Video: racepoint.be</span>
-    </div>
+    <div class="ft-legal"><span>© Racepoint · Schönberg, Ostbelgien</span><span>Prototyp 10 · Die Runde · Fotos &amp; Video: racepoint.be</span></div>
   </div>
 </footer>
 
