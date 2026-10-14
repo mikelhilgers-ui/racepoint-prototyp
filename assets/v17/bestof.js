@@ -1,6 +1,6 @@
 /* =====================================================================
    RACEPOINT · 17 · BEST OF (THROWAWAY)
-   1) Basis: Lenis + ScrollTrigger, Header, Menü, Anker
+   1) Basis (Lenis, Header, Menü, Anker) liegt in assets/v17/site.js
    2) Hero: Shop-Film, Headline-Reveal, Film „verdichtet“ sich beim
       Scrollen in den Schriftzug RACEPOINT (Video im Schriftzug, V10)
    3) Der Aufbau (V8, verdichtet auf 4 Schritte)
@@ -19,50 +19,10 @@
   const fmt = (n, d) => n.toLocaleString('de-BE', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
   if (RM) document.documentElement.classList.add('rm');
 
-  // Diese Seite ist bewusst nur deutsch (Live-Status, KI-Begrüßung)
-  const forceDe = () => { if (RP.lang !== 'de') RP.setLang('de'); };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceDe); else forceDe();
-
   /* =====================================================================
-     1) BASIS
+     1) BASIS: Lenis, Header, Menue, Anker, Sprache -> assets/v17/site.js
      ===================================================================== */
-  let lenis = null;
-  if (!RM && window.Lenis) {
-    lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add(t => lenis.raf(t * 1000));
-    gsap.ticker.lagSmoothing(0);
-  }
-  const mmenu = $('#mmenu'), burger = $('.burger');
-  const setMenu = on => {
-    mmenu.classList.toggle('on', on);
-    mmenu.setAttribute('aria-hidden', String(!on));
-    burger.setAttribute('aria-expanded', String(on));
-    if (lenis) on ? lenis.stop() : lenis.start();
-  };
-  burger.addEventListener('click', () => setMenu(true));
-  $('.mclose').addEventListener('click', () => setMenu(false));
-  mmenu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && mmenu.classList.contains('on')) setMenu(false); });
-
-  document.addEventListener('click', e => {
-    const a = e.target.closest('a[href^="#"]');
-    if (!a) return;
-    const el = document.querySelector(a.getAttribute('href'));
-    if (!el) return;
-    e.preventDefault();
-    if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.4 }); else el.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
-  });
-
-  const hdr = $('#hdr');
-  ScrollTrigger.create({
-    start: 0, end: 'max',
-    onUpdate: self => {
-      const y = self.scroll();
-      hdr.classList.toggle('solid', y > 60);
-      hdr.classList.toggle('hide', self.direction === 1 && y > 400 && !mmenu.classList.contains('on'));
-    },
-  });
+  const lenis = window.RP17Site ? RP17Site.lenis : null; // eslint-disable-line no-unused-vars
 
   /* =====================================================================
      2) HERO
