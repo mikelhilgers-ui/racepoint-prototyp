@@ -1,5 +1,17 @@
 import { readEvents } from '../prototype/kombi/stream.mjs';
 
+// Text blocks that follow each other directly belong together (citations split sentences into
+// several blocks); only blocks separated by tool use/results start a new paragraph.
+export function joinText(content){
+  let out='',gap=false;
+  for(const block of content){
+    if(!block)continue;
+    if(block.type==='text'&&block.text){out+=(gap&&out?'\n\n':'')+block.text;gap=false;}
+    else if(block.type!=='text')gap=true;
+  }
+  return out.trim();
+}
+
 // Preserve full provider content for tool continuations; only text goes to the UI.
 export async function readAnthropicStream(response,{onText=()=>{},onProgress=()=>{}}={}){
   const content=[],inputs=new Map();let stop_reason=null,complete=false;
@@ -13,7 +25,7 @@ export async function readAnthropicStream(response,{onText=()=>{},onProgress=()=
       const block=content[data.index],delta=data.delta;if(!block)continue;
       if(delta.type==='text_delta'){
         block.text=(block.text||'')+delta.text;
-        onText(content.filter(b=>b?.type==='text').map(b=>b.text).join('\n\n'));
+        onText(joinText(content));
       }else if(delta.type==='input_json_delta')inputs.set(data.index,(inputs.get(data.index)||'')+delta.partial_json);
       else if(delta.type==='citations_delta')(block.citations??=[]).push(delta.citation);
       else if(delta.type==='thinking_delta')block.thinking=(block.thinking||'')+delta.thinking;
