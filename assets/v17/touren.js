@@ -207,15 +207,15 @@
     svg.appendChild(OV.labels);
     OV.groups = $$('.ov-g', cam);
     OV.groups.forEach(g => {
-      const id = g.dataset.id, hit = $('.ov-hit', g);
-      hit.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hl(id, true); });
-      hit.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hl(null, true); });
-      hit.addEventListener('click', () => {
+      const id = g.dataset.id;
+      g.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') hl(id, true); });
+      g.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') hl(null, true); });
+      g.addEventListener('click', () => {
         if (canHover.matches) selectTour(id, { scroll: true });
         else { hl(id, true); showOvInfo(id); }
       });
     });
-    svg.addEventListener('click', e => { if (!e.target.closest('.ov-hit')) { hideOvInfo(); hl(null, true); } });
+    svg.addEventListener('click', e => { if (!e.target.closest('.ov-g')) { hideOvInfo(); hl(null, true); } });
     layoutOverview();
   }
   function layoutOverview() {
@@ -228,13 +228,26 @@
     const s = Math.min((W - side * 2) / (bb.x1 - bb.x0), (H - top - bot) / (bb.y1 - bb.y0));
     const tx = side + (W - side * 2 - (bb.x1 - bb.x0) * s) / 2 - bb.x0 * s, ty = top + (H - top - bot - (bb.y1 - bb.y0) * s) / 2 - bb.y0 * s;
     OV.cam.setAttribute('transform', 'matrix(' + s.toFixed(5) + ' 0 0 ' + s.toFixed(5) + ' ' + tx.toFixed(2) + ' ' + ty.toFixed(2) + ')');
+    // Trefferflaeche in Karteneinheiten (Hit-Test ignoriert non-scaling-stroke)
+    $$('.ov-hit', OV.cam).forEach(h => { h.style.strokeWidth = (18 / s).toFixed(2); });
     const P = (lat, lon) => { const q = T.proj(lat, lon); return [q[0] * s + tx, q[1] * s + ty]; };
     const inside = p => p[0] > 8 && p[0] < W - 8 && p[1] > 48 && p[1] < H - (isMobile() ? 44 : 14);
     let l = '';
+    // grobe Textbreite je Klasse (px pro Zeichen), damit nichts am Rand abgeschnitten wird
+    const CW = { region: 11.5, water: 7, poi: 6.9, border: 9.2 };
     T.LABELS.forEach(lb => {
       if (lb.k === 'poi' && W < 420) return;
       const p = P(lb.lat, lb.lon);
       if (!inside(p)) return;
+      if (!lb.rot) {
+        const w = lb.t.length * (CW[lb.k] || 7);
+        if (lb.peak) { if (p[0] + 9 + w > W - 8) return; }
+        else {
+          const x = clamp(p[0], w / 2 + 10, W - w / 2 - 10);
+          if (Math.abs(x - p[0]) > 40) return;
+          p[0] = x;
+        }
+      }
       l += '<g class="lb lb-' + lb.k + '" transform="translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ')">' +
         (lb.peak ? '<path class="lb-peak" d="M-5,3l5,-9l5,9z"/>' : '') +
         '<text' + (lb.peak ? ' x="9" y="3"' : '') + ' text-anchor="' + (lb.peak ? 'start' : 'middle') + '"' + (lb.rot ? ' transform="rotate(' + lb.rot + ')"' : '') + '>' + esc(lb.t) + '</text></g>';
@@ -242,7 +255,7 @@
     T.TOWNS.forEach(tw => {
       if (tw[5] !== 1 || tw[0] === 'Schönberg') return;
       const p = P(tw[1], tw[2]);
-      if (!inside(p)) return;
+      if (!inside(p) || p[0] + 7 + tw[0].length * 6.6 > W - 8) return;
       l += '<g class="lb lb-town small" transform="translate(' + (p[0] + 7).toFixed(1) + ' ' + (p[1] + 4).toFixed(1) + ')"><text>' + esc(tw[0]) + '</text></g>';
     });
     const sp = P(T.SHOP.lat, T.SHOP.lon);
@@ -264,7 +277,7 @@
     if (!t || !box) return;
     box.style.setProperty('--c', 'var(--c-' + t.type + ')');
     box.innerHTML = '<div><span class="k">' + TYPE[t.type] + (t.m.beispiel ? ' · Beispielroute' : '') + '</span><b>' + esc(t.m.title) + '</b><span>' + nf(t.km) + ' km · ' + nf(t.up) + ' Hm · ' + esc(t.m.difficulty || '') + '</span></div>' +
-      '<button class="btn" type="button" data-go="' + t.id + '">Tour ansehen ' + icon('i-arrow') + '</button>';
+      '<button class="btn" type="button" data-go="' + t.id + '" aria-label="Tour ansehen: ' + esc(t.m.title) + '">Ansehen ' + icon('i-arrow') + '</button>';
     box.hidden = false;
     $('[data-go]', box).addEventListener('click', () => selectTour(id, { scroll: true }));
   }

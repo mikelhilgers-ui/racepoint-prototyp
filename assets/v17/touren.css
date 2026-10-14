@@ -119,6 +119,7 @@
 /* ---------------- Papierkarte (aus V10) ---------------- */
 .tmap{display:block;width:100%;height:100%;max-width:none;overflow:hidden}
 .tmap text{font-family:var(--display)}
+.tmap .lb,.tmap .shop-m,.tmap .wp-m,.tmap .rider,.tmap .hov-m{pointer-events:none}
 .m-grid{fill:none;stroke:rgba(18,19,22,.055);stroke-width:1;vector-effect:non-scaling-stroke}
 .m-topo path{fill:none;stroke:rgba(84,70,52,.22);stroke-width:.8;vector-effect:non-scaling-stroke}
 .m-topo .ix path{stroke:rgba(84,70,52,.38);stroke-width:1.25}
@@ -149,7 +150,8 @@
 /* Uebersichtsrouten */
 .ov-r{fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;transition:opacity .35s,stroke-width .25s}
 .ov-c{fill:none;stroke:var(--paper);stroke-width:6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .3s}
-.ov-hit{fill:none;stroke:transparent;stroke-width:16;vector-effect:non-scaling-stroke;cursor:pointer;pointer-events:stroke}
+.ov-hit{fill:none;stroke:transparent;stroke-width:16;stroke-linecap:round;stroke-linejoin:round;cursor:pointer;pointer-events:stroke}
+.ov-g{cursor:pointer}
 .ov-rennrad{stroke:var(--m-rennrad)} .ov-gravel{stroke:var(--m-gravel)} .ov-mtb{stroke:var(--m-mtb)}
 .ov-g.off{opacity:.12;pointer-events:none}
 .ov-g.off .ov-hit{pointer-events:none}
@@ -460,8 +462,9 @@
   .tr-cards{grid-template-columns:1fr}
   .tr-ov-in{aspect-ratio:auto;height:min(118vw,560px)}
   .tr-legend{top:auto;bottom:12px;right:auto;left:12px;gap:10px;padding:5px 10px;font-size:10.5px}
-  .tr-ovinfo{flex-wrap:wrap}
-  .tr-ovinfo .btn{margin-left:0;width:100%}
+  .tr-ovinfo{left:10px;right:10px;bottom:10px;padding:8px 8px 8px 14px}
+  .tr-ovinfo b{font-size:19px}
+  .tr-ovinfo .btn{padding:10px 14px}
   .tr-ov-k{display:none}
   .tr-side{grid-template-columns:1fr}
   .tr-two{grid-template-columns:1fr;gap:0}
