@@ -22,3 +22,13 @@ body:has(dialog[open]) .design-switch{display:none}
 [data-design] .quick-hours-panel{color:#1e1e1e;background:#fafafa}
 [data-design] .quick-hours-panel a{color:#3c3c3c}
 @media(max-width:600px){[data-design] .quick-contact{background:transparent}[data-design="atelier"] .quick-contact,[data-design="terrain"] .quick-contact{color:var(--ink)}.design-switch{left:14px;bottom:14px}.design-switch summary{padding:8px;gap:0}.design-switch summary>b,.design-switch summary>i{display:none}.design-switch summary>span{width:27px;height:27px}.design-switch nav{bottom:58px}}
+
+/* Mobile: no sideways scroll, and a compact chat launcher stacked above the prototype gear. */
+[data-design]{overflow-x:clip}
+[data-design] .visit-section{overflow:hidden}
+@media(max-width:640px){
+  [data-design] .advisor-fab{right:calc(14px + env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));width:48px;height:48px;min-height:48px;max-width:none;padding:0;gap:0;justify-content:center;border:1px solid #ffffff2e;border-radius:24px 24px 7px 24px;box-shadow:0 8px 22px #0006;clip-path:none}
+  [data-design] .advisor-fab>span:not(.spark){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  [data-design] .advisor-fab .spark{font-size:21px;line-height:1;color:#e83637}
+  [data-design] .advisor-fab:hover{transform:none}
+}
