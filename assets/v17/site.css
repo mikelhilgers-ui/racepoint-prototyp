@@ -307,7 +307,10 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 .rt-prog i.on{background:var(--red)}
 .rt-demo{position:absolute;z-index:5;left:var(--gut);bottom:16px;margin:0;font-size:11.5px;color:var(--dim)}
 /* reduzierte Bewegung: keine Pin-Strecke, Endzustand mit Vorher/Nachher */
-.rm .retul{height:auto;min-height:0;padding:120px 0 60px}
+.rm .retul{height:auto;min-height:0;padding:110px 0 60px;display:flex;flex-direction:column}
+.rm .rt-top{order:-1}
+.rm .rt-col{order:2;margin-top:30px}
+.rm .rt-demo{position:relative;inset:auto;order:3;margin:18px var(--gut) 0}
 .rm .rt-stage{position:relative;inset:auto;width:auto;height:min(70vh,640px);margin:0 var(--gut)}
 .rm .rt-col{position:relative;inset:auto;width:auto;padding:0 var(--gut);display:grid;gap:26px;grid-template-columns:repeat(2,minmax(0,1fr))}
 .rm .rt-col > *{grid-area:auto;opacity:1;visibility:visible}

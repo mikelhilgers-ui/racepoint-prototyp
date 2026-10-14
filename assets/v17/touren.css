@@ -180,6 +180,7 @@
 .rider .core{fill:var(--red);stroke:var(--paper);stroke-width:3.5}
 .rider .chev{fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 @keyframes halo{from{transform:scale(.6);opacity:1}to{transform:scale(1.6);opacity:0}}
+.cam.zl1 .lb-town.r2,.cam.zl1 .lb-town.r3,.cam.zl2 .lb-town.r3{display:none}
 .hov-m{opacity:0;transition:opacity .2s;pointer-events:none}
 .hov-m.on{opacity:1}
 .hov-m circle{fill:#fff;stroke:var(--pi);stroke-width:3}
@@ -315,16 +316,18 @@
 @media (max-width:760px){
   .route-map{bottom:47%}
   .route-map::after{box-shadow:inset 0 0 50px 10px rgba(244,240,232,.85)}
-  .mf-n{top:62px;right:14px;width:30px;height:30px;font-size:12px}
-  .mf-scale{top:70px;right:54px}
-  .rt-mapsw{top:auto;bottom:calc(47% + 82px);right:12px}
+  .mf-n{top:auto;bottom:84px;right:14px;width:30px;height:30px;font-size:12px}
+  .mf-scale{top:auto;bottom:92px;right:54px}
+  .rt-mapsw{top:auto;bottom:80px;left:12px;right:auto;align-items:flex-start}
+  .rt-leaf .leaflet-top.leaflet-right{margin-top:66px}
   .osm-go{min-height:40px;padding:0 12px;font-size:11.5px}
   .osm-note{display:none}
   .msw button{min-height:40px;padding:0 11px;font-size:11.5px}
   .route-panel{left:0;right:0;top:auto;bottom:0;width:auto;height:47%;gap:0;padding:12px 16px 14px;background:#fbf9f5;border-top:1px solid var(--rule);border-radius:22px 22px 0 0;box-shadow:0 -24px 40px -30px rgba(18,19,22,.45)}
   .rp-head{position:static;padding:0 0 10px;background:none;border:0;box-shadow:none;backdrop-filter:none;border-bottom:1px solid var(--rule);border-radius:0}
   .rp-top{position:absolute;left:12px;right:12px;top:calc(12px - 112.766%);margin:0}
-  .rp-sel{flex:0 1 auto;max-width:calc(100% - 150px)}
+  .rp-sel{flex:1 1 auto;max-width:210px}
+  .rp-gpx{margin-left:auto}
   .rp-sel select{min-height:42px;font-size:14.5px;background:rgba(251,249,245,.94);box-shadow:0 10px 24px -14px rgba(18,19,22,.5)}
   .rp-gpx{display:grid}
   .rp-head .bsp{font-size:10px;padding:3px 7px;background:rgba(251,249,245,.94)}
@@ -414,8 +417,7 @@
 .tr-bike .pr b{font:900 italic 28px/1 var(--display)}
 .tr-bike .pr small{color:var(--dim);font-size:12.5px}
 .tr-acts{display:grid;gap:8px}
-.tr-acts .btn{width:100%;justify-content:flex-start;min-height:50px}
-.tr-acts .btn svg:last-child{margin-left:auto}
+.tr-acts .btn{width:100%;justify-content:flex-start;min-height:50px;padding-left:22px}
 .tr-acts .btn .ic{width:19px;height:19px}
 .tr-side .fine{margin:2px 0 0}
 
