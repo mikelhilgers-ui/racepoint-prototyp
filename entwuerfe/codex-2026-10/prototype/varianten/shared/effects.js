@@ -1,4 +1,5 @@
 // Progressive enhancement: content stays usable without motion or JavaScript.
+import './mobile.js';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
 const progress=document.createElement('div');progress.className='reading-progress';progress.setAttribute('aria-hidden','true');document.body.append(progress);

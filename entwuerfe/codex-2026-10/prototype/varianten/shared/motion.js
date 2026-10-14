@@ -1,3 +1,4 @@
+import './mobile.js';
 const reduced=matchMedia('(prefers-reduced-motion: reduce)'),tall=matchMedia('(min-height: 600px)');
 const hero=document.querySelector('.hero'),rides=document.querySelector('.ride-section'),grid=rides?.querySelector('.ride-grid');
 function wrap(section,className){if(!section)return;const inner=document.createElement('div');inner.className=className;inner.append(...section.childNodes);section.append(inner);return inner;}
