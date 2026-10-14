@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Racepoint · Touren · 17 · Best of</title>
+<meta name="description" content="6 GPX-Touren ab Racepoint in Schönberg: Rennrad, Gravel und MTB durch Venn, Ourtal und Schneifel. Start und Ziel ist der Laden – Kaffee inklusive.">
+<link rel="icon" href="assets/racepoint-logo-sm.svg">
+<!-- RACEPOINT — PROTOTYP 17 · BEST OF · Unterseite Touren (THROWAWAY)
+     Header, Mobil-Menü und Footer: assets/v17/site.js · Styles: bestof.css + site.css + touren.css
+     Touren: assets/v17/touren/touren.json + *.gpx (Distanz, Höhenmeter, Profil und Karte werden aus der GPX berechnet)
+     Logik: assets/v17/touren-map.js (GPX, Gelände, stilisierte Karte) + assets/v17/touren.js (Seite, Scroll-Fahrt, Leaflet) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800;1,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="assets/v17/bestof.css">
+<link rel="stylesheet" href="assets/v17/site.css">
+<link rel="stylesheet" href="assets/v17/touren.css">
+<script src="assets/prototype-picker.js" defer></script>
+</head>
+<body data-page="touren">
+<a class="skip" href="#touren">Zum Inhalt springen</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></symbol>
+  <symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-cup" viewBox="0 0 24 24"><path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z M16 11h1.5a2.5 2.5 0 010 5H16 M8 3.5c0 1.2 1 1.3 1 2.5M11.5 3.5c0 1.2 1 1.3 1 2.5"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4L3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5z M9 4v13.5 M15 6.5V20"/></symbol>
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 015-5l-2.6 2.6.6 2.4 2.4.6L22.5 4.5a4 4 0 01-5 5L9 18a2.1 2.1 0 01-3-3z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3z M3 7l9 6 9-6"/></symbol>
+</svg>
+<main>
+
+<!-- ===================== 1 · Hero ===================== -->
+<section class="phero tr-hero" id="top">
+  <div class="tr-topo" id="heroTopo" aria-hidden="true"></div>
+  <div class="phero-word" aria-hidden="true">TOUREN</div>
+  <div class="wrap phero-grid">
+    <div class="phero-txt">
+      <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v17-best-of.html">Racepoint</a></li><li>Touren</li></ol>
+      <p class="kicker"><i class="dot"></i>GPX-Touren · Rennrad, Gravel &amp; MTB</p>
+      <h1><span>6 Touren</span><span><em>ab Racepoint.</em></span></h1>
+      <p class="lead">Start und Ziel: unser Laden. Kaffee inklusive.</p>
+      <p class="tr-note" data-beispiel-note hidden><i aria-hidden="true"></i><span>Achims echte GPX-Touren folgen – die Strecken hier sind Platzhalter.</span></p>
+      <div class="btns"><a class="btn" href="#touren">Tour wählen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a><a class="btn ghost" data-ask="Welche Tour ab Racepoint passt zu meiner Form?">Welche Tour passt zu mir?</a></div>
+      <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill" id="trCount">Rennrad · Gravel · MTB</span></div>
+    </div>
+    <aside class="tr-how" aria-labelledby="howH">
+      <h2 class="kicker" id="howH">So funktioniert’s</h2>
+      <ol>
+        <li><b aria-hidden="true">01</b><div><h3>GPX laden</h3><p>Tour aussuchen und die GPX-Datei herunterladen.</p></div></li>
+        <li><b aria-hidden="true">02</b><div><h3>Aufs Gerät</h3><p>In Garmin, Wahoo oder die App auf dem Handy importieren.</p></div></li>
+        <li><b aria-hidden="true">03</b><div><h3>Losfahren</h3><p>Start vor unserer Tür in Schönberg – und danach auf einen Kaffee rein.</p></div></li>
+      </ol>
+      <p class="tr-how-f"><svg aria-hidden="true"><use href="#i-map"/></svg>K.-F. Schinkel Straße 5 · 4782 Schönberg</p>
+    </aside>
+  </div>
+</section>
+
+<nav class="ctabs tr-tabs" aria-label="Touren filtern"><div class="wrap"><div class="ctabs-in" id="trTabs">
+  <a href="#alle" data-f="alle" class="on" aria-current="true">Alle <small data-n="alle"></small></a>
+  <a href="#rennrad" data-f="rennrad"><i class="tdot t-rennrad" aria-hidden="true"></i>Rennrad <small data-n="rennrad"></small></a>
+  <a href="#gravel" data-f="gravel"><i class="tdot t-gravel" aria-hidden="true"></i>Gravel <small data-n="gravel"></small></a>
+  <a href="#mtb" data-f="mtb"><i class="tdot t-mtb" aria-hidden="true"></i>MTB <small data-n="mtb"></small></a>
+</div></div></nav>
+
+<!-- ===================== 2+3 · Übersichtskarte + Tourenkarten ===================== -->
+<section class="sec tr-list" id="touren" aria-labelledby="listH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Alle Touren auf einer Karte</p><h2 class="h2 rv" id="listH">Wähl deine<br><em>Runde.</em></h2></div>
+      <p class="lead rv">Jede Tour beginnt und endet bei uns in Schönberg. Fahr über eine Tour oder tippe sie an – Details zeigen die Strecke Kilometer für Kilometer.</p>
+    </div>
+    <div class="tr-split">
+      <div class="tr-cards" id="trCards" aria-live="polite">
+        <div class="tr-load"><i></i><span>Touren werden geladen …</span></div>
+      </div>
+      <div class="tr-ov">
+        <div class="tr-ov-in paper" id="ovBox">
+          <svg class="tmap" id="ovMap" role="img" aria-label="Stilisierte Karte: alle Touren rund um Schönberg"><g class="cam"></g></svg>
+          <p class="tr-ov-k"><b>Übersicht</b> · Karte stilisiert</p>
+          <ul class="tr-legend" aria-label="Legende">
+            <li><i class="t-rennrad"></i>Rennrad</li><li><i class="t-gravel"></i>Gravel</li><li><i class="t-mtb"></i>MTB</li>
+          </ul>
+          <div class="tr-ovinfo" id="ovInfo" hidden></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4 · Tour im Detail: gepinnte Scroll-Fahrt (Idee aus 10 · Die Runde) ===================== -->
+<section class="tr-route" id="tour" aria-label="Tour im Detail">
+  <div class="route-pin paper">
+    <div class="route-map">
+      <svg class="tmap" id="rtMap" aria-hidden="true"><g class="cam"></g></svg>
+      <div class="rt-leaf" id="rtLeaf" hidden></div>
+      <div class="map-ui" aria-hidden="true">
+        <span class="mf-n">N<i></i></span>
+        <span class="mf-scale"><i></i><b>2 km</b></span>
+      </div>
+      <div class="rt-mapsw" id="mapSw"></div>
+    </div>
+
+    <div class="route-stamp" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <defs><path id="stCircle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"/></defs>
+        <circle cx="100" cy="100" r="94" class="s1"/><circle cx="100" cy="100" r="60" class="s2"/>
+        <text class="st-ring"><textPath href="#stCircle">RUNDE GESCHAFFT · RACEPOINT · SCHÖNBERG · </textPath></text>
+        <text x="100" y="98" class="st-big" text-anchor="middle" id="stampKm">– KM</text>
+        <text x="100" y="122" class="st-small" text-anchor="middle">+ 1 Kaffee</text>
+      </svg>
+    </div>
+
+    <div class="route-panel">
+      <header class="rp-head">
+        <div class="rp-top">
+          <label class="rp-sel"><span class="sr-only">Tour wählen</span><select id="rtSel"></select><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></label>
+          <span class="bsp" id="rtBsp" hidden>Beispielroute</span>
+          <a class="rp-gpx" id="rtGpxS" href="#" download aria-label="GPX herunterladen"><svg aria-hidden="true"><use href="#i-dl"/></svg></a>
+        </div>
+        <p class="kicker rp-k"><b id="rtType">–</b> · Karte stilisiert</p>
+        <h2 class="rp-h"><span id="rtTitle">Tour</span><em id="rtSub">wird geladen …</em></h2>
+        <div class="rp-stats" aria-hidden="true">
+          <div><b class="st-km">0,0</b><span>km</span></div>
+          <div><b class="st-hm">0</b><span>Hm</span></div>
+          <div><b class="st-wp">1/1</b><span>Stopp</span></div>
+        </div>
+        <ol class="rp-dots" id="rtDots" aria-hidden="true"></ol>
+        <div class="rp-acts">
+          <a class="rp-btn" id="rtGpx" href="#" download><svg aria-hidden="true"><use href="#i-dl"/></svg>GPX herunterladen</a>
+          <button class="rp-btn rp-btn--ink" type="button" id="rtAsk" data-ask=""><svg aria-hidden="true"><use href="#i-spark"/></svg>Welches Bike passt?</button>
+        </div>
+      </header>
+      <div class="route-cards" id="rtCards"></div>
+    </div>
+
+    <div class="route-profile" id="rtProfBox">
+      <svg class="prof" id="rtProf" aria-hidden="true"></svg>
+      <div class="prof-read" id="profRead" aria-live="off"></div>
+      <span class="sr-only" id="profHelp">Höhenprofil: mit den Pfeiltasten entlang der Strecke bewegen.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5 · Steckbrief der gewählten Tour ===================== -->
+<section class="sec tr-info" id="steckbrief" aria-labelledby="infoH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker"><span id="inType">Tour</span> · Steckbrief <span class="bsp" id="inBsp" hidden>Beispielroute</span></p><h2 class="h2" id="infoH">Tour</h2></div>
+      <p class="lead" id="inDesc"></p>
+    </div>
+    <div class="tr-info-grid">
+      <div class="tr-facts">
+        <dl class="tr-stats" id="inStats"></dl>
+        <div class="tr-block">
+          <h3>Untergrund</h3>
+          <div class="surf surf-lg" id="inSurf"></div>
+        </div>
+        <div class="tr-two">
+          <div class="tr-block"><h3>Highlights</h3><ul class="ticks" id="inHi"></ul></div>
+          <div class="tr-block"><h3>Stopps &amp; Pausen</h3><ol class="tr-stops" id="inStops"></ol></div>
+        </div>
+      </div>
+      <aside class="tr-side">
+        <article class="tr-bike" id="inBike"></article>
+        <div class="tr-acts" id="inActs"></div>
+        <p class="fine" id="inFine"></p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6 · Tipps vom Laden ===================== -->
+<section class="sec tr-tips" aria-labelledby="tipsH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Tipps vom Laden</p><h2 class="h2 rv" id="tipsH">Gut vorbereitet.<br><em>Entspannt zurück.</em></h2></div>
+      <p class="lead rv">Drei Dinge, die Achim vor jeder Tour empfiehlt – und wann der Kaffee danach wartet.</p>
+    </div>
+    <div class="tips">
+      <article class="tip rv">
+        <i aria-hidden="true"><svg><use href="#i-wrench"/></svg></i>
+        <h3>Sicherheits-Check</h3>
+        <p>Bremsen, Reifen, Schaltung und Licht: Wir schauen vor der Tour kurz drüber – für alle Marken, nicht nur für Bikes von uns.</p>
+        <button type="button" data-ask="Ich möchte vor einer Tour einen Sicherheits-Check für mein Bike machen lassen.">Check anfragen</button>
+      </article>
+      <article class="tip rv">
+        <i aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/></svg></i>
+        <h3>Ersatzschlauch &amp; Pumpe</h3>
+        <ul class="ticks"><li>Schlauch oder Tubeless-Flickzeug</li><li>Minipumpe oder CO₂-Kartusche</li><li>Multitool und Kettenschloss</li><li>Riegel, Wasser, Regenjacke</li></ul>
+        <button type="button" data-ask="Was gehört in meine Satteltasche für eine Tour?">Was brauche ich genau?</button>
+      </article>
+      <article class="tip tip-hours rv">
+        <i aria-hidden="true"><svg><use href="#i-cup"/></svg></i>
+        <h3>Kaffee danach</h3>
+        <span class="pill pill-status" data-open-status></span>
+        <ul class="hours" data-hours></ul>
+      </article>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis/lenis.min.js"></script>
+<script src="assets/rp-core.js"></script>
+<script src="assets/ki-berater.js"></script>
+<script src="assets/v17/data.js"></script>
+<script src="assets/v17/site.js"></script>
+<script src="assets/v17/touren-map.js"></script>
+<script src="assets/v17/touren.js"></script>
+</body>
+</html>

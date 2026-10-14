@@ -243,8 +243,18 @@
     { id: 'pruem', w: 0.45, d: 50, pts: [[50.300, 6.470], [50.262, 6.452], [50.235, 6.430], [50.207, 6.424], [50.170, 6.430], [50.130, 6.440], [50.090, 6.450]] },
     { id: 'alf', w: 0.32, d: 28, pts: [[50.262, 6.330], [50.248, 6.308], [50.235, 6.290], [50.215, 6.262], [50.195, 6.235], [50.178, 6.200], [50.168, 6.160], [50.164, 6.143]] },
   ];
-  RIVERS.forEach(r => {
-    r.s = sampleSegs(crSegments(r.pts.map(P)), 8);
+  // Fluesse maeandern (deterministisch): Spline abtasten und seitlich versetzen
+  RIVERS.forEach((r, ri) => {
+    const base = sampleSegs(crSegments(r.pts.map(P)), 10);
+    let acc = 0;
+    r.s = base.map((q, i) => {
+      if (i) acc += Math.hypot(q[0] - base[i - 1][0], q[1] - base[i - 1][1]) / U;
+      const a = base[Math.max(0, i - 1)], b = base[Math.min(base.length - 1, i + 1)];
+      const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1;
+      const fade = Math.min(1, i / 6, (base.length - 1 - i) / 6);
+      const o = (fbm(acc / 1.5 + ri * 7.1, ri * 3.3, 3) * 0.55 + fbm(acc / 0.45 + ri * 2.9, 5.5, 2) * 0.16) * r.w * 1.6 * U * fade;
+      return [q[0] - dy / l * o, q[1] + dx / l * o];
+    });
     const xs = r.s.map(q => q[0]), ys = r.s.map(q => q[1]), m = r.w * U * 3.2;
     r.bb = [Math.min(...xs) - m, Math.min(...ys) - m, Math.max(...xs) + m, Math.max(...ys) + m];
   });
@@ -397,6 +407,18 @@
       field[j * cols + i] = v; if (v < lo) lo = v; if (v > hi) hi = v;
     }
     const iv = opt.iv || 20, ix = opt.ix || 100;
+    // Hoehenlinien
+    let topo = '';
+    for (let lv = Math.ceil(lo / iv) * iv; lv < hi; lv += iv) {
+      const chains = contourLevel(field, cols, rows, reg.x0, reg.y0, step, lv);
+      const pieces = [];
+      chains.forEach(c => {
+        const q = simplify(c.closed ? c.p.concat([c.p[0]]) : c.p, step * 0.06);
+        pieces.push.apply(pieces, contourPieces(c.closed ? q.slice(0, -1) : q, c.closed, 14));
+      });
+      if (pieces.length) topo += '<g' + (lv % ix === 0 ? ' class="ix"' : '') + '>' + pieces.map(d => '<path d="' + d + '"/>').join('') + '</g>';
+    }
+    if (opt.topoOnly) return '<g class="m-topo">' + topo + '</g>';
     const inReg = (x, y, m) => x > reg.x0 - m && x < reg.x1 + m && y > reg.y0 - m && y < reg.y1 + m;
     let s = '<defs>' +
       '<pattern id="' + pre + 'Forest" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2.3" class="m-tree"/><circle cx="12" cy="11" r="2.3" class="m-tree"/></pattern>' +
@@ -428,20 +450,9 @@
     s += '<g class="m-forest">' + forests.filter(f => inReg(f[0], f[1], Math.max(f[2], f[3]) * 1.4)).map(f =>
       '<path d="' + smoothClosed(blob(f[0], f[1], f[2], f[3], f[5], 0.2, 40, f[4])) + '" fill="url(#' + pre + 'Forest)"/>').join('') + '</g>';
     s += '<g class="m-moor">' + MOORS.map((m, i) => { const p = P(m); return inReg(p[0], p[1], 3 * U) ? '<path d="' + smoothClosed(blob(p[0], p[1], m[2] * U, m[3] * U, 11 + i * 2.3, 0.16, 40, m[4] * Math.PI / 180)) + '" fill="url(#' + pre + 'Marsh)"/>' : ''; }).join('') + '</g>';
-    // Hoehenlinien
-    let topo = '';
-    for (let lv = Math.ceil(lo / iv) * iv; lv < hi; lv += iv) {
-      const chains = contourLevel(field, cols, rows, reg.x0, reg.y0, step, lv);
-      const pieces = [];
-      chains.forEach(c => {
-        const q = simplify(c.closed ? c.p.concat([c.p[0]]) : c.p, step * 0.06);
-        pieces.push.apply(pieces, contourPieces(c.closed ? q.slice(0, -1) : q, c.closed, 14));
-      });
-      if (pieces.length) topo += '<g' + (lv % ix === 0 ? ' class="ix"' : '') + '>' + pieces.map(d => '<path d="' + d + '"/>').join('') + '</g>';
-    }
     s += '<g class="m-topo">' + topo + '</g>';
     // Wasser
-    s += RIVERS.map(r => '<path class="' + (r.main ? 'm-river' : 'm-brook') + '" d="' + segsToD(crSegments(r.pts.map(P))) + '"/>').join('');
+    s += RIVERS.map(r => '<path class="' + (r.main ? 'm-river' : 'm-brook') + '" d="M' + r.s.map(q => f1(q[0]) + ',' + f1(q[1])).join('L') + '"/>').join('');
     s += '<g class="m-lake">' + LAKES.map((l, i) => {
       const p = P(l), w = blob(p[0], p[1], l[2] / 2 * U, l[3] / 2 * U, 21 + i * 4, 0.14, 48, l[4] * Math.PI / 180);
       const sc = k => w.map(q => [p[0] + (q[0] - p[0]) * k, p[1] + (q[1] - p[1]) * k]);

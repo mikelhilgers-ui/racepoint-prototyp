@@ -102,24 +102,27 @@ function twillCanvas(n = 8, size = 128) {
 
 // Felgenschriftzug: weiss auf transparent, Farbe kommt vom Material
 const FONT = '"Roboto Condensed","Arial Narrow",Arial,sans-serif';
+let logoImg = null;
 function rimDecalTex(label) {
   const c = canvas(2048, 128), t = tex(c, { srgb: true, repeat: [1, 1] });
   t.wrapT = THREE.ClampToEdgeWrapping;
-  const draw = () => {
+  logoImg = logoImg || new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = 'assets/racepoint-logo-white.svg'; });
+  const draw = img => {
     const g = c.getContext('2d');
     g.clearRect(0, 0, 2048, 128);
     g.fillStyle = '#fff';
-    g.font = `italic 800 88px ${FONT}`;
+    g.font = `italic 800 74px ${FONT}`;
     g.textBaseline = 'middle';
-    const w = g.measureText(label).width, x0 = (2048 - w) / 2;
-    g.fillText(label, x0, 66);
-    // Zierstreifen links und rechts vom Schriftzug
-    g.fillRect(40, 60, x0 - 90, 8); g.fillRect(x0 + w + 50, 60, 2048 - (x0 + w + 50) - 40, 8);
-    g.fillRect(x0 - 40, 36, 10, 56); g.fillRect(x0 + w + 30, 36, 10, 56);
+    // Racepoint-Logo + Modellbezeichnung, wie ein grosser Felgen-Schriftzug
+    const lh = img ? 62 : 0, lw = lh * 12.5, gap = img ? 44 : 0, tw = g.measureText(label).width;
+    const w = lw + gap + tw, x0 = (2048 - w) / 2;
+    if (img) g.drawImage(img, x0, 64 - lh / 2, lw, lh);
+    g.fillText(label, x0 + lw + gap, 68);
+    // Zierlinien links und rechts
+    g.fillRect(30, 61, x0 - 80, 6); g.fillRect(x0 + w + 50, 61, 2048 - (x0 + w + 50) - 30, 6);
     t.needsUpdate = true;
   };
-  draw();
-  if (document.fonts) document.fonts.ready.then(draw);
+  logoImg.then(img => { draw(img); if (document.fonts) document.fonts.ready.then(() => draw(img)); });
   return t;
 }
 
@@ -200,7 +203,7 @@ export function partMaterials() {
   MATS = {
     rimCarbon: P({ color: 0x121316, metalness: .25, roughness: .34, clearcoat: 1, clearcoatRoughness: .08,
       normalMap: rimN, normalScale: new THREE.Vector2(.35, .35), anisotropy: .5, sheen: .15, sheenColor: 0x404650 }),
-    rimDecal: S({ color: 0xffffff, map: rimDecalTex('RACEPOINT  ·  CARBON 50'), transparent: true, roughness: .3, metalness: .1,
+    rimDecal: S({ color: 0xffffff, map: rimDecalTex('CARBON 50'), transparent: true, roughness: .3, metalness: .1,
       depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, side: THREE.DoubleSide }),
     rubber(tread = 'slick', tanwall = false) {
       const k = tread + tanwall;
@@ -215,11 +218,11 @@ export function partMaterials() {
     nipple: S({ color: 0x2a2c31, metalness: 1, roughness: .3 }),
     hub: S({ color: 0x15161a, metalness: .6, roughness: .32 }),
     rotor: S({ color: 0xb8bdc4, metalness: 1, roughness: .22 }),
-    rotorCarrier: S({ color: 0x24262b, metalness: .9, roughness: .35 }),
+    rotorCarrier: S({ color: 0x3c3f46, metalness: 1, roughness: .3 }),
     alloy: S({ color: 0xc9cdd3, metalness: 1, roughness: .24 }),
     anodBlack: S({ color: 0x1b1c20, metalness: .85, roughness: .3 }),
     anodSilver: S({ color: 0xd6d9de, metalness: 1, roughness: .18 }),
-    chainPlate: S({ color: 0xaeb3ba, metalness: 1, roughness: .28 }),
+    chainPlate: S({ color: 0xc4c8ce, metalness: 1, roughness: .24 }),
     chainInner: S({ color: 0x5d6168, metalness: 1, roughness: .34 }),
     chainPin: S({ color: 0xe4e6ea, metalness: 1, roughness: .2 }),
     // ohne Normal-Map: die Bauteil-Geometrien haben keine UVs
@@ -227,7 +230,7 @@ export function partMaterials() {
     carbonMatte: P({ color: 0x1a1b1f, metalness: .25, roughness: .55, clearcoat: .3, clearcoatRoughness: .4 }),
     black: S({ color: 0x111215, metalness: .3, roughness: .42 }),
     rubberBlack: S({ color: 0x18191b, roughness: .8 }),
-    microfibre: P({ color: 0x141416, roughness: .9, metalness: 0, sheen: .8, sheenColor: 0x3a3a40, sheenRoughness: .8 }),
+    microfibre: P({ color: 0x131315, roughness: .88, metalness: 0, sheen: .35, sheenColor: 0x2a2a30, sheenRoughness: .7 }),
     saddleShell: P({ color: 0x18191d, metalness: .3, roughness: .4, clearcoat: .7, clearcoatRoughness: .2 }),
     red: S({ color: 0xE83637, metalness: .55, roughness: .3 }),
     pedalSteel: S({ color: 0xd9dce0, metalness: 1, roughness: .16 }),
@@ -346,7 +349,7 @@ export function makeWheel(o = {}) {
   // Schriftzug-Band auf beiden Flanken
   if (o.decal !== false && depth > .035) [1, -1].forEach(side => {
     const dg = cached(`rimDecal:${rimKey}:${side}`, () => {
-      const nT = 192, nS = 4, s0 = .16, s1 = .62, pos = [], uv = [], idx = [];
+      const nT = 192, nS = 4, s0 = .1, s1 = .72, pos = [], uv = [], idx = [];
       for (let i = 0; i <= nT; i++) {
         const th = i / nT * TAU;
         for (let j = 0; j <= nS; j++) {
@@ -386,7 +389,15 @@ export function makeWheel(o = {}) {
     trail: [[0, 40, .25, [.009, .0045, .013]], [24, 40, .5, [.008, .0048, .008]], [-24, 40, .5, [.008, .0048, .008]], [54, 40, 0, [.009, .0052, .008]], [-54, 40, 0, [.009, .0052, .008]]],
   }[tread];
   if (rows) {
-    const total = rows.reduce((s, r) => s + r[1], 0), knobs = new THREE.InstancedMesh(rboxC(1, 1, 1, .22), M.knob, total);
+    const total = rows.reduce((s, r) => s + r[1], 0), knobs = new THREE.InstancedMesh(cached('knob', () => {
+      // flacher, leicht gerundeter Stollen mit wenig Dreiecken (bis zu 400 Stueck pro Bike)
+      const sh = new THREE.Shape(), r = .22;
+      sh.moveTo(-.5 + r, -.5); sh.lineTo(.5 - r, -.5); sh.quadraticCurveTo(.5, -.5, .5, -.5 + r); sh.lineTo(.5, .5 - r); sh.quadraticCurveTo(.5, .5, .5 - r, .5);
+      sh.lineTo(-.5 + r, .5); sh.quadraticCurveTo(-.5, .5, -.5, .5 - r); sh.lineTo(-.5, -.5 + r); sh.quadraticCurveTo(-.5, -.5, -.5 + r, -.5);
+      const k = new THREE.ExtrudeGeometry(sh, { depth: .8, bevelEnabled: true, bevelThickness: .1, bevelSize: .08, bevelSegments: 1, curveSegments: 2 });
+      k.translate(0, 0, -.4); k.rotateX(-Math.PI / 2);   // Hoehe = y (Normale), Grundriss in x/z
+      return k;
+    }), M.knob, total);
     const m4 = new THREE.Matrix4(), tX = V(), nY = V(), bZ = V(), pos = V(), sc = V();
     let k = 0;
     rows.forEach(([phiD, n, offs, size]) => {
@@ -474,7 +485,7 @@ export function makeRotor(R = .08, M = partMaterials()) {
     for (let i = 0; i < 6; i++) {
       const a = i / 6 * TAU;
       // geschwungener Arm: innen breit, aussen schmal, leicht verdreht
-      [[r0, a - .42], [r0 + .012, a - .2], [r1, a - .05 + .12], [r1 + .003, a + .1 + .12], [r0 + .012, a + .3], [r0, a + .42]].forEach(([r, b], j) =>
+      [[r0, a - .3], [r0 + .01, a - .13], [r1, a + .04], [r1 + .003, a + .15], [r0 + .01, a + .08], [r0, a + .26]].forEach(([r, b], j) =>
         (i || j ? s.lineTo(r * Math.cos(b), r * Math.sin(b)) : s.moveTo(r * Math.cos(b), r * Math.sin(b))));
     }
     s.holes.push(circlePath(.0175));
@@ -520,7 +531,7 @@ export function makeSaddle(o = {}) {
   // Kontur (Draufsicht): x = vorn (+), Heck bei -L/2
   const outline = (shrink = 0) => {
     const hw = W / 2 - shrink, pts = [];
-    const prof = [[.5, .19], [.47, .26], [.4, .29], [.28, .3], [.16, .34], [.04, .5], [-.08, .74], [-.2, .9], [-.31, .98], [-.4, 1], [-.46, .96], [-.495, .8], [-.5, .5], [-.505, .2], [-.505, 0]];
+    const prof = [[.5, .26], [.48, .33], [.4, .36], [.26, .37], [.13, .42], [.02, .55], [-.1, .76], [-.22, .92], [-.33, .99], [-.42, 1], [-.47, .95], [-.5, .78], [-.51, .5], [-.515, .2], [-.515, 0]];
     prof.forEach(([x, y]) => pts.push(new THREE.Vector2(x * (L - shrink * 2), y * hw)));
     prof.slice(0, -1).reverse().forEach(([x, y]) => pts.push(new THREE.Vector2(x * (L - shrink * 2), -y * hw)));
     const s = new THREE.Shape(); s.moveTo(pts[0].x, pts[0].y); s.splineThru(pts.slice(1).concat([pts[0]]));
@@ -529,11 +540,11 @@ export function makeSaddle(o = {}) {
   // Hoehenprofil: Nase faellt ab, Mitte leicht eingesenkt, Heck flach, Raender rund nach unten
   const shapeY = (x, z) => {
     const u = x / L;                                      // -.5 .. .5
-    let y = -.022 * sstep(.12, .5, u) ** 1.4;            // Nase runter
-    y -= .004 * Math.exp(-(((u - .05) / .14) ** 2));        // Mulde in der Mitte
-    y += .003 * sstep(-.3, -.5, u);                       // Heck minimal hoch
+    let y = -.011 * sstep(.15, .5, u) ** 1.5;            // Nase leicht runter
+    y -= .003 * Math.exp(-(((u - .02) / .16) ** 2));       // Mulde in der Mitte
+    y += .002 * sstep(-.3, -.5, u);                       // Heck minimal hoch
     const hw = Math.max(.02, W / 2 * (u < -.3 ? 1 : lerp(.3, 1, sstep(.45, -.2, u))));
-    y -= .012 * Math.pow(Math.min(1, Math.abs(z) / hw), 4);   // Kanten rund nach unten
+    y -= .008 * Math.pow(Math.min(1, Math.abs(z) / hw), 4);   // Kanten rund nach unten
     return y;
   };
   const deform = (geo, yOff) => {
@@ -549,21 +560,21 @@ export function makeSaddle(o = {}) {
     h.moveTo(x1, 0); h.bezierCurveTo(x1 - .01, cw * .9, x0 + .03, cw * 1.25, x0 + .012, cw * 1.05);
     h.bezierCurveTo(x0, cw * .9, x0, -cw * .9, x0 + .012, -cw * 1.05); h.bezierCurveTo(x0 + .03, -cw * 1.25, x1 - .01, -cw * .9, x1, 0);
     s.holes.push(h);
-    const geo = new THREE.ExtrudeGeometry(s, { depth: .009, bevelEnabled: true, bevelThickness: .008, bevelSize: .0075, bevelSegments: 6, curveSegments: 40 });
+    const geo = new THREE.ExtrudeGeometry(s, { depth: .004, bevelEnabled: true, bevelThickness: .0065, bevelSize: .007, bevelSegments: 6, curveSegments: 40 });
     geo.rotateX(-Math.PI / 2);   // Kontur liegt in x/z, Dicke nach oben (y)
     return deform(geo, .0);
   });
-  mesh(top, M.microfibre, g, V(0, .03, 0));
+  mesh(top, M.microfibre, g, V(0, .026, 0));
   const shell = cached(key + ':shell', () => {
-    const geo = new THREE.ExtrudeGeometry(outline(.004), { depth: .003, bevelEnabled: true, bevelThickness: .002, bevelSize: .002, bevelSegments: 2, curveSegments: 32 });
+    const geo = new THREE.ExtrudeGeometry(outline(.003), { depth: .002, bevelEnabled: true, bevelThickness: .0015, bevelSize: .0015, bevelSegments: 2, curveSegments: 32 });
     geo.rotateX(-Math.PI / 2);
     return deform(geo, -.0005);
   });
-  mesh(shell, M.saddleShell, g, V(0, .018, 0));
+  mesh(shell, M.saddleShell, g, V(0, .0165, 0));
   // Streben (Carbon, oval) – unter der Schale von hinten nach vorn, Klemmbereich gerade
   [1, -1].forEach(sd => {
     const z = sd * .021;
-    const pts = [V(-.098, .022, sd * .034), V(-.075, .008, z), V(-.03, -.0005, z), V(.035, -.0005, z), V(.07, .006, sd * .016), V(.088, .014, sd * .01)];
+    const pts = [V(-.1, .017, sd * .034), V(-.075, .007, z), V(-.03, -.0005, z), V(.035, -.0005, z), V(.07, .006, sd * .016), V(.088, .014, sd * .01)];
     mesh(cached(`rail:${sd}`, () => sweep(pts, [.0035, .0045], { seg: 30, rad: 10, ref: V(0, 1, 0) })), M.carbon, g);
   });
   // Klemme (Stuetzenkopf): Klemmbacken + Schrauben
@@ -693,69 +704,65 @@ export function makePedal(o = {}) {
   return g;
 }
 
-// Schaltwerk (SRAM-AXS-artig): B-Knuckle am Schaltauge, Parallelogramm mit Akku, Kaefig mit 2 Roellchen
+// Schaltwerk (SRAM-AXS-artig): B-Knuckle am Schaltauge, geformter Parallelogramm-Koerper,
+// Akku oben hinten, schlanker Kaefig mit Taille, zwei verzahnte Roellchen
 export function makeRearDerailleur(o = {}) {
   const M = mats(o), g = new THREE.Group(), mtb = !!o.mtb;
   const p1 = o.p1, p2 = o.p2, zc = o.zc, ax = o.axleZ ?? .071;
   const jR = pitchR(mtb ? 14 : 12);
-  // Schaltauge + B-Knuckle hinter/unter der Achse, aussen am Ausfallende
-  const hanger = V(-.004, -.014, ax + .006), bk = V(-.012, -.03, ax + .016);
-  mesh(rboxC(.022, .03, .006, .002), M.anodBlack, g, hanger.clone().add(V(0, .004, 0)));
-  const bkM = mesh(rboxC(.03, .024, .02, .007), M.black, g, bk); bkM.rotation.z = -.5;
-  // P-Knuckle ueber dem oberen Roellchen
-  const pk = V(p1.x - .002, p1.y + .03, zc + .016);
-  // Parallelogramm: aeussere Platte (gross, mit Logo-Akzent) + innere Platte
-  const link = (z, w, mat) => {
-    const d = pk.clone().sub(bk), L = Math.hypot(d.x, d.y), a = Math.atan2(d.y, d.x);
-    const m = mesh(rboxC(L + .014, w, .006, .0028), mat, g, V((pk.x + bk.x) / 2, (pk.y + bk.y) / 2, z));
-    m.rotation.z = a;
-    return { m, a, L };
-  };
-  const out = link(lerp(bk.z, pk.z, .5) + .009, .03, M.carbonMatte);
-  link(lerp(bk.z, pk.z, .5) - .006, .018, M.black);
-  // Akku oben auf dem Parallelogramm
-  const bat = mesh(rboxC(.04, .02, .02, .005), M.black, g, V((pk.x + bk.x) / 2 - .006, (pk.y + bk.y) / 2 + .02, lerp(bk.z, pk.z, .5) + .002));
-  bat.rotation.z = out.a + .15;
-  mesh(rboxC(.012, .005, .021, .002), M.anodSilver, g, bat.position.clone().add(V(-.012, .006, 0)), false).rotation.z = bat.rotation.z;   // Taste
-  // roter Akzent auf der Aussenplatte
-  const acc = mesh(rboxC(out.L * .55, .004, .0012, .0006), M.red, g, V((pk.x + bk.x) / 2, (pk.y + bk.y) / 2 - .006, lerp(bk.z, pk.z, .5) + .0125), false);
-  acc.rotation.z = out.a;
-  const pkM = mesh(rboxC(.024, .022, .026, .007), M.black, g, pk); pkM.rotation.z = .3;
-  // Kaefig: zwei Platten um beide Roellchen
-  const dir = p2.clone().sub(p1), beta = Math.atan2(dir.y, dir.x), cr = jR + .007;
+  const hanger = V(-.004, -.012, ax + .005), bk = V(-.016, -.026, ax + .015);
+  const pk = V(p1.x - .004, p1.y + .028, zc + .014);
+  mesh(rboxC(.02, .028, .006, .002), M.anodBlack, g, hanger);
+  mesh(cylC(.006, .016, 12), M.anodSilver, g, V(hanger.x, hanger.y, ax + .012));        // Befestigungsschraube
+  const bkM = mesh(rboxC(.028, .03, .024, .008), M.carbonMatte, g, bk); bkM.rotation.z = -.35;
+  // Koerper: geschwungener, flacher Arm vom B- zum P-Knuckle
+  const mid = bk.clone().lerp(pk, .5).add(V(-.014, .002, .006));
+  mesh(cached(`rdBody:${mtb}:${pk.x.toFixed(3)}:${pk.y.toFixed(3)}:${zc.toFixed(4)}`, () =>
+    sweep([bk, mid, pk], t => [lerp(.013, .01, t), lerp(.011, .009, t)], { seg: 20, rad: 14, ref: V(0, 0, 1) })), M.carbonMatte, g);
+  // aeussere Abdeckung mit rotem Streifen
+  const d = pk.clone().sub(bk), ang = Math.atan2(d.y, d.x), L = Math.hypot(d.x, d.y);
+  const cover = mesh(rboxC(L * .78, .02, .004, .0018), M.black, g, bk.clone().lerp(pk, .5).add(V(-.01, .001, .017))); cover.rotation.z = ang;
+  const stripe = mesh(rboxC(L * .5, .0035, .0012, .0006), M.red, g, cover.position.clone().add(V(0, 0, .0026)), false); stripe.rotation.z = ang;
+  // Akku: oben auf dem Koerper, nach hinten zeigend
+  const bat = mesh(rboxC(.044, .019, .022, .005), M.black, g, bk.clone().add(V(-.026, .012, .002)));
+  bat.rotation.z = .12;
+  mesh(rboxC(.012, .004, .023, .0015), M.anodSilver, g, bat.position.clone().add(V(-.008, .0105, 0)), false).rotation.z = .12;
+  const pkM = mesh(cylC(.012, .02, 20), M.carbonMatte, g, pk);
+  void pkM;
+  // Kaefig: zwei Platten mit Taille
+  const dir = p2.clone().sub(p1), beta = Math.atan2(dir.y, dir.x), c1 = jR * .78, c2 = jR * .74;
   const cageG = cached(`cage:${mtb}:${p1.x.toFixed(3)}:${p1.y.toFixed(3)}:${p2.x.toFixed(3)}:${p2.y.toFixed(3)}`, () => {
-    const s = new THREE.Shape();
-    for (let i = 0; i <= 16; i++) { const a = beta + Math.PI / 2 + Math.PI * i / 16; (i ? s.lineTo : s.moveTo).call(s, p1.x + cr * Math.cos(a), p1.y + cr * Math.sin(a)); }
-    for (let i = 0; i <= 16; i++) { const a = beta - Math.PI / 2 + Math.PI * i / 16; s.lineTo(p2.x + cr * .92 * Math.cos(a), p2.y + cr * .92 * Math.sin(a)); }
-    // Fenster in der Platte
-    const h = new THREE.Path(), m = p1.clone().lerp(p2, .5), L = dir.length() * .3, ww = .004;
-    h.absellipse(m.x, m.y, L, ww, beta, beta + TAU, true, beta);
-    s.holes.push(h);
-    return smooth(extrude(s, .0024, .0007, 6, 2));
+    const s = new THREE.Shape(), n = V(-Math.sin(beta), Math.cos(beta)), m = p1.clone().lerp(p2, .5);
+    const P = (c, r, a) => [c.x + r * Math.cos(a), c.y + r * Math.sin(a)];
+    let first = true;
+    for (let i = 0; i <= 14; i++) { const [x, y] = P(p1, c1, beta + Math.PI / 2 + Math.PI * i / 14); first ? s.moveTo(x, y) : s.lineTo(x, y); first = false; }
+    s.quadraticCurveTo(m.x - n.x * c1 * .45, m.y - n.y * c1 * .45, ...P(p2, c2, beta - Math.PI / 2));
+    for (let i = 1; i <= 14; i++) s.lineTo(...P(p2, c2, beta - Math.PI / 2 + Math.PI * i / 14));
+    s.quadraticCurveTo(m.x + n.x * c1 * .45, m.y + n.y * c1 * .45, ...P(p1, c1, beta + Math.PI / 2));
+    return smooth(extrude(s, .0022, .0007, 8, 2));
   });
   mesh(cageG, M.carbon, g, V(0, 0, zc + .0072));
   mesh(cageG, M.anodBlack, g, V(0, 0, zc - .0072));
-  // Schaltroellchen mit Zaehnen, Lagerdeckel
   const jockey = cached(`jockey:${mtb}`, () => extrude(gearShape(mtb ? 14 : 12, { tipH: .0026, rootD: .0032, holes: [circlePath(.0042)] }), .0034, .0003, 4, 1));
   const jockeys = [p1, p2].map(p => {
     const jg = new THREE.Group(); jg.position.set(p.x, p.y, zc); g.add(jg);
     mesh(jockey, M.black, jg);
-    mesh(cylC(.0062, .014, 20), M.anodSilver, jg);
     return jg;
   });
-  return { g, jockeys, anchor: V((pk.x + bk.x) / 2, (pk.y + bk.y) / 2 + .01, lerp(bk.z, pk.z, .5) + .016) };
+  [p1, p2].forEach(p => mesh(cylC(.0055, .021, 16), M.anodSilver, g, V(p.x, p.y, zc)));   // Roellchen-Schrauben
+  return { g, jockeys, anchor: bk.clone().lerp(pk, .5).add(V(-.01, 0, .02)) };
 }
 
 // Umwerfer (kabellos): Leitblech folgt dem grossen Blatt, Koerper + Akku am Sitzrohr
 export function makeFrontDerailleur(o = {}) {
   const M = mats(o), g = new THREE.Group(), R = o.ringR, zr = o.zr ?? .047, a0 = (o.angle ?? 112) * DEG;
   const cage = cached(`fdCage:${R.toFixed(4)}:${a0}`, () => {
-    const s = new THREE.Shape(), r0 = R + .006, r1 = R + .024, aA = a0 - .62, aB = a0 + .22;
+    const s = new THREE.Shape(), r0 = R + .005, r1 = R + .017, aA = a0 - .5, aB = a0 + .16;
     s.absarc(0, 0, r1, aA, aB, false); s.absarc(0, 0, r0, aB, aA, true);
     return smooth(extrude(s, .0016, .0005, 24, 2));
   });
-  mesh(cage, M.anodSilver, g, V(0, 0, zr + .0065));
-  mesh(cage, M.anodBlack, g, V(0, 0, zr - .0105));
+  mesh(cage, M.anodBlack, g, V(0, 0, zr + .0065));
+  mesh(cage, M.anodSilver, g, V(0, 0, zr - .0105));
   // Koerper ueber dem Leitblech
   const top = V((R + .03) * Math.cos(a0 - .12), (R + .03) * Math.sin(a0 - .12), zr + .004);
   const body = mesh(rboxC(.04, .028, .03, .007), M.black, g, top); body.rotation.z = a0 - Math.PI / 2;
@@ -776,8 +783,8 @@ export function makeChain(curve, o = {}) {
     s.quadraticCurveTo(0, -waist, -p, -r);
     return extrude(s, .0007, 0, 5);
   };
-  const outerG = cached(`chainOuter:${pitch.toFixed(5)}`, () => plate(.0044, .0033));
-  const innerG = cached(`chainInner:${pitch.toFixed(5)}`, () => plate(.0047, .0037));
+  const outerG = cached(`chainOuter:${pitch.toFixed(5)}`, () => plate(.0041, .004));
+  const innerG = cached(`chainInner:${pitch.toFixed(5)}`, () => plate(.0045, .0044));
   const nOut = N / 2, nIn = N / 2;
   const outer = new THREE.InstancedMesh(outerG, M.chainPlate, nOut * 2), inner = new THREE.InstancedMesh(innerG, M.chainInner, nIn * 2);
   const roller = new THREE.InstancedMesh(cylC(.0039, .0024, 10), M.chainInner, N), pin = new THREE.InstancedMesh(cylC(.0018, .0062, 8), M.chainPin, N);
