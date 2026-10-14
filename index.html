@@ -56,6 +56,32 @@ tailwind.config = {
   .catpick{ transition: all .2s; }
   .catpick.catactive{ outline:3px solid #E83637; outline-offset:2px; }
   .catpick.catactive .catlabel{ color:#E83637; }
+
+  /* ===== Mobil-Feinschliff (Smartphone + kleines Tablet) ===== */
+  #mobileMenu{ background:rgba(14,15,17,.97); }
+  body:has(#mobileMenu:not(.hidden)) :is(.prototype-picker,.kib-launch){ display:none; }
+  @media (max-width:767px){
+    /* V1: Hero-Inhalt im Fluss, damit Info-Badge und Headline nicht unter Logo/Ton-Button rutschen */
+    .v1hero{ height:auto; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end; }
+    .v1hero .v1copy{ position:relative; padding-top:9.5rem; }
+    .v1hero .v1copy h1{ font-size:2.75rem; line-height:.95; }
+    .v1hero .v1copy p{ font-size:1.0625rem; }
+    .v1hero .v1copy .flex-wrap{ display:grid; grid-template-columns:1fr 1fr; gap:.625rem; }
+    .v1hero .v1copy .flex-wrap > a{ padding:.95rem .75rem; text-align:center; font-size:.875rem; }
+    .v1hero .v1copy .flex-wrap > a:first-child{ grid-column:1 / -1; font-size:.9375rem; }
+    /* Video-Karten: Querformat statt sehr hoher Hochkant-Kacheln */
+    .variant .yt.aspect-\[3\/4\]{ aspect-ratio:4/3; }
+    /* Abschnittskoepfe: "Alle ansehen →" nicht umbrechen */
+    .variant .items-end.justify-between > a{ white-space:nowrap; flex-shrink:0; padding-bottom:.35rem; }
+    .variant .items-end.justify-between > h2{ min-width:0; }
+    /* Bike-Slider: Pfeile unten statt mitten im Text */
+    .bikeslider .bsprev, .bikeslider .bsnext{ top:auto; bottom:1rem; --tw-translate-y:0; transform:none; height:2.75rem; width:2.75rem; }
+    .bikeslider .bsprev{ left:1.5rem; }
+    .bikeslider .bsnext{ left:4.75rem; right:auto; }
+    .bikeslider .bscount{ bottom:1.5rem; right:1.5rem; }
+    /* Footer: gestapelt + Luft fuer die schwebenden Buttons (KI-Berater, Prototyp-Wahl) */
+    .variant > footer > div{ flex-direction:column; align-items:center; gap:.75rem; text-align:center; padding-bottom:calc(5.5rem + env(safe-area-inset-bottom)); }
+  }
 </style>
 <script src="assets/prototype-picker.js" defer></script>
 </head>
@@ -80,12 +106,12 @@ tailwind.config = {
     <div class="flex items-center gap-4"><div class="hidden sm:flex items-center gap-2 text-xs text-white/60"><button class="lang text-white font-semibold">DE</button>·<button class="lang">FR</button>·<button class="lang">NL</button>·<button class="lang">EN</button></div><a class="hidden md:inline-block rounded-full bg-rp-red px-5 py-2.5 text-sm font-bold uppercase">Termin</a><button class="menubtn md:hidden grid place-items-center h-10 w-10 -mr-1 text-white"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-7 h-7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
   </div></header>
 
-  <div class="relative h-screen min-h-[680px] w-full overflow-hidden">
+  <div class="v1hero relative h-screen min-h-[680px] w-full overflow-hidden">
     <!-- Hero = echtes Teaser-Video der bestehenden racepoint.be (selbst gehostet, laeuft ueberall, auch per Doppelklick) -->
     <video id="heroVideo" class="absolute inset-0 h-full w-full object-cover brightness-110" autoplay muted loop playsinline poster="assets/teaser-poster.jpg"><source src="assets/racepoint-teaser.mp4" type="video/mp4"></video>
     <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none"></div>
     <button class="soundtoggle absolute top-24 right-5 z-20 rounded-full bg-black/40 backdrop-blur ring-1 ring-white/25 px-4 py-2 text-xs font-semibold uppercase tracking-wide">Ton an</button>
-    <div class="absolute bottom-0 inset-x-0 z-10 pointer-events-none"><div class="mx-auto max-w-7xl px-6 lg:px-10 pb-12 md:pb-16">
+    <div class="v1copy absolute bottom-0 inset-x-0 z-10 pointer-events-none"><div class="mx-auto max-w-7xl px-6 lg:px-10 pb-12 md:pb-16">
       <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium mb-5"><span class="h-1.5 w-1.5 rounded-full bg-rp-red"></span> Specialized Elite Händler · ~80.000 Abos · ~18 Mio. Aufrufe</div>
       <h1 class="font-anton text-5xl md:text-6xl lg:text-7xl leading-[0.92] tracking-tight max-w-4xl uppercase">Der Experte aus den Videos. <span class="text-rp-red">Jetzt für dein Bike.</span></h1>
       <p class="mt-4 text-lg md:text-xl text-white/80 max-w-2xl">80.000 Menschen schauen zu, wie hier aus Carbon Träume werden. Deiner ist der nächste. Beratung, Bikefitting und Werkstatt in Schönberg, Ostbelgien.</p>
@@ -839,7 +865,7 @@ tailwind.config = {
 
 <!-- ===================== Mobil-Menü ================================== -->
 <div id="mobileMenu" class="fixed inset-0 z-[65] hidden bg-rp-ink/98 backdrop-blur text-white overflow-y-auto">
-  <div class="flex items-center justify-between px-6 h-20"><img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint"><button id="menuClose" class="text-3xl leading-none" title="Schließen">&times;</button></div>
+  <div class="flex items-center justify-between px-6 h-20"><img src="assets/racepoint-logo-light.svg" class="h-5 md:h-6 w-auto" alt="Racepoint"><button id="menuClose" class="grid place-items-center h-11 w-11 -mr-2 text-3xl leading-none" title="Schließen" aria-label="Menü schließen">&times;</button></div>
   <nav class="px-6 mt-4 flex flex-col">
     <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Bikes</a>
     <a tabindex="0" class="mnav py-4 text-3xl font-anton uppercase border-b border-white/10 cursor-pointer">Builds &amp; Videos</a>

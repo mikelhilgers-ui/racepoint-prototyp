@@ -102,7 +102,7 @@
     body:has(dialog[open]) .prototype-picker{display:none}
     html.kib-open-doc .prototype-picker,body:has(#chatPanel:not(.hidden)) .prototype-picker{display:none}
     body:has(.prototype-picker) .advisor-fab{bottom:88px!important}
-    @media(max-width:600px){.prototype-picker{right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom))}.prototype-panel{max-height:calc(100dvh - 104px - env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}body:has(.prototype-picker) .advisor-fab{bottom:82px!important}}
+    @media(max-width:640px){.prototype-picker{right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom))}.prototype-toggle{width:48px;height:48px;box-shadow:0 8px 22px #0006}.prototype-toggle svg{width:24px;height:24px}.prototype-panel{max-height:calc(100dvh - 90px - env(safe-area-inset-bottom));max-width:calc(100vw - 28px);margin-bottom:10px}body:has(.prototype-picker) .advisor-fab{bottom:calc(74px + env(safe-area-inset-bottom))!important}}
     @media(prefers-reduced-motion:reduce){.prototype-toggle{transition:none}.prototype-toggle:hover{transform:none}}
   `;
   document.head.append(style);

@@ -537,8 +537,16 @@
   @media (max-width:640px){
     .kib-panel{inset:0;width:auto;border-radius:0;transform-origin:50% 100%;transform:translateY(100%);opacity:1;padding-bottom:env(safe-area-inset-bottom)}
     .kib-open .kib-panel{transform:none}
-    .kib-launch{right:16px;bottom:84px}
+    /* Kompakter runder Launcher, sauber ueber dem Prototyp-Zahnrad (48px, rechts 14px, unten 14px) */
+    .kib-launch{right:calc(14px + env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));gap:8px}
+    .kib-orb{width:48px;height:48px;box-shadow:0 10px 26px rgba(232,54,55,.32),0 3px 10px rgba(0,0,0,.5)}
+    .kib-orb i svg{width:22px;height:22px}
+    .kib-orb b{inset:10px}
+    .kib-orb .kib-ping{right:0;top:0;width:11px;height:11px}
+    .kib-label span{padding:7px 11px;font-size:13px}
     .kib-label small{display:none}
+    .kib-in,.kib-lead input,.kib-lead textarea{font-size:16px}
+    .kib-acts{opacity:1}
     .kib-hello h3{font-size:30px}
     .kib-bike{flex-basis:84%}
   }
@@ -616,7 +624,8 @@
     let hi = 0;
     const cycle = () => { const h = S.hints[state.lang] || S.hints.de; hintEl.textContent = '„' + h[hi++ % h.length] + '“'; };
     cycle(); setInterval(cycle, 3200);
-    setTimeout(() => label.classList.remove('on'), 16000);
+    // Mobil: Label nur kurz als Hinweis zeigen, damit es keine Inhalte verdeckt
+    setTimeout(() => label.classList.remove('on'), matchMedia('(max-width:640px)').matches ? 6500 : 16000);
     root.querySelector('.kib-orb').addEventListener('mouseenter', () => label.classList.add('on'));
 
     // Globale Einstiege: [data-ask] und <form data-ask-form>
