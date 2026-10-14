@@ -8,7 +8,7 @@ Prototypen zur Richtungsentscheidung. Alle 15 aktiven Entwürfe sind über das Z
 
 `node preview.mjs` starten, dann http://127.0.0.1:8101/ öffnen. Die Startseite zeigt alle Entwürfe mit Vorschaubildern, neueste zuerst. Unter Windows lädt `powershell -File start-preview.ps1` vorhandene API-Zugangsdaten aus den Benutzer-Umgebungsvariablen, ohne sie in Dateien zu schreiben.
 
-Das Zahnrad steht auf jedem Prototyp und allen Unterseiten. **17 · Best of** steht als neuester Entwurf ganz oben. **16 · Motion**, **15 · Cinema**, **14 · Terrain**, **13 · Velocity**, **11 · Original**, **10 · Die Runde**, **9 · 3D-Studio** und **8 · Der Aufbau** tragen das rote **NEW**-Badge. Atelier und Kunden-Feedback sind aus der Auswahl entfernt. Beim Wechsel zwischen den vollständigen Designs bleibt die Unterseite erhalten. Cinema startet den lokalen Shop-Teaser direkt und stumm; Pause und Ton sind bedienbar.
+Das Zahnrad steht auf jedem Prototyp und allen Unterseiten, außer bei 17 · Best of: Dort sitzt nur der KI-Berater unten rechts, die Seite wirkt wie eine fertige Website. **17 · Best of** steht als neuester Entwurf ganz oben. **16 · Motion**, **15 · Cinema**, **14 · Terrain**, **13 · Velocity**, **11 · Original**, **10 · Die Runde**, **9 · 3D-Studio** und **8 · Der Aufbau** tragen das rote **NEW**-Badge. Atelier und Kunden-Feedback sind aus der Auswahl entfernt. Beim Wechsel zwischen den vollständigen Designs bleibt die Unterseite erhalten. Cinema startet den lokalen Shop-Teaser direkt und stumm; Pause und Ton sind bedienbar.
 
 Unser Paket unter `entwuerfe/codex-2026-10/` verwendet den echten KI-Berater mit Herstellerrecherche. Der gemeinsame lokale Server stellt dessen API bereit. Die übrigen Prototypen nutzen ihn ebenfalls über `assets/ki-berater.js`. Für eine statische Vorschau reicht weiterhin ein einfacher Webserver; dort steht die echte KI nicht zur Verfügung.
 
@@ -40,6 +40,8 @@ Der öffentliche Testserver begrenzt KI-Anfragen auf zwei gleichzeitig, zwölf p
 | Achim, Meisterwerkstatt, Retül-Bikefitting | 8 Der Aufbau, 11 Original |
 | Samstagsrunde mit Höhenprofil, je Etappe eine Bike-Kategorie | 10 Die Runde |
 | Filme aus dem Kanal, Kontakt mit Live-Öffnungszeiten | 10 Die Runde, 8 Der Aufbau |
+
+Reihenfolge der Startseite: Hero, Bikes, Achim, Werkstatt, Der Aufbau, Samstagsrunde, Filme, Besuch und zuletzt der KI-Berater direkt vor dem Footer.
 
 Die Seite ist nur deutsch, nutzt nur lokale Bibliotheken aus `vendor/` und berücksichtigt `prefers-reduced-motion`.
 
