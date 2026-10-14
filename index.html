@@ -13,6 +13,7 @@
 <!--  Racepoint-Kanal. Hero-Videos laufen automatisch (stumm,Loop),-->
 <!--  Galerie-Videos starten per Klick. Achim/Team-Foto: racepoint.be -->
 <!--  Icons nur bei Telefon/WhatsApp + Play-Dreieck. ?v=1..6.       -->
+<!--  Neu: Prototypen 8–10 als eigene Seiten (v8/v9/v10-*.html).   -->
 <!-- ============================================================= -->
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -883,6 +884,9 @@ tailwind.config = {
     <button data-go="4" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">4 · Finde dein Bike</button>
     <button data-go="5" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">5 · Bold/Sportlich</button>
     <button data-go="6" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70">6 · Immersive</button>
+    <a href="v8-aufbau.html" class="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70 hover:bg-white/5 hover:text-white">8 · Der Aufbau<span class="text-[10px] tracking-wider rounded-md bg-rp-red/20 text-red-300 px-1.5 py-0.5">Motion</span></a>
+    <a href="v9-3d-studio.html" class="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70 hover:bg-white/5 hover:text-white">9 · 3D-Studio<span class="text-[10px] tracking-wider rounded-md bg-rp-red/20 text-red-300 px-1.5 py-0.5">Motion</span></a>
+    <a href="v10-die-runde.html" class="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70 hover:bg-white/5 hover:text-white">10 · Die Runde<span class="text-[10px] tracking-wider rounded-md bg-rp-red/20 text-red-300 px-1.5 py-0.5">Motion</span></a>
     <button data-go="7" class="vbtn block w-full text-left rounded-lg px-3 py-2.5 text-sm font-semibold uppercase text-white/70 border-t border-white/10 mt-1 pt-3"><span class="text-rp-red">7 ·</span> Kunden-Feedback</button>
     <div class="px-3 pt-2 pb-1 text-[11px] text-white/30 border-t border-white/10 mt-1">F12 → Mobilansicht</div>
   </div>
@@ -903,8 +907,11 @@ tailwind.config = {
       f.innerHTML = '<iframe class="'+cls+'" allow="autoplay; encrypted-media" src="'+heroSrc(h.dataset.id, !soundOn)+'"></iframe>';
     });
   }
+  // Prototypen 8–10 liegen als eigene Seiten daneben (Scroll-Motion, 3D, KI-Berater 2.0)
+  const NEXT = { '8':'v8-aufbau.html', '9':'v9-3d-studio.html', '10':'v10-die-runde.html' };
   function showVariant(v){
-    v = String(v); if(!['1','2','3','4','5','6','7'].includes(v)) v = '1';
+    v = String(v); if(NEXT[v]){ location.replace(NEXT[v]); return; }
+    if(!['1','2','3','4','5','6','7'].includes(v)) v = '1';
     document.querySelectorAll('.variant').forEach(s => s.classList.toggle('active', s.dataset.variant === v));
     document.querySelectorAll('.vbtn').forEach(b => { const on=b.dataset.go===v; b.classList.toggle('bg-rp-red',on); b.classList.toggle('text-white',on); b.classList.toggle('text-white/70',!on); });
     const url=new URL(location); url.searchParams.set('v',v); history.replaceState({},'',url);
