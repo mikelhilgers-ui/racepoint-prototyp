@@ -1,0 +1,2 @@
+Alle Schriften in diesem Ordner stehen unter der SIL Open Font License 1.1 (https://openfontlicense.org).
+Quelle: Fontsource (npm @fontsource/anton, roboto-condensed, roboto-mono, barlow-condensed, @fontsource-variable/fraunces, dm-sans), Originale bei Google Fonts.

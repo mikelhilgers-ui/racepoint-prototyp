@@ -129,7 +129,9 @@
     [0, G.HTt[0]].forEach(x => S('line', { x1: x, y1: -778, x2: x, y2: -742 }, solid));
     S('line', { x1: 990, y1: 0, x2: 990, y2: G.HTt[1] }, solid);
     [0, G.HTt[1]].forEach(y => S('line', { x1: 972, y1: y, x2: 1008, y2: y }, solid));
-    const txt = (x, y, s, rot) => S('text', { x, y, fill: 'rgba(255,255,255,.55)', stroke: 'none', 'font-family': 'Roboto Mono, monospace', 'font-size': 24, 'letter-spacing': 2, 'text-anchor': 'middle', transform: rot ? 'rotate(' + rot + ' ' + x + ' ' + y + ')' : '' }, bp, s);
+    // Bemassungs-Texte in eigener Gruppe: sie blenden aus, sobald die Laufraeder sitzen (sonst kollidieren sie mit dem Bike)
+    const bpt = S('g', {}, bp);
+    const txt = (x, y, s, rot) => S('text', { x, y, fill: 'rgba(255,255,255,.55)', stroke: 'none', 'font-family': 'Roboto Mono, monospace', 'font-size': 24, 'letter-spacing': 2, 'text-anchor': 'middle', transform: rot ? 'rotate(' + rot + ' ' + x + ' ' + y + ')' : '' }, bpt, s);
     txt(94, 284, 'RADSTAND 996 MM'); txt(450, -132, '73°'); txt(-128, -60, '73,5°'); txt(197, -776, 'REACH 395'); txt(1030, -282, 'STACK 565', -90);
     root.appendChild(bp);
 
@@ -275,6 +277,7 @@
       const inner = S('g', {}, k);
       S('circle', { r: 27, fill: 'rgba(12,13,16,.88)', stroke: '#22c55e', 'stroke-width': 3.5 }, inner);
       S('path', { d: 'M-11,0 L-3,8 L12,-9', fill: 'none', stroke: '#22c55e', 'stroke-width': 4.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, inner);
+      S('rect', { x: 26, y: (i % 2 ? 42 : -32) - 24, width: c[2].length * 13.4 + 20, height: 33, rx: 9, fill: 'rgba(12,13,16,.86)', stroke: 'rgba(34,197,94,.35)', 'stroke-width': 1.5 }, inner);
       S('text', { x: 36, y: i % 2 ? 42 : -32, fill: '#86efac', 'font-family': 'Roboto Mono, monospace', 'font-size': 22, 'letter-spacing': 1 }, inner, c[2]);
     });
 
@@ -283,7 +286,7 @@
     const flash = p => S('circle', { cx: p[0], cy: p[1], r: 12, opacity: 0 }, flashes);
 
     return {
-      svg, root, parts, bp, shadow, checks: $$('.chk > g', checks),
+      svg, root, parts, bp, bpt, shadow, checks: $$('.chk > g', checks),
       flash: {
         rahmen: [flash([0, 0]), flash(G.HTb)], gabel: [flash(G.HTb)], wheelR: [flash(G.R)], wheelF: [flash(G.F)],
         kurbel: [flash([0, 0])], kassette: [flash(G.R)], cockpit: [flash([392, -592])], sattel: [flash([-148, -500])],
@@ -349,8 +352,9 @@
   // Explosionszeichnung: Versatz je Teil {x, y, r, s} – quer (Desktop) und hoch (Handy)
   const EXPLODE = {
     wide: {
-      rahmen: [0, -30, -4, 1], gabel: [300, -230, 18, 1], wheelR: [-300, 150, -10, 0.95], wheelF: [330, 180, 12, 0.95],
-      kassette: [-420, 300, 0, 1], kurbel: [130, 400, 35, 1], schaltwerk: [-170, 450, -15, 1], cockpit: [330, -320, -14, 1], sattel: [-270, -250, 10, 1],
+      // Tiefe: nahe Teile groesser, ferne kleiner; der Rahmen hebt sich und kippt, damit schon Schritt 01 sichtbar landet
+      rahmen: [20, -120, -9, 1.06], gabel: [420, -260, 24, 0.86], wheelR: [-200, 240, -14, 0.82], wheelF: [470, 200, 16, 1.1],
+      kassette: [-380, 330, 0, 0.9], kurbel: [170, 470, 40, 1.12], schaltwerk: [-180, 500, -18, 0.92], cockpit: [440, -380, -18, 1.08], sattel: [-340, -320, 12, 0.9],
     },
     narrow: {
       rahmen: [0, -10, -4, 1], gabel: [150, -330, 22, 1], wheelR: [-90, 250, -8, 0.8], wheelF: [90, 280, 10, 0.8],
@@ -442,6 +446,9 @@
     const sr = stage.getBoundingClientRect();
     if (sr.bottom < 0 || sr.top > innerHeight) return;
     const t = state.t || 0, sc = state.narrow ? 0.55 : 1;
+    const placed = [];   // fuer die Kollisionspruefung: bereits gesetzte Etiketten
+    // Handy: Etiketten bleiben ueber der Textkarte unten
+    const maxY = state.narrow && t > 0.7 ? stepCard.getBoundingClientRect().top - sr.top - 8 : sr.height - 10;
     Object.keys(tagEls).forEach(k => {
       const te = tagEls[k], f = 1 - clamp((t - START[k] + 0.05) / 0.45, 0, 1);
       // Handy: Etiketten erst nach dem Hero, damit der Titel frei bleibt
@@ -451,7 +458,22 @@
       const cx = r.left + r.width / 2 - sr.left, cy = r.top + r.height / 2 - sr.top;
       const o = TAGPOS[k], tx = cx + o[0] * sc, ty = cy + o[1] * sc;
       const w = te.d.offsetWidth, h = te.d.offsetHeight;
-      const lx = o[0] < 0 ? tx : tx, ax = clamp(lx - (o[0] < 0 ? w : 0), 6, sr.width - w - 6), ay = clamp(ty - h / 2, state.narrow ? 132 : 70, sr.height - h - 10);
+      const ax = clamp(tx - (o[0] < 0 ? w : 0), 6, sr.width - w - 6);
+      let ay = clamp(ty - h / 2, state.narrow ? 132 : 70, sr.height - h - 10);
+      // nicht ueberlappen: so lange um eine Etikettenhoehe verschieben, bis frei
+      for (let n = 0; n < 6; n++) {
+        const hit = placed.find(q => ax < q.x + q.w + 4 && ax + w + 4 > q.x && ay < q.y + q.h + 4 && ay + h + 4 > q.y);
+        if (!hit) break;
+        ay = ty < hit.y + hit.h / 2 ? hit.y - h - 6 : hit.y + hit.h + 6;
+      }
+      // untere rechte Ecke (KI-Orb + Zahnrad) frei halten
+      if (ax + w > sr.width - 110 && ay + h > sr.height - 190) ay = sr.height - 190 - h;
+      ay = clamp(ay, state.narrow ? 132 : 70, Math.max(state.narrow ? 132 : 70, maxY - h));
+      // immer noch verdeckt (enger Bildschirm)? Dann dieses Etikett weglassen – frueher eingebaute Teile haben Vorrang
+      if (placed.some(q => ax < q.x + q.w + 2 && ax + w + 2 > q.x && ay < q.y + q.h + 2 && ay + h + 2 > q.y)) {
+        te.d.style.opacity = 0; te.line.setAttribute('opacity', 0); te.dot.setAttribute('opacity', 0); return;
+      }
+      placed.push({ x: ax, y: ay, w, h });
       te.d.style.transform = 'translate(' + ax + 'px,' + ay + 'px)';
       te.d.style.opacity = vis;
       const ex = o[0] < 0 ? ax + w : ax, ey = ay + h / 2;
@@ -464,10 +486,15 @@
   const bobs = Object.keys(B.parts).map((k, i) => ({ k, el: B.parts[k].querySelector('.bob'), ph: i * 1.7, sp: 0.9 + (i % 3) * 0.25 }));
   gsap.ticker.add(time => {
     if (!state.active) return;
+    // Buehne ausserhalb des Bildschirms: nichts schreiben (spart Layout + SVG-Neuzeichnen)
+    const sr = stage.getBoundingClientRect();
+    if (sr.bottom < 0 || sr.top > innerHeight) return;
     const t = state.t || 0;
     bobs.forEach(b => {
       const f = 1 - clamp((t - START[b.k]) / 0.4, 0, 1);
-      b.el.setAttribute('transform', f > 0 ? 'translate(0 ' + r1(Math.sin(time * b.sp + b.ph) * 12 * f) + ') rotate(' + r1(Math.sin(time * b.sp * 0.7 + b.ph) * 1.2 * f) + ')' : '');
+      if (f <= 0) { if (b.on) { b.el.removeAttribute('transform'); b.on = false; } return; }
+      b.on = true;
+      b.el.setAttribute('transform', 'translate(0 ' + r1(Math.sin(time * b.sp + b.ph) * 12 * f) + ') rotate(' + r1(Math.sin(time * b.sp * 0.7 + b.ph) * 1.2 * f) + ')');
     });
     placeTags();
   });
@@ -479,7 +506,14 @@
     if (reduce) {
       // Ohne Bewegung: fertig aufgebautes, lackiertes Bike
       state.active = false;
-      gsap.set([B.bp, '#hud', '#checklist', '#progress', '#tags', stepCard], { autoAlpha: 0 });
+      gsap.set([B.bp, '#hud', '#checklist', '#progress', '#tags', stepCard, B.checks, '.cue'], { autoAlpha: 0 });
+      // Finale-CTAs (KI-Frage, Beratung, Builds) direkt im Hero zeigen – ohne Scroll-Timeline erscheint #finTxt nie
+      const ht = $('#heroTxt');
+      if (!$('.rm-fin', ht)) {
+        const box = document.createElement('div'); box.className = 'rm-fin';
+        box.append($('#finTxt .ask'), $('#finTxt .fin-btns'));
+        ht.appendChild(box);
+      }
       gsap.set(B.chainLinks, { opacity: 1 });
       gsap.set(B.shadow, { opacity: 1 });
       B.sw1.setAttribute('offset', 1.1); B.sw2.setAttribute('offset', 1.2);
@@ -487,6 +521,9 @@
     }
     state.active = true;
     const L = EXPLODE[narrow ? 'narrow' : 'wide'];
+    // nach einem Wechsel aus dem Reduce-Zweig die CTAs zurueck ins Finale haengen
+    const rmFin = $('.rm-fin');
+    if (rmFin) { $('#finTxt h2').parentNode.append(...rmFin.children); rmFin.remove(); }
     Object.keys(L).forEach(k => {
       const v = L[k];
       gsap.set(B.parts[k], { x: v[0], y: v[1], rotation: v[2], scale: v[3], transformOrigin: '50% 50%' });
@@ -498,6 +535,9 @@
       scrollTrigger: {
         trigger: stage, start: 'top top', end: () => '+=' + Math.round(innerHeight * (narrow ? 6 : 6.5)),
         pin: true, scrub: 0.9, anticipatePin: 1, invalidateOnRefresh: true,
+        // zuerst berechnen: sonst verschieben sich nach einem Breakpoint-Wechsel (Resize, Tablet drehen)
+        // alle spaeteren Trigger um die Pin-Laenge
+        refreshPriority: 1,
       },
       // Anzeige folgt der (nachlaufenden) Animation, nicht der Scrollposition
       onUpdate: () => update(tl.time(), tl.progress()),
@@ -512,9 +552,12 @@
     tl.to(B.root, { scale: 1, svgOrigin: '94 -250', duration: sAt(6) + 1 - START.rahmen, ease: 'power1.inOut' }, START.rahmen);
     // Teile einbauen
     Object.keys(L).forEach(k => {
-      tl.to(B.parts[k], { x: 0, y: 0, rotation: 0, scale: 1, duration: 1, ease: 'power3.inOut' }, START[k]);
+      tl.to(B.parts[k], { x: 0, y: 0, rotation: 0, scale: 1, duration: 1, ease: 'back.inOut(1.15)' }, START[k]);
+      // Einrasten: kurzer Ruck der ganzen Buehne
+      tl.to(bikebox, { keyframes: [{ x: -3, y: 2, duration: 0.04 }, { x: 2, y: -1, duration: 0.04 }, { x: 0, y: 0, duration: 0.06 }] }, START[k] + 0.95);
       (B.flash[k] || []).forEach(c => tl.fromTo(c, { attr: { r: 14 }, opacity: 0.95 }, { attr: { r: 130 }, opacity: 0, duration: 0.5, ease: 'power1.out', immediateRender: false }, START[k] + 0.95));
     });
+    tl.to(B.bpt, { opacity: 0, duration: 0.5 }, START.wheelF + 0.5);
     tl.to(B.chainBase, { drawSVG: '100%', duration: 0.7, ease: 'none' }, START.kette);
     tl.to(B.chainLinks, { opacity: 1, duration: 0.3 }, START.kette + 0.6);
     tl.to(B.shadow, { opacity: 1, duration: 0.6 }, START.wheelF + 0.6);
@@ -531,10 +574,16 @@
     tl.fromTo(B.glint, { attr: { x: -900 } }, { attr: { x: 1100 }, duration: 0.9, ease: 'power1.inOut' }, FIN + 1.2);
     tl.to(B.spinR, { rotation: 540, svgOrigin: G.R.join(' '), duration: 2.4, ease: 'power1.in' }, FIN);
     tl.to(B.spinF, { rotation: 540, svgOrigin: G.F.join(' '), duration: 2.4, ease: 'power1.in' }, FIN);
-    tl.fromTo('#finTxt', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, FIN + 0.7);
+    // Finale-Text kommt schon waehrend der Lackierung – keine leere Spalte
+    tl.fromTo('#finTxt', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.6 }, FIN + 0.15);
+    // Abschluss: langsamer Push-in auf das fertige Bike
+    // Handy: Bike wird kleiner und rueckt hoch, damit der Finale-Block darunter Platz hat
+    if (narrow) tl.to(bikebox, { scale: 0.8, yPercent: -14, transformOrigin: '50% 0%', duration: 0.8 }, FIN);
+    else tl.to(bikebox, { scale: 1.05, duration: 1.6, ease: 'power1.inOut' }, FIN + 0.9);
     tl.to('#hud', { autoAlpha: 0.5, duration: 0.4 }, FIN + 0.5);
 
     update(0, 0);
+    ScrollTrigger.sort();
     return () => { state.active = false; };
   });
 
@@ -586,17 +635,19 @@
     if (quoteFx) quoteFx.st.kill();
     const split = new SplitText(quoteEl, { type: 'words', wordsClass: 'wd' });
     if (RP.reducedMotion) { gsap.set(split.words, { opacity: 1 }); quoteFx = { st: { kill() {} }, split }; return; }
-    const tw = gsap.to(split.words, { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: '#quote', start: 'top 80%', end: 'bottom 40%', scrub: true } });
+    const tw = gsap.to(split.words, { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: '#quote', start: 'top 80%', end: 'bottom 70%', scrub: true } });
     quoteFx = { st: tw.scrollTrigger, split };
   }
-  initQuote();
+  // erst nach dem Laden der Schriften zerlegen (sonst falsche Wortbreiten + Konsolenwarnung)
+  document.fonts.ready.then(initQuote);
 
   /* ---- Zaehler ---- */
   function fmtCount(n) { return Math.round(n).toLocaleString(RP.lang === 'en' ? 'en-GB' : RP.lang + '-BE'); }
   $$('[data-count]').forEach(el => {
     const to = +el.dataset.count, suf = el.dataset.suffix || '';
-    const o = { v: 0 };
+    const o = { v: RP.reducedMotion ? to : 0 };
     const set = () => { el.textContent = fmtCount(o.v) + (suf ? ({ de: ' Mio.', fr: ' mio', nl: ' mln', en: 'M' }[RP.lang] || suf) : ''); };
+    if (RP.reducedMotion) { set(); RP.onLang(() => set()); return; }
     ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => gsap.to(o, { v: to, duration: 1.8, ease: 'power2.out', onUpdate: set }) });
     RP.onLang(() => set());
   });
@@ -611,6 +662,7 @@
     { k: 'kids', t: { de: 'Das erste richtige Rad – mit Beratung, die mitwächst.', fr: 'Le premier vrai vélo – avec des conseils qui grandissent avec eux.', nl: 'De eerste echte fiets – met advies dat meegroeit.', en: 'The first real bike – with advice that grows with them.' }, q: { de: 'Ich suche ein Kinderrad', fr: 'Je cherche un vélo pour enfant', nl: 'Ik zoek een kinderfiets', en: 'I’m looking for a kids’ bike' } },
   ];
   const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  let catTriggers = [];
   function renderCats() {
     const K = window.KIBerater;
     $('#cats').innerHTML = CATS.map(c => {
@@ -625,13 +677,14 @@
       el.addEventListener('pointerleave', () => { rx(0); ry(0); });
     });
     gsap.set('#cats', { perspective: 900 });
-    if (!RP.reducedMotion) ScrollTrigger.batch('#cats .rv', { start: 'top 90%', onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out' }) });
+    catTriggers.forEach(t => t.kill());
+    if (!RP.reducedMotion) catTriggers = ScrollTrigger.batch('#cats .rv', { start: 'top 90%', onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out' }) });
   }
   renderCats();
 
   /* ---- Builds: horizontaler Scroll ---- */
   const BUILDS = [
-    ['9KIh7oOIPT4', 'S-Works Tarmac SL8 LTD', [['Typ', 'Unboxing · Limited'], ['Gruppe', 'SRAM Red AXS'], ['LRS', 'Roval Rapide CLX']]],
+    ['9KIh7oOIPT4', 'S-Works Tarmac SL8\u00a0LTD', [['Typ', 'Unboxing · Limited'], ['Gruppe', 'SRAM Red AXS'], ['LRS', 'Roval Rapide CLX']]],
     ['MHXDMPbMypQ', 'Tarmac SL7 S-Works', [['Typ', 'Dreambuild'], ['Gruppe', 'SRAM Red AXS'], ['LRS', 'Roval Rapide CLX']]],
     ['vV_rL9yq620', 'S-Works Aethos', [['Typ', 'Bike Ahead'], ['Gruppe', 'SRAM Red AXS'], ['Gewicht', '6,1 kg']]],
     ['5TcRRpUy5T4', 'Cervélo S5', [['Typ', 'Bike Build'], ['Gruppe', 'Dura-Ace 12s'], ['LRS', 'Princeton']]],
@@ -654,21 +707,30 @@
       '</p><span class="btn" style="align-self:flex-start;background:#0e0f11">' + T({ de: 'Build planen', fr: 'Planifier', nl: 'Build plannen', en: 'Plan my build' }) + ' ' + arrow + '</span></article>';
   }
   renderBuilds();
-  let hTween = null;
+  let hTween = null, parallax = [];
+  // Bild-Parallax je Karte – nach jedem Neu-Rendern der Karten neu anlegen (alte Tweens zeigen sonst auf geloeschte Knoten)
+  function buildParallax() {
+    parallax.forEach(t => t.kill());
+    parallax = hTween ? $$('.bcard img', track).map(img => gsap.fromTo(img, { xPercent: -5 }, { xPercent: 5, ease: 'none', scrollTrigger: { trigger: img.parentNode, containerAnimation: hTween, start: 'left right', end: 'right left', scrub: true } })) : [];
+  }
   mm.add('(prefers-reduced-motion: no-preference)', () => {
+    // Endkarte stoppt mit Abstand zum Rand (der Abstandshalter .htrack::after zaehlt mit)
     const dist = () => Math.max(0, track.scrollWidth - innerWidth);
     hTween = gsap.to(track, {
       x: () => -dist(), ease: 'none',
       scrollTrigger: { trigger: '#hwrap', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 0.8, invalidateOnRefresh: true, onUpdate: s => { $('#hbar').style.width = (s.progress * 100) + '%'; } },
     });
-    $$('.bcard img', track).forEach(img => gsap.fromTo(img, { xPercent: -5 }, { xPercent: 5, ease: 'none', scrollTrigger: { trigger: img.parentNode, containerAnimation: hTween, start: 'left right', end: 'right left', scrub: true } }));
-    return () => { hTween = null; };
+    buildParallax();
+    return () => { hTween = null; parallax = []; };
   });
 
   /* ---- Marken-Laufband reagiert auf Scroll-Tempo ---- */
   if (!RP.reducedMotion) {
-    const skew = gsap.quickTo('.marq div', 'skewX', { duration: 0.5, ease: 'power3' });
+    // Schraeglage auf dem Wrapper, nicht auf dem per CSS laufenden Band (sonst bricht die Endlos-Schleife);
+    // nach dem Scrollen (auch Tastatur/Sprung) zurueck auf 0
+    const skew = gsap.quickTo('.marq', 'skewX', { duration: 0.5, ease: 'power3' });
     ScrollTrigger.create({ trigger: '#werkstatt', start: 'top bottom', end: 'bottom top', onUpdate: self => skew(clamp(self.getVelocity() / -260, -10, 10)) });
+    ScrollTrigger.addEventListener('scrollEnd', () => skew(0));
   }
 
   /* ---- Besuch: Parallax + Oeffnungszeiten ---- */
@@ -762,10 +824,24 @@
 
   /* ---------------- Sprachwechsel ---------------- */
   renderTexts();
+  // rp-core meldet beim Start einmal die (unveraenderte) Sprache – dann nichts neu bauen
+  let shownLang = RP.lang;
   RP.onLang(() => {
-    renderTexts(); renderHours(); renderCats(); renderBuilds();
+    if (RP.lang === shownLang) return;
+    shownLang = RP.lang;
+    renderTexts(); renderHours(); renderCats(); renderBuilds(); buildParallax(); a11y();
     initQuote();
     ScrollTrigger.refresh();
+  });
+  // Tastatur: data-ask/data-video-Elemente ohne href sind sonst keine Tab-Stopps
+  function a11y() {
+    $$('[data-ask]:not(button):not(form):not([href]),[data-video]').forEach(el => {
+      el.setAttribute('tabindex', '0'); el.setAttribute('role', 'button');
+    });
+  }
+  a11y();
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"][tabindex="0"]')) { e.preventDefault(); e.target.click(); }
   });
   window.addEventListener('load', () => ScrollTrigger.refresh());
 })();

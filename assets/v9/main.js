@@ -95,8 +95,6 @@ if (studio) {
     live = true;
     html.classList.add('stage-ready');
     studio.intro(.15);
-    // echtes Rennrad-Modell erst nach dem ersten Bild nachladen (Draco, ~0,9 MB)
-    setTimeout(() => studio.loadModel().then(ok => html.classList.toggle('model-ready', ok)), reduced ? 0 : 1600);
   });
 } else {
   fallback();

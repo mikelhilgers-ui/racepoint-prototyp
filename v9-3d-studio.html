@@ -38,7 +38,7 @@
     --glass:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
   }
   *{box-sizing:border-box}
-  html{background:var(--ink);color:var(--paper);-webkit-text-size-adjust:100%}
+  html{background:var(--ink);color:var(--paper);-webkit-text-size-adjust:100%;overflow-x:clip}
   body{margin:0;font:400 17px/1.55 'Roboto Condensed',system-ui,sans-serif;background:var(--ink);overflow-x:clip}
   img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
@@ -92,7 +92,7 @@
   .hdr.scrolled{background:rgba(11,12,14,.62);border-color:var(--line);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
   .hdr-logo img{height:17px;width:auto}
   .hdr-nav{display:flex;gap:26px;margin-left:auto}
-  .hdr-nav a{position:relative;padding:6px 0;font-weight:500;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,242,236,.74);transition:color .2s}
+  .hdr-nav a{position:relative;white-space:nowrap;padding:6px 0;font-weight:500;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,242,236,.74);transition:color .2s}
   .hdr-nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
   .hdr-nav a:hover{color:#fff}
   .hdr-nav a:hover::after{transform:scaleX(1)}
@@ -371,9 +371,6 @@
   .foot nav{display:flex;flex-wrap:wrap;gap:20px;color:var(--mute);font-size:14px;text-transform:uppercase;letter-spacing:.06em}
   .foot nav a:hover{color:#fff}
   .foot small{display:block;width:100%;color:var(--faint);font-size:13px;padding-right:90px}
-  .foot .credit{display:block;margin-top:8px}
-  .foot .credit a{color:var(--mute);text-decoration:underline;text-decoration-color:rgba(245,242,236,.3);text-underline-offset:3px}
-  .foot .credit a:hover{color:#fff}
 
   .toast{position:fixed;left:50%;bottom:28px;z-index:50;transform:translate(-50%,24px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:12px;
     max-width:calc(100vw - 32px);padding:14px 22px;border-radius:999px;background:rgba(16,17,20,.92);border:1px solid rgba(34,197,94,.35);color:var(--paper);
@@ -411,6 +408,8 @@
     .hdr-logo img{height:12px}
     .hdr-right{gap:8px}
     .hdr-right .btn-pill{display:none}
+    .hdr-logo{flex:0 1 auto;min-width:0}
+    .hdr-logo img{max-width:100%}
     [data-lang-switch] button{padding:7px 7px}
     .hero{padding-bottom:32px}
     .hero-title{font-size:19.6vw;line-height:.86}
@@ -418,7 +417,7 @@
     .hero-title .o{-webkit-text-stroke-width:1.5px}
     .seg-v button{padding:10px 13px;font-size:12px}
     /* untere rechte Ecke bleibt fuer KI-Orb + Zahnrad frei: Satz, KI-Eingabe und Chips linksbuendig mit Abstand */
-    .hero-ui{gap:14px;align-items:flex-start;text-align:left;padding-right:72px}
+    .hero-ui{gap:14px;align-items:flex-start;text-align:left;padding-right:72px;align-self:stretch;width:auto}
     .hero-ui .chips{justify-content:flex-start}
     .hero-ui p{font-size:17px}
     .ask{height:56px;padding-left:16px;gap:10px}
@@ -471,6 +470,11 @@
     .hours{padding:22px 18px 18px}
     .visit .row .btn{flex:1 1 150px}
     .foot small{padding-right:76px;padding-bottom:70px}
+  }
+
+  @media (max-width:380px){
+    .hdr-right{gap:6px}
+    [data-lang-switch] button{padding:7px 5px}
   }
 
   /* ---------------- Reduzierte Bewegung: keine Kamerafahrt, Kapitel als normale Bloecke ---------------- */
@@ -802,8 +806,7 @@
           <a href="#kontakt" data-i18n='{"fr":"Contact","nl":"Contact","en":"Contact"}'>Kontakt</a>
           <a href="">Impressum</a>
         </nav>
-        <small>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler · Prototyp 9 „3D-Studio“ – das Bike wird live im Browser gerendert, ohne ein einziges Foto.
-          <span class="credit">3D-Modell <a href="https://sketchfab.com/3d-models/road-bike-cb03b0657fbc4693b59194124ba713db" target="_blank" rel="noopener">„Road Bike“</a> von <a href="https://sketchfab.com/tanity" target="_blank" rel="noopener">tanity</a>, <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC BY 4.0</a> – Farben und Material angepasst.</span></small>
+        <small>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler · Prototyp 9 „3D-Studio“ – das Bike wird live im Browser gerendert, ohne ein einziges Foto.</small>
       </div>
     </footer>
   </div>

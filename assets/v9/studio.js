@@ -9,7 +9,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/RoomEnvironment.js';
 import { GEO, PAINTS, makeMaterials, buildBike, disposeBike } from './bike.js';
-import { loadRoadBike, buildModelBike } from './model.js';
 
 const gsap = window.gsap;
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
@@ -97,15 +96,15 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   const M = makeMaterials();
   const cfg = { type: 'rennrad', paint: 'rot', wheels: 'tief' };
   const bikes = [];
-  let bike = null, road = null;   // road = Vorlage des echten Rennrad-Modells, sobald geladen
+  let bike = null;
   function spawn() {
-    const b = cfg.type === 'rennrad' && road ? buildModelBike(road, cfg, M) : buildBike(cfg.type, cfg, M);
+    const b = buildBike(cfg.type, cfg, M);
     b.parts.forEach(p => { p.m = 0; });
     holder.add(b.root); bikes.push(b);
     contact.scale.set(b.size.len * 1.08, .44, 1);
     return b;
   }
-  function retire(b) { if (b.shared) b.root.removeFromParent(); else disposeBike(b); bikes.splice(bikes.indexOf(b), 1); }
+  function retire(b) { disposeBike(b); bikes.splice(bikes.indexOf(b), 1); }
   bike = spawn();
 
   /* ---------------- Zustand (wird von der Seite gesetzt) ---------------- */
@@ -118,7 +117,7 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     active: true,    // rendern ja/nein
   };
   const rot = { spin: 0, user: 0, vel: 0, drag: false, x: 0, t: 0, time: 0 };
-  let wheelAngle = 0, crankAngle = 0;
+  let wheelAngle = 0, crankAngle = 0, chainPos = 0;
 
   /* ---------------- Kamera mit Lens-Shift ---------------- */
   const camera = new THREE.PerspectiveCamera(30, 1, .05, 60);
@@ -224,16 +223,6 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     gsap.to(bike.parts, { m: 0, duration: 1.5, ease: 'expo.out', delay, stagger: { amount: Math.min(bike.parts.length * .04, 1.1), from: 'random' } });
   }
 
-  // Echtes Rennrad nachladen: bis es da ist (oder wenn es scheitert) steht das prozedurale Bike.
-  // Ist gerade das Rennrad gewaehlt, setzt es sich aus seinen Teilen neu zusammen.
-  function loadModel() {
-    return loadRoadBike().then(tpl => {
-      road = tpl;
-      if (cfg.type === 'rennrad') rebuild();
-      return true;
-    }, () => false);
-  }
-
   /* ---------------- Projektion fuer HUD ---------------- */
   function project(name) {
     const a = bike.anchors[name];
@@ -263,9 +252,15 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
     crankAngle += state.pedal * dt;
     wheelAngle += (state.pedal * ratio + state.wheel) * dt;
     M.chain.map.offset.x += state.pedal * dt * (.0127 / (2 * Math.sin(Math.PI / G.rings[0]))) / .0254;
+    // Kette: Glieder laufen mit (Kettenlaenge pro Kurbel-Radiant = Teilkreisradius des Blatts)
+    const chainMoved = state.pedal !== 0;
+    chainPos += state.pedal * dt * (.0127 / (2 * Math.sin(Math.PI / G.rings[0])));
     for (const b of bikes) {
       b.spin.wheels.forEach(s => { s.rotation.z = -wheelAngle; });
       b.spin.crank.forEach(s => { s.rotation.z = -crankAngle; });
+      (b.spin.pedals || []).forEach(p => { p.g.rotation.z = p.base + crankAngle; });   // Pedale bleiben waagerecht
+      (b.spin.jockeys || []).forEach(j => { j.g.rotation.z = -chainPos / j.r; });
+      if (chainMoved || b.chainPos !== chainPos) { (b.chains || []).forEach(c => c.set(-chainPos)); b.chainPos = chainPos; }
       applyParts(b);
     }
     updateCamera(dt);
@@ -288,9 +283,8 @@ export function createStudio(canvas, { small = false, reduced = false } = {}) {
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); state.active = false; if (onLost) onLost(); });
 
   return {
-    cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, loadModel, frame, setGoal, snap, project, tick, resize,
+    cfg, state, M, setType, setWheels, setPaint, setSize, intro, pulse, prepare, frame, setGoal, snap, project, tick, resize,
     get partCount() { return bike.count; },
-    get real() { return !!bike.shared; },
     set onDrag(fn) { onDrag = fn; },
     set onLost(fn) { onLost = fn; },
   };

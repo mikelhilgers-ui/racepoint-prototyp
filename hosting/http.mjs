@@ -4,7 +4,7 @@ import {stat,realpath} from 'node:fs/promises';
 import {resolve,sep,extname} from 'node:path';
 
 const home='/entwuerfe/codex-2026-10/prototype/varianten/';
-const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.mp4':'video/mp4','.glb':'model/gltf-binary','.woff2':'font/woff2','.wasm':'application/wasm','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8'};
+const mime={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.jpg':'image/jpeg','.png':'image/png','.webp':'image/webp','.mp4':'video/mp4','.glb':'model/gltf-binary','.woff2':'font/woff2','.wasm':'application/wasm','.txt':'text/plain; charset=utf-8','.md':'text/plain; charset=utf-8','.gpx':'application/gpx+xml'};
 
 export function createRacepointServer({root,publicFiles,origin,agentStatus,runAgent,maxDailyRequests=100,maxActive=2,maxPerMinute=12}){
   const publicOrigin=new URL(origin),allowed=new Set(publicFiles),requestTimes=[];

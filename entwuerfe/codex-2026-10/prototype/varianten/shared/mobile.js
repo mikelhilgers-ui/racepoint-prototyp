@@ -12,6 +12,17 @@ const fitHeadings=()=>{
     const broken=()=>{const edge=box();return words.some(range=>{const parts=[...range.getClientRects()].filter(rect=>rect.width>0);const all=range.getBoundingClientRect();return parts.length>1||all.right>edge.right+1||all.left<edge.left-1;});};
     let size=base;while(broken()&&size>base*.6){size*=.94;heading.style.fontSize=size.toFixed(1)+'px';}
   }
+  // The "BUILT FOR YOU" backdrop word in the 3D section stays whole on narrow screens, whatever font has loaded.
+  for(const scene of document.querySelectorAll('.bike-scene')){
+    scene.style.removeProperty('--watermark-size');
+    if(!narrow.matches||!scene.getClientRects().length)continue;
+    const mark=getComputedStyle(scene,'::before');if(!mark.content||mark.content==='none')continue;
+    const probe=document.createElement('span');
+    Object.assign(probe.style,{position:'absolute',visibility:'hidden',whiteSpace:'nowrap',font:mark.font,fontSize:mark.fontSize,fontWeight:mark.fontWeight,fontFamily:mark.fontFamily,letterSpacing:mark.letterSpacing,textTransform:mark.textTransform});
+    probe.textContent=mark.content.replace(/^["']|["']$/g,'');document.body.append(probe);
+    const room=Math.min(scene.clientWidth,innerWidth)-28,width=probe.getBoundingClientRect().width;probe.remove();
+    if(width>room)scene.style.setProperty('--watermark-size',(parseFloat(mark.fontSize)*room/width).toFixed(1)+'px');
+  }
 };
 let fitFrame=0;const scheduleFit=()=>{cancelAnimationFrame(fitFrame);fitFrame=requestAnimationFrame(fitHeadings);};
 scheduleFit();document.fonts?.ready.then(scheduleFit);addEventListener('resize',scheduleFit,{passive:true});narrow.addEventListener('change',scheduleFit);

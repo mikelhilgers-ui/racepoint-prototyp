@@ -36,6 +36,16 @@ body:has(dialog[open]) .design-switch{display:none}
   [data-design] .advisor-fab>span:not(.spark){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   [data-design] .advisor-fab .spark{font-size:21px;line-height:1;color:#e83637}
   [data-design] .advisor-fab:hover{transform:none}
+
+  /* Phones: comfortable tap targets for logo, menu, hero, breadcrumb and footer links. */
+  [data-design] .site-header .logo,[data-design] .footer-logo{display:inline-flex;align-items:center;min-height:44px}
+  [data-design] .hero-link,[data-design] .family-strip>a,[data-design] .build-next{min-height:44px;align-items:center}
+  [data-design] .footer-mail{display:inline-flex;align-items:center;min-height:44px}
+  [data-design] .breadcrumb{display:block;width:max-content;max-width:100%;padding:13px 0;margin-top:-13px}
+  [data-design] .page-hero .breadcrumb{margin-bottom:20px}
+  [data-design] .menu-toggle{width:44px;padding:12px 9px;margin-right:-9px}
+  [data-design] .bike-scene[style*="--watermark-size"]::before{font-size:var(--watermark-size)!important}
+  [data-design] .model-credit a,[data-design] .motion-scroll-note a{padding:12px 0;margin:-12px 0}
 }
 @media(max-width:600px){[data-design] .advisor-dialog,[data-design] .advisor-dialog.is-maximized{border-radius:0}}
 /* Tablet and desktop: hero film controls end before the prototype gear in the bottom-right corner. */

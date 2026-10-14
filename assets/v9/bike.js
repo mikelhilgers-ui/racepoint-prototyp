@@ -7,6 +7,8 @@
    ===================================================================== */
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+// Laufraeder, Sattel und Antrieb kommen aus dem gemeinsamen Bauteil-Modul (auch fuer V17)
+import { partMaterials, makeWheel, makeCaliper, makeSaddle, makeCassette, makeCrankset, makeRearDerailleur, makeFrontDerailleur, makeChain } from '../bike-parts3d.js';
 
 const TAU = Math.PI * 2, DEG = Math.PI / 180;
 const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
@@ -23,7 +25,7 @@ export const GEO = {
     tireR: .339, tireW: .028, tireH: .027, rimW: .0142, rim: [.052, .032], tread: 'slick',
     cs: .410, fc: .580, drop: .072, sta: 73.5, hta: 73, stack: .555, reach: .385, ht: .15, st: .47, seat: .735,
     stem: .11, stemA: -12, bar: 'drop', barW: .2, flare: 0,
-    rings: [52, 39], cogs: [11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30, 34], cog: 5,
+    rings: [48, 35], cogs: [10, 11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 33], cog: 6,
     rotor: .08, spokes: 12, axle: .071,
   },
   gravel: {
@@ -148,8 +150,11 @@ export function makeMaterials() {
         float facing = abs(dot(normalize(vNormal), normalize(vViewPosition)));
         diffuseColor.rgb = mix(diffuseColor.rgb, mix(uFlipB, uFlipA, smoothstep(.4, .97, facing)), uFlip);`);
   };
+  // Bauteil-Materialien; der Felgenschriftzug teilt sich die Farbe mit dem Rahmen-Schriftzug (folgt dem Lack)
+  const parts = partMaterials(), decalMat = decal(logoTex(1024, 128, 72));
+  parts.rimDecal.color = decalMat.color;
   return {
-    paint,
+    paint, parts,
     carbon: P({ color: 0x17181c, metalness: .35, roughness: .4, clearcoat: .6, clearcoatRoughness: .25, bumpMap: weave, bumpScale: .25 }),
     rim: P({ color: 0x141518, metalness: .3, roughness: .36, clearcoat: .8, clearcoatRoughness: .18, bumpMap: rimWeave, bumpScale: .35 }),
     black: S({ color: 0x121316, metalness: .25, roughness: .46 }),
@@ -163,7 +168,7 @@ export function makeMaterials() {
     chain: S({ color: 0xffffff, metalness: .9, roughness: .38, map: chainTex() }),
     gold: S({ color: 0xdca94f, metalness: 1, roughness: .18 }),
     red: S({ color: 0xE83637, metalness: .55, roughness: .3 }),
-    decal: decal(logoTex(1024, 128, 72)),
+    decal: decalMat,
     rimDecal: decal(logoTex(2048, 128, 90)),
     lamp: new THREE.MeshBasicMaterial({ color: new THREE.Color(3, 3, 2.8) }),
     lampRed: new THREE.MeshBasicMaterial({ color: new THREE.Color(4, .2, .2) }),
@@ -280,23 +285,6 @@ function smoothNormals(g) {
   return m;
 }
 
-// Sattel: Draufsicht als Kontur mit Mittelkanal, dick extrudiert, Heck leicht hochgezogen
-function saddleGeo(L, W) {
-  const hw = W / 2, right = [[.5, 0], [.46, .2], [.36, .34], [.18, .42], [.02, .5], [-.12, .72], [-.25, .93], [-.37, 1], [-.46, .92], [-.5, .62], [-.5, .3]];
-  const pts = right.concat([[-.47, 0]], right.slice(1).reverse().map(([x, y]) => [x, -y])).map(([x, y]) => new THREE.Vector2(x * L, y * hw));
-  const s = new THREE.Shape(); s.moveTo(pts[0].x, pts[0].y); s.splineThru(pts.slice(1).concat([pts[0]]));
-  const hole = new THREE.Path(); hole.absellipse(-.07 * L, 0, .19 * L, .13 * hw, 0, TAU, true);
-  s.holes.push(hole);
-  const g = new THREE.ExtrudeGeometry(s, { depth: .011, bevelEnabled: true, bevelThickness: .009, bevelSize: .008, bevelSegments: 5, curveSegments: 48 });
-  g.rotateX(-Math.PI / 2);
-  const p = g.attributes.position;
-  for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i);
-    p.setY(i, p.getY(i) + .45 * Math.min(0, x + .03) ** 2 - .5 * Math.max(0, x - .06) ** 2);
-  }
-  return smoothNormals(g);
-}
-
 /* ---------------- Mesh-Helfer ---------------- */
 function mesh(geo, mat, parent, pos, shadow = true) {
   const m = new THREE.Mesh(geo, mat);
@@ -330,123 +318,6 @@ const tubeR = (a, b, sw = .2) => t => {
   return [lerp(a[0], b[0], e) * s, lerp(a[1], b[1], e) * s];
 };
 
-/* ---------------- Laufrad ---------------- */
-// Achse im Ursprung, Drehachse z. Alles, was sich dreht, haengt an "spin".
-function buildWheel(G, opt, M, front) {
-  const g = new THREE.Group(), spin = new THREE.Group(); g.add(spin);
-  const bsd = .311, depth = G.rim[opt.wheels === 'leicht' ? 1 : 0], w = G.rimW;
-  const hw = s => w * (1 + .08 * Math.sin(Math.PI * Math.min(1, s * 1.3))) * Math.sqrt(Math.max(0, 1 - s ** 4));
-
-  // Felge: tiefes U-Profil, Bett oben, runde Flanke unten
-  const prof = [[bsd + .0034, -w * .86], [bsd + .0034, w * .86], [bsd + .0012, w]];
-  const N = 16;
-  for (let k = 0; k <= N; k++) { const s = Math.sin(k / N * Math.PI / 2); prof.push([bsd - s * depth, hw(s)]); }
-  for (let k = N - 1; k >= 0; k--) { const s = Math.sin(k / N * Math.PI / 2); prof.push([bsd - s * depth, -hw(s)]); }
-  prof.push([bsd + .0012, -w], [bsd + .0034, -w * .86]);
-  mesh(lathe(prof, 144), M.rim, spin);
-
-  // Schriftzug auf der Felgenflanke (nur tiefe Felgen)
-  if (opt.wheels !== 'leicht' && depth > .035) [1, -1].forEach(side => {
-    const nT = 192, nS = 4, s0 = .2, s1 = .74, pos = [], uv = [], idx = [];
-    for (let i = 0; i <= nT; i++) {
-      const th = i / nT * TAU;
-      for (let j = 0; j <= nS; j++) {
-        const s = lerp(s0, s1, j / nS), r = bsd - s * depth;
-        pos.push(r * Math.cos(th), r * Math.sin(th), side * (hw(s) + .0006));
-        uv.push((side > 0 ? -i : i) / nT * 4, 1 - j / nS);
-      }
-    }
-    for (let i = 0; i < nT; i++) for (let j = 0; j < nS; j++) { const a = i * (nS + 1) + j, b = a + nS + 1; idx.push(a, b, a + 1, a + 1, b, b + 1); }
-    const dg = new THREE.BufferGeometry();
-    dg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    dg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-    dg.setIndex(idx); dg.computeVertexNormals();
-    mesh(dg, M.rimDecal, spin, null, false);
-  });
-
-  // Reifen: elliptischer Querschnitt, Lauflaeche schwarz, Flanke schwarz oder Tan-Wall
-  const hh = G.tireH / 2, hwT = G.tireW / 2, rc = bsd + hh - .0015, tp = [];
-  for (let k = 0; k <= 40; k++) { const f = (-158 + 316 * k / 40) * DEG; tp.push([rc + hh * Math.cos(f), hwT * Math.sin(f), f]); }
-  const tg = lathe(tp, 144), cols = [], tread = new THREE.Color(0x141518), side = new THREE.Color(opt.wheels === 'tan' ? 0x9a6a3a : 0x1a1b1e), c = new THREE.Color();
-  for (let i = 0; i <= 144; i++) tp.forEach(p => {
-    const k = THREE.MathUtils.smoothstep(Math.abs(p[2]) / DEG, 46, 56);
-    c.copy(tread).lerp(side, k); cols.push(c.r, c.g, c.b);
-  });
-  tg.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
-  mesh(tg, M.rubber, spin);
-
-  // Stollen als InstancedMesh (Gravel fein, MTB grob)
-  const rows = {
-    gravel: [[0, 64, .25, [.004, .0016, .007]], [22, 64, .5, [.005, .002, .004]], [-22, 64, .5, [.005, .002, .004]], [46, 64, 0, [.006, .0026, .006]], [-46, 64, 0, [.006, .0026, .006]]],
-    mtb: [[0, 36, .25, [.011, .006, .016]], [30, 36, .5, [.009, .0062, .009]], [-30, 36, .5, [.009, .0062, .009]], [58, 36, 0, [.011, .0066, .009]], [-58, 36, 0, [.011, .0066, .009]]],
-    trail: [[0, 40, .25, [.009, .004, .013]], [24, 40, .5, [.008, .0045, .008]], [-24, 40, .5, [.008, .0045, .008]], [54, 40, 0, [.009, .005, .008]], [-54, 40, 0, [.009, .005, .008]]],
-  }[G.tread];
-  if (rows) {
-    const total = rows.reduce((s, r) => s + r[1], 0), knobs = new THREE.InstancedMesh(rbox(1, 1, 1, .2), M.knob, total);
-    const m4 = new THREE.Matrix4(), tX = V(), nY = V(), bZ = V(), pos = V(), sc = V();
-    let k = 0;
-    rows.forEach(([phiD, n, offs, size]) => {
-      const f = phiD * DEG, rr = rc + hh * Math.cos(f), zz = hwT * Math.sin(f);
-      const nr = Math.cos(f) / hh, nz = Math.sin(f) / hwT, nl = Math.hypot(nr, nz);
-      for (let i = 0; i < n; i++) {
-        const th = (i + offs) / n * TAU, e = V(Math.cos(th), Math.sin(th), 0);
-        tX.set(-Math.sin(th), Math.cos(th), 0);
-        nY.copy(e).multiplyScalar(nr / nl).add(V(0, 0, nz / nl));
-        bZ.crossVectors(tX, nY);
-        pos.copy(e).multiplyScalar(rr).add(V(0, 0, zz)).addScaledVector(nY, size[1] * .3);
-        m4.makeBasis(tX, nY, bZ).scale(sc.set(...size)).setPosition(pos);
-        knobs.setMatrixAt(k++, m4);
-      }
-    });
-    knobs.castShadow = true;
-    spin.add(knobs);
-  }
-
-  // Nabe mit Flanschen; hinten sitzt der Antriebsflansch weiter innen (Freilauf)
-  const fl = front ? [-.036, .033] : [-.034, .019];
-  mesh(lathe([[.008, -.052], [.015, -.05], [.015, fl[0] - .006], [.027, fl[0] - .003], [.027, fl[0] + .003], [.017, fl[0] + .009],
-    [.019, (fl[0] + fl[1]) / 2], [.017, fl[1] - .009], [.027, fl[1] - .003], [.027, fl[1] + .003], [.016, fl[1] + .007], [.016, .05], [.008, .052]], 48), M.black, spin);
-  if (!front) disc(.0175, .05, M.dark, spin, V(0, 0, .044));
-  disc(.006, G.axle * 2 + .012, M.alloy, g, null, 16);
-
-  // Speichen: vorn fast radial, hinten zweifach gekreuzt
-  const n = G.spokes, sp = new THREE.InstancedMesh(new THREE.CylinderGeometry(.00105, .00105, 1, 6, 1, true), M.spoke, n * 2);
-  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), Y = V(0, 1, 0);
-  let k = 0;
-  [1, -1].forEach(s => {
-    for (let i = 0; i < n; i++) {
-      const thR = (i + (s > 0 ? 0 : .5)) / n * TAU, thH = thR + (front ? .12 : .55) * (i % 2 ? 1 : -1);
-      const rimP = V((bsd - depth + .004) * Math.cos(thR), (bsd - depth + .004) * Math.sin(thR), s * .003);
-      const hubP = V(.025 * Math.cos(thH), .025 * Math.sin(thH), s > 0 ? fl[1] : fl[0]);
-      const d = rimP.clone().sub(hubP), L = d.length();
-      q.setFromUnitVectors(Y, d.normalize());
-      m4.compose(at(hubP, d, L / 2), q, V(1, L, 1));
-      sp.setMatrixAt(k++, m4);
-    }
-  });
-  sp.castShadow = true;
-  spin.add(sp);
-
-  // Bremsscheibe (links) mit Lochkranz und Spider
-  const rr = G.rotor, rz = front ? -.043 : -.05, holes = [circlePath(rr - .021)];
-  for (let i = 0; i < 24; i++) {
-    const a = i / 24 * TAU, b = a + TAU / 48;
-    holes.push(circlePath(.0024, (rr - .0125) * Math.cos(a), (rr - .0125) * Math.sin(a)));
-    holes.push(circlePath(.0018, (rr - .006) * Math.cos(b), (rr - .006) * Math.sin(b)));
-  }
-  const outer = new THREE.Shape(); outer.absarc(0, 0, rr, 0, TAU, false); outer.holes = holes;
-  mesh(extrude(outer, .0018, 0, 64), M.alloy, spin, V(0, 0, rz));
-  const star = new THREE.Shape();
-  for (let i = 0; i < 6; i++) {
-    const a = i / 6 * TAU, pts = [[.016, a - .5], [rr - .019, a - .1], [rr - .019, a + .1], [.016, a + .5]];
-    pts.forEach(([r, b], j) => (i || j ? star.lineTo(r * Math.cos(b), r * Math.sin(b)) : star.moveTo(r * Math.cos(b), r * Math.sin(b))));
-  }
-  star.holes.push(circlePath(.007));
-  mesh(extrude(star, .003, 0, 8), M.dark, spin, V(0, 0, rz));
-
-  return { g, spin, hw, depth, bsd };
-}
-
 /* ---------------- Kette (geschlossene Kurve um Blatt, Ritzel, Roellchen) ---------------- */
 function chainPath(ring, Rr, zr, cog, rc, zc, p1, p2, rp) {
   const pts = [], arc = (c, r, a0, a1, z, n) => { for (let i = 0; i <= n; i++) { const a = a0 + (a1 - a0) * i / n; pts.push(V(c.x + r * Math.cos(a), c.y + r * Math.sin(a), z)); } };
@@ -473,7 +344,7 @@ function chainPath(ring, Rr, zr, cog, rc, zc, p1, p2, rp) {
 export function buildBike(type, opt, M) {
   const G = GEO[type], root = new THREE.Group(), inner = new THREE.Group();
   root.add(inner);
-  const parts = [], anchors = {}, wheelSpin = [], crankSpin = [];
+  const parts = [], anchors = {}, wheelSpin = [], crankSpin = [], pedals = [], chains = [], jockeys = [];
   const part = (name, dir, amt, delay = 0, tag = '') => {
     const g = new THREE.Group(); g.name = name; inner.add(g);
     parts.push({ node: g, dir: V(...dir).normalize(), amt, delay, tag,
@@ -584,7 +455,9 @@ export function buildBike(type, opt, M) {
   /* ---------- Laufraeder ---------- */
   const mkWheel = (front, p) => {
     const W = part(front ? 'wheelF' : 'wheelR', [front ? 1 : -1, 0, 0], .52, front ? 0 : .02, 'wheel');
-    const w = buildWheel(G, opt, M, front);
+    const w = makeWheel({ front, rimDepth: G.rim[opt.wheels === 'leicht' ? 1 : 0], rimHalf: G.rimW, tyreW: G.tireW, tyreH: G.tireH,
+      tread: { slick: 'file', mtb: 'knobby' }[G.tread] || G.tread, tanwall: opt.wheels === 'tan', decal: opt.wheels !== 'leicht',
+      spokes: G.spokes * 2, axle: front ? (G.axle > .072 ? .055 : .05) : G.axle, rotorR: G.rotor, rotorZ: front ? -.043 : -.05, mats: M.parts });
     w.g.position.copy(p); W.add(w.g); wheelSpin.push(w.spin);
     return { W, w };
   };
@@ -597,79 +470,41 @@ export function buildBike(type, opt, M) {
   const CK = part('crank', [0, -.2, 1], .42, .06), CL = part('crankL', [0, -.2, -1], .36, .06);
   const crankAt = (grp, side) => { const s = new THREE.Group(); s.position.copy(BB); grp.add(s); crankSpin.push(s); return s; };
   const ck = crankAt(CK, 1), cl = crankAt(CL, -1);
-  rings.forEach((n, i) => {
-    const r = pitchR(n);
-    mesh(extrude(toothShape(n, r + .0032, r - .0025, [circlePath(r - .013)]), .0024, 0, 8), i ? M.dark : M.black, ck, V(0, 0, zr - i * .0048));
-  });
-  // Spider: 4 Arme vom Kurbelstern zum Blatt
-  const spider = new THREE.Shape();
-  for (let i = 0; i < 4; i++) {
-    const a = i / 4 * TAU + .4;
-    [[.022, a - .55], [Rr - .006, a - .14], [Rr - .006, a + .14], [.022, a + .55]].forEach(([r, b], j) =>
-      (i || j ? spider.lineTo(r * Math.cos(b), r * Math.sin(b)) : spider.moveTo(r * Math.cos(b), r * Math.sin(b))));
-  }
-  mesh(extrude(spider, .006, .0015, 8), M.carbon, ck, V(0, 0, zr - .006));
-  disc(.0145, G.motor ? .18 : .15, M.alloy, ck, null, 20);
-  const crankArm = (grp, side, ang) => {
-    const tip = V(.1725 * Math.cos(ang), .1725 * Math.sin(ang), side * (G.bar === 'flat' ? .085 : .075));
-    const a = V(0, 0, side * (G.motor ? .075 : .056));
-    tube([a, a.clone().lerp(tip, .5).add(zSide(side * .012)), tip], { r: t => [lerp(.021, .0135, t), lerp(.0095, .0075, t)], caps: true }, M.carbon, grp);
-    disc(.021, .014, M.carbon, grp, a.clone().add(zSide(side * .002)));
-    // Pedal: Rennrad = Keo-Form, sonst Flatpedal
-    const pz = tip.z + side * .045;
-    rod(tip, V(tip.x, tip.y, pz + side * .02), .0055, M.alloy, grp, 12);
-    mesh(drop ? rbox(.085, .017, .06, .006) : rbox(.1, .014, .095, .004), drop ? M.black : M.dark, grp, V(tip.x, tip.y, pz));
-  };
-  crankArm(ck, 1, -55 * DEG);
-  crankArm(cl, -1, 125 * DEG);
+  const cs = makeCrankset({ rings, zr, mtb: !drop, mats: M.parts });
+  ck.add(cs.right); cl.add(cs.left); pedals.push(...cs.pedals);
 
   // Kassette an der Hinterachse (dreht mit dem Laufrad)
   const KS = part('cassette', [-.45, 0, 1], .36, .12), ks = new THREE.Group();
   ks.position.copy(RA); KS.add(ks); wheelSpin.push(ks);
-  const z0 = .022, dz = .0039 * 11 / (G.cogs.length - 1);
-  [...G.cogs].reverse().forEach((n, i) => {
-    const r = pitchR(n);
-    mesh(extrude(toothShape(n, r + .0026, r - .0022, [circlePath(.0175)]), .0018, 0, 6), i % 3 === 1 ? M.dark : M.alloy, ks, V(0, 0, z0 + i * dz));
-  });
-  const ci = G.cogs.length - 1 - G.cog, zc = z0 + ci * dz, rc = pitchR(G.cogs[G.cog]);
+  const cas = makeCassette(G.cogs, { mats: M.parts });
+  ks.add(cas.g);
+  const zc = cas.z(G.cog), rc = cas.r(G.cog);
 
-  // Schaltwerk: Koerper, Akku, Kaefig mit zwei Roellchen
+  // Schaltwerk am rechten Ausfallende: Roellchen unter dem aktiven Ritzel, Kaefig nach vorn-unten
   const RD = part('rd', [-.3, -.7, 1], .36, .18);
-  const big = !drop, rpR = .019, p1 = RA.clone().add(V(-.027, -rc - (big ? .052 : .03))), p2 = p1.clone().add(V(.024, -(big ? .086 : .07)));
-  [p1, p2].forEach(p => mesh(extrude(toothShape(12, rpR + .0018, rpR - .002, [circlePath(.004)]), .004, 0, 6), M.black, RD, V(p.x, p.y, zc)));
-  [p1, p2].forEach(p => disc(.008, .02, M.alloy, RD, V(p.x, p.y, zc)));
-  const dir = p2.clone().sub(p1), beta = Math.atan2(dir.y, dir.x), cage = new THREE.Shape(), cr = .026;
-  for (let i = 0; i <= 16; i++) { const a = beta + Math.PI / 2 + Math.PI * i / 16; (i ? cage.lineTo : cage.moveTo).call(cage, p1.x + cr * Math.cos(a), p1.y + cr * Math.sin(a)); }
-  for (let i = 0; i <= 16; i++) { const a = beta - Math.PI / 2 + Math.PI * i / 16; cage.lineTo(p2.x + cr * Math.cos(a), p2.y + cr * Math.sin(a)); }
-  const cageG = extrude(cage, .0026, .0008, 6);
-  mesh(cageG, M.carbon, RD, zSide(zc + .0085));
-  mesh(cageG.clone(), M.dark, RD, zSide(zc - .0085));
-  const body0 = RA.clone().add(V(.004, -.012, G.axle + .004)), body1 = p1.clone().add(V(-.006, .02, zc + .014));
-  tube([body0, body0.clone().lerp(body1, .5).add(V(-.016, -.004, .012)), body1], { r: [.0145, .011], caps: true, seg: 16 }, M.black, RD);
-  const bat = mesh(rbox(.036, .022, .016, .005), M.black, RD, body0.clone().lerp(body1, .45).add(V(-.026, .006, .022)));
-  bat.rotation.z = -.5;
-  mesh(rbox(.006, .012, .002, .001), M.red, RD, bat.position.clone().add(V(-.004, .002, .009)), false).rotation.z = -.5;
-  anchor('drive', RD, body0.clone().lerp(body1, .5).add(V(-.016, -.004, .028)));
+  const big = !drop, rpR = pitchR(big ? 14 : 12);
+  const p1 = V(-.02, -rc - (big ? .05 : .032)), p2 = p1.clone().add(V(.028, big ? -.086 : -.068));
+  const rd = makeRearDerailleur({ p1, p2, zc, axleZ: G.axle, mtb: big, mats: M.parts });
+  rd.g.position.copy(RA); RD.add(rd.g); jockeys.push(...rd.jockeys.map(g => ({ g, r: rpR })));
+  anchor('drive', RD, RA.clone().add(rd.anchor));
 
-  // Umwerfer (nur 2-fach)
+  // Umwerfer (nur 2-fach, kabellos) am Sitzrohr
   if (rings.length > 1) {
-    const FD = part('fd', [.1, .5, 1], .26, .2), a = 112 * DEG, p = BB.clone().add(V((Rr + .014) * Math.cos(a), (Rr + .014) * Math.sin(a), zr + .006));
-    const cg = mesh(rbox(.07, .016, .003, .001), M.alloy, FD, p.clone().add(zSide(.005))); cg.rotation.z = a - Math.PI / 2;
-    const bd = mesh(rbox(.04, .03, .02, .006), M.black, FD, at(BB, stDir, .19).add(V(.02, 0, .03))); bd.rotation.z = a - Math.PI / 2;
+    const FD = part('fd', [.1, .5, 1], .26, .2), fd = makeFrontDerailleur({ ringR: Rr, zr, angle: 104, mats: M.parts });
+    fd.g.position.copy(BB); FD.add(fd.g);
   }
 
-  // Kette
+  // Kette aus einzelnen Gliedern: grosses Blatt -> aktives Ritzel -> beide Roellchen
   const CH = part('chain', [0, -.3, 1], .26, .14);
-  const cc = chainPath(BB, Rr, zr, RA, rc, zc, p1, p2, rpR);
-  const chainG = new THREE.TubeGeometry(cc, 420, .0034, 8, true);
-  const chainMat = M.chain; chainMat.map.repeat.set(cc.getLength() / .0254, 1);
-  mesh(chainG, chainMat, CH);
+  const cc = chainPath(BB, Rr, zr, RA, rc, zc, RA.clone().add(p1), RA.clone().add(p2), rpR);
+  const chain = makeChain(cc, { mats: M.parts });
+  CH.add(chain.g); chains.push(chain);
 
-  // Bremssaettel links (Flat-Mount)
+  // Flat-Mount-Bremssaettel links an Gabel und Kettenstrebe
   const BR = part('brakes', [0, .1, -1], .26, .2);
-  [[FA, 128 * DEG, -.043, G.rotor], [RA, 28 * DEG, -.05, G.rotor]].forEach(([c, a, z, rr]) => {
-    const m = mesh(rbox(.056, .026, .028, .006), M.black, BR, c.clone().add(V((rr - .008) * Math.cos(a), (rr - .008) * Math.sin(a), z - .004)));
-    m.rotation.z = a + Math.PI / 2;
+  [[FA, 128 * DEG, -.043], [RA, 24 * DEG, -.05]].forEach(([c, a, z]) => {
+    const cal = makeCaliper({ rotorR: G.rotor, mats: M.parts });
+    cal.position.copy(c).add(zSide(z)); cal.rotation.z = a; BR.add(cal);
   });
 
   /* ---------- Cockpit ---------- */
@@ -747,11 +582,9 @@ export function buildBike(type, opt, M) {
   } else {
     tube([at(STt, stDir, -.06), at(seatTop, stDir, -.03)], { r: [.0165, .0118], caps: true, seg: 6 }, M.carbon, SP);
   }
-  mesh(rbox(.05, .016, .03, .005), M.dark, SP, at(seatTop, stDir, -.03));
   const SD = part('saddle', [-.2, 1, 0], .38, .16);
-  const sg = mesh(saddleGeo(drop ? .245 : .26, drop ? .143 : .14), M.saddle, SD, seatTop.clone().add(V(.012, -.021)));
-  [1, -1].forEach(s => tube([V(-.075, -.011), V(-.03, -.022), V(.03, -.022), V(.08, -.008)].map(p => p.add(sg.position).add(zSide(s * .021))),
-    { r: .0034, rmf: true, seg: 20, rad: 8 }, M.dark, SD));
+  const sd = makeSaddle({ length: drop ? .245 : .255, width: drop ? .143 : .14, mats: M.parts });
+  sd.g.position.copy(at(seatTop, stDir, -.03)).add(V(.004, -.008)); SD.add(sd.g);
 
   /* ---------- Extras je Typ ---------- */
   if (G.rearSus) {
@@ -804,11 +637,12 @@ export function buildBike(type, opt, M) {
   };
   let count = 0;
   root.traverse(o => { if (o.isMesh) count += o.isInstancedMesh ? o.count : 1; });
-  return { root, parts, anchors, focus, spin: { wheels: wheelSpin, crank: crankSpin }, count, size: { len: FA.x - RA.x + 2 * R, h: seatTop.y + .04 } };
+  return { root, parts, anchors, focus, spin: { wheels: wheelSpin, crank: crankSpin, pedals, jockeys }, chains, count, size: { len: FA.x - RA.x + 2 * R, h: seatTop.y + .04 } };
 }
 
 // Speicher eines alten Bikes freigeben (Materialien bleiben geteilt)
 export function disposeBike(b) {
-  b.root.traverse(o => { if (o.geometry) o.geometry.dispose(); });
+  // geteilte Bauteil-Geometrien (userData.keep) bleiben fuer das naechste Bike im Cache
+  b.root.traverse(o => { if (o.geometry && !o.geometry.userData.keep) o.geometry.dispose(); });
   b.root.removeFromParent();
 }
