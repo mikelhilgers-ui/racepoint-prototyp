@@ -15,3 +15,12 @@ const fitHeadings=()=>{
 };
 let fitFrame=0;const scheduleFit=()=>{cancelAnimationFrame(fitFrame);fitFrame=requestAnimationFrame(fitHeadings);};
 scheduleFit();document.fonts?.ready.then(scheduleFit);addEventListener('resize',scheduleFit,{passive:true});narrow.addEventListener('change',scheduleFit);
+
+// Phones: the compact advisor bubble waits until the hero call-to-action has scrolled away, so it never covers it.
+const hero=document.querySelector('.hero');
+if(hero){
+  let heroFrame=0;
+  const updateHero=()=>{heroFrame=0;document.body.classList.toggle('hero-cta-in-view',hero.getBoundingClientRect().bottom>innerHeight*.45);};
+  const scheduleHero=()=>{if(!heroFrame)heroFrame=requestAnimationFrame(updateHero);};
+  addEventListener('scroll',scheduleHero,{passive:true});addEventListener('resize',scheduleHero,{passive:true});updateHero();
+}

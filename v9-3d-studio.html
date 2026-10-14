@@ -33,7 +33,7 @@
   /* ---------------- Basis ---------------- */
   :root{
     --red:#E83637; --reddark:#c5282a; --ink:#0b0c0e; --ink2:#121316; --paper:#f5f2ec;
-    --mute:rgba(245,242,236,.64); --faint:rgba(245,242,236,.4); --line:rgba(255,255,255,.1);
+    --mute:rgba(245,242,236,.66); --faint:rgba(245,242,236,.56); --line:rgba(255,255,255,.1);
     --gut:clamp(16px,4vw,56px); --hdr:72px; --ease:cubic-bezier(.2,.7,.1,1);
     --glass:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
   }
@@ -137,7 +137,7 @@
   .btn-wa:hover{background:#15803d}
   .eyebrow{display:flex;align-items:center;gap:10px;color:var(--red);font:500 12px/1 'Roboto Mono',monospace;letter-spacing:.18em;text-transform:uppercase;margin-bottom:18px}
   .eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
-  .h2{font:400 clamp(40px,5.6vw,84px)/.94 Anton,sans-serif;text-transform:uppercase;letter-spacing:.003em}
+  .h2{font:400 clamp(40px,5.6vw,84px)/1.02 Anton,sans-serif;text-transform:uppercase;letter-spacing:.003em;text-wrap:balance}
   .h2 .r{color:var(--red)}
   .ln-mask{padding:.3em 0 .06em;margin:-.3em 0 -.06em}
 
@@ -224,14 +224,14 @@
   .ch-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
   .ch-num{font:400 56px/.9 Anton,sans-serif;color:transparent;-webkit-text-stroke:1.5px rgba(245,242,236,.5)}
   .ch-kicker{color:var(--red)}
-  .chapter h2{font:400 clamp(30px,2.8vw,40px)/1.1 Anton,sans-serif;text-transform:uppercase;margin-bottom:14px}
+  .chapter h2{font:400 clamp(30px,2.8vw,40px)/1.1 Anton,sans-serif;text-transform:uppercase;margin-bottom:14px;text-wrap:balance}
   .chapter p{margin:0 0 20px;color:var(--mute);font-size:17px}
   .spec{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin:0;padding:0;list-style:none;border-radius:14px;overflow:hidden;background:var(--line);border:1px solid var(--line)}
   .spec li{padding:12px 12px 10px;background:rgba(11,12,14,.55)}
   .spec b{display:block;font:400 19px/1.05 Anton,sans-serif;text-transform:uppercase;letter-spacing:.01em}
   .spec span{display:block;margin-top:4px;font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em}
   .explode-title{position:absolute;left:0;right:0;top:calc(var(--hdr) + 3vh);text-align:center;opacity:0;visibility:hidden;padding:0 var(--gut)}
-  .explode-title h2{font:400 clamp(48px,8.4vw,140px)/.9 Anton,sans-serif;text-transform:uppercase;text-shadow:0 10px 60px rgba(0,0,0,.6)}
+  .explode-title h2{font:400 clamp(48px,8.4vw,140px)/.94 Anton,sans-serif;text-transform:uppercase;text-shadow:0 10px 60px rgba(0,0,0,.6);text-wrap:balance}
   .explode-title h2 b{font-weight:400;color:var(--red)}
   .explode-title p{margin:14px auto 0;max-width:64ch;color:var(--mute);font-size:18px}
   .tour-prog{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;gap:6px;padding:6px;border-radius:999px;opacity:0}
@@ -314,8 +314,9 @@
   .build:first-child{grid-column:span 2;grid-row:span 2}
   .build:first-child .build-media{aspect-ratio:auto;flex:1;min-height:320px}
   .build:first-child .build-meta b{font-size:clamp(26px,2.4vw,36px)}
-  .build{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:#141518;border:1px solid var(--line);cursor:pointer;transition:border-color .3s,transform .4s var(--ease)}
-  .build:hover{border-color:rgba(232,54,55,.5);transform:translateY(-4px)}
+  /* Hover ueber die eigene translate-Eigenschaft: transform gehoert dem GSAP-Reveal */
+  .build{position:relative;display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:#141518;border:1px solid var(--line);cursor:pointer;transition:border-color .3s,translate .4s var(--ease)}
+  .build:hover{border-color:rgba(232,54,55,.5);translate:0 -4px}
   .build-media{position:relative;display:block;aspect-ratio:16/9;overflow:hidden}
   .build-media img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .4s}
   .build:hover .build-media img{transform:scale(1.06);filter:brightness(1.08)}
@@ -325,7 +326,7 @@
   .build:hover .play{transform:scale(1.1)}
   .build-tag{position:absolute;z-index:1;right:14px;top:12px;padding:5px 9px;border-radius:7px;background:rgba(11,12,14,.7);backdrop-filter:blur(6px)}
   .build-meta{display:block;padding:16px 18px 18px}
-  .build-meta b{display:block;font:400 22px/1.05 Anton,sans-serif;text-transform:uppercase;letter-spacing:.01em}
+  .build-meta b{display:block;font:400 22px/1.05 Anton,sans-serif;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
   .build-meta span{display:block;margin-top:6px;color:var(--faint);font-size:14px}
 
   .svc-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:20px}
@@ -335,7 +336,7 @@
   .svc::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,12,14,.2) 0%,rgba(11,12,14,.55) 45%,rgba(11,12,14,.94) 100%)}
   .svc h3{font:400 clamp(32px,3.2vw,48px)/1.02 Anton,sans-serif;text-transform:uppercase;margin:14px 0 14px;max-width:16ch}
   .svc p{margin:0 0 20px;max-width:44ch;color:rgba(245,242,236,.8)}
-  .svc .mono{color:var(--red)}
+  .svc .mono{align-self:flex-start;color:#fff;padding:6px 10px;border-radius:7px;background:rgba(11,12,14,.72);border:1px solid rgba(232,54,55,.5);backdrop-filter:blur(6px)}
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 24px;padding:0;list-style:none}
   .tags li{padding:6px 11px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(6px)}
   .svc-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
@@ -348,7 +349,7 @@
   .visit .h2{font-size:clamp(48px,6.4vw,100px)}
   .addr{margin:28px 0 8px;font-size:22px;line-height:1.35}
   .addr .mono{display:block;margin-top:8px;color:var(--faint)}
-  .dist{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;gap:0;margin:22px 0 30px;padding:0;list-style:none;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .dist{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:22px 0 30px;padding:0;list-style:none;border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .dist li{padding:12px 16px;border-right:1px solid var(--line)}
   .dist li:last-child{border-right:0}
   .dist b{display:block;font-size:13px;color:var(--faint);font-weight:500;letter-spacing:.06em;text-transform:uppercase}
@@ -370,6 +371,9 @@
   .foot nav{display:flex;flex-wrap:wrap;gap:20px;color:var(--mute);font-size:14px;text-transform:uppercase;letter-spacing:.06em}
   .foot nav a:hover{color:#fff}
   .foot small{display:block;width:100%;color:var(--faint);font-size:13px;padding-right:90px}
+  .foot .credit{display:block;margin-top:8px}
+  .foot .credit a{color:var(--mute);text-decoration:underline;text-decoration-color:rgba(245,242,236,.3);text-underline-offset:3px}
+  .foot .credit a:hover{color:#fff}
 
   .toast{position:fixed;left:50%;bottom:28px;z-index:50;transform:translate(-50%,24px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:12px;
     max-width:calc(100vw - 32px);padding:14px 22px;border-radius:999px;background:rgba(16,17,20,.92);border:1px solid rgba(34,197,94,.35);color:var(--paper);
@@ -389,7 +393,7 @@
     .hero-types{order:3;width:auto;margin-top:28px;align-items:center;gap:10px}
     .hero-types .side-label{display:none}
     .seg-v{grid-auto-flow:column;border-radius:999px;padding:4px}
-    .seg-v button{padding:10px 16px;border-radius:999px;font-size:13px}
+    .seg-v button{padding:10px 16px;border-radius:999px;font-size:13px;justify-content:center;text-align:center}
     .seg-v button::before{display:none}
     .seg-v .ind{border-radius:999px}
     .side-hint{padding:0;font-size:13px}
@@ -451,7 +455,7 @@
     .achim-grid,.visit-grid,.svc-grid{grid-template-columns:1fr}
     .achim-img{position:relative;top:auto}
     .sec-head{flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:32px}
-    .builds-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 calc(var(--gut) * -1);padding:0 var(--gut) 8px;scrollbar-width:none}
+    .builds-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gut);gap:14px;margin:0 calc(var(--gut) * -1);padding:0 var(--gut) 8px;scrollbar-width:none}
     .builds-grid::-webkit-scrollbar{display:none}
     .build,.build:first-child{flex:0 0 82%;scroll-snap-align:start}
     .svc{min-height:460px}
@@ -469,7 +473,8 @@
   .rm .tour{height:auto;padding:12vh 0}
   .rm .tour-sticky{position:relative;height:auto;overflow:visible;display:flex;flex-direction:column;gap:40vh;padding:30vh var(--gut)}
   .rm .chapter,.rm .chapter.right{position:relative;top:auto;left:auto;right:auto;bottom:auto;margin:0;opacity:1;visibility:visible;width:min(460px,100%)}
-  .rm .chapter.right{align-self:flex-end}
+  .rm .chapter.right{align-self:flex-end;margin-right:64px}
+  @media (max-width:760px){.rm .chapter.right{margin-right:0}}
   .rm .explode-title,.rm .tour-prog,.rm .slot,.rm .hud,.rm .hud-label,.rm .stage-type{display:none}
   .rm .ask-wrap::before,.rm .ask{animation:none}
   @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
@@ -793,7 +798,8 @@
           <a href="#kontakt" data-i18n='{"fr":"Contact","nl":"Contact","en":"Contact"}'>Kontakt</a>
           <a href="">Impressum</a>
         </nav>
-        <small>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler · Prototyp 9 „3D-Studio“ – das Bike wird live im Browser gerendert, ohne ein einziges Foto.</small>
+        <small>© Racepoint · Schönberg, Ostbelgien · Specialized Elite Händler · Prototyp 9 „3D-Studio“ – das Bike wird live im Browser gerendert, ohne ein einziges Foto.
+          <span class="credit">3D-Modell <a href="https://sketchfab.com/3d-models/road-bike-cb03b0657fbc4693b59194124ba713db" target="_blank" rel="noopener">„Road Bike“</a> von <a href="https://sketchfab.com/tanity" target="_blank" rel="noopener">tanity</a>, <a href="https://creativecommons.org/licenses/by/4.0/deed.de" target="_blank" rel="noopener">CC BY 4.0</a> – Farben und Material angepasst.</span></small>
       </div>
     </footer>
   </div>

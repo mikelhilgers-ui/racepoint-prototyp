@@ -41,3 +41,6 @@ body:not(.scroll-cinema) .motion-scroll-note{display:none}
 @media(max-width:540px){body:not(.scroll-cinema) .motion-rides-sticky .ride-grid{grid-template-columns:1fr}}
 
 .ride-section,.footer,.chat-header{background:#13151a}.film-tag{background:#e83637;color:#fff}.play-icon{background:#e83637dd;color:#fff;border-color:#e83637}.chat-message.user,.advisor-dialog .chat-message.user{background:#13151a}
+/* Phones with short screens: the four-line title keeps clear of the header and the topline. */
+@media(max-width:600px){.hero h1{font-size:min(20vw,9.8svh)}}
+@media(max-width:600px) and (max-height:780px){.hero-topline{display:none}.hero-copy{bottom:96px}.hero-copy>.eyebrow{margin-bottom:14px}.hero-description{margin-top:18px}}

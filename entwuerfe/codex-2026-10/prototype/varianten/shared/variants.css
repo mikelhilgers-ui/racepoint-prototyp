@@ -27,8 +27,14 @@ body:has(dialog[open]) .design-switch{display:none}
 [data-design]{overflow-x:clip}
 [data-design] .visit-section{overflow:hidden}
 @media(max-width:640px){
-  [data-design] .advisor-fab{right:calc(14px + env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));width:48px;height:48px;min-height:48px;max-width:none;padding:0;gap:0;justify-content:center;border:1px solid #ffffff2e;border-radius:24px 24px 7px 24px;box-shadow:0 8px 22px #0006;clip-path:none}
+  [data-design] .advisor-fab{right:calc(14px + env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));width:48px;height:48px;min-height:48px;max-width:none;padding:0;gap:0;justify-content:center;background:#fff;color:#13151a;border:1px solid #13151a1f;border-radius:24px 24px 7px 24px;box-shadow:0 8px 22px #0005;clip-path:none;transition:opacity .25s,visibility .25s}
+  [data-design].hero-cta-in-view .advisor-fab{opacity:0;visibility:hidden;pointer-events:none}
+  [data-design]:not([data-design="cinema"]) .hero-bottom{padding-right:62px}
+  [data-design] .category-nav>a{min-height:44px;display:inline-flex;align-items:center}
+  [data-design] .footer-grid>div>a{padding:11px 0;line-height:18px}
+  [data-design] .footer-bottom a{min-height:40px;display:inline-flex;align-items:center}
   [data-design] .advisor-fab>span:not(.spark){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
   [data-design] .advisor-fab .spark{font-size:21px;line-height:1;color:#e83637}
   [data-design] .advisor-fab:hover{transform:none}
 }
+@media(max-width:600px){[data-design] .advisor-dialog,[data-design] .advisor-dialog.is-maximized{border-radius:0}}

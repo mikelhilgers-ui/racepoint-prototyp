@@ -51,7 +51,8 @@ document.addEventListener('click', e => {
 });
 
 const hdr = $('#hdr');
-ScrollTrigger.create({ start: 8, end: 'max', onToggle: s => hdr.classList.toggle('scrolled', s.isActive) });
+// offenes Ende: mit end:'max' waere der Trigger genau am Seitenende inaktiv und der Header wieder durchsichtig
+ScrollTrigger.create({ start: 8, end: 1e7, onToggle: s => hdr.classList.toggle('scrolled', s.isActive) });
 
 const burger = $('.burger'), menu = $('#menu');
 function setMenu(on) {
@@ -94,6 +95,8 @@ if (studio) {
     live = true;
     html.classList.add('stage-ready');
     studio.intro(.15);
+    // echtes Rennrad-Modell erst nach dem ersten Bild nachladen (Draco, ~0,9 MB)
+    setTimeout(() => studio.loadModel().then(ok => html.classList.toggle('model-ready', ok)), reduced ? 0 : 1600);
   });
 } else {
   fallback();
@@ -109,8 +112,8 @@ const ST = {
   hero:     { slot: 'hero', az: .52,  el: .1,  focus: 'bike',    ext: [.9, .51],  sway: 1 },
   frame:    { slot: 'r',    az: .3,   el: .16, focus: 'frame',   ext: [.52, .37] },
   drive:    { slot: 'l',    az: -.62, el: .2,  focus: 'drive',   ext: [.32, .24], pedal: 4.2 },
-  explode:  { slot: 'c',    az: -.1,  el: .3,  focus: 'bike',    ext: [1.2, .84], explode: 1, pedal: 1, portrait: { az: .9, ext: [.8, .9] } },
-  explode2: { slot: 'c',    az: .75,  el: .2,  focus: 'bike',    ext: [1.2, .84], explode: 1, portrait: { az: 1.35, ext: [.75, .9] } },
+  explode:  { slot: 'c',    az: -.35,  el: .3,  focus: 'bike',    ext: [1.2, .84], explode: 1, pedal: 1, portrait: { az: .9, ext: [.8, .9] } },
+  explode2: { slot: 'c',    az: 1.0,   el: .2,  focus: 'bike',    ext: [1.2, .84], explode: 1, portrait: { az: 1.35, ext: [.75, .9] } },
   wheel:    { slot: 'r',    az: .2,   el: .05, focus: 'wheel',   ext: [.4, .4],   wheel: 15 },
   cockpit:  { slot: 'l',    az: -1.3, el: .62, focus: 'cockpit', ext: [.3, .2] },
   config:   { slot: 'cfg',  az: .46,  el: .1,  focus: 'bike',    ext: [.92, .57], spin: 1 },
@@ -193,6 +196,9 @@ if (!reduced) {
   tourTl.fromTo(explodeTitle, { autoAlpha: 0, scale: .92 }, { autoAlpha: 1, scale: 1, duration: 34, ease: 'power3.out' }, eIn)
     .to(explodeTitle, { autoAlpha: 0, scale: 1.06, duration: 26, ease: 'power2.in' }, eOut)
     .fromTo(prog, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 24 }, CH_T[0][0])
+    // die Explosion ist ein eigener Moment, nicht Teil von "Antrieb": Leiste blendet so lange aus
+    .to(prog, { autoAlpha: 0, duration: 20 }, eIn)
+    .to(prog, { autoAlpha: 1, duration: 20 }, CH_T[2][0] - 10)
     .to(prog, { autoAlpha: 0, duration: 16 }, TOUR_VH - 18);
   cfgST = ScrollTrigger.create({ trigger: '#konfigurator', start: 'top bottom', end: 'top top' });
   gsap.fromTo(stageType, { autoAlpha: 0, yPercent: 30 }, { autoAlpha: 1, yPercent: 0, ease: 'none',
@@ -242,7 +248,8 @@ function drawHud() {
   const r = chapters[idx].getBoundingClientRect();
   vis *= clamp(Math.min(r.bottom, innerHeight - r.top) / 120);
   let ex, ey, d;
-  if (r.top > p.y + 24) {
+  // Route nach der Ruheposition des Panels waehlen, sonst springt die Linie, waehrend es hereingleitet
+  if (r.top - (+gsap.getProperty(chapters[idx], 'y') || 0) > p.y + 24) {
     // Panel unter dem Punkt (Mobil): Knick, dann senkrecht auf die Panel-Oberkante
     ex = clamp(p.x, r.left + 32, r.right - 32); ey = r.top;
     const run = Math.min(Math.abs(ex - p.x), Math.max(0, ey - p.y - 24));
@@ -280,9 +287,10 @@ if (studio) {
   // Unter den Inhalten wird die Buehne gedimmt, das Bike tritt zurueck – danach wird nicht mehr gerendert
   gsap.timeline({ scrollTrigger: { trigger: '.content', start: 'top bottom', end: 'top top', scrub: true,
     onLeave: () => { studio.state.active = false; }, onEnterBack: () => { studio.state.active = true; } } })
-    .fromTo('.stage-dim', { opacity: 0 }, { opacity: .7, ease: 'none' }, 0)
-    .fromTo(stageTypeText, { autoAlpha: 1 }, { autoAlpha: 0, ease: 'none' }, 0)
-    .fromTo('#studio', { scale: 1, yPercent: 0 }, { scale: .9, yPercent: -8, ease: 'none' }, 0);
+    // Buehne faehrt mit dem Konfigurator nach oben raus – das Bike trifft nie auf die Verlaufskante der Inhalte
+    .fromTo('.stage-dim', { opacity: 0 }, { opacity: .55, ease: 'none' }, 0)
+    .fromTo(stageTypeText, { autoAlpha: 1 }, { autoAlpha: 0, ease: 'none', duration: .5 }, 0)
+    .fromTo(['#studio', stageType], { y: 0 }, { y: () => -innerHeight, ease: 'none' }, 0);
 }
 
 /* =====================================================================
@@ -440,10 +448,18 @@ textReady.then(() => {
   // Hero rollt raus: Headline steigt weg. Auf breiten Screens liegen die Bedienelemente ueber
   // der Buehne und blenden mit aus – im mobilen Fluss scrollen sie ganz normal mit.
   gsap.to(title, { yPercent: -28, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom 55%', scrub: true } });
-  gsap.matchMedia().add('(min-width:1181px)', () => {
+  const mm = gsap.matchMedia();
+  mm.add('(min-width:1181px)', () => {
+    // Satz, KI-Eingabe und Chips bleiben stehen (y gleicht das Scrollen aus) und sind weg, bevor sie das Bike kreuzen
+    gsap.timeline({ scrollTrigger: { trigger: '#top', start: 'top top', end: '+=150', scrub: true } })
+      .fromTo('.hero-ui', { y: 0, autoAlpha: 1 }, { y: 120, autoAlpha: 0, ease: 'none' }, 0);
     gsap.timeline({ scrollTrigger: { trigger: '#top', start: 'top top', end: 'bottom 55%', scrub: true } })
-      .to('.hero-ui', { y: -50, autoAlpha: 0, ease: 'none' }, 0)
       .to('.hero-side', { autoAlpha: 0, ease: 'none' }, 0);
+  });
+  mm.add('(max-width:1180px)', () => {
+    // Fluss-Layout: der Hero ist hoeher als der Bildschirm – Reste ausblenden, bevor Kapitel 01 kommt
+    gsap.to(['.hero-types', '.hero-ui', '.hero-left'], { autoAlpha: 0, ease: 'none',
+      scrollTrigger: { trigger: '#tour', start: 'top 80%', end: 'top 45%', scrub: true } });
   });
 
   // Ueberschriften: Zeilen gleiten aus einer Maske
@@ -486,8 +502,9 @@ $('#buildsGrid').innerHTML = BUILDS.map(b => `
     <span class="build-meta"><b>${b.name}</b><span>${b.note}</span></span>
   </a>`).join('');
 // nur Deckkraft + Skalierung: im mobilen Wisch-Karussell darf nichts ueber den Rand ragen
-if (!reduced) gsap.from('.build', { scale: .94, autoAlpha: 0, transformOrigin: '50% 100%', duration: 1.1, ease: 'expo.out', stagger: .08,
-  scrollTrigger: { trigger: '#buildsGrid', start: 'top 85%', once: true } });
+// clearProps: danach gehoert transform wieder dem CSS-Hover (sonst bleibt scale(.94) inline haengen)
+if (!reduced) gsap.fromTo('.build', { scale: .94, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, transformOrigin: '50% 100%', duration: 1.1, ease: 'expo.out', stagger: .08,
+  clearProps: 'transform,transformOrigin', scrollTrigger: { trigger: '#buildsGrid', start: 'top 85%', once: true } });
 
 /* ---------------- Oeffnungszeiten ---------------- */
 function renderHours() {

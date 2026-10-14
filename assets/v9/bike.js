@@ -781,7 +781,7 @@ export function buildBike(type, opt, M) {
     const gl = new THREE.Sprite(M.glow); gl.position.copy(lp).add(V(.03, 0)); gl.scale.setScalar(.22); LI.add(gl);
     const tl = ssTop.clone().add(V(-.03, -.02));
     mesh(rbox(.012, .034, .03, .004), M.lampRed, LI, tl, false);
-    const gr = new THREE.Sprite(M.glowRed); gr.position.copy(tl).add(V(-.01, 0)); gr.scale.setScalar(.14); LI.add(gr);
+    const gr = new THREE.Sprite(M.glowRed); gr.position.copy(tl).add(V(-.016, 0)); gr.scale.setScalar(.06); gr.material.opacity = .7; LI.add(gr);
   }
 
   /* ---------- Teile zentrieren, Bike mittig stellen ---------- */
