@@ -41,17 +41,42 @@
   /* ---------------- Pfad-Helfer ---------------- */
   const f1 = n => Math.round(n * 10) / 10;
   const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-  // weiche Linie durch Punkte (Quadratic ueber Mittelpunkte)
-  function smoothOpen(p) {
-    if (p.length < 3) return 'M' + p.map(q => f1(q[0]) + ',' + f1(q[1])).join('L');
-    let d = 'M' + f1(p[0][0]) + ',' + f1(p[0][1]);
-    for (let i = 1; i < p.length - 1; i++) {
-      const m = mid(p[i], p[i + 1]);
-      d += 'Q' + f1(p[i][0]) + ',' + f1(p[i][1]) + ' ' + f1(m[0]) + ',' + f1(m[1]);
+  // Linienzug ausduennen (Douglas-Peucker): fast gerade Stuecke brauchen keine Zwischenpunkte
+  function simplify(p, tol) {
+    if (p.length < 4) return p;
+    const keep = new Uint8Array(p.length), stack = [[0, p.length - 1]], t2 = tol * tol;
+    keep[0] = keep[p.length - 1] = 1;
+    while (stack.length) {
+      const [a, b] = stack.pop(), ax = p[a][0], ay = p[a][1], dx = p[b][0] - ax, dy = p[b][1] - ay, l2 = dx * dx + dy * dy;
+      let best = -1, bi = -1;
+      for (let i = a + 1; i < b; i++) {
+        const ex = p[i][0] - ax, ey = p[i][1] - ay, c = ex * dy - ey * dx;
+        const d2 = l2 ? c * c / l2 : ex * ex + ey * ey;   // Ring: Anfang = Ende -> Abstand zum Punkt
+        if (d2 > best) { best = d2; bi = i; }
+      }
+      if (best > t2) { keep[bi] = 1; stack.push([a, bi], [bi, b]); }
     }
-    const l = p[p.length - 1];
-    return d + 'L' + f1(l[0]) + ',' + f1(l[1]);
+    return p.filter((_, i) => keep[i]);
   }
+  // Hoehenlinie als weiche Kurve (Quadratic ueber Mittelpunkte), zerlegt in kurze Teilpfade:
+  // gleiche Kurve, nahtlose Uebergaenge – aber der Browser ueberspringt Teile ausserhalb des Bildes
+  function contourPieces(p, closed, per) {
+    const P = q => f1(q[0]) + ',' + f1(q[1]), segs = [];
+    if (closed) {
+      let prev = mid(p[p.length - 1], p[0]);
+      p.forEach((q, i) => { const m = mid(q, p[(i + 1) % p.length]); segs.push([prev, q, m]); prev = m; });
+    } else {
+      let prev = p[0];
+      for (let i = 1; i < p.length - 1; i++) { const m = mid(p[i], p[i + 1]); segs.push([prev, p[i], m]); prev = m; }
+      segs.push([prev, null, p[p.length - 1]]);
+    }
+    const out = [];
+    for (let k = 0; k < segs.length; k += per) {
+      out.push('M' + P(segs[k][0]) + segs.slice(k, k + per).map(g => (g[1] ? 'Q' + P(g[1]) + ' ' : 'L') + P(g[2])).join(''));
+    }
+    return out;
+  }
+  // weiche geschlossene Form (Wald, Moor, See)
   function smoothClosed(p) {
     const n = p.length, m0 = mid(p[n - 1], p[0]);
     let d = 'M' + f1(m0[0]) + ',' + f1(m0[1]);
@@ -245,8 +270,13 @@
     const levels = [];
     for (let lv = Math.ceil(lo / 20) * 20; lv < hi; lv += 20) {
       const chains = contourLevel(field, cols, rows, WORLD.x0, WORLD.y0, step, lv);
-      const d = chains.map(c => c.closed ? smoothClosed(c.p) : smoothOpen(c.p)).join('');
-      if (d) levels.push({ level: lv, index: lv % 100 === 0, d });
+      const pieces = [];
+      chains.forEach(c => {
+        // geschlossene Ringe: Startpunkt doppelt, damit die Vereinfachung den Ring nicht oeffnet
+        const q = simplify(c.closed ? c.p.concat([c.p[0]]) : c.p, 1);
+        pieces.push.apply(pieces, contourPieces(c.closed ? q.slice(0, -1) : q, c.closed, 14));
+      });
+      if (pieces.length) levels.push({ level: lv, index: lv % 100 === 0, pieces });
     }
     cache = { levels, lo, hi };
     return cache;
@@ -304,7 +334,7 @@
     const MARSH = [[700, 255, 230, 105, 11], [500, 205, 120, 70, 12], [880, 210, 90, 55, 13]];
     s += '<g class="m-moor">' + MARSH.map(f => '<path d="' + smoothClosed(blob(f[0], f[1], f[2], f[3], f[4] * 2.3, 0.18)) + '"/>').join('') + '</g>';
     // Hoehenlinien
-    s += '<g class="m-topo">' + c.levels.map(l => '<path class="' + (l.index ? 'ix' : '') + '" d="' + l.d + '"/>').join('') + '</g>';
+    s += '<g class="m-topo">' + c.levels.map(l => '<g' + (l.index ? ' class="ix"' : '') + '>' + l.pieces.map(d => '<path d="' + d + '"/>').join('') + '</g>').join('') + '</g>';
     // Fluss (Our) + Nebenbaeche
     s += '<path class="m-river" d="' + segsToD(RIVER_SEGS) + '"/>';
     const BROOKS = [[[600, 1180], [700, 1050], [800, 1000], [858, 930]], [[1300, 980], [1180, 1000], [1090, 975]], [[400, 420], [560, 520], [700, 560], [860, 640]]];

@@ -18,6 +18,7 @@ const smoother = t => t * t * t * (t * (t * 6 - 15) + 10);
 const reduced = RP.reducedMotion;
 const html = document.documentElement;
 const mobile = matchMedia('(max-width:760px)');
+const flowHero = matchMedia('(max-width:1180px)');   // Hero als Fluss-Layout (Tablet/Handy) statt Overlay
 
 // rp-core uebersetzt erst bei DOMContentLoaded – Texte danach zerlegen (SplitText)
 const rpReady = new Promise(r => {
@@ -148,8 +149,9 @@ measure();
 ScrollTrigger.addEventListener('refreshInit', measure);
 
 const CAM = ['az', 'el', 'dist', 'tx', 'ty', 'tz', 'sx', 'sy'], FX = ['explode', 'pedal', 'wheel', 'sway', 'spin'];
-// Der Hero scrollt mit der Seite – sein Slot (und damit das Bike) wandert mit nach oben
-const slotRect = k => k === 'hero' ? { ...rects.hero, y: rects.hero.y - scrollY } : rects[k];
+// Im Fluss-Layout ist der Hero hoeher als der Bildschirm: sein Slot (und damit das Bike) scrollt mit nach oben.
+// Auf breiten Screens bleibt das Bike stehen, waehrend die Overlay-Bedienelemente ausblenden.
+const slotRect = k => k === 'hero' && flowHero.matches ? { ...rects.hero, y: rects.hero.y - scrollY } : rects[k];
 // Hochformat: Explosion schraeger von vorn, damit die seitlich fliegenden Teile ins schmale Bild passen
 const view = st => studio.frame(st.portrait && innerHeight > innerWidth ? { ...st, ...st.portrait } : st, slotRect(st.slot));
 let pageT = 0, rmKey = 'hero';

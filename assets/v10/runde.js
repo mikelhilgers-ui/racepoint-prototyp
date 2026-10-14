@@ -638,6 +638,7 @@
       gsap.set(rider, { x: end[0], y: end[1] });
       layoutMap();
       wpM.forEach(m => m.classList.add('on'));
+      $('.route').classList.add('is-done');
       elWp.textContent = N + '/' + N;
       window.addEventListener('resize', () => layoutMap());
       return;
