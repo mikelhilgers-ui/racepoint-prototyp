@@ -367,7 +367,7 @@
       const isShop = s.start || s.ziel;
       return '<g class="wp-m' + (isShop ? ' wp-shop' : '') + '" data-k="' + k + '" transform="translate(' + P.x.toFixed(1) + ' ' + P.y.toFixed(1) + ')"><g class="wp-s">' +
         (isShop
-          ? '<circle class="o" r="15"/><path class="cup" transform="translate(-7.5 -8) scale(.62)" d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z M16 11h1.5a2.5 2.5 0 010 5H16 M8 3.5c0 1.2 1 1.3 1 2.5M11.5 3.5c0 1.2 1 1.3 1 2.5"/><text class="wp-l" x="23" y="4">Racepoint · Start &amp; Ziel</text>'
+          ? '<circle class="o" r="15"/><path class="cup" transform="translate(-7.5 -8) scale(.62)" d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5z M16 11h1.5a2.5 2.5 0 010 5H16 M8 3.5c0 1.2 1 1.3 1 2.5M11.5 3.5c0 1.2 1 1.3 1 2.5"/><text class="wp-l" x="23" y="4">Racepoint<tspan class="sz"> · Start &amp; Ziel</tspan></text>'
           : '<circle class="o" r="12"/><text class="n" y="4.3" text-anchor="middle">' + (k + 1) + '</text><text class="wp-l" x="20" y="4">' + esc(s.name || s.title) + '</text>') +
         '</g></g>';
     }).join('');

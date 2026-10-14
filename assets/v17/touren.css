@@ -349,6 +349,7 @@
   .route-profile{left:12px;right:12px;bottom:calc(47% + 10px);height:62px;padding:4px 10px 2px;border-radius:12px}
   .prof-read{top:-34px}
   .route-stamp{width:96px}
+  .wp-l .sz{display:none}
   html.tr-pinned .kib-launch{opacity:0;visibility:hidden;transform:translateY(16px)}
 }
 @media (max-width:760px) and (min-height:720px){
