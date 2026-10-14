@@ -32,9 +32,11 @@ export async function initBikeScene(){
   if(!clip){fail();renderer.dispose();return;}
   const action=mixer.clipAction(clip);action.setLoop(THREE.LoopOnce,1);action.clampWhenFinished=true;action.play();
   // Fit the real animated components, excluding the oversized AR shadow planes.
+  // Skinned cables carry quantized (normalized) geometry whose node matrix is not
+  // their render transform; including them pushed the mobile camera ~500 units away.
   const fitParts=[];
   bike.traverse(mesh=>{
-    if(!mesh.isMesh||/shadow/i.test(mesh.name))return;
+    if(!mesh.isMesh||mesh.isSkinnedMesh||/shadow/i.test(mesh.name))return;
     mesh.geometry.computeBoundingBox();const box=mesh.geometry.boundingBox;
     const local=[];for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])local.push(new THREE.Vector3(x,y,z));
     fitParts.push({mesh,local,world:local.map(()=>new THREE.Vector3())});

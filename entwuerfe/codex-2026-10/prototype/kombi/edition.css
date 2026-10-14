@@ -212,3 +212,29 @@ body:has(#advisor-dialog[open]) .advisor-fab{visibility:hidden}
 .chat-widget-btn.primary{background:var(--red);border-color:var(--red);color:#ffffff}
 .chat-widget input,.chat-widget textarea{width:100%;padding:8px 10px;border:1px solid #c5c5c5;border-radius:5px;font:inherit;font-size:12px}
 .chat-widget textarea{min-height:110px;resize:vertical}
+
+/* Mobile-Feinschliff: schwebende Elemente, Lesbarkeit, Tap-Flächen. */
+.visit-section{overflow:hidden}
+@media(max-width:600px){
+  html,body{overflow-x:clip}
+  h1,h2,h3{overflow-wrap:break-word;hyphens:manual}
+  /* Berater: runder Launcher über dem Prototyp-Zahnrad (48px, rechts/unten 14px). */
+  html body .advisor-fab.advisor-fab.advisor-fab{right:max(14px,env(safe-area-inset-right));bottom:calc(74px + env(safe-area-inset-bottom));width:48px;height:48px;padding:0;gap:0;justify-content:center;border-radius:50%;background:var(--paper);border:1px solid #c9d0bd;box-shadow:0 8px 24px #0003,0 0 0 3px #ffffff26}
+  .advisor-fab>span:not(.spark){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .advisor-fab .spark{font-size:24px}
+  .logo,.footer-logo{display:inline-flex;align-items:center;min-height:44px}
+  .hero-link,.family-strip>a{min-height:44px;align-items:center}
+  .hero-bottom{padding-right:62px;font-size:10px;line-height:1.7}
+  .hero-bottom button{min-height:44px}
+  .build-sticky{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+  .build-next{min-height:44px}
+  .ride-card .micro{font-size:9px}
+  .ride-card>div>span:last-child{font-size:11px}
+  .footer{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .footer-grid address,.footer-grid>div>a,.footer-grid dl{font-size:12px}
+  .footer-grid>div>a{display:inline-flex;align-items:center;min-height:40px}
+  .footer-grid>div:last-child a{margin-right:20px}
+  .footer-bottom{font-size:11px}
+  .footer-bottom a{display:inline-flex;align-items:center;min-height:40px}
+  .text-link{min-height:44px}
+}
