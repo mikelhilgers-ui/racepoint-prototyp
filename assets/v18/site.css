@@ -387,7 +387,9 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 /* ---------------- Ueber uns ---------------- */
 .team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .tm{padding:26px 24px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--line)}
-.tm .ini{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--red),#ff7a45);font:900 italic 28px var(--display)}
+.tm .ava{display:flex}
+.tm .ava img{width:clamp(128px,11vw,160px);height:clamp(128px,11vw,160px);border-radius:50%;object-fit:cover;padding:3px;background:linear-gradient(135deg,var(--red),#ff7a45)}
+.tm .ava-2 img + img{margin-left:-36px}
 .tm h3{margin:18px 0 4px;font:900 italic 32px/.95 var(--display);text-transform:uppercase}
 .tm .kicker{font-size:12px}
 .tm p{margin:12px 0 0;color:var(--mute);font-size:15px}
@@ -817,7 +819,7 @@ html:is([data-theme="light"],[data-theme="mix"]) .tb{
 }
 /* KI-Berater ganz unten (site.js): dunkel in allen Themes, läuft ohne Linie in den Footer */
 .kib-end{position:relative;padding-bottom:clamp(64px,7vw,104px)}
-.kib-end + .ftr{border-top:0}
+.kib-end + .ftr{position:relative;margin-top:-1px;border-top:0}
 /* KI-Block unten: Orb wie der KI-Knopf unten rechts (Farbring, Funke, grüner Punkt) */
 .kib-end .ai-orb{width:84px;height:84px;filter:drop-shadow(0 14px 34px rgba(232,54,55,.35))}
 .kib-end .ai-orb i{inset:-2px;background:conic-gradient(from 0deg,#E83637,#ff7a45,#ffd6b0,#fff,#E83637);filter:blur(.3px);animation:spin 4s linear infinite}

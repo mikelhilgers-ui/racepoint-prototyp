@@ -171,11 +171,13 @@
     '<a class="btn stoer-btn" href="' + st.href + '">' + st.btn + ' ' + arrow + '</a></div>' +
     '<a class="stoer-fig" href="' + st.href + '" tabindex="-1" aria-hidden="true"><img src="' + st.img + '" alt="" loading="lazy"><span class="stoer-badge">Passt<br>dazu!</span></a>' +
     '</div></aside>' : '';
-  // KI-Berater ganz unten (auf Shop-Seiten vor dem Störer): überall gleicher Block, Text je Seite. Kontakt und Werkstatt haben ihn schon im Inhalt
+  // KI-Berater ganz unten (auf Shop-Seiten vor dem Störer): überall gleicher Block, Text je Seite. Die Werkstatt hat ihn schon im Inhalt
   const TERMIN_HINWEIS = 'Ein Termin ist nur eine Anfrage. Gebucht ist er erst, wenn das Racepoint-Team ihn bestätigt.';
   const KIB = {
     home: { k: 'KI-Berater <span class="ai-mode" id="aiMode">· verbindet …</span>', h1: 'Frag den', h2: 'KI-Berater.', p: 'Er empfiehlt Bikes aus dem Katalog, hilft bei der Rahmengröße, nennt Öffnungszeiten und bereitet Terminanfragen vor. Wird es persönlich, übernimmt Achim.', ph: 'Z. B. „Gravelbike bis 3.000 € für Touren im Venn“',
       chips: [['Bike-Beratung', 'Welches Bike passt zu mir? Ich hätte gern eine Beratung.'], ['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Termin', 'Ich möchte einen Termin vereinbaren.'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?']] },
+    kontakt: { k: 'KI-Berater', h1: 'Schneller gefragt', h2: 'als angerufen.', p: 'Öffnungszeiten, Anfahrt, Termin oder eine Frage zum Rad: Der KI-Berater antwortet sofort und bereitet deine Anfrage vor. Wird es persönlich, übernimmt Achim.', ph: 'Z. B. „Habt ihr Samstag offen?“',
+      chips: [['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Anfahrt', 'Wie komme ich zu Racepoint in Schönberg?'], ['Termin', 'Ich möchte einen Termin vereinbaren.'], ['Anfrage vorbereiten', 'Hilf mir, meine Anfrage an Racepoint vorzubereiten.']] },
     bikes: { k: 'KI-Berater', h1: 'Der KI-Berater', h2: 'hilft bei der Auswahl.', p: 'Beschreib, wo du fährst und was du ausgeben möchtest. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Erstes Rennrad, Budget 2.000 €“',
       chips: [['Welches Bike?', 'Welches Bike passt zu mir?'], ['Rennrad', 'Welches Rennrad passt zu mir?'], ['E-Bike', 'Welches E-Bike passt zu mir?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?']] },
     rennrad: { k: 'KI-Berater', h1: 'Das passende Rennrad', h2: 'mit dem KI-Berater.', p: 'Schreib, wie weit du fährst und wie viel du ausgeben willst. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Rennrad für lange Sonntagsrunden bis 3.000 €“',

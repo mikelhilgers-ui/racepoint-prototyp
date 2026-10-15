@@ -35,6 +35,7 @@ Karussell aus 8 Fotos und 5 kurzen Clips. Auf keinem Bild sind Personen zu sehen
 | Datei | Original-URL | Fundstelle | Inhalt |
 |---|---|---|---|
 | `team-laden.webp` | https://www.racepoint.be/files/89705.jpg | racepoint.be/ueber-uns/ | Achim, Elke und Team mit Kindern im Laden. ⚠ Personen und **Kinder** erkennbar: Einverständnis bei Achim klären |
+| `team/achim.webp`, `team/elke.webp`, `team/team-1.webp`, `team/team-2.webp` | Ausschnitte aus `team-laden.webp` (320 px) | racepoint.be/ueber-uns/ | Über uns, Teamkacheln. Zuordnung angenommen: Mann mit Brille = Achim, einzige Frau = Elke, die beiden jungen Männer = Leon und Sven (Mechaniker, laut Auftraggeber; wer wer ist, ist offen). ⚠ Einverständnis bei Achim klären, echte Porträts folgen. |
 | `showroom-2.webp` | https://www.racepoint.be/files/88764.jpg | racepoint.be/ueber-uns/ | Showroom mit Rennrädern und MTBs |
 | `detail-schaltgriff.webp` | https://www.instagram.com/p/DZF3zPmiGPy/ | Instagram | Schaltgriff Campagnolo Record (Detail) |
 
