@@ -11,12 +11,12 @@
 <!--  RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE (THROWAWAY)                      -->
 <!--  Gliederung der Startseite, von oben nach unten:                    -->
 <!--  Hero (Film + Video im Schriftzug) · Sortiment #bikes · Achim #achim -->
-<!--  · Werkstatt #werkstatt · Bikefitting #bikefitting (je eine eigene  -->
-<!--  Zeile) · Traumbike #traum (angeheftete Clips) · Aufbau-Filme       -->
-<!--  #builds · Touren #touren (Filmband mit Höhenlinien, drei Karten)   -->
-<!--  · YouTube #filme · Kontakt #kontakt · KI-Berater #berater.         -->
+<!--  · Werkstatt #werkstatt · Bikefitting #bikefitting (zwei randlose   -->
+<!--  Zeilen, ein Kapitel Service) · Traumbike #traum (angeheftete Clips) -->
+<!--  · YouTube #filme (Achims Builds) · Touren #touren (Filmband mit     -->
+<!--  Höhenlinien, drei Karten) · KI-Berater #berater · Kontakt #kontakt. -->
 <!--  Libs lokal in vendor/ · Logik in assets/v18/ (traum.js: Traumbike,  -->
-<!--  Aufbau-Filme, Touren-Teaser)                                       -->
+<!--  Service, Touren-Teaser)                                             -->
 <!-- ================================================================= -->
 
 <!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
@@ -184,40 +184,43 @@
   </div>
 </section>
 
-<!-- ===================== 4 · Werkstatt (eigene Zeile: Bild links, Text rechts) ===================== -->
-<section class="sec svc-row work" id="werkstatt" aria-labelledby="wH">
-  <div class="marq" aria-hidden="true"><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div></div>
-  <div class="wrap row-grid">
-    <figure class="row-fig rv"><a href="v18-werkstatt.html#aufbau" tabindex="-1" aria-hidden="true"><img src="assets/v10/film-2.jpg" alt="Achim montiert ein Rennrad im Montageständer" loading="lazy"></a></figure>
-    <div class="row-txt">
-      <p class="kicker rv">Meisterwerkstatt</p>
-      <h2 class="h2 rv" id="wH">Unsere Werkstatt<br><em>repariert alle Marken.</em></h2>
-      <p class="lead rv">Inspektion, Reparatur, Fahrwerk und E-Bike-Service, egal von welcher Marke.</p>
-      <ul class="ticks rv"><li>Inspektion &amp; Reparatur</li><li>Fahrwerk-Service für Gabel &amp; Dämpfer</li><li>E-Bike-Service: Motor, Akku, Software</li><li>Kleinigkeiten oft sofort</li></ul>
-      <div class="btns rv"><a class="btn" href="v18-werkstatt.html#aufbau">So arbeitet die Werkstatt <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
-    </div>
+<!-- ===================== 4 · Service: Werkstatt (Medium links) und Bikefitting (Medium rechts) ===================== -->
+<!-- Zwei randlose Zeilen im selben Hellton, das Medium läuft bis an den Viewport-Rand, dazwischen eine feine Linie.
+     Das Werkstatt-Video lädt und läuft nur in Sicht (traum.js, Abschnitt 2), das Bild des Bikefittings zoomt langsam
+     beim Scrollen. Bei reduzierter Bewegung bleiben Poster bzw. Bild unverändert stehen. -->
+<section class="svc-row work" id="werkstatt" aria-labelledby="wH">
+  <figure class="svc-media" id="wMedia">
+    <a class="svc-link" href="v18-werkstatt.html#aufbau" tabindex="-1" aria-hidden="true">
+      <picture><source media="(max-width:820px)" srcset="assets/v18/media/cine/werkstatt.webp"><img src="assets/v18/media/cine/werkstatt-amb.webp" alt="Maßband am Sitzrohr eines Rahmens in der Werkstatt" loading="lazy"></picture>
+      <video class="svc-vid" muted loop playsinline preload="none" aria-hidden="true" data-src="assets/v18/media/cine/werkstatt-amb.mp4" data-src-m="assets/v18/media/cine/werkstatt.mp4"></video>
+    </a>
+  </figure>
+  <div class="svc-txt">
+    <p class="svc-idx rv"><b>01</b><i>·</i>Werkstatt</p>
+    <h2 class="h2 rv" id="wH">Unsere Werkstatt<br><em>repariert alle Marken.</em></h2>
+    <p class="lead rv">Egal von welcher Marke. Kleinigkeiten erledigen wir oft sofort.</p>
+    <ul class="ticks rv"><li>Inspektion &amp; Reparatur</li><li>Fahrwerk-Service für Gabel &amp; Dämpfer</li><li>E-Bike-Service: Motor, Akku, Software</li></ul>
+    <div class="btns rv"><a class="btn" href="v18-werkstatt.html#aufbau">So arbeitet die Werkstatt <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
   </div>
 </section>
 
-<!-- ===================== 5 · Bikefitting (eigene Zeile: Text links, Bild rechts) ===================== -->
-<section class="sec svc-row fit" id="bikefitting" aria-labelledby="fH">
-  <div class="wrap row-grid row-rev">
-    <figure class="row-fig rv"><a href="v18-bikefitting.html" tabindex="-1" aria-hidden="true"><img src="assets/v18/media/cine/fitting-1.webp" alt="Junger Rennradfahrer mit Retül-Messmarkern auf dem Rollentrainer" style="object-position:50% 12%" loading="lazy"></a><span class="rec"><i></i>Retül · 3D live</span></figure>
-    <div class="row-txt">
-      <p class="kicker rv">Retül-Bikefitting</p>
-      <h2 class="h2 rv" id="fH">Bikefitting<br><em>mit Retül.</em></h2>
-      <p class="lead rv">Wir vermessen deine Bewegung in 3D und stellen danach Sattel, Cockpit und Cleats ein. Das geht auf einem neuen Bike genauso wie auf deinem jetzigen.</p>
-      <ol class="steps3 rv">
-        <li><b>01</b><span><strong>Gespräch</strong>Ziele, Beschwerden, Fußvermessung.</span></li>
-        <li><b>02</b><span><strong>3D-Messung</strong>Bewegungsmessung in 3D auf deinem eigenen Rad.</span></li>
-        <li><b>03</b><span><strong>Anpassung</strong>Sattel, Cockpit und Cleats einstellen. Dauer ca. 1,5 h.</span></li>
-      </ol>
-      <div class="btns rv"><a class="btn" href="v18-bikefitting.html">So läuft Retül bei uns <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
-    </div>
+<section class="svc-row fit" id="bikefitting" aria-labelledby="fH">
+  <figure class="svc-media" id="fMedia">
+    <a class="svc-link" href="v18-bikefitting.html" tabindex="-1" aria-hidden="true">
+      <img class="svc-zoom" src="assets/v18/media/cine/fitting-2.webp" alt="Radfahrer mit Messmarkern auf einem Zeitfahrrad im Fitting-Bereich" style="object-position:50% 30%" loading="lazy">
+    </a>
+    <span class="rec"><i></i>Retül · 3D live</span>
+  </figure>
+  <div class="svc-txt">
+    <p class="svc-idx rv"><b>02</b><i>·</i>Bikefitting</p>
+    <h2 class="h2 rv" id="fH">Bikefitting<br><em>mit Retül.</em></h2>
+    <p class="lead rv">Wir vermessen deine Bewegung in 3D und stellen danach Sattel, Cockpit und Cleats ein. Das geht auf einem neuen Bike genauso wie auf deinem jetzigen.</p>
+    <ul class="ticks rv"><li><strong>Gespräch:</strong> Ziele, Beschwerden, Fußvermessung</li><li><strong>3D-Messung</strong> auf deinem eigenen Rad</li><li><strong>Anpassung</strong> von Sattel, Cockpit und Cleats, ca.&nbsp;1,5&nbsp;h</li></ul>
+    <div class="btns rv"><a class="btn" href="v18-bikefitting.html">So läuft Retül bei uns <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
   </div>
 </section>
 
-<!-- ===================== 6 · Traumbike: angeheftete Scrollsequenz (Clips), Schluss mit Links ===================== -->
+<!-- ===================== 5 · Traumbike: angeheftete Scrollsequenz (Clips), Schluss mit Links ===================== -->
 <!-- Die Clips stehen in EINER Konfiguration: STORY oben in assets/v18/traum.js. Die Ebenen und
      Bildunterschriften (#tLayers, #tCaps) füllt traum.js daraus. -->
 <section class="traum" id="traum" aria-label="Traumbike">
@@ -228,14 +231,14 @@
       <div class="t-intro wrap" id="tIntro">
         <p class="kicker"><i class="dot"></i>Traumbike</p>
         <h2 class="h2" id="traumTitle">So könnte dein<br><em>Traumbike aussehen.</em></h2>
-        <p class="lead">Rahmen, Laufräder, Farbe: So kann ein Bike nach deiner Idee aussehen. Was davon bei dir möglich ist, zeigen wir dir im Laden.</p>
+        <p class="lead">Rahmen und Farbe: So kann ein Bike nach deiner Idee aussehen. Was davon bei dir möglich ist, zeigen wir dir im Laden.</p>
       </div>
       <ol class="t-caps wrap" id="tCaps" aria-hidden="true"></ol>
       <div class="t-fin wrap" id="tFin">
         <h2 class="t-big">Such dir<br><em>dein Bike aus.</em></h2>
         <div class="btns t-fin-btns">
           <a class="btn" href="v18-bikes.html">Bikes ansehen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn ghost" href="v18-anfrage.html?thema=Individueller%20Build">Idee besprechen</a>
+          <a class="btn ghost" href="v18-kontakt.html?thema=Individueller%20Build#anfrage">Idee besprechen</a>
         </div>
       </div>
       <div class="t-tick" id="tTick" aria-hidden="true"><i id="tTickBar"></i></div>
@@ -243,24 +246,34 @@
   </div>
 </section>
 
-<!-- ===================== 7 · Aufbau-Filme (Achims Builds, Liste füllt traum.js) ===================== -->
-<section class="sec builds" id="builds" aria-labelledby="bH">
+<!-- ===================== 6 · YouTube: Achims Builds (ein Block, Builds und neue Filme gemischt) ===================== -->
+<section class="sec yt" id="filme" aria-labelledby="ytH">
   <div class="wrap">
     <div class="sec-h">
       <div>
-        <p class="kicker rv">Aufbau-Filme</p>
-        <h2 class="h2 rv" id="bH">Achims Builds<br><em>auf YouTube.</em></h2>
+        <p class="kicker rv">YouTube · @racepointbikeshop</p>
+        <h2 class="h2 rv" id="ytH">Achims Builds<br><em>auf YouTube.</em></h2>
       </div>
-      <div class="t-dream-cta rv">
-        <p class="lead">So sieht ein Aufbau bei uns aus. Such dir einen Film aus.</p>
-        <div class="btns"><a class="btn ghost" href="v18-filme.html">Alle Filme</a></div>
+      <div class="films-cta rv">
+        <p class="lead">Builds, Unboxings und Werkstatt-Wissen aus dem Laden. <strong>80.000 Abos</strong> schauen schon zu.</p>
+        <div class="btns">
+          <a class="btn" href="https://www.youtube.com/@racepointbikeshop?sub_confirmation=1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" stroke="none"/></svg>Kanal abonnieren</a>
+          <a class="btn ghost" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        </div>
       </div>
     </div>
-    <div class="t-films" id="tFilms"></div>
+    <div class="yt-grid">
+      <button class="film yt-big rv" type="button" data-video="17-1wlt905s"><img src="assets/v18/media/films/17-1wlt905s.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Build</span><b>S-Works Tarmac SL9</b></span></button>
+      <button class="film rv" type="button" data-video="cIBBbESSOoc"><img src="entwuerfe/codex-2026-10/prototype/assets/films/cIBBbESSOoc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Gravel · Build</span><b>S-Works Crux</b></span></button>
+      <button class="film rv" type="button" data-video="-84OwxUfgIQ"><img src="entwuerfe/codex-2026-10/prototype/assets/films/-84OwxUfgIQ.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">E-MTB · Build</span><b>Turbo Levo SL</b></span></button>
+      <button class="film rv" type="button" data-video="QTqThigoqjc"><img src="assets/v18/media/films/QTqThigoqjc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Unboxing</span><b>Cervélo Soloist 2026</b></span></button>
+      <button class="film rv" type="button" data-video="2zD31t7mWCw"><img src="entwuerfe/codex-2026-10/prototype/assets/films/2zD31t7mWCw.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">MTB · Unboxing</span><b>Epic 8 Pro LTD</b></span></button>
+      <button class="film rv" type="button" data-video="Z5TqAKmey0M"><img src="entwuerfe/codex-2026-10/prototype/assets/films/Z5TqAKmey0M.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Kinder · Build</span><b>Hotwalk Carbon</b></span></button>
+    </div>
   </div>
 </section>
 
-<!-- ===================== 8 · Touren: Filmband mit Höhenlinien, drei Tourenkarten (traum.js) ===================== -->
+<!-- ===================== 7 · Touren: Filmband mit Höhenlinien, drei Tourenkarten (traum.js) ===================== -->
 <section class="tb" id="touren" aria-labelledby="tbH">
   <div class="tb-bg" aria-hidden="true">
     <picture><source media="(max-width:820px)" srcset="assets/v18/media/cine/rennrad.webp"><img src="assets/v18/media/cine/rennrad-amb.webp" alt="" loading="lazy"></picture>
@@ -304,33 +317,31 @@
   </div>
 </section>
 
-<!-- ===================== 9 · YouTube-Kanal ===================== -->
-<section class="sec films" id="filme">
-  <div class="wrap">
-    <div class="sec-h">
-      <div>
-        <p class="kicker rv">YouTube · @racepointbikeshop</p>
-        <h2 class="h2 rv">Achim auf YouTube<br><em>mit 80.000 Abos.</em></h2>
-      </div>
-      <div class="films-cta rv">
-        <p class="lead">Builds, Unboxings und Werkstatt-Wissen aus dem Laden in Schönberg.</p>
-        <div class="btns">
-        <a class="btn ghost" href="https://www.youtube.com/@racepointbikeshop?sub_confirmation=1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="M10 9.2v5.6l5-2.8z" fill="currentColor" stroke="none"/></svg>Kanal abonnieren</a>
-        <a class="btn ghost" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-        </div>
-      </div>
+<!-- ===================== 8 · KI-Berater ===================== -->
+<section class="sec ai" id="berater" aria-labelledby="aiTitle">
+  <div class="ai-glow" aria-hidden="true"></div>
+  <div class="wrap ai-in">
+    <div class="ai-orb" aria-hidden="true"><i></i><b></b></div>
+    <p class="kicker rv">KI-Berater <span class="ai-mode" id="aiMode">· verbindet …</span></p>
+    <h2 class="h2 rv" id="aiTitle">Frag den<br><em>KI-Berater.</em></h2>
+    <p class="lead rv">Er empfiehlt Bikes aus dem Katalog, hilft bei der Rahmengröße, nennt Öffnungszeiten und bereitet Terminanfragen vor. Wird es persönlich, übernimmt Achim.</p>
+    <form class="ask rv" data-ask-form>
+      <label class="sr-only" for="askInput">Frage an den KI-Berater</label>
+      <input id="askInput" type="text" autocomplete="off" placeholder="Z. B. „Gravelbike bis 3.000 € für Touren im Venn“">
+      <button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </form>
+    <div class="chips rv" role="list">
+      <button type="button" role="listitem" data-ask="Welches Bike passt zu mir? Ich hätte gern eine Beratung."><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="16" r="4"/><circle cx="18" cy="16" r="4"/><path d="M6 16l4-8h5l3 8M10 8H8"/></svg>Bike-Beratung</button>
+      <button type="button" role="listitem" data-ask="Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Öffnungszeiten</button>
+      <button type="button" role="listitem" data-ask="Ich möchte einen Termin vereinbaren."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>Termin</button>
+      <button type="button" role="listitem" data-ask="Welche Rahmengröße brauche ich?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17L17 4l3 3L7 20z"/><path d="M8 13l2 2M11 10l2 2M14 7l2 2"/></svg>Rahmengröße</button>
+      <button type="button" role="listitem" data-ask="Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></svg>Kontakt &amp; Anfahrt</button>
     </div>
-    <div class="film-grid">
-      <button class="film film-big rv" type="button" data-video="9KIh7oOIPT4"><img src="entwuerfe/codex-2026-10/prototype/assets/films/9KIh7oOIPT4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Unboxing</span><b>Tarmac SL8 LTD Forward 50</b></span></button>
-      <button class="film rv" type="button" data-video="QTqThigoqjc"><img src="assets/v18/media/films/QTqThigoqjc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Unboxing &amp; Build</span><b>Cervélo Soloist 2026</b></span></button>
-      <button class="film rv" type="button" data-video="nyoM95Rp9g4"><img src="assets/v18/media/films/nyoM95Rp9g4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Leichtbau · Unboxing</span><b>Specialized Aethos 2</b></span></button>
-      <button class="film rv" type="button" data-video="2zD31t7mWCw"><img src="entwuerfe/codex-2026-10/prototype/assets/films/2zD31t7mWCw.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">MTB · Unboxing</span><b>Epic 8 Pro LTD</b></span></button>
-      <button class="film rv" type="button" data-video="Z5TqAKmey0M"><img src="entwuerfe/codex-2026-10/prototype/assets/films/Z5TqAKmey0M.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Kinder · Build</span><b>Hotwalk Carbon</b></span></button>
-    </div>
+    <p class="fine rv">Ein Termin ist nur eine Anfrage. Gebucht ist er erst, wenn das Racepoint-Team ihn bestätigt.</p>
   </div>
 </section>
 
-<!-- ===================== 10 · Besuch / Kontakt ===================== -->
+<!-- ===================== 9 · Besuch / Kontakt ===================== -->
 <section class="visit" id="kontakt">
   <div class="visit-bg" id="visitBg" aria-hidden="true"></div>
   <div class="wrap visit-grid">
@@ -354,29 +365,6 @@
       <ul class="hours" id="hours"></ul>
       <p class="fine">Live-Status nach belgischer Zeit. Werkstatt- und Fitting-Termine nach Absprache.</p>
     </div>
-  </div>
-</section>
-<!-- ===================== 11 · KI-Berater ===================== -->
-<section class="sec ai" id="berater" aria-labelledby="aiTitle">
-  <div class="ai-glow" aria-hidden="true"></div>
-  <div class="wrap ai-in">
-    <div class="ai-orb" aria-hidden="true"><i></i><b></b></div>
-    <p class="kicker rv">KI-Berater <span class="ai-mode" id="aiMode">· verbindet …</span></p>
-    <h2 class="h2 rv" id="aiTitle">Frag den<br><em>KI-Berater.</em></h2>
-    <p class="lead rv">Er empfiehlt Bikes aus dem Katalog, hilft bei der Rahmengröße, nennt Öffnungszeiten und bereitet Terminanfragen vor. Wird es persönlich, übernimmt Achim.</p>
-    <form class="ask rv" data-ask-form>
-      <label class="sr-only" for="askInput">Frage an den KI-Berater</label>
-      <input id="askInput" type="text" autocomplete="off" placeholder="Z. B. „Gravelbike bis 3.000 € für Touren im Venn“">
-      <button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="chips rv" role="list">
-      <button type="button" role="listitem" data-ask="Welches Bike passt zu mir? Ich hätte gern eine Beratung."><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="16" r="4"/><circle cx="18" cy="16" r="4"/><path d="M6 16l4-8h5l3 8M10 8H8"/></svg>Bike-Beratung</button>
-      <button type="button" role="listitem" data-ask="Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Öffnungszeiten</button>
-      <button type="button" role="listitem" data-ask="Ich möchte einen Termin vereinbaren."><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/></svg>Termin</button>
-      <button type="button" role="listitem" data-ask="Welche Rahmengröße brauche ich?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17L17 4l3 3L7 20z"/><path d="M8 13l2 2M11 10l2 2M14 7l2 2"/></svg>Rahmengröße</button>
-      <button type="button" role="listitem" data-ask="Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></svg>Kontakt &amp; Anfahrt</button>
-    </div>
-    <p class="fine rv">Ein Termin ist nur eine Anfrage. Gebucht ist er erst, wenn das Racepoint-Team ihn bestätigt.</p>
   </div>
 </section>
 </main>

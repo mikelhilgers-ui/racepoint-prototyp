@@ -1,28 +1,31 @@
 /* =====================================================================
-   RACEPOINT · 18 · MEIN TRAUMBIKE — Startseite: Traumbike, Aufbau-Filme, Touren (THROWAWAY)
+   RACEPOINT · 18 · MEIN TRAUMBIKE — Startseite: Traumbike, Service, Touren (THROWAWAY)
    Gliederung der Startseite (v18-traumbike.html), Reihenfolge von oben:
      Hero · Sortiment (#bikes) · Achim (#achim) · Werkstatt (#werkstatt) · Bikefitting (#bikefitting)
-     · Traumbike (#traum) · Aufbau-Filme (#builds) · Touren (#touren)
-     · YouTube (#filme) · Kontakt (#kontakt) · KI-Berater (#berater)
+     · Traumbike (#traum) · YouTube (#filme) · Touren (#touren) · KI-Berater (#berater) · Kontakt (#kontakt)
    Diese Datei steuert drei Blöcke. Jeder läuft für sich und bricht ohne seine Elemente still ab:
-     1) Traumbike     angeheftet: Clips (Rahmen, Laufräder, Farbe) als Beispiel, wie ein Bike
+     1) Traumbike     angeheftet: Clips (Idee, Rahmen, Farbe) als Beispiel, wie ein Bike
                       aussehen kann; Schluss mit Links zu den Bikes und zum Gespräch
-     2) Aufbau-Filme  Achims Builds, öffnen über data-video im Filmfenster (RP.openVideo)
+     2) Service       Werkstatt (Video lädt und läuft nur in Sicht) und Bikefitting (Bild zoomt langsam
+                      beim Scrollen). Bei reduzierter Bewegung bleiben Poster bzw. Bild stehen.
      3) Touren        Filmband mit Höhenlinien (wie der Hero von v18-touren.html) und drei
                       Tourenkarten mit Streckenlinie. Daten aus assets/v17/touren (nur gelesen),
                       Helfer RP18Touren aus touren-map.js
+   Der YouTube-Block (#filme) ist reines Markup, die Filme öffnen über data-video im Filmfenster (RP.openVideo).
    Der Hero-Zusatz „Komm zu Achim, Elke und ihrem Team.“ steht ganz unten in dieser Datei.
-   Alle Medien von 1) und 2) stehen in STORY (unten). Quellen: assets/v18/media/QUELLEN.md.
+   Alle Medien von 1) stehen in STORY (unten). Quellen: assets/v18/media/QUELLEN.md.
    Benötigt: gsap, ScrollTrigger, Lenis (über assets/v18/site.js), window.RP, window.RP18Touren
    ===================================================================== */
 (function () {
   'use strict';
 
   const M = 'assets/v18/media/';
+  // Länge der angehefteten Traumbike-Folge in Bildschirmhöhen (früher 4,8 Desktop, 4,2 Mobil)
+  const SCROLL = 1.8;
 
   /* ================= DIE EINE KONFIGURATION ================= */
   const STORY = {
-    // Traumbike: Clips als Beispiel, wie ein Bike aussehen kann (Rahmen, Laufräder, Farbe).
+    // Traumbike: Clips als Beispiel, wie ein Bike aussehen kann (Idee, Rahmen, Farbe).
     // "src" = Desktop, "srcM" = Handy,
     // "pos" = Bildausschnitt im Hochformat (object-position)
     idea: {
@@ -31,8 +34,6 @@
           title: 'Bring deine Idee mit.', text: 'Ein Foto, ein Modell oder nur eine Farbe. Das reicht für das erste Gespräch.' },
         { src: M + 's5/s5-cockpit.mp4', srcM: M + 's5/s5-cockpit-m.mp4', poster: M + 's5/s5-cockpit.webp', pos: '50% 50%',
           title: 'Such dir den Rahmen aus.', text: 'Er bestimmt, wie sich dein Bike fährt und wie du darauf sitzt.' },
-        { src: M + 's5/s5-heck.mp4', srcM: M + 's5/s5-heck-m.mp4', poster: M + 's5/s5-heck.webp', pos: '42% 50%',
-          title: 'Laufräder und Antrieb.', text: 'Was es gibt und was es kostet, zeigen wir dir im Laden.' },
         { src: M + 's5/s5-rahmen.mp4', srcM: M + 's5/s5-rahmen-m.mp4', poster: M + 's5/s5-rahmen.webp', pos: '55% 50%',
           title: 'Dann die Farbe.', text: 'Auch die darf deine sein. Mehr braucht es für den Anfang nicht.' },
       ],
@@ -40,15 +41,6 @@
       still: { src: M + 's5/s5-rahmen.webp', srcM: M + 's5/s5-rahmen.webp',
         alt: 'Lackierter Rennradrahmen in Blau mit Kupfer' },
     },
-    // Achims Aufbau-Filme: der erste Film wird groß gezeigt
-    films: [
-      { id: 'IDVUInlGTOw', title: 'S-Works Tarmac SL8', sub: 'Rennrad-Aufbau mit SRAM Force', img: M + 'films/IDVUInlGTOw.jpg' },
-      { id: 'cIBBbESSOoc', title: 'S-Works Crux', sub: 'Ein Gravelbike entsteht', img: 'entwuerfe/codex-2026-10/prototype/assets/films/cIBBbESSOoc.jpg' },
-      { id: '-84OwxUfgIQ', title: 'Turbo Levo SL', sub: 'E-MTB-Aufbau', img: 'entwuerfe/codex-2026-10/prototype/assets/films/-84OwxUfgIQ.jpg' },
-      { id: 'vV_rL9yq620', title: 'S-Works Aethos', sub: 'Leichtbau aus der Werkstatt', img: 'entwuerfe/codex-2026-10/prototype/assets/films/vV_rL9yq620.jpg' },
-      { id: 'WHggv7Jye4M', title: 'S-Works Shiv', sub: 'Triathlon-Build im Detail', img: 'entwuerfe/codex-2026-10/prototype/assets/films/WHggv7Jye4M.jpg' },
-      { id: '17-1wlt905s', title: 'S-Works Tarmac SL9', sub: 'Das neue Tarmac im Aufbau', img: M + 'films/17-1wlt905s.jpg' },
-    ],
     // Touren-Teaser: eine Tour je Art (jeweils die erste dieser Art in touren.json),
     // Film im Hintergrund (Desktop -amb, Handy die normale Datei)
     tours: {
@@ -64,7 +56,6 @@
   const RM = !!(window.RP && RP.reducedMotion);
   const small = () => window.innerWidth < 820;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const playSvg = '<span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>';
   // Filme erst laden, wenn der Block näher als anderthalb Bildschirme ist (sonst bremsen sie den Seitenstart)
   const near = (el, fn) => {
     if (!el) return;
@@ -118,29 +109,31 @@
     gsap.set('#tFin', { autoAlpha: 0 });
     gsap.set('#tFin .t-big', { yPercent: 30, autoAlpha: 0 });
 
+    // Kurze Folge: drei Clips in rund 1,8 Bildschirmhöhen (SCROLL), etwa drei Wischer
+    const T0 = 0.5, STEP = 0.8;
     const tl = gsap.timeline({ defaults: { ease: 'none' } });
     // Einstieg: Titel, dann erster Clip übernimmt
-    tl.to('#tIntro', { autoAlpha: 0, y: -50, duration: 0.5 }, 0.55)
-      .to(caps[0], { autoAlpha: 1, y: 0, duration: 0.3 }, 0.9);
+    tl.to('#tIntro', { autoAlpha: 0, y: -50, duration: 0.35 }, 0.3)
+      .to(caps[0], { autoAlpha: 1, y: 0, duration: 0.25 }, T0);
     for (let i = 1; i < n; i++) {
-      const t = 0.9 + i * 1.1;
-      tl.to(caps[i - 1], { autoAlpha: 0, y: -24, duration: 0.2 }, t - 0.3)
-        .to(L[i], { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.6, ease: 'power2.inOut' }, t - 0.2)
-        .fromTo($('video', L[i]), { scale: 1.18 }, { scale: 1, duration: 1.3 }, t - 0.2)
-        .to(caps[i], { autoAlpha: 1, y: 0, duration: 0.25 }, t + 0.15);
+      const t = T0 + i * STEP;
+      tl.to(caps[i - 1], { autoAlpha: 0, y: -24, duration: 0.15 }, t - 0.25)
+        .to(L[i], { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.45, ease: 'power2.inOut' }, t - 0.2)
+        .fromTo($('video', L[i]), { scale: 1.18 }, { scale: 1, duration: 0.9 }, t - 0.2)
+        .to(caps[i], { autoAlpha: 1, y: 0, duration: 0.2 }, t + 0.1);
     }
     // Schluss: Links zu den Bikes
-    const tf = 0.9 + n * 1.1;
-    tl.to(caps[n - 1], { autoAlpha: 0, y: -24, duration: 0.25 }, tf - 0.4)
+    const tf = T0 + n * STEP;
+    tl.to(caps[n - 1], { autoAlpha: 0, y: -24, duration: 0.2 }, tf - 0.3)
       .to('#tFin', { autoAlpha: 1, duration: 0.01 }, tf - 0.1)
-      .to('#tFin .t-big', { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, tf - 0.1)
-      .from('#tFin .t-fin-btns', { autoAlpha: 0, y: 20, duration: 0.3 }, tf + 0.25)
-      .to({}, { duration: 0.7 });
+      .to('#tFin .t-big', { yPercent: 0, autoAlpha: 1, duration: 0.4, ease: 'power3.out' }, tf - 0.1)
+      .from('#tFin .t-fin-btns', { autoAlpha: 0, y: 20, duration: 0.25 }, tf + 0.2)
+      .to({}, { duration: 0.5 });
     const total = tl.duration();
-    const marks = clips.map((_, i) => i === 0 ? 0 : 0.9 + i * 1.1 - 0.2);
+    const marks = clips.map((_, i) => i === 0 ? 0 : T0 + i * STEP - 0.2);
 
     ScrollTrigger.create({
-      trigger: '#tIdea', pin: '#tStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * (small() ? 4.2 : 4.8)),
+      trigger: '#tIdea', pin: '#tStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * SCROLL),
       animation: tl, scrub: 0.6, anticipatePin: 1,
       onUpdate: st => {
         const tt = st.progress * total;
@@ -154,16 +147,31 @@
   }
 
   /* =====================================================================
-     2) AUFBAU-FILME
+     2) SERVICE: Werkstatt-Video (nur in Sicht) und Bikefitting-Zoom
+     Die Bilder stehen im Markup (Poster bzw. Bild). Bei reduzierter Bewegung passiert hier nichts:
+     kein Video, kein Zoom.
      ===================================================================== */
-  function builds() {
-    const box = $('#tFilms');
-    if (!box) return;
-    box.innerHTML = STORY.films.map((f, i) =>
-      '<button class="film t-film' + (i ? '' : ' t-film-big') + ' rv" type="button" data-video="' + f.id + '">' +
-      '<img src="' + f.img + '" alt="" loading="lazy">' + playSvg +
-      '<span class="film-m"><span class="kicker">' + esc(f.sub) + '</span><b>' + esc(f.title) + '</b></span></button>').join('');
-    // .rv blendet bestof.js ein (läuft nach dieser Datei und erfasst auch diese Karten)
+  function service() {
+    if (RM) return;
+    const wm = $('#wMedia');
+    const vid = wm && $('.svc-vid', wm);
+    if (vid) {
+      // Video erst kurz vorher laden, nur abspielen, solange die Zeile im Bild ist
+      near(wm, () => {
+        vid.src = (small() && vid.dataset.srcM) || vid.dataset.src;
+        vid.addEventListener('playing', () => vid.classList.add('on'), { once: true });
+        vid.muted = true;
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause(); }), { threshold: 0.15 }).observe(wm);
+        } else vid.play().catch(() => {});
+      });
+    }
+    const fm = $('#fMedia');
+    const img = fm && $('.svc-zoom', fm);
+    if (img && window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.fromTo(img, { scale: 1 }, { scale: 1.16, ease: 'none', scrollTrigger: { trigger: fm, start: 'top bottom', end: 'bottom top', scrub: true } });
+    }
   }
 
   /* =====================================================================
@@ -257,7 +265,7 @@
     });
   }
 
-  builds();
+  service();
   traumbike();
   touren();
 })();

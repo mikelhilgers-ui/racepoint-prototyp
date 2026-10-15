@@ -640,9 +640,9 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 .hdr-cart.has span{display:block}
 .hdr-cart:hover{border-color:var(--edge2)}
 
-/* Traumbike-Story (v18-traumbike.html): Startseite ab dem Hero. Gliederung: Hero-Zeile, Werkstatt- und
-   Bikefitting-Zeile (.svc-row), Traumbike (.traum), Aufbau-Filme (.builds), Touren-Filmband (.tb).
-   Klassen t-pic/t-big/t-films aus traum.css, dunkle Variablen kommen für .t-pic, .rec usw. aus theme.css,
+/* Traumbike-Story (v18-traumbike.html): Startseite ab dem Hero. Gliederung: Hero-Zeile, Service (Werkstatt- und
+   Bikefitting-Zeile, .svc-row), Traumbike (.traum), YouTube (.yt), Touren-Filmband (.tb).
+   Klassen t-pic/t-big aus traum.css, dunkle Variablen kommen für .film, .rec usw. aus theme.css,
    daher passt alles in Dunkel/Hell/Mix. Das Filmband .tb setzt die dunklen Variablen selbst.
    Dieser Block steht am Ende von site.css. */
 /* Hero: Versal-Zeile (#knockSub, von bestof.js eingeblendet) und darunter die kleine Team-Zeile.
@@ -657,28 +657,42 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 .knock-team.in-flow{opacity:1;visibility:visible;margin-top:14px;text-align:left}
 @media (prefers-reduced-motion:reduce){ .knock-stack{display:none} }
 
-/* Werkstatt und Bikefitting: je eine volle Zeile, Bild und Text abwechselnd links/rechts */
-.svc-row{padding:clamp(64px,7vw,110px) 0}
-.svc-row .marq{margin-bottom:clamp(40px,5.5vw,80px)}
-.svc-row.fit{background:var(--bg2)}
-.row-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:center}
-.row-rev{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr)}
-.row-rev .row-fig{order:2}
-.row-fig{position:relative;margin:0;aspect-ratio:4/3;border-radius:var(--r);overflow:hidden;background:var(--bg3);box-shadow:0 30px 70px -30px var(--shadow)}
-.row-fig a{display:block;width:100%;height:100%}
-.row-fig img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
-.row-fig:hover img{transform:scale(1.04)}
-.row-txt{display:flex;flex-direction:column;align-items:flex-start;gap:20px;min-width:0}
-.row-txt .h2{margin:0;font-size:clamp(38px,4.6vw,74px)}
-.row-txt .ticks,.row-txt .steps3{margin:4px 0 6px}
-.row-txt .btns{margin-top:6px}
+/* Service: Werkstatt (Medium links) und Bikefitting (Medium rechts), randlose Zeilen im selben Hellton.
+   Das Medium nimmt 58 % der Breite ein und läuft bis an den Viewport-Rand, der Text steht auf der Seite des
+   Seitenrasters (--max). Dazwischen eine feine Linie, sodass beide wie ein Kapitel wirken. */
+.svc-row{--svc-h:min(78vh,720px);--svc-pad:max(var(--gut),calc((100vw - var(--max)) / 2 + var(--gut)));position:relative;display:grid;grid-template-columns:minmax(0,58fr) minmax(0,42fr);min-height:var(--svc-h);background:var(--bg)}
+.svc-row + .svc-row{border-top:1px solid var(--line)}
+.svc-row.fit{grid-template-columns:minmax(0,42fr) minmax(0,58fr)}
+.svc-row.fit .svc-media{order:2}
+.svc-media{position:relative;margin:0;min-height:var(--svc-h);overflow:hidden;background:var(--bg3)}
+.svc-link{position:absolute;inset:0;display:block}
+.svc-media picture{position:absolute;inset:0;display:block}
+.svc-media :is(img,video){position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
+.svc-vid{opacity:0;transition:opacity 1s}
+.svc-vid.on{opacity:1}
+.svc-zoom{transform-origin:50% 40%;will-change:transform}
+.svc-txt{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:20px;min-width:0;padding:clamp(56px,6vw,104px) var(--svc-pad) clamp(56px,6vw,104px) clamp(48px,6.5vw,128px)}
+.svc-row.fit .svc-txt{padding:clamp(56px,6vw,104px) clamp(48px,6.5vw,128px) clamp(56px,6vw,104px) var(--svc-pad)}
+.svc-idx{margin:0;display:flex;align-items:baseline;gap:.55em;font:700 italic clamp(17px,1.5vw,22px)/1 var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+.svc-idx b{font:900 italic clamp(30px,3vw,46px)/.9 var(--display);letter-spacing:.02em;color:var(--red)}
+.svc-idx i{font-style:normal;color:var(--dim)}
+.svc-txt .h2{margin:0;font-size:clamp(40px,4.3vw,76px)}
+.svc-txt .ticks{margin:4px 0 6px}
+.svc-txt .ticks strong{color:var(--ink);font-weight:600}
+.svc-txt .btns{margin-top:6px}
 
 /* Traumbike: Schlusszeile mit zwei Knöpfen */
 .t-fin-btns{margin-top:clamp(20px,3vh,30px)}
 .t-fin-btns .btn{pointer-events:auto}
 .t-fin::before{content:"";position:absolute;z-index:-1;left:-8vw;right:-8vw;top:-120px;bottom:-90px;pointer-events:none;background:radial-gradient(ellipse 75% 80% at 28% 42%,rgba(5,5,6,.78) 0%,rgba(5,5,6,.45) 50%,rgba(5,5,6,0) 78%)}
-/* Aufbau-Filme: Knopf rechts neben der Überschrift */
-.t-dream-cta{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+/* YouTube: ein großer Film (zwei Spalten, zwei Zeilen) und fünf Kacheln. Karten (.film) aus bestof.css */
+.yt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.yt-big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:100%}
+.yt-big .film-play{width:84px;height:84px;margin:-42px 0 0 -42px}
+.yt-big .film-m{left:24px;bottom:22px}
+.yt-big .film-m b{font-size:clamp(34px,3.4vw,54px)}
+.yt-big .film-m .kicker{font-size:13px}
+.yt .films-cta strong{color:var(--ink);font-weight:600}
 @media (max-width:560px){
   .t-intro .h2{font-size:clamp(42px,12.6vw,60px)}
 }
@@ -742,20 +756,31 @@ html:is([data-theme="light"],[data-theme="mix"]) .tb{
 .tb-bsp[hidden]{display:none}
 
 @media (max-width:820px){
-  .row-grid,.row-rev{grid-template-columns:minmax(0,1fr);gap:28px}
-  .row-rev .row-fig{order:0}
-  .row-fig{aspect-ratio:4/3}
+  .svc-row,.svc-row.fit{grid-template-columns:minmax(0,1fr);min-height:0}
+  .svc-row.fit .svc-media{order:0}
+  .svc-media{min-height:0;aspect-ratio:4/5}
+  .svc-txt,.svc-row.fit .svc-txt{padding:clamp(36px,8vw,56px) var(--gut) clamp(48px,10vw,72px)}
+  .yt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .yt-big{grid-column:1/-1;grid-row:auto;aspect-ratio:16/10;min-height:0}
+  .yt-grid .film:last-child{grid-column:1/-1;aspect-ratio:16/7}
   .tb-grid{grid-template-columns:minmax(0,1fr);gap:32px}
   .tb::before{background:
     linear-gradient(180deg,rgba(9,9,11,.62) 0%,rgba(9,9,11,.72) 55%,#0b0b0d 100%)}
 }
 @media (max-width:560px){
-  .row-txt .btns .btn,.tb-txt .btns .btn{flex:1 1 auto}
+  .svc-txt .btns .btn,.tb-txt .btns .btn{flex:1 1 auto}
+  .yt .films-cta .btns .btn{flex:1 1 auto}
+  .yt-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(-1 * var(--gut));padding:0 var(--gut) 6px;scrollbar-width:none;gap:12px}
+  .yt-grid::-webkit-scrollbar{display:none}
+  .yt-grid .film,.yt-grid .film:last-child{flex:0 0 78%;aspect-ratio:16/11;scroll-snap-align:start}
+  .yt-grid .yt-big{flex-basis:88%}
+  .yt-grid .film-m b{font-size:22px}
+  .yt-big .film-m b{font-size:28px}
   .tb-card{min-height:104px;padding:14px 16px 14px 18px;grid-template-columns:minmax(0,1fr) 92px}
   .tb-how{font-size:12.5px;letter-spacing:.14em}
 }
 @media (prefers-reduced-motion:reduce){
-  .tb-card,.tb-go,.row-fig img{transition:none}
+  .tb-card,.tb-go,.svc-vid{transition:none}
 }
 /* Bike-Detail: Hinweis unter Reservieren */
 .bd-res{margin-top:12px;color:var(--mute);font-size:14px;max-width:46ch}
