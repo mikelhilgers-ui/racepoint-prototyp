@@ -179,7 +179,7 @@
       c.addEventListener('mouseleave', () => hl(null, false));
       c.addEventListener('focusin', () => hl(c.dataset.id, false));
     });
-    if (!RM && window.gsap) gsap.from($$('.tcard', box), { autoAlpha: 0, y: 26, duration: 0.7, stagger: 0.06, ease: 'power3.out', clearProps: 'all' });
+    if (!RM && window.gsap) gsap.fromTo($$('.tcard', box), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'power3.out', clearProps: 'all' });
     const counts = { alle: 0, rennrad: 0, gravel: 0, mtb: 0 };
     TOURS.forEach(t => { counts.alle++; if (counts[t.type] != null) counts[t.type]++; });
     $$('[data-n]').forEach(el => { el.textContent = counts[el.dataset.n] || 0; });

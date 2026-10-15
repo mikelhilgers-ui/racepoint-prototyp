@@ -116,7 +116,9 @@
       grid.innerHTML = list.length ? list.map(b => card(b)).join('') :
         '<div class="empty"><p>Für diesen Filter haben wir hier gerade kein Modell gelistet – im Laden steht oft mehr.</p><a class="btn" data-ask="Ich suche ein ' + CAT_NAME[c] + ' (' + (STYLE[f] || f) + '). Was könnt ihr empfehlen?">Achim fragen</a></div>';
       guardImgs(grid);
-      if (!RM && window.gsap) gsap.from($$('.bcard', grid), { autoAlpha: 0, y: 26, duration: 0.6, stagger: 0.07, ease: 'power3.out' });
+      // fromTo mit festem Endwert: .bcard hat eine CSS-Transition auf transform (Hover), sonst liest gsap.from
+      // einen Zwischenstand als Ziel und eine Kachel bleibt versetzt stehen
+      if (!RM && window.gsap) gsap.fromTo($$('.bcard', grid), { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.07, ease: 'power3.out', clearProps: 'transform,opacity,visibility' });
       const cnt = $('#bikeCount'); if (cnt) cnt.textContent = list.length + (list.length === 1 ? ' Modell' : ' Modelle');
     }
     chips.addEventListener('click', e => {
