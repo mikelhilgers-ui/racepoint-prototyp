@@ -142,7 +142,7 @@
         '<p>Dein Radladen in Schönberg<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
       '<nav aria-label="Shop"><b>Shop</b><a href="' + SHOP + '"' + cur('shop') + '>Ganzer Shop</a><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(EXTRA).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
-      '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
+      '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '</nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v18-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +
     '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><span class="ftr-mini">' + SOCIAL.map(c => '<a href="' + c.href + '" target="_blank" rel="noopener" aria-label="' + c.name + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + c.svg + '</svg></a>').join('') + '</span><span>Prototyp 18 · Mein Traumbike</span></div></footer>';

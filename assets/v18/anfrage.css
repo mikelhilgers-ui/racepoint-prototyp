@@ -1,0 +1,91 @@
+/* =====================================================================
+   RACEPOINT · 18 · Anfrage (nur v18-anfrage.html)
+   Formular links, ruhige Spalte "So geht es weiter" rechts.
+   Mix: Hero dunkel, Formularabschnitt hell (überschreibt die Mix-Regel
+   nth-of-type(even) aus theme.css). Hell und Dunkel folgen dem Theme.
+   ===================================================================== */
+
+/* Mix: Formularabschnitt hell, gleiche Variablen wie der Hell-Block in theme.css */
+html[data-theme="mix"] body[data-page="kontakt"] main > section#anfrage{
+  --bg:#f4f2ee; --bg2:#ffffff; --bg3:#e9e6e0;
+  --ink:#17171b; --mute:rgba(23,23,27,.68); --dim:rgba(23,23,27,.47); --line:rgba(23,23,27,.12);
+  --strong:#17171b; --strong-inv:#fff; --nav:rgba(23,23,27,.72);
+  --glass:rgba(255,255,255,.7); --glass2:rgba(255,255,255,.95); --edge:rgba(23,23,27,.16); --edge2:rgba(23,23,27,.4);
+  --ghost:rgba(23,23,27,.05); --ghost2:rgba(23,23,27,.1); --ghost-b:rgba(23,23,27,.2);
+  --pill:rgba(255,255,255,.8); --pill-b:rgba(23,23,27,.13);
+  --card:#fff; --field:#fff; --noimg:#fff; --noimg2:#e6e3dd;
+  --stroke:rgba(23,23,27,.22); --stroke2:rgba(23,23,27,.09); --grid:rgba(23,23,27,.04); --fade0:rgba(244,242,238,0);
+  --ai-mid:#fbe7e4; --live:#15803d; --shadow:rgba(23,23,27,.35);
+  --rail-b:rgba(255,255,255,.8); --rail-glow:rgba(255,255,255,.95);
+  --logo-l:none; --logo-d:block; --warn:#7a4f06; --warn2:#8a5a08; --ok:#15803d; --no:#b91c1c;
+  color-scheme:light;
+  color:var(--ink);
+  background-color:var(--bg);
+}
+
+/* Abschnitt: kein großer Leerraum, endet sauber vor dem Footer */
+.an-sec{scroll-margin-top:40px;padding:clamp(40px,5vw,72px) 0 clamp(48px,5.5vw,84px)}
+html[data-theme="mix"] body[data-page="kontakt"] main > section.an-sec{padding:clamp(40px,5vw,72px) 0 clamp(48px,5.5vw,84px) !important}
+.an-h{margin-bottom:clamp(24px,3vw,40px)}
+.an-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4.5vw,72px);align-items:start}
+
+/* Formular: lesbar in allen Themes */
+.an-sec .formcard{background:var(--bg2);border:1px solid var(--line);box-shadow:0 24px 60px -34px var(--shadow)}
+.an-sec .fld input,.an-sec .fld textarea{background:var(--field);color:var(--strong);border:1px solid var(--edge)}
+.an-sec .fld input::placeholder,.an-sec .fld textarea::placeholder{color:var(--dim);opacity:1}
+.an-sec .fld input:hover,.an-sec .fld textarea:hover{border-color:var(--edge2)}
+.an-sec .fld input:focus,.an-sec .fld textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(232,54,55,.22)}
+.an-sec .fld > span,.an-sec .topics legend{color:var(--mute)}
+.an-sec .topics span{color:var(--ink);border-color:var(--edge);background:var(--glass)}
+.an-sec .topics label:hover span{border-color:var(--edge2)}
+.an-sec .topics input:checked + span{background:var(--red);border-color:var(--red);color:#fff}
+.an-sec .topics input:focus-visible + span{outline:2px solid var(--strong);outline-offset:2px}
+.an-sec .btn:focus-visible,.an-alt:focus-visible{outline:2px solid var(--strong);outline-offset:3px}
+
+/* Vorschau: erst da, wenn ein Entwurf da ist (Nachricht eingetragen) */
+.an-draft{display:none;gap:10px}
+.formcard:has(textarea:not(:placeholder-shown)) .an-draft{display:grid}
+.an-draft:has(.draft:empty){display:none !important}
+.an-draft .kicker{color:var(--mute)}
+.an-draft .draft{background:var(--bg);border:1px dashed var(--edge2);color:var(--ink);max-height:260px}
+.an-draft .draft:empty{display:none}
+
+/* Rechte Spalte */
+.an-side{display:grid;gap:18px;align-content:start}
+.an-steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:ans}
+.an-steps li{position:relative;display:grid;gap:3px;padding:0 0 22px 56px;counter-increment:ans}
+.an-steps li:last-child{padding-bottom:0}
+.an-steps li::before{content:counter(ans);position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--bg2);border:1px solid var(--edge);color:var(--red);font:900 italic 19px/1 var(--display);z-index:1}
+.an-steps li:not(:last-child)::after{content:"";position:absolute;left:18.5px;top:38px;bottom:0;width:1px;background:var(--line)}
+.an-steps b{font:800 italic 22px/1.1 var(--display);text-transform:uppercase;letter-spacing:.01em;color:var(--strong);padding-top:6px}
+.an-steps span{color:var(--mute);font-size:15px;line-height:1.5;max-width:44ch}
+.an-alt-k{margin-top:14px;color:var(--mute)}
+
+.an-alts{display:grid;gap:10px}
+.an-alt{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);text-align:left;text-decoration:none;font:inherit;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s}
+.an-alt:hover{border-color:var(--red);transform:translateY(-2px);box-shadow:0 14px 30px -20px var(--shadow)}
+.an-ic{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--ghost);color:var(--red)}
+.an-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.an-tx{display:grid;gap:2px;min-width:0}
+.an-tx b{font:700 16px/1.25 var(--body);color:var(--strong)}
+.an-tx small{font:400 13.5px/1.4 var(--body);color:var(--mute)}
+
+/* Dunkel/Mix-dunkel: Karte etwas heller als der Grund */
+html[data-theme="dark"] .an-sec .formcard{background:var(--bg2)}
+
+@media (min-width:1001px){
+  .an-side{position:sticky;top:104px}
+}
+@media (max-width:1000px){
+  .an-grid{grid-template-columns:1fr;gap:34px}
+}
+@media (max-width:560px){
+  .an-sec .formcard{padding:20px 18px}
+  .an-steps b{font-size:20px}
+  .an-alt{padding:12px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .an-alt{transition:none}
+  .an-alt:hover{transform:none}
+}
+html[data-theme="dark"] .an-sec :is(.fld input,.fld textarea){background:var(--bg)}

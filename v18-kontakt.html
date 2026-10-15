@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
 <link rel="stylesheet" href="assets/v18/theme.css">
+<link rel="stylesheet" href="assets/v18/anfrage.css">
 </head>
 <body data-page="kontakt">
 <a class="skip" href="#kontakt">Zum Inhalt springen</a>
@@ -82,24 +83,50 @@
   </div>
 </section>
 
-<section class="sec" aria-labelledby="nH" style="padding-top:0">
-  <div class="wrap split">
-    <div>
-      <p class="kicker rv">Nachricht</p>
-      <h2 class="h2 rv" id="nH">Schreib uns<br><em>vorab.</em></h2>
-      <p class="lead rv">Das Formular macht daraus einen E-Mail-Entwurf an info@racepoint.be. Oder frag den KI-Berater nach Öffnungszeiten, Katalog und Terminen.</p>
-      <div class="side-acts rv"><a class="btn" data-ask="Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte.">KI-Berater fragen</a><a class="btn ghost" href="v18-anfrage.html">Ausführliche Anfrage <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
-    </div>
-    <form class="formcard mform rv" data-mailform="Kontakt">
-      <label class="fld"><span>Worum geht es?</span><select name="thema"><option>Bike-Beratung</option><option>Werkstatt</option><option>Bikefitting</option><option>Individueller Build</option><option>Andere Frage</option></select></label>
-      <label class="fld"><span>Deine Nachricht</span><textarea name="nachricht" placeholder="Deine Frage oder dein Anliegen"></textarea></label>
+<section class="sec an-sec" id="anfrage" aria-labelledby="nH">
+  <div class="wrap">
+    <div class="sec-h an-h"><div><p class="kicker rv">Nachricht</p><h2 class="h2 rv" id="nH">Schreib uns<br><em>vorab.</em></h2></div><p class="lead rv">Neues Bike, Werkstatt-Termin oder Bikefitting: Schreib kurz, worum es geht. Ein Satz reicht, ein Roman geht auch.</p></div>
+  </div>
+  <div class="wrap an-grid">
+    <form class="formcard mform rv" data-mailform="Anfrage">
+      <fieldset class="topics"><legend>Worum geht es?</legend>
+        <label><input type="radio" name="thema" value="Bike-Beratung" checked><span>Bike-Beratung</span></label><label><input type="radio" name="thema" value="Werkstatt"><span>Werkstatt</span></label><label><input type="radio" name="thema" value="Bikefitting"><span>Bikefitting</span></label><label><input type="radio" name="thema" value="Individueller Build"><span>Individueller Build</span></label><label><input type="radio" name="thema" value="Andere Frage"><span>Andere Frage</span></label>
+      </fieldset>
+      <label class="fld"><span>Deine Nachricht</span><textarea name="nachricht" placeholder="z. B. Ich suche ein Gravelbike für Touren, Budget bis 3.000 € …"></textarea></label>
       <div class="two">
-        <label class="fld"><span>Dein Name</span><input name="name" autocomplete="name"></label>
+        <label class="fld"><span>Dein Name, wenn du möchtest</span><input name="name" autocomplete="name"></label>
         <label class="fld"><span>Telefon oder E-Mail</span><input name="kontakt" autocomplete="email"></label>
       </div>
-      <button class="btn" type="submit">E-Mail-Entwurf öffnen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-      <p class="fine">Es wird nichts automatisch gesendet. Du prüfst die E-Mail und schickst sie selbst ab.</p>
+      <button class="btn" type="submit">E-Mail-Entwurf vorbereiten <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
+      <p class="fine">Es wird nichts automatisch gesendet oder gebucht.</p>
+      <div class="an-draft">
+        <p class="kicker">Vorschau deines Entwurfs</p>
+        <pre class="draft" data-draft aria-live="polite"></pre>
+      </div>
     </form>
+    <aside class="an-side" aria-label="So geht es weiter">
+      <p class="kicker rv">So geht es weiter</p>
+      <ol class="an-steps rv">
+        <li><b>Thema wählen und schreiben</b><span>Such das Thema aus und schreib, worum es geht.</span></li>
+        <li><b>Entwurf prüfen</b><span>Deine Angaben landen in einem E-Mail-Entwurf. Du siehst ihn, bevor etwas passiert.</span></li>
+        <li><b>Selbst abschicken</b><span>Du schickst ihn aus deinem E-Mail-Programm ab.</span></li>
+      </ol>
+      <p class="kicker rv an-alt-k">Oder anders</p>
+      <div class="an-alts rv">
+        <a class="an-alt" href="tel:+3280548898">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4.5-2 1.5a12 12 0 006 6l1.5-2 4.5 1.5v3a2 2 0 01-2 2A16.5 16.5 0 014.5 5.5a2 2 0 012-2z"/></svg></span>
+          <span class="an-tx"><b>+32 80 54 88 98</b><small>Reden geht oft schneller als Tippen.</small></span>
+        </a>
+        <button class="an-alt" type="button" data-ask="Hilf mir, meine Anfrage an Racepoint vorzubereiten.">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14a2 2 0 012 2V15a2 2 0 01-2 2h-7l-4.5 3.5V17H5a2 2 0 01-2-2V7.5a2 2 0 012-2z"/></svg></span>
+          <span class="an-tx"><b>Mit dem KI-Berater sprechen</b><small>Er hilft dir, die Anfrage zu formulieren.</small></span>
+        </button>
+        <a class="an-alt" href="mailto:info@racepoint.be">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></span>
+          <span class="an-tx"><b>info@racepoint.be</b><small>Direkt aus deinem E-Mail-Programm.</small></span>
+        </a>
+      </div>
+    </aside>
   </div>
 </section>
 </main>
