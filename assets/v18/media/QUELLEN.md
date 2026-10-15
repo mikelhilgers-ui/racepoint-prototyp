@@ -113,6 +113,7 @@ Videos neu kodiert (H.264, ohne Ton, 720×1280), dazu je eine weiche Querformat-
 | `cine/porto*` | https://www.instagram.com/reel/C5lt3vxM75o/ | racepoint.be | Bikes (Einstieg), Filme-Showreel | Specialized Porto mit Getränkekisten vor dem Laden. ⚠ Person erkennbar |
 | `cine/levo-1…3.webp` | https://www.instagram.com/p/CBgQoNElF1x/ | racepoint.be | Bikes (Karte, Einblicke) | Turbo Levo S-Works (Modell 2020) vor der Übergabe |
 | `cine/showreel*` | Schnitt aus rennrad, werkstatt, mtb, kids, helme, ueberuns, sl9, porto | racepoint.be / jnssnsarne | Filme (Einstieg) | Je 2,6 s. ⚠ enthält den MTB-Ausschnitt von @jnssnsarne, Freigaben wie oben |
+| `shop/*.webp` (24 Dateien: tee-*, hoodie-*, cap-*) | https://racepoint-shop.com/products.json (öffentliche Produktfotos, Stand 15.10.2026) | racepoint-shop.com | Shop (Produkte, Einstieg) | Racepoint-Kollektion, auf 800 bzw. 1200 px verkleinert. ⚠ Models erkennbar (Chriddle, Elena, Leon, Marco, Achim), Freigabe für die neue Seite klären |
 
 Nicht verwendet, aber geladen: https://www.instagram.com/p/DRKk-rriPNG/ (Cervélo im Matsch, Hochformat).
 Die Bildnachweise stehen auf der Seite in der Bildunterschrift („via @jnssnsarne“).

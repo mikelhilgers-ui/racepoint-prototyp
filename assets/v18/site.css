@@ -622,3 +622,9 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 @media (min-width:821px){
   .phero.cine:not(:has(.phero-reel)) .phero-side .phero-badge{left:auto;top:auto;right:70px;bottom:120px}
 }
+/* Bikes-Übersicht: sechs Kacheln (mit Kinder & Familie und Zubehör), darunter drei Minis */
+@media (min-width:1181px){
+  .cats.cats-6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cats-6 .cat{aspect-ratio:4/3.3}
+}
+@media (min-width:901px){ .cats-6 + .cat-more{grid-template-columns:repeat(3,minmax(0,1fr))} }

@@ -32,6 +32,7 @@
   const ZUB = { id: 'zubehoer', href: 'v18-zubehoer.html', name: 'Zubehör', short: 'Schuhe, Helme, Bekleidung', img: 'assets/v18/media/cine/kleid-3.webp' };
   const BIKES = 'v18-bikes.html';
   const PAGES = [
+    { id: 'shop', href: 'v18-shop.html', name: 'Shop' },
     { id: 'werkstatt', href: 'v18-werkstatt.html', name: 'Werkstatt' },
     { id: 'bikefitting', href: 'v18-bikefitting.html', name: 'Bikefitting' },
     { id: 'touren', href: 'v18-touren.html', name: 'Touren' },
