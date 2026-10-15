@@ -777,7 +777,7 @@
       '<a class="btn" href="' + esc(t.file) + '" download="' + esc(t.dlName) + '">' + '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>GPX herunterladen</a>' +
       '<a class="btn ghost" href="mailto:' + MAIL + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body) + '"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3z M3 7l9 6 9-6"/></svg>Leihrad/Probefahrt anfragen</a>' +
       '<button type="button" class="btn ghost" data-ask="' + esc('Ich möchte mein ' + BIKEWORD[t.type] + ' vor der Tour „' + m.title + '“ (' + nf(t.km) + ' km, ' + nf(t.up) + ' Hm) in der Werkstatt checken lassen.') + '"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 015-5l-2.6 2.6.6 2.4 2.4.6L22.5 4.5a4 4 0 01-5 5L9 18a2.1 2.1 0 01-3-3z"/></svg>Werkstatt-Check vor der Tour</button>';
-    $('#inFine').textContent = (m.beispiel ? 'Beispielroute: Die Linie verbindet echte Orte, folgt aber keinen echten Wegen – bitte nicht zum Navigieren verwenden. Achims echte GPX-Tour folgt. ' : '') +
+    $('#inFine').textContent = (m.beispiel ? 'Beispielroute: Die Linie verbindet echte Orte, folgt aber keinen echten Wegen. Bitte nicht zum Navigieren verwenden. Achims echte GPX-Tour folgt. ' : '') +
       'Distanz, Höhenmeter (Glättung ' + T.ASCENT_THRESHOLD + ' m) und Profil sind aus der GPX-Datei berechnet. Die Fahrzeit ist eine grobe Schätzung ohne Pausen.';
   }
 
@@ -789,7 +789,7 @@
     const consent = ls.get(LS_OSM) === '1';
     if (!consent) {
       sw.innerHTML = '<button class="osm-go" type="button" data-osm="osm">' + icon('i-map') + 'Karte laden (OpenStreetMap)</button>' +
-        '<p class="osm-note">Lädt Kartenkacheln von openstreetmap.org – erst nach deinem Klick. Die Wahl wird gemerkt.</p>';
+        '<p class="osm-note">Lädt Kartenkacheln von openstreetmap.org, erst nach deinem Klick. Die Wahl wird gespeichert.</p>';
     } else {
       sw.innerHTML = '<div class="msw" role="group" aria-label="Kartenansicht"><button type="button" data-m="svg" aria-pressed="true">Stilisiert</button><button type="button" data-m="osm" aria-pressed="false">Echte Karte</button><button type="button" data-m="topo" aria-pressed="false">Topo</button></div>';
     }
@@ -934,7 +934,7 @@
       TOURS = await load();
     } catch (e) {
       console.warn('[Touren]', e);
-      $('#trCards').innerHTML = '<div class="tr-err"><b>Die Touren konnten nicht geladen werden.</b><span>Die Seite liest die GPX-Dateien per fetch – bitte über einen Webserver öffnen (z. B. <code>npm start</code>), nicht direkt als Datei.</span></div>';
+      $('#trCards').innerHTML = '<div class="tr-err"><b>Die Touren konnten nicht geladen werden.</b><span>Die Seite liest die GPX-Dateien per fetch. Bitte über einen Webserver öffnen (z. B. <code>npm start</code>), nicht direkt als Datei.</span></div>';
       $('#tour').hidden = true; $('#steckbrief').hidden = true;
       return;
     }

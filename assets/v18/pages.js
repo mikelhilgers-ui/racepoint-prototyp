@@ -53,7 +53,7 @@
   const SIZES = [[160, 'XS', 49], [168, 'S', 52], [176, 'M', 54], [184, 'L', 56], [192, 'XL', 58], [206, 'XXL', 61]];
 
   /* ---------------- Katalog ---------------- */
-  const CAT_NAME = { rennrad: 'Rennrad', gravel: 'Gravel', mtb: 'MTB', ebike: 'E-Bike', familie: 'Kids & Familie', kind: 'Kids & Familie' };
+  const CAT_NAME = { rennrad: 'Rennrad', gravel: 'Gravel', mtb: 'MTB', ebike: 'E-Bike', familie: 'Kinder & Familie', kind: 'Kinder & Familie' };
   const CAT_PAGE = { rennrad: 'v18-rennrad.html', gravel: 'v18-gravel.html', mtb: 'v18-mtb.html', ebike: 'v18-ebike.html', kind: 'v18-familie.html', familie: 'v18-familie.html' };
   const STYLE = { alltag: 'Alltag', sportlich: 'Sportlich', racer: 'Racer', trail: 'Trail' };
   // Familie & Alltag zeigt wie im Original das Kinder-MTB und das Alltags-E-Bike
@@ -116,7 +116,7 @@
       const s = sort.value;
       list = list.slice().sort((a, b) => s === 'desc' ? b.price - a.price : s === 'name' ? a.name.localeCompare(b.name, 'de') : a.price - b.price);
       grid.innerHTML = list.length ? list.map(b => card(b)).join('') :
-        '<div class="empty"><p>Für diesen Filter haben wir hier gerade kein Modell gelistet – im Laden steht oft mehr.</p><a class="btn" data-ask="Ich suche ein ' + CAT_NAME[c] + ' (' + (STYLE[f] || f) + '). Was könnt ihr empfehlen?">Achim fragen</a></div>';
+        '<div class="empty"><p>Für diesen Filter ist hier gerade kein Modell gelistet. Im Laden steht oft mehr.</p><a class="btn" data-ask="Ich suche ein ' + CAT_NAME[c] + ' (' + (STYLE[f] || f) + '). Was könnt ihr empfehlen?">Achim fragen</a></div>';
       guardImgs(grid);
       // fromTo mit festem Endwert: .bcard hat eine CSS-Transition auf transform (Hover), sonst liest gsap.from
       // einen Zwischenstand als Ziel und eine Kachel bleibt versetzt stehen
@@ -160,7 +160,7 @@
     const b = id && byId(id);
     if (!b) {
       document.title = 'Racepoint · Bikes';
-      $('#bdTop').innerHTML = '<div class="bd-miss"><p class="kicker">Bike-Detail</p><h1 class="h2" style="margin-top:14px">Welches Bike<br><em>darf es sein?</em></h1><p class="lead" style="margin-top:18px">' + (id ? 'Dieses Modell kennen wir hier nicht. ' : '') + 'Hier sind alle Modelle aus unserer Auswahl.</p></div>';
+      $('#bdTop').innerHTML = '<div class="bd-miss"><p class="kicker">Bike-Detail</p><h1 class="h2" style="margin-top:14px">Bike nicht<br><em>gefunden.</em></h1><p class="lead" style="margin-top:18px">' + (id ? 'Dieses Modell kennen wir hier nicht. ' : '') + 'Hier sind alle Modelle aus unserer Auswahl.</p></div>';
       $('#bdSim h2').innerHTML = 'Alle <em>Bikes</em>';
       $('#simGrid').innerHTML = D.bikes.map(x => card(x)).join('');
       $('#cfgSec').remove();
@@ -207,7 +207,7 @@
       '<div class="bd-tags">' + b.styles.map(s => '<span class="pill">' + (STYLE[s] || s) + '</span>').join('') + '<span class="pill pill-status" data-open-status></span></div>' +
       '<div class="bd-price"><b>' + eur(b.price) + '</b><p><strong>Herstellerpreis Belgien, kein Racepoint-Angebot.</strong> Geprüft am ' + date(b.checkedAt) + '. Ausführung, Preis, Größe und lokaler Bestand werden persönlich bestätigt.</p></div>' +
       '<ul class="bd-specs">' + b.specs.map((s, i) => '<li><span>' + ['Rahmen', 'Ausstattung', 'Details'][i] + '</span>' + esc(s) + '</li>').join('') +
-        '<li><span>Verfügbar</span>Auf Anfrage – wir prüfen den Bestand</li></ul>' +
+        '<li><span>Verfügbar</span>Auf Anfrage, wir prüfen den Bestand</li></ul>' +
       '<div class="bd-acts"><a class="btn" href="' + mailto('Anfrage: Specialized ' + b.name, body) + '">Anfragen ' + arrow + '</a><a class="btn ghost" data-ask="' + esc(ask) + '">KI-Berater fragen</a></div>' +
       '<a class="bd-src" href="' + esc(b.source) + '" target="_blank" rel="noopener">Datenblatt beim Hersteller ' + arrow + '</a>';
     if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
@@ -238,7 +238,7 @@
     if (kids) {
       $('#wbSizeH').textContent = 'Größe';
       $('#wbSizeBox .wb-size').remove();
-      $('#wbSizeBox .wb-hint').textContent = 'Bei Kinderrädern entscheidet die Schrittlänge. Wir lassen dein Kind im Laden Probesitzen.';
+      $('#wbSizeBox .wb-hint').textContent = 'Bei Kinderrädern entscheidet die Schrittlänge. Dein Kind kann im Laden probesitzen.';
     }
     const h = $('#wbHeight'), out = $('#wbHeightOut');
     const sizeOf = v => SIZES.find(s => v < s[0]) || SIZES[SIZES.length - 1];
@@ -289,7 +289,7 @@
       lines.push(get('nachricht') || '(Deine Nachricht)');
       lines.push('', 'Viele Grüße', get('name') || '');
       if (get('kontakt')) lines.push('Erreichbar unter: ' + get('kontakt'));
-      return { subject: 'Anfrage: ' + t + (get('name') ? ' – ' + get('name') : ''), body: lines.join('\n') };
+      return { subject: 'Anfrage: ' + t + (get('name') ? ' · ' + get('name') : ''), body: lines.join('\n') };
     };
     const upd = () => { if (draft) { const m = build(); draft.textContent = 'An: ' + MAIL + '\nBetreff: ' + m.subject + '\n\n' + m.body; } };
     form.addEventListener('input', upd); form.addEventListener('change', upd); upd();

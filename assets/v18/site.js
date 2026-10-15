@@ -26,7 +26,7 @@
     { id: 'gravel', href: 'v18-gravel.html', name: 'Gravel', short: 'Diverge & Crux', img: 'assets/gravel-ride.jpg' },
     { id: 'mtb', href: 'v18-mtb.html', name: 'MTB', short: 'Rockhopper bis Stumpjumper', img: 'assets/mtb-action.jpg' },
     { id: 'ebike', href: 'v18-ebike.html', name: 'E-Bike', short: 'Turbo Vado & Levo', img: 'entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg' },
-    { id: 'familie', href: 'v18-familie.html', name: 'Kids & Familie', short: 'Riprock & Alltag', img: 'assets/achim-team.jpg' },
+    { id: 'familie', href: 'v18-familie.html', name: 'Kinder & Familie', short: 'Riprock, Hotwalk & Co.', img: 'assets/achim-team.jpg' },
   ];
   // Zubehör steht im Bikes-Menü, ist aber keine Bike-Kategorie
   const ZUB = { id: 'zubehoer', href: 'v18-zubehoer.html', name: 'Zubehör', short: 'Schuhe, Helme, Bekleidung', img: 'assets/v18/media/cine/kleid-3.webp' };
@@ -70,7 +70,7 @@
           '<a href="' + bikesHref + '"' + cur('bikes') + ' aria-haspopup="true">Bikes' + chev + '</a>' +
           '<div class="dd-p"><div class="dd-in">' +
             CATS.concat(ZUB).map(c => '<a href="' + c.href + '" class="' + (c === ZUB ? 'dd-zub' : '') + (page === c.id ? ' on" aria-current="page"' : '"') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
-            '<a class="dd-all" href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes im Überblick ' + arrow + '</a>' +
+            '<a class="dd-all" href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a>' +
           '</div></div>' +
         '</div>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
@@ -102,7 +102,7 @@
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
         '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a>' +
       '</nav>' +
-      '<p class="mm-k"><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Bikes · alle im Überblick ' + arrow + '</a></p>' +
+      '<p class="mm-k"><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a></p>' +
       '<div class="mm-cats">' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
     '</div>';
 
@@ -118,7 +118,7 @@
   ];
   const social =
     '<div class="wrap ftr-soc">' +
-      '<div class="ftr-soc-h"><p class="kicker">Racepoint unterwegs</p><p class="ftr-soc-t">Folge uns. Rund <b>100.000</b> Menschen schauen Achim schon über die Schulter.</p></div>' +
+      '<div class="ftr-soc-h"><p class="kicker">Racepoint online</p><p class="ftr-soc-t">Rund <b>100.000</b> Abos und Follower auf allen Kanälen.</p></div>' +
       '<div class="ftr-soc-g">' + SOCIAL.map(c =>
         '<a class="soc soc-' + c.k + '" href="' + c.href + '" target="_blank" rel="noopener">' +
           '<span class="soc-ic"><svg viewBox="0 0 24 24" aria-hidden="true">' + c.svg + '</svg></span>' +
@@ -131,7 +131,7 @@
   const footer =
     '<footer class="ftr">' + social + '<div class="wrap ftr-grid">' +
       '<div class="ftr-brand"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">' +
-        '<p>Dein Bike. Dein Moment.<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
+        '<p>Dein Radladen in Schönberg<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
       '<nav aria-label="Bikes"><b>Bikes</b><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
       '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +

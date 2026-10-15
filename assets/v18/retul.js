@@ -310,7 +310,7 @@
     sparkLine.setAttribute('points', st.spark.map((v, i) => r1(i / 89 * 100) + ',' + r1(100 - pct(v))).join(' '));
     const ok = p >= 0.74;
     hud.state.classList.toggle('ok', ok);
-    hud.state.textContent = p < 0.2 ? 'Kalibrierung' : p < 0.5 ? 'Vorher · Sattel zu tief' : p < 0.74 ? 'Anpassung läuft' : 'Sitzposition optimiert ✓';
+    hud.state.textContent = p < 0.2 ? 'Kalibrierung' : p < 0.5 ? 'Vorher · Sattel zu tief' : p < 0.74 ? 'Anpassung läuft' : 'Sattel angepasst ✓';
     if (cmp && !RM) { cmp.style.opacity = fin; cmp.style.visibility = fin > 0.01 ? 'visible' : 'hidden'; }
     sec.classList.toggle('fin', fin > 0.5);
     const sec2 = Math.floor((performance.now() - st.t0) / 1000);

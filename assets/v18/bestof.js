@@ -205,7 +205,7 @@
       const last = stops.length - 1;
       marks.innerHTML = stops.map((s, i) => '<span style="left:' + (s.km / total * 100).toFixed(2) + '%;top:' + (py(at(pe, s.km / total)) / VH * 100).toFixed(2) + '%"><em>' + (i === 0 ? 'Start' : i === last ? 'Ziel' : 'km ' + fmt(s.km)) + '</em></span>').join('');
       stopsEl.innerHTML = stops.map(s => '<li><span class="km">km ' + fmt(s.km) + ' · ' + esc(s.name) + '</span><h4>' + esc(s.title) + '</h4><p>' + esc(s.tagline) + '</p>' +
-        (s.ask ? '<button type="button" data-ask="' + esc(fill(s.ask)) + '">' + esc(s.cta || 'Frag Achims KI') + ' →</button>' : '') + '</li>').join('');
+        (s.ask ? '<button type="button" data-ask="' + esc(fill(s.ask)) + '">' + esc(s.cta || 'Frag den KI-Berater') + ' →</button>' : '') + '</li>').join('');
       // Zahlen im Text aus den Daten
       setAll('[data-ride="km"]', fmt(total));
       setAll('[data-ride="hm"]', fmt(up));
