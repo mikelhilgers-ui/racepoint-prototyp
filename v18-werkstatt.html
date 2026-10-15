@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
 <link rel="stylesheet" href="assets/v18/theme.css">
+<link rel="stylesheet" href="assets/v18/werkstatt-aufbau.css">
 </head>
 <body data-page="werkstatt">
 <a class="skip" href="#leistungen">Zum Inhalt springen</a>
@@ -68,6 +69,25 @@
       <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></i><h3>Begutachtung</h3><p>Unfallgutachten oder Einschätzung zum Zustand deines Bikes. Den passenden Service klärst du direkt mit dem Team.</p><button type="button" data-ask="Ich brauche ein Unfallgutachten bzw. eine Begutachtung meines Rads.">Termin anfragen →</button></article>
       <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></i><h3>Kleinigkeiten oft sofort</h3><p>Schlauch, Einstellung, ein Geräusch, das zu Hause da war und hier plötzlich weg ist: Vieles erledigen wir oft direkt, wenn du vorbeikommst.</p><button type="button" data-ask="Habt ihr heute geöffnet? Ich hätte eine Kleinigkeit am Rad.">Termin anfragen →</button></article>
     </div>
+  </div>
+</section>
+
+<!-- So arbeiten wir: angeheftetes Bildband, der Werkstatt-Film läuft mit dem Scrollen (assets/v18/werkstatt-aufbau.js).
+     Die Startseite verlinkt hierher (v18-werkstatt.html#aufbau). -->
+<section class="aufbau" id="aufbau" aria-labelledby="auH">
+  <div class="t-build-stage" id="auStage">
+    <video class="t-scrub" id="auScrub" muted playsinline preload="none" aria-hidden="true" data-src="assets/racepoint-teaser-scrub.mp4" data-poster="assets/v10/film-poster.jpg" data-from="6.5" data-to="11.9"></video>
+    <div class="t-build-shade" aria-hidden="true"></div>
+    <div class="t-build-txt wrap">
+      <p class="kicker">So arbeiten wir</p>
+      <h2 class="h2" id="auH">Handwerk an<br><em>deinem Bike.</em></h2>
+      <p class="lead">Ob Service, Reparatur oder Aufbau: Wir fetten Lager, kürzen Züge und ziehen Schrauben mit Drehmoment an. Für alle Marken.</p>
+    </div>
+    <ol class="t-steps" id="auSteps">
+      <li class="t-step"><img src="assets/v18/media/werkstatt-steuersatz.webp" alt="Steuersatz wird gefettet" loading="lazy"><span><b>01 · Lager &amp; Steuersatz</b>Gefettet und spielfrei eingepresst.</span></li>
+      <li class="t-step"><img src="assets/v18/media/werkstatt-schaltwerk.webp" alt="Schaltwerk wird eingestellt" loading="lazy"><span><b>02 · Antrieb</b>Schaltung eingestellt.</span></li>
+      <li class="t-step"><img src="assets/v18/media/werkstatt-lenkerband.webp" alt="Lenkerband wird gewickelt" loading="lazy"><span><b>03 · Cockpit</b>Lenkerband wickeln, Lenker ausrichten.</span></li>
+    </ol>
   </div>
 </section>
 
@@ -139,5 +159,6 @@
 <script src="assets/v18/data.js"></script>
 <script src="assets/v18/site.js"></script>
 <script src="assets/v18/pages.js"></script>
+<script src="assets/v18/werkstatt-aufbau.js"></script>
 </body>
 </html>
