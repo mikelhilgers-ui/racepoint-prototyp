@@ -217,6 +217,12 @@ button{font:inherit;color:inherit}
 .ride-stats{display:flex;gap:clamp(24px,4vw,56px);margin-bottom:14px}
 .ride-stats b{display:block;font:900 italic clamp(48px,5vw,80px)/.9 var(--display);font-variant-numeric:tabular-nums}
 .ride-stats span{font:600 12px var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.ride-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.ride-stats i{font-style:normal}
+.ride-alt b{color:var(--mute)}
+.ride-bsp{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font:700 11px var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ride-msg{margin:18px 0 0;color:var(--mute);font-size:14px}
+.ride-btns{display:flex;flex-wrap:wrap;gap:10px}
 .ride-chart{position:relative;height:clamp(150px,22vw,260px)}
 .ride-prof{position:absolute;inset:0;width:100%;height:100%;overflow:visible;max-width:none}
 .ride-prof .grid line{stroke:rgba(255,255,255,.07);stroke-width:1;vector-effect:non-scaling-stroke}
@@ -346,6 +352,12 @@ button{font:inherit;color:inherit}
   .ride-stops li{padding:14px 16px}
   .ride-stops h4{font-size:24px}
   .ride-marks em{display:none}
+  .ride-top{flex-direction:column-reverse;gap:10px}
+  .ride-stats{gap:18px;width:100%}
+  .ride-stats b{font-size:40px}
+  .ride-stats span{font-size:10.5px;letter-spacing:.14em}
+  .ride-btns{width:100%}
+  .ride-btns .btn{width:100%;justify-content:center}
   .ftr-grid{grid-template-columns:1fr}
   .stats b{font-size:28px}
   .vlinks a{font-size:24px}

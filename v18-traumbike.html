@@ -320,18 +320,25 @@
   </div>
 </section>
 
-<!-- ===================== 7 · Die Samstagsrunde (aus V10) ===================== -->
+<!-- ===================== 7 · Die Samstagsrunde: echte Tour aus den Touren-Daten (assets/v17/touren) ===================== -->
 <section class="sec ride" id="runde">
   <div class="wrap">
     <div class="sec-h">
       <div>
-        <p class="kicker rv">Die Samstagsrunde · 9 Uhr ab Laden</p>
-        <h2 class="h2 rv">Eine Runde.<br><em>Für alle, die fahren.</em></h2>
+        <p class="kicker rv">Die Samstagsrunde · ab Laden</p>
+        <h2 class="h2 rv">Venn-Klassiker.<br><em>Einmal übers Dach Belgiens.</em></h2>
       </div>
-      <p class="lead rv">58 km durch Venn, Eifel und Ardennen. Jede Etappe zeigt, welches Bike dort zu Hause ist – und am Ende gibt’s Kaffee bei Achim.</p>
+      <p class="lead rv"><span data-ride="km">95</span> km und <span data-ride="hm">1.248</span> Höhenmeter: über Losheimergraben und den Bütgenbacher See hinauf zum Signal de Botrange, dann lange bergab nach Malmedy. Scroll und fahr mit.</p>
     </div>
     <div class="ride-box" id="rideBox">
-      <div class="ride-stats" aria-hidden="true"><div><b id="rKm">0</b><span>km</span></div><div><b id="rHm">0</b><span>Höhenmeter</span></div></div>
+      <div class="ride-top">
+        <div class="ride-stats" aria-hidden="true">
+          <div><b id="rKm">0</b><span>von <i data-ride="km">95</i> km</span></div>
+          <div><b id="rHm">0</b><span>von <i data-ride="hm">1.248</i> Hm</span></div>
+          <div class="ride-alt"><b id="rEl">–</b><span>m über dem Meer</span></div>
+        </div>
+        <span class="ride-bsp" id="rideBsp" hidden>Beispielstrecke</span>
+      </div>
       <div class="ride-chart">
         <svg class="ride-prof" id="rideProf" viewBox="0 0 1000 240" preserveAspectRatio="none" aria-hidden="true">
           <defs><linearGradient id="rideArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E83637" stop-opacity=".38"/><stop offset="1" stop-color="#E83637" stop-opacity="0"/></linearGradient></defs>
@@ -343,14 +350,25 @@
         <div class="ride-marks" id="rideMarks" aria-hidden="true"></div>
         <div class="ride-dot" id="rideDot" aria-hidden="true"></div>
       </div>
-      <ol class="ride-stops" id="rideStops"></ol>
+      <!-- Platzhalter in Stopp-Größe, damit beim Nachladen nichts springt -->
+      <ol class="ride-stops" id="rideStops">
+        <li><span class="km">km 0 · Racepoint</span><h4>Kaffee bei Achim</h4><p>Start in Schönberg.</p></li>
+        <li><span class="km">km 18 · Losheimergraben</span><h4>Rampe an die Grenze</h4><p>Hoch auf fast 680 Meter.</p></li>
+        <li><span class="km">km 27 · Bütgenbacher See</span><h4>Am Bütgenbacher See</h4><p>Kurz durchatmen.</p></li>
+        <li><span class="km">km 47 · Signal de Botrange</span><h4>Dach Belgiens</h4><p>694 Meter. Höher geht es nicht.</p></li>
+        <li><span class="km">km 59 · Malmedy</span><h4>Abfahrt nach Malmedy</h4><p>Schnell, kurvig, kühl.</p></li>
+        <li><span class="km">km 95 · Racepoint</span><h4>Zurück bei Racepoint</h4><p>Bike an die Wand, Kaffee in die Hand.</p></li>
+      </ol>
     </div>
     <div class="ride-cta rv">
-      <a class="btn" href="v18-touren.html">6 Touren<span class="hide-sm">&nbsp;ab Racepoint</span> · GPX laden <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="ride-btns">
+      <a class="btn" href="v18-touren.html">Alle <span data-ride="count">6</span> Touren<span class="hide-sm">&nbsp;ab Racepoint</span> <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn ghost" href="v18-touren.html#tour-venn-klassiker">Venn-Klassiker im Detail · GPX</a>
+      </div>
       <div class="ride-chips" aria-label="Touren nach Art">
-        <a href="v18-touren.html#gravel"><b>Gravel</b><span>2 Touren</span></a>
-        <a href="v18-touren.html#rennrad"><b>Rennrad</b><span>2 Touren</span></a>
-        <a href="v18-touren.html#mtb"><b>MTB</b><span>2 Touren</span></a>
+        <a href="v18-touren.html#rennrad"><b>Rennrad</b><span data-ride-type="rennrad">2 Touren</span></a>
+        <a href="v18-touren.html#gravel"><b>Gravel</b><span data-ride-type="gravel">2 Touren</span></a>
+        <a href="v18-touren.html#mtb"><b>MTB</b><span data-ride-type="mtb">2 Touren</span></a>
       </div>
     </div>
   </div>
@@ -443,6 +461,7 @@
 <script src="assets/rp-core.js"></script>
 <script src="assets/ki-berater.js"></script>
 <script src="assets/v18/site.js"></script>
+<script src="assets/v18/touren-map.js"></script>
 <script src="assets/v18/traum.js"></script>
 <script src="assets/v18/bestof.js"></script>
 </body>
