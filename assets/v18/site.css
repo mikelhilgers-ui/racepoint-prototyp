@@ -615,4 +615,12 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
   .zgal figure:first-child{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}
 }
 /* Helles Hintergrundbild (z. B. Himmel im Porto-Reel): Bühne abdunkeln, damit die Überschrift lesbar bleibt */
-.phero.cine.dim .cine-m{filter:brightness(.6)}
+@media (max-width:820px){ .phero.cine.dim .cine-m{filter:brightness(.6)} }
+/* Variante .sharp: Desktop zeigt das Hochformat-Reel scharf als Bühne rechts, statt es weich
+   gezeichnet über die ganze Breite zu ziehen. Die Reel-Karte entfällt (wäre derselbe Film). */
+@media (min-width:821px){
+  .phero.cine.sharp .phero-fig :is(picture,video){left:auto;width:min(60%,calc(min(100svh,1000px) * .95));-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+  .phero.cine.sharp .phero-reel{display:none}
+  /* ohne Karte steht der Film-Knopf frei über dem Film, mit Abstand zum KI-Knopf */
+  .phero.cine:is(.sharp,:not(:has(.phero-reel))) .phero-side .phero-badge{left:auto;top:auto;right:70px;bottom:120px}
+}

@@ -320,7 +320,8 @@
     const vids = [];
     const bg = $('.cine-bg', cine);
     if (bg) {
-      bg.src = (small && bg.dataset.srcM) || bg.dataset.src;
+      // .sharp: auch am Desktop das scharfe Hochformat statt des weichen Querformats
+      bg.src = ((small || cine.classList.contains('sharp')) && bg.dataset.srcM) || bg.dataset.src;
       bg.addEventListener('playing', () => bg.classList.add('on'), { once: true });
       vids.push(bg);
     }
