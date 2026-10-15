@@ -282,6 +282,20 @@ button{font:inherit;color:inherit}
 .hours li.today span:first-child::after{content:"Heute";margin-left:10px;padding:2px 7px;border-radius:6px;background:var(--red);font:700 11px/1.4 var(--body);letter-spacing:.06em;text-transform:uppercase;vertical-align:2px}
 .hours li.closed span:last-child{color:rgba(255,255,255,.38)}
 
+/* Besuch in Hell und Mix: heller Block zwischen Touren-Filmband und KI-Berater (beide dunkel).
+   Wie die Service-Zeilen: Text links auf Hell, Ladenfoto rechts scharf bis an den Rand, Öffnungszeiten dunkel darauf. */
+html:is([data-theme="light"],[data-theme="mix"]) .visit{background:var(--bg)}
+html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{left:auto;width:44%}
+html:is([data-theme="light"],[data-theme="mix"]) .visit::before{left:auto;width:44%;background:linear-gradient(90deg,rgba(11,11,13,.28),rgba(11,11,13,0) 40%)}
+html:is([data-theme="light"],[data-theme="mix"]) .vcard address{color:var(--ink)}
+html:is([data-theme="light"],[data-theme="mix"]) .visit .hours-card{--bg2:#121216;--strong:#fff;--line:rgba(255,255,255,.12);--ink:#f4f1ec;--mute:rgba(244,241,236,.66);--dim:rgba(244,241,236,.5);color:var(--ink);box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
+@media (max-width:900px){
+  html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{left:0;width:auto;top:auto;bottom:-8%;height:62%}
+  html:is([data-theme="light"],[data-theme="mix"]) .visit::before{left:0;width:auto;top:auto;bottom:-8%;height:74%}
+  html:is([data-theme="light"],[data-theme="mix"]) .visit::before{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 14%,rgba(244,242,238,0) 40%)}
+}
+.hours li.today span:first-child::after{color:#fff}
+
 /* Footer */
 .ftr{border-top:1px solid var(--line);padding:64px 0 120px;background:var(--bg)}
 .ftr-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:32px}

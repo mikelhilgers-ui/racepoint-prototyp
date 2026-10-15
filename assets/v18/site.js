@@ -138,7 +138,7 @@
     '</div>';
   const footer =
     '<footer class="ftr">' + social + '<div class="wrap ftr-grid">' +
-      '<div class="ftr-brand"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">' +
+      '<div class="ftr-brand"><a class="ftr-logo" href="' + HOME + '" aria-label="Racepoint · Startseite"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"></a>' +
         '<p>Dein Radladen in Schönberg<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
       '<nav aria-label="Shop"><b>Shop</b><a href="' + SHOP + '"' + cur('shop') + '>Ganzer Shop</a><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(EXTRA).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
@@ -171,7 +171,53 @@
     '<a class="btn stoer-btn" href="' + st.href + '">' + st.btn + ' ' + arrow + '</a></div>' +
     '<a class="stoer-fig" href="' + st.href + '" tabindex="-1" aria-hidden="true"><img src="' + st.img + '" alt="" loading="lazy"><span class="stoer-badge">Passt<br>dazu!</span></a>' +
     '</div></aside>' : '';
-  if (main) main.insertAdjacentHTML('afterend', stoerer + footer);
+  // KI-Berater ganz unten (auf Shop-Seiten vor dem Störer): überall gleicher Block, Text je Seite. Kontakt und Werkstatt haben ihn schon im Inhalt
+  const TERMIN_HINWEIS = 'Ein Termin ist nur eine Anfrage. Gebucht ist er erst, wenn das Racepoint-Team ihn bestätigt.';
+  const KIB = {
+    home: { k: 'KI-Berater <span class="ai-mode" id="aiMode">· verbindet …</span>', h1: 'Frag den', h2: 'KI-Berater.', p: 'Er empfiehlt Bikes aus dem Katalog, hilft bei der Rahmengröße, nennt Öffnungszeiten und bereitet Terminanfragen vor. Wird es persönlich, übernimmt Achim.', ph: 'Z. B. „Gravelbike bis 3.000 € für Touren im Venn“',
+      chips: [['Bike-Beratung', 'Welches Bike passt zu mir? Ich hätte gern eine Beratung.'], ['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Termin', 'Ich möchte einen Termin vereinbaren.'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?']] },
+    bikes: { k: 'KI-Berater', h1: 'Der KI-Berater', h2: 'hilft bei der Auswahl.', p: 'Beschreib, wo du fährst und was du ausgeben möchtest. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Erstes Rennrad, Budget 2.000 €“',
+      chips: [['Welches Bike?', 'Welches Bike passt zu mir?'], ['Rennrad', 'Welches Rennrad passt zu mir?'], ['E-Bike', 'Welches E-Bike passt zu mir?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?']] },
+    rennrad: { k: 'KI-Berater', h1: 'Das passende Rennrad', h2: 'mit dem KI-Berater.', p: 'Schreib, wie weit du fährst und wie viel du ausgeben willst. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Rennrad für lange Sonntagsrunden bis 3.000 €“',
+      chips: [['Welches Rennrad?', 'Welches Rennrad passt zu mir? Ich hätte gern eine Beratung.'], ['Rahmengröße', 'Welche Rahmengröße brauche ich für ein Rennrad?'], ['Probefahrt', 'Kann ich ein Rennrad bei euch probefahren?'], ['Retül-Fitting', 'Ich möchte einen Termin für ein Retül-Bikefitting.']] },
+    gravel: { k: 'KI-Berater', h1: 'Gravelbike für', h2: 'Venn und Eifel.', p: 'Schreib, wo du fährst und wie viel Gepäck mitkommt. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Gravelbike bis 3.000 € für Touren im Venn“',
+      chips: [['Welches Gravelbike?', 'Welches Gravelbike passt zu mir?'], ['Diverge oder Crux?', 'Diverge oder Crux: Was ist der Unterschied?'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?']] },
+    mtb: { k: 'KI-Berater', h1: 'MTB-Auswahl', h2: 'mit dem KI-Berater.', p: 'Nenn uns dein Gelände und dein Budget. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Erstes Hardtail für Waldwege bis 1.500 €“',
+      chips: [['Welches MTB?', 'Welches MTB passt zu meinen Trails?'], ['Hardtail oder Fully?', 'Hardtail oder Fully: Was passt zu mir?'], ['Fahrwerk-Service', 'Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer.'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?']] },
+    ebike: { k: 'KI-Berater', h1: 'E-Bike für Pendeln', h2: 'oder Trail.', p: 'Schreib uns deine Strecke und die Höhenmeter. Der KI-Berater sucht passende E-Bikes aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „E-Bike zum Pendeln, 15 km mit Steigung“',
+      chips: [['Welches E-Bike?', 'Welches E-Bike passt zu mir?'], ['Probefahrt', 'Kann ich ein E-Bike probefahren?'], ['E-Bike-Service', 'Macht ihr E-Bike-Service für Motor, Akku und Software?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?']] },
+    familie: { k: 'KI-Berater', h1: 'Das richtige Rad', h2: 'fürs Kind.', p: 'Schreib uns, wie groß dein Kind ist und wie es fährt. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Erstes MTB für meine 9-jährige Tochter“',
+      chips: [['Rad fürs Kind?', 'Welches Rad passt für mein Kind?'], ['Radgröße', 'Welche Radgröße braucht mein Kind?'], ['Alltags-E-Bike', 'Welches E-Bike passt für den Familienalltag?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?']] },
+    bike: { k: 'KI-Berater', h1: 'Passt das Rad', h2: 'zu dir?', p: 'Frag nach Rahmengröße, Ausstattung oder Probefahrt. Der KI-Berater kennt den Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Welche Rahmengröße bei 1,82 m?“',
+      chips: [['Rahmengröße', 'Welche Rahmengröße brauche ich?'], ['Probefahrt', 'Kann ich das Rad bei euch probefahren?'], ['Leasing', 'Bietet ihr Leasing oder Finanzierung an?'], ['Retül-Fitting', 'Ich möchte einen Termin für ein Retül-Bikefitting.']] },
+    shop: { k: 'Größe, Geschenk, Gutschein', h1: 'Unsicher bei', h2: 'der Größe?', p: 'Der KI-Berater hilft bei Größe und Geschenkideen. Oder du kommst vorbei und probierst an.', ph: 'Z. B. „Welche Hoodie-Größe bei 182 cm?“',
+      chips: [['Welches Bike?', 'Welches Bike passt zu mir?'], ['Kleidergröße', 'Welche Größe brauche ich bei Trikot oder Hoodie?'], ['Geschenkidee', 'Ich suche ein Geschenk für jemanden, der Rad fährt.'], ['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?']] },
+    kollektion: { k: 'Größe, Geschenk, Gutschein', h1: 'Unsicher bei', h2: 'der Größe?', p: 'Der KI-Berater hilft bei Größe und Geschenkideen. Oder du kommst vorbei und probierst an.', ph: 'Z. B. „Welche Hoodie-Größe bei 182 cm?“',
+      chips: [['Hoodie-Größe', 'Welche Hoodie-Größe brauche ich?'], ['Geschenkidee', 'Ich suche ein Geschenk für jemanden, der Rad fährt.'], ['Gutschein', 'Ich möchte einen Racepoint-Gutschein kaufen.'], ['Racepoint-Trikot', 'Gibt es das Racepoint-Trikot gerade im Laden?']] },
+    zubehoer: { k: 'Größe, Passform, Geschenk', h1: 'Größe und', h2: 'Passform.', p: 'Der KI-Berater gibt dir eine erste Einschätzung zu Schuhgröße, Helm oder Geschenk. Anprobiert wird im Laden.', ph: 'Z. B. „Welcher Helm passt zum Rennrad?“',
+      chips: [['Schuhgröße', 'Welche Schuhgröße brauche ich bei Specialized-Schuhen?'], ['Helm', 'Welcher Helm passt zu mir?'], ['Racepoint-Trikot', 'Gibt es das Racepoint-Trikot gerade im Laden?'], ['Geschenkidee', 'Ich suche ein Geschenk für jemanden, der Rad fährt.']] },
+    bikefitting: { k: 'Termin · Retül-Bikefitting', h1: 'Fitting-Termin', h2: 'anfragen.', p: 'Sag uns, welches Rad du fährst und was dich stört. Der KI-Berater bereitet deine Anfrage vor, Achim bestätigt den Termin persönlich.', ph: 'Z. B. „Knieschmerzen nach langen Runden: hilft ein Fitting?“',
+      chips: [['Fitting-Termin', 'Ich möchte einen Termin für ein Retül-Bikefitting.'], ['Dauer & Kosten', 'Was kostet ein Retül-Bikefitting und wie lange dauert es?'], ['Beschwerden', 'Ich habe Knieschmerzen beim Radfahren. Kann ein Bikefitting helfen?'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?']] },
+    touren: { k: 'KI-Berater', h1: 'Welches Rad', h2: 'für die Runde?', p: 'Sag, welche Tour dich reizt. Der KI-Berater schlägt ein passendes Bike vor und bereitet auf Wunsch einen Check vor der Tour vor.', ph: 'Z. B. „Welches Bike für eine Runde im Venn?“',
+      chips: [['Welches Bike?', 'Welches Bike passt zu meinen Touren?'], ['Check vor der Tour', 'Ich möchte mein Rad vor einer Tour durchsehen lassen.'], ['Probefahrt', 'Kann ich ein Bike bei euch probefahren?'], ['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?']] },
+    filme: { k: 'Eigener Dreambuild', h1: 'Dein Bike', h2: 'nach Wunsch.', p: 'Was du dir wünschst und was möglich ist, besprechen wir persönlich. Dass es schon das dritte Rad wird, bleibt unter uns.', ph: 'Z. B. „Aero-Rennrad als Dreambuild, was ist möglich?“',
+      chips: [['Dreambuild', 'Ich möchte eine Beratung für einen individuellen Bike-Build.'], ['Rennrad', 'Welches Rennrad passt zu mir?'], ['Gravel', 'Welches Gravelbike passt zu mir?'], ['E-Bike', 'Welches E-Bike passt zu mir?']] },
+    'ueber-uns': { k: 'Kontakt', h1: 'Komm vorbei', h2: 'in Schönberg.', p: 'Komm mit deinem Bike oder mit einer Frage. Oder frag vorab den KI-Berater.', ph: 'Z. B. „Wann seid ihr am Samstag da?“',
+      chips: [['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Kontakt & Anfahrt', 'Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte.'], ['Termin', 'Ich möchte einen Termin vereinbaren.']] },
+  };
+  const ki = KIB[page];
+  const escA = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>';
+  const kiEnde = ki ? '<aside class="sec ai cta kib-end" id="berater" aria-labelledby="aiTitle"><div class="ai-glow" aria-hidden="true"></div><div class="wrap ai-in">' +
+    '<div class="ai-orb" aria-hidden="true"><i></i><b></b>' +
+    '<svg class="ai-spark" viewBox="0 0 24 24"><path d="M12 2.5l1.9 5.6a3 3 0 001.9 1.9l5.7 2-5.7 2a3 3 0 00-1.9 1.9L12 21.5l-1.9-5.6a3 3 0 00-1.9-1.9L2.5 12l5.7-2a3 3 0 001.9-1.9z" fill="url(#aiSparkG)"/><defs><linearGradient id="aiSparkG" x1="3" y1="3" x2="21" y2="21"><stop stop-color="#fff"/><stop offset=".55" stop-color="#ffb08a"/><stop offset="1" stop-color="#E83637"/></linearGradient></defs></svg>' +
+    '<span class="ai-ping"></span></div>' +
+    '<p class="kicker rv">' + ki.k + '</p><h2 class="h2 rv" id="aiTitle">' + ki.h1 + '<br><em>' + ki.h2 + '</em></h2><p class="lead rv">' + ki.p + '</p>' +
+    '<form class="ask rv" data-ask-form><label class="sr-only" for="askInput">Frage an den KI-Berater</label><input id="askInput" type="text" autocomplete="off" placeholder="' + escA(ki.ph) + '">' +
+    '<button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form>' +
+    '<div class="chips rv" role="list">' + ki.chips.map(c => '<button type="button" role="listitem" data-ask="' + escA(c[1]) + '">' + STAR + escA(c[0]) + '</button>').join('') + '</div>' +
+    '<p class="fine rv">' + TERMIN_HINWEIS + '</p></div></aside>' : '';
+  if (main) main.insertAdjacentHTML('afterend', kiEnde + stoerer + footer);
   if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
 
   /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, Mix ist Standard) ---------------- */

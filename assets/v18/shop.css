@@ -157,3 +157,14 @@ img.sh-line-img.is-bike{padding:2px;aspect-ratio:1}
   .cats.cats-3{grid-template-columns:1fr}
   .cats-3 .cat{aspect-ratio:16/10}
 }
+
+/* Laden-Hinweis unter dem Produktraster: dunkle Karte mit Ladenfoto, in allen Themes gleich */
+.sh-visit{position:relative;isolation:isolate;overflow:hidden;margin-top:clamp(48px,6vw,88px);padding:clamp(28px,4vw,56px);border-radius:22px;display:grid;grid-template-columns:1.4fr auto;gap:28px 48px;align-items:end;background:#0b0b0d;color:#f4f1ec;
+  --ink:#f4f1ec;--mute:rgba(244,241,236,.7);--line:rgba(255,255,255,.12);--ghost:rgba(255,255,255,.07);--ghost2:rgba(255,255,255,.15);--ghost-b:rgba(255,255,255,.24);--strong:#fff;--strong-inv:#0b0b0d;color-scheme:dark}
+.sh-visit-bg{position:absolute;inset:0;z-index:-1;background:url(../shop-interior.jpg) center/cover}
+.sh-visit-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,13,.94) 0%,rgba(11,11,13,.8) 55%,rgba(11,11,13,.55) 100%)}
+.sh-visit .kicker{color:var(--red)}
+.sh-visit-h{margin:12px 0 16px;font-size:clamp(34px,4vw,60px)}
+.sh-visit-txt p:not(.kicker){max-width:520px;margin:0 0 18px;color:var(--mute)}
+.sh-visit-act{display:flex;flex-direction:column;gap:10px}
+@media (max-width:760px){ .sh-visit{grid-template-columns:1fr;align-items:start} .sh-visit-act .btn{justify-content:center} }

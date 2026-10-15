@@ -50,8 +50,8 @@
   </div>
 </section>
 
-<!-- Ablauf vor der Retül-Animation; als <div>, damit er im Mix hell bleibt (theme.css zählt nur <section>) -->
-<div class="sec fit-ablauf fit-t1" role="region" aria-labelledby="abH">
+<!-- Ablauf vor der Retül-Animation. Mix-Töne fest über .mix-hell/.mix-dunkel, weil der Retül-Pin (pin-spacer) die Zählung verschiebt -->
+<div class="sec fit-ablauf fit-t1 mix-hell" role="region" aria-labelledby="abH">
   <div class="wrap">
     <div class="sec-h">
       <div><p class="kicker rv">Ablauf · rund 1,5 Stunden</p><h2 class="h2 rv" id="abH">So läuft<br><em>das Fitting.</em></h2></div>
@@ -93,7 +93,7 @@
   <p class="rt-demo">Animierte Beispiel-Messung, keine echten Kundendaten.</p>
 </section>
 
-<section class="sec fit-t1" aria-labelledby="getH">
+<section class="sec fit-t1 mix-hell" aria-labelledby="getH">
   <div class="wrap">
     <div class="sec-h"><div><p class="kicker rv">Was du mitnimmst</p><h2 class="h2 rv" id="getH">Das nimmst<br><em>du mit.</em></h2></div></div>
     <div class="gets">
@@ -106,7 +106,7 @@
   </div>
 </section>
 
-<section class="sec fit-t2" aria-label="Einblicke">
+<section class="sec fit-t2 mix-hell ton2" aria-label="Einblicke">
   <div class="wrap gal3">
     <figure class="rv"><img src="assets/v18/media/cine/fitting-g4.webp" alt="Beckenmodell in der Hand, dahinter ein Fahrer mit Messmarkern auf dem Rollentrainer" loading="lazy"></figure>
     <figure class="rv"><img src="assets/v18/media/cine/fitting-g3.webp" alt="Specialized S-Works vor der Liege, auf der ein Beweglichkeitstest läuft" loading="lazy"></figure>
@@ -114,22 +114,6 @@
   </div>
 </section>
 
-<section class="sec ai cta" aria-label="Beratung">
-  <div class="ai-glow" aria-hidden="true"></div>
-  <div class="wrap ai-in">
-    <div class="ai-orb" aria-hidden="true"><i></i><b></b></div>
-    <p class="kicker rv">Termin · Retül-Bikefitting</p>
-    <h2 class="h2 rv">Fitting-Termin<br><em>anfragen.</em></h2>
-    <p class="lead rv">Sag uns, welches Rad du fährst und was dich stört. Der KI-Berater bereitet deine Anfrage vor, Achim bestätigt den Termin persönlich.</p>
-    <form class="ask rv" data-ask-form>
-      <label class="sr-only" for="askInput">Frage an den KI-Berater</label>
-      <input id="askInput" type="text" autocomplete="off" placeholder="Z. B. „Knieschmerzen nach langen Runden: hilft ein Fitting?“">
-      <button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="chips rv" role="list"><button type="button" role="listitem" data-ask="Ich möchte einen Termin für ein Retül-Bikefitting."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Fitting-Termin</button><button type="button" role="listitem" data-ask="Was kostet ein Retül-Bikefitting und wie lange dauert es?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Dauer & Kosten</button><button type="button" role="listitem" data-ask="Ich habe Knieschmerzen beim Radfahren. Kann ein Bikefitting helfen?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Beschwerden</button><button type="button" role="listitem" data-ask="Welche Rahmengröße brauche ich?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Rahmengröße</button></div>
-    <p class="fine rv">Termine werden nur als Anfrage vorbereitet. Gebucht wird erst, wenn das Racepoint-Team bestätigt.</p>
-  </div>
-</section>
 </main>
 
 <script src="vendor/gsap/gsap.min.js"></script>

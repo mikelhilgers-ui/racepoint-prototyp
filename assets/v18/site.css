@@ -680,7 +680,7 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 /* Traumbike: Schlusszeile mit zwei Knöpfen */
 .t-fin-btns{margin-top:clamp(20px,3vh,30px)}
 .t-fin-btns .btn{pointer-events:auto}
-.t-fin::before{content:"";position:absolute;z-index:-1;left:-8vw;right:-8vw;top:-120px;bottom:-90px;pointer-events:none;background:radial-gradient(ellipse 75% 80% at 28% 42%,rgba(5,5,6,.78) 0%,rgba(5,5,6,.45) 50%,rgba(5,5,6,0) 78%)}
+.t-fin::before{content:"";position:absolute;z-index:-1;left:-8vw;right:-8vw;top:-120px;bottom:-90px;pointer-events:none;background:radial-gradient(ellipse 75% 80% at 28% 42%,rgba(5,5,6,.78) 0%,rgba(5,5,6,.45) 50%,rgba(5,5,6,0) 78%);-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 80%,transparent 100%)}
 /* YouTube: ein großer Film (zwei Spalten, zwei Zeilen) und fünf Kacheln. Karten (.film) aus bestof.css */
 .yt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .yt-big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:100%}
@@ -815,3 +815,16 @@ html:is([data-theme="light"],[data-theme="mix"]) .tb{
   .kib.kib-big .kib-panel{width:calc(100vw - 40px) !important}
   .kib .kib-resize{display:none}
 }
+/* KI-Berater ganz unten (site.js): dunkel in allen Themes, läuft ohne Linie in den Footer */
+.kib-end{position:relative;padding-bottom:clamp(64px,7vw,104px)}
+.kib-end + .ftr{border-top:0}
+/* KI-Block unten: Orb wie der KI-Knopf unten rechts (Farbring, Funke, grüner Punkt) */
+.kib-end .ai-orb{width:84px;height:84px;filter:drop-shadow(0 14px 34px rgba(232,54,55,.35))}
+.kib-end .ai-orb i{inset:-2px;background:conic-gradient(from 0deg,#E83637,#ff7a45,#ffd6b0,#fff,#E83637);filter:blur(.3px);animation:spin 4s linear infinite}
+.kib-end .ai-orb b{inset:4px;background:radial-gradient(circle at 35% 30%,#3a1a1b 0%,#141518 55%,#0b0b0d 100%);box-shadow:none}
+.kib-end .ai-orb::after{inset:18px;z-index:1;background:radial-gradient(circle,rgba(255,122,69,.55),rgba(232,54,55,0) 70%)}
+.kib-end .ai-spark{position:absolute;left:50%;top:50%;z-index:2;width:36px;height:36px;margin:-18px 0 0 -18px}
+.kib-end .ai-ping{position:absolute;right:3px;top:3px;z-index:3;width:16px;height:16px;border-radius:50%;background:#22c55e;border:3px solid #0e0f11}
+/* Sauberer Übergang: das Glühen läuft unten in den Footer-Ton aus */
+.kib-end::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,13,0),#0b0b0d 92%)}
+.kib-end .ai-in{z-index:1}

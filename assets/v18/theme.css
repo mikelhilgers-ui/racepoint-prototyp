@@ -9,10 +9,11 @@
 
 /* ---------------- Variablen: dunkel (Standard, Inseln, dunkle Mix-Blöcke) ---------------- */
 :root,
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
 html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
 html[data-theme="mix"] body[data-page="home"] .achim,
+html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){
   --bg:#0b0b0d; --bg2:#121216; --bg3:#18181d;
   --ink:#f4f1ec; --mute:rgba(244,241,236,.66); --dim:rgba(244,241,236,.42); --line:rgba(255,255,255,.09);
@@ -27,14 +28,16 @@ html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(e
   --logo-l:block; --logo-d:none; --warn:#f3dcae; --warn2:#f0cf8f; --ok:#bbf7d0; --no:#fecaca;
   color-scheme:dark;
 }
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
 html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
 html[data-theme="mix"] body[data-page="home"] .achim,
+html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){color:var(--ink)}
 html[data-theme="mix"] body[data-page="home"] .achim,
+html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){background-color:var(--bg)}
-/* Startseite: Rhythmus der Abschnitte (Reihenfolge: #top · ticker · #bikes · #achim · #werkstatt · #bikefitting · #traum · #filme · #touren · #berater · #kontakt)
+/* Startseite: Rhythmus der Abschnitte (Reihenfolge: #top · ticker · #bikes · #achim · #werkstatt · #bikefitting · #traum · #filme · #touren · #kontakt · #berater aus site.js)
    Mix:     D · rot · L · D · L · L · D · L · D · L · D   (Bühnen #top, #achim, #traum, #touren, #kontakt dunkel)
    Hell:    Bühnen dunkel, sonst hell, benachbarte helle Abschnitte wechseln zwischen --bg und --bg2
    Dunkel:  benachbarte Abschnitte wechseln zwischen --bg und --bg2, dazu eine feine Linie
@@ -175,6 +178,26 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
 /* Bikefitting: Mix wechselt über die Abschnittsfolge. Hell und Dunkel trennen benachbarte Blöcke über zwei Töne */
 html[data-theme="light"] body[data-page="bikefitting"] main > .fit-t1{background-color:#f4f2ee}
 html[data-theme="light"] body[data-page="bikefitting"] main > .fit-t2{background-color:#e9e6e0;border-top:1px solid rgba(23,23,27,.1)}
-html[data-theme="mix"] body[data-page="bikefitting"] main > .fit-t1{background-color:#f4f2ee}
 html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="bikefitting"] main > .fit-t1{background-color:#131318}
 html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="bikefitting"] main > .fit-t2{background-color:#0b0b0d;border-top:1px solid rgba(255,255,255,.06)}
+
+/* Mix: feste Markierung statt Zählung, wo GSAP-Pins (pin-spacer) oder <div>-Blöcke die Reihenfolge verschieben.
+   .mix-hell = heller Block, .mix-dunkel = dunkler Block, unabhängig von der Position */
+html[data-theme="mix"]:root body:not([data-page="home"]) main > .mix-hell{
+  --bg:#f4f2ee; --bg2:#ffffff; --bg3:#e9e6e0;
+  --ink:#17171b; --mute:rgba(23,23,27,.68); --dim:rgba(23,23,27,.47); --line:rgba(23,23,27,.12);
+  --strong:#17171b; --strong-inv:#fff; --nav:rgba(23,23,27,.72);
+  --glass:rgba(255,255,255,.7); --glass2:rgba(255,255,255,.95); --edge:rgba(23,23,27,.16); --edge2:rgba(23,23,27,.4);
+  --ghost:rgba(23,23,27,.05); --ghost2:rgba(23,23,27,.1); --ghost-b:rgba(23,23,27,.2);
+  --pill:rgba(255,255,255,.8); --pill-b:rgba(23,23,27,.13);
+  --card:#fff; --field:#fff; --noimg:#fff; --noimg2:#e6e3dd;
+  --stroke:rgba(23,23,27,.22); --stroke2:rgba(23,23,27,.09); --grid:rgba(23,23,27,.04); --fade0:rgba(244,242,238,0);
+  --ai-mid:#fbe7e4; --live:#15803d; --shadow:rgba(23,23,27,.35);
+  --rail-b:rgba(255,255,255,.8); --rail-glow:rgba(255,255,255,.95);
+  --logo-l:none; --logo-d:block; --warn:#7a4f06; --warn2:#8a5a08; --ok:#15803d; --no:#b91c1c;
+  color-scheme:light;
+}
+html[data-theme="mix"]:root body:not([data-page="home"]) main > .mix-hell{color:var(--ink);background-color:var(--bg)}
+html[data-theme="mix"]:root body:not([data-page="home"]) main > .mix-hell.ton2{background-color:#e9e6e0;border-top:1px solid rgba(23,23,27,.1)}
+/* Dunkel-Theme: KI-Block unten setzt sich mit einer feinen Kante vom letzten Abschnitt ab */
+html:not([data-theme="light"]):not([data-theme="mix"]) .kib-end{border-top:1px solid var(--line)}
