@@ -28,11 +28,13 @@
     { id: 'ebike', href: 'v18-ebike.html', name: 'E-Bike', short: 'Turbo Vado & Levo', img: 'entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg' },
     { id: 'familie', href: 'v18-familie.html', name: 'Kinder & Familie', short: 'Riprock, Hotwalk & Co.', img: 'assets/achim-team.jpg' },
   ];
-  // Zubehör steht im Bikes-Menü, ist aber keine Bike-Kategorie
+  // Shop: Bikes (Kategorie-Seiten, reservieren), Zubehör und Kollektion (kaufen) unter einem Menüpunkt
+  const SHOP = 'v18-shop.html';
   const ZUB = { id: 'zubehoer', href: 'v18-zubehoer.html', name: 'Zubehör', short: 'Schuhe, Helme, Bekleidung', img: 'assets/v18/media/cine/kleid-3.webp' };
+  const KOLL = { id: 'kollektion', href: 'v18-kollektion.html', name: 'Kollektion', short: 'Shirts, Hoodies, Gutscheine', img: 'assets/v18/media/shop/hoodie-bw-w-3.webp' };
+  const EXTRA = [ZUB, KOLL];
   const BIKES = 'v18-bikes.html';
   const PAGES = [
-    { id: 'shop', href: 'v18-shop.html', name: 'Shop' },
     { id: 'werkstatt', href: 'v18-werkstatt.html', name: 'Werkstatt' },
     { id: 'bikefitting', href: 'v18-bikefitting.html', name: 'Bikefitting' },
     { id: 'touren', href: 'v18-touren.html', name: 'Touren' },
@@ -41,12 +43,16 @@
     { id: 'kontakt', href: 'v18-kontakt.html', name: 'Kontakt' },
   ];
   const page = document.body.dataset.page || 'home';
-  const isCat = CATS.some(c => c.id === page) || page === 'bike' || page === 'bikes' || page === ZUB.id;
+  const isCat = CATS.some(c => c.id === page) || page === 'bike' || page === 'bikes' || page === 'shop' || page === ZUB.id || page === KOLL.id;
   const cur = id => (id === page || (id === 'bikes' && isCat)) ? ' aria-current="page" class="on"' : '';
   const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
   const chev = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
   const isHome = page === 'home';
-  const bikesHref = BIKES;
+  const bikesHref = SHOP;
+  // Warenkorb-Zähler für den Header (Inhalt verwaltet shop.js, hier nur lesen)
+  let cartN = 0;
+  try { cartN = JSON.parse(localStorage.getItem('rp18-cart') || '[]').reduce((n, i) => n + (i.qty || 0), 0); } catch (e) {}
+  const bag = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>';
 
   /* ---------------- Hell/Dunkel/Mix: Icons + Segment-Schalter ---------------- */
   const THEMES = [
@@ -68,10 +74,11 @@
       '<a class="logo" href="' + HOME + '" aria-label="Racepoint · Startseite"><img class="lg-l" src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"><img class="lg-d" src="assets/racepoint-logo-dark.svg" alt="Racepoint" width="200" height="16"></a>' +
       '<nav class="hdr-nav" aria-label="Hauptnavigation">' +
         '<div class="dd">' +
-          '<a href="' + bikesHref + '"' + cur('bikes') + ' aria-haspopup="true">Bikes' + chev + '</a>' +
+          '<a href="' + bikesHref + '"' + cur('bikes') + ' aria-haspopup="true">Shop' + chev + '</a>' +
           '<div class="dd-p"><div class="dd-in">' +
-            CATS.concat(ZUB).map(c => '<a href="' + c.href + '" class="' + (c === ZUB ? 'dd-zub' : '') + (page === c.id ? ' on" aria-current="page"' : '"') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
-            '<a class="dd-all" href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a>' +
+            CATS.concat(EXTRA).map(c => '<a href="' + c.href + '" class="' + (c === ZUB ? 'dd-zub' : '') + (page === c.id ? ' on" aria-current="page"' : '"') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
+            '<div class="dd-foot"><a class="dd-all" href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a>' +
+            '<a class="dd-all" href="' + SHOP + '"' + (page === 'shop' ? ' aria-current="page"' : '') + '>Ganzer Shop ' + arrow + '</a></div>' +
           '</div></div>' +
         '</div>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
@@ -79,6 +86,7 @@
       '<div class="hdr-r">' +
         '<span class="pill pill-status" data-open-status></span>' +
         '<a class="btn btn-sm" data-ask="Ich möchte einen Termin vereinbaren.">Termin</a>' +
+        '<a class="hdr-cart' + (cartN ? ' has' : '') + '" href="' + SHOP + '#warenkorb" data-cart-open aria-label="Warenkorb">' + bag + '<span data-cart-count>' + cartN + '</span></a>' +
         themeSeg +
         '<button class="theme-tg" type="button" data-theme-next>' + ICON.dark + ICON.light + ICON.mix + '</button>' +
         '<button class="burger" type="button" aria-label="Menü öffnen" aria-controls="mmenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>' +
@@ -101,10 +109,9 @@
       '<nav class="mm-links" aria-label="Seiten">' +
         '<a href="' + HOME + '"' + cur('home') + '>Start</a>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
-        '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a>' +
       '</nav>' +
-      '<p class="mm-k"><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a></p>' +
-      '<div class="mm-cats">' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
+      '<p class="mm-k"><a href="' + SHOP + '"' + (page === 'shop' ? ' aria-current="page"' : '') + '>Shop ' + arrow + '</a> · <a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes ' + arrow + '</a></p>' +
+      '<div class="mm-cats">' + CATS.concat(EXTRA).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
     '</div>';
 
   /* ---------------- Footer ---------------- */
@@ -134,7 +141,7 @@
       '<div class="ftr-brand"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">' +
         '<p>Dein Radladen in Schönberg<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
-      '<nav aria-label="Bikes"><b>Bikes</b><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
+      '<nav aria-label="Shop"><b>Shop</b><a href="' + SHOP + '"' + cur('shop') + '>Ganzer Shop</a><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(EXTRA).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
       '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v18-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +

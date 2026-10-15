@@ -628,3 +628,16 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
   .cats-6 .cat{aspect-ratio:4/3.3}
 }
 @media (min-width:901px){ .cats-6 + .cat-more{grid-template-columns:repeat(3,minmax(0,1fr))} }
+/* Shop-Menü: sieben Kacheln, unten zwei Links */
+.dd-in{grid-template-columns:repeat(7,124px)}
+@media (min-width:561px) and (max-width:1180px){ .dd-in{grid-template-columns:repeat(7,108px)} }
+.dd-in .dd-foot{grid-column:1/-1;display:flex;justify-content:center;gap:36px;border-top:1px solid var(--line)}
+.dd-in .dd-foot a.dd-all{border-top:0}
+/* Warenkorb im Header */
+.hdr-cart{position:relative;display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:50%;border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.hdr-cart svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.hdr-cart span{position:absolute;right:-4px;top:-4px;display:none;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--red);color:#fff;font:700 11px/19px var(--body);text-align:center}
+.hdr-cart.has span{display:block}
+.hdr-cart:hover{border-color:var(--edge2)}
+/* Bike-Detail: Hinweis unter Reservieren */
+.bd-res{margin-top:12px;color:var(--mute);font-size:14px;max-width:46ch}

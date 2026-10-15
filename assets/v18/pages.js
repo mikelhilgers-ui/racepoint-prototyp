@@ -88,7 +88,8 @@
         '<ul class="bspecs">' + b.specs.map(s => '<li>' + esc(s) + '</li>').join('') + '</ul>' +
         '<div class="bprice"><b>' + eur(b.price) + '</b><small>Herstellerpreis · Belgien</small></div>' +
         '<div class="bacts"><a class="btn" href="v18-bike.html?id=' + encodeURIComponent(b.id) + '">Ansehen ' + arrow + '</a>' +
-        '<a class="btn ghost" data-ask="Ich interessiere mich für das Specialized ' + esc(b.name) + ' (' + eur(b.price) + '). Passt es zu mir und welche Größe brauche ich?">Beraten lassen</a></div>' +
+        '<a class="btn ghost" href="v18-shop.html?p=bike-' + encodeURIComponent(b.id) + '">Reservieren</a>' +
+        '<a class="btn ghost bact-ask" data-ask="Ich interessiere mich für das Specialized ' + esc(b.name) + ' (' + eur(b.price) + '). Passt es zu mir und welche Größe brauche ich?">Beraten lassen</a></div>' +
       '</div></article>';
   }
   function filmCard(id, cls) {
@@ -208,7 +209,8 @@
       '<div class="bd-price"><b>' + eur(b.price) + '</b><p><strong>Herstellerpreis Belgien, kein Racepoint-Angebot.</strong> Geprüft am ' + date(b.checkedAt) + '. Ausführung, Preis, Größe und lokaler Bestand werden persönlich bestätigt.</p></div>' +
       '<ul class="bd-specs">' + b.specs.map((s, i) => '<li><span>' + ['Rahmen', 'Ausstattung', 'Details'][i] + '</span>' + esc(s) + '</li>').join('') +
         '<li><span>Verfügbar</span>Auf Anfrage, wir prüfen den Bestand</li></ul>' +
-      '<div class="bd-acts"><a class="btn" href="' + mailto('Anfrage: Specialized ' + b.name, body) + '">Anfragen ' + arrow + '</a><a class="btn ghost" data-ask="' + esc(ask) + '">KI-Berater fragen</a></div>' +
+      '<div class="bd-acts"><a class="btn" href="v18-shop.html?p=bike-' + encodeURIComponent(b.id) + '">Reservieren ' + arrow + '</a><a class="btn ghost" href="' + mailto('Anfrage: Specialized ' + b.name, body) + '">Anfragen</a><a class="btn ghost" data-ask="' + esc(ask) + '">KI-Berater fragen</a></div>' +
+      '<p class="bd-res">Reservieren kostet nichts. Wir legen das Rad zurück, du fährst Probe und bezahlst im Laden.</p>' +
       '<a class="bd-src" href="' + esc(b.source) + '" target="_blank" rel="noopener">Datenblatt beim Hersteller ' + arrow + '</a>';
     if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
 

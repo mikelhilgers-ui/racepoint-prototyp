@@ -2,7 +2,8 @@
    RACEPOINT · 18 · Shop (THROWAWAY)
    Produkte, Filter, Produktansicht und Warenkorb für v18-shop.html.
    Racepoint-Kollektion: Daten und Fotos aus racepoint-shop.com (Stand 15.10.2026).
-   Artikel mit beispiel:true sind erfunden. Später liefert Shopify die Daten
+   Artikel mit beispiel:true sind erfunden. Bikes kommen aus data.js und werden nur
+   reserviert (bezahlt im Laden nach der Probefahrt). Später liefert Shopify die Daten
    (Storefront API), die Kasse bleibt bei Shopify. Hier wird nichts bestellt.
    Muss NACH site.js geladen werden.
    ===================================================================== */
@@ -46,16 +47,22 @@
       text: 'Snapback mit gesticktem RP-Logo, gebogener Schirm, stabile Front. 100 % Polyester. Laut Achim für die Freizeit, zum Beispiel zum Eis essen.' },
 
     // Erfunden: Beispiele, wie Specialized-Ware und Gutscheine im Shop aussähen
-    { id: 'recon', cat: 'schuhe', beispiel: true, name: 'S-Works Recon', sub: 'Specialized · MTB-Schuh', price: 425, sizes: ['40', '41', '42', '43', '44', '45', '46'], imgs: [C + 'schuh-recon'],
+    { id: 'recon', cat: 'zubehoer', beispiel: true, name: 'S-Works Recon', sub: 'Specialized · MTB-Schuh', price: 425, sizes: ['40', '41', '42', '43', '44', '45', '46'], imgs: [C + 'schuh-recon'],
       text: 'Carbonsohle, BOA-Verschluss, für Trail und Rennen. Probier ihn im Laden an, Schuhgrößen fallen je nach Modell unterschiedlich aus.' },
-    { id: 'recon-sl', cat: 'schuhe', beispiel: true, name: 'S-Works Recon SL', sub: 'Specialized · Gravel- und XC-Schuh', price: 475, sizes: ['40', '41', '42', '43', '44', '45', '46'], imgs: [C + 'schuh-reconsl'],
+    { id: 'recon-sl', cat: 'zubehoer', beispiel: true, name: 'S-Works Recon SL', sub: 'Specialized · Gravel- und XC-Schuh', price: 475, sizes: ['40', '41', '42', '43', '44', '45', '46'], imgs: [C + 'schuh-reconsl'],
       text: 'Die leichtere Variante in Oak Green, für Gravel und Cross-Country.' },
-    { id: 'helm', cat: 'schuhe', beispiel: true, name: 'Specialized Helm Hi-Vis', sub: 'Specialized · Rennradhelm', price: 129.9, sizes: ['S', 'M', 'L'], imgs: [C + 'helme'],
+    { id: 'helm', cat: 'zubehoer', beispiel: true, name: 'Specialized Helm Hi-Vis', sub: 'Specialized · Rennradhelm', price: 129.9, sizes: ['S', 'M', 'L'], imgs: [C + 'helme'],
       text: 'In Neongelb, gut zu sehen auch bei Nebel im Venn. Den Kopfumfang messen wir im Laden.' },
+    { id: 'torch', cat: 'zubehoer', beispiel: true, name: 'S-Works Torch Lace', sub: 'Specialized · Rennradschuh', price: 399, sizes: ['40', '41', '42', '43', '44', '45', '46'], imgs: [C + 'schuh-scan'],
+      text: 'Carbonsohle und Schnürung. Vor dem Kauf messen wir deinen Fuß, das Video dazu läuft unten auf der Seite.' },
+    { id: 'evade', cat: 'zubehoer', beispiel: true, name: 'S-Works Evade 3 Red Bull', sub: 'Specialized · Aero-Helm', price: 299, sizes: ['S', 'M', 'L'], imgs: [C + 'sl9'],
+      text: 'Der Aero-Helm in der Red-Bull-Lackierung, passend zum Tarmac SL9 aus demselben Video.' },
     { id: 'trikot-rp', cat: 'bekleidung', beispiel: true, name: 'Racepoint-Trikot', sub: 'Racepoint · Kurzarm', price: 89.9, sizes: M, imgs: [C + 'kleid-9'],
       text: 'Schwarz und Weiß, enger Schnitt, drei Rückentaschen. Für die Samstagsrunde und den Kaffee danach.' },
     { id: 'trikot-verlauf', cat: 'bekleidung', beispiel: true, name: 'Trikot Farbverlauf', sub: 'Specialized · Damen', price: 99.9, sizes: ['XS', 'S', 'M', 'L'], imgs: [C + 'kleid-1'],
       text: 'Von Blau zu Rot, leichter Stoff für warme Tage.' },
+    { id: 'trikot-schwarz', cat: 'bekleidung', beispiel: true, name: 'Trikot Schwarz', sub: 'Specialized · Herren', price: 79.9, sizes: M, imgs: [C + 'kleid-5'],
+      text: 'Schlicht in Schwarz, passt zu jedem Rad und zu jeder Hose.' },
     { id: 'cap-spz', cat: 'bekleidung', beispiel: true, name: 'Specialized Cap', sub: 'Specialized · Einheitsgröße', price: 24.9, sizes: null, imgs: [C + 'kleid-4'],
       text: 'In Grau oder Schwarz mit rotem S. Hängt im Laden gleich neben der Racepoint-Cap.' },
 
@@ -68,17 +75,29 @@
     { id: 'kaffee', cat: 'gutschein', beispiel: true, laden: true, gift: { k: 'Kaffee', t: 'Nach der Runde' }, name: 'Kaffee nach der Runde', sub: 'Nur im Laden', price: 0,
       text: 'Den gibt es nicht online, nur nach der Runde bei uns im Laden. Bezahlt wird in Höhenmetern.' },
   ];
+  // Bikes aus data.js (Herstellerpreise Belgien): reservieren statt kaufen
+  const BCAT = { rennrad: 'Rennrad', gravel: 'Gravel', mtb: 'MTB', ebike: 'E-Bike', kind: 'Kinder' };
+  const BIKES = ((window.RP18Data && RP18Data.bikes) || []).map(b => {
+    const parts = b.name.split(' · ');
+    return { id: 'bike-' + b.id, cat: 'bikes', bike: b, name: parts[0], sub: 'Specialized · ' + (BCAT[b.cat] || 'Bike') + (parts.length > 1 ? ' · ' + parts.slice(1).join(' · ') : ''),
+      price: b.price, img: b.image, sizes: b.cat === 'kind' ? null : ['Noch offen', 'XS', 'S', 'M', 'L', 'XL'],
+      text: b.specs.join(' · ') + '.', fit: 'Die Größe ist erst ein Richtwert. Festgelegt wird sie bei der Probefahrt oder beim Bikefitting.' };
+  });
+  P.unshift.apply(P, BIKES);
   const byId = Object.fromEntries(P.map(p => [p.id, p]));
   const FILTERS = [
     { id: 'alle', name: 'Alle' },
-    { id: 'merch', name: RP },
+    { id: 'bikes', name: 'Bikes' },
+    { id: 'zubehoer', name: 'Zubehör' },
     { id: 'bekleidung', name: 'Bekleidung' },
-    { id: 'schuhe', name: 'Schuhe & Helme' },
+    { id: 'merch', name: RP },
     { id: 'gutschein', name: 'Gutscheine' },
   ];
 
   const eur = n => n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
   const src = f => (f.indexOf('/') >= 0 ? f : S + f) + '.webp';
+  const imgOf = p => p.img || src(p.imgs[0]);
+  const rp = p => p.img ? ' referrerpolicy="no-referrer"' : '';
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const priceOf = p => p.amounts ? 'ab ' + eur(p.amounts[0]) : p.laden ? 'unbezahlbar' : eur(p.price);
   const giftArt = (p, amount) =>
@@ -92,23 +111,28 @@
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(cart)); } catch (e) {} };
   const unit = i => i.amount || byId[i.id].price;
   const count = () => cart.reduce((n, i) => n + i.qty, 0);
-  const total = () => cart.reduce((n, i) => n + unit(i) * i.qty, 0);
+  const isBike = i => byId[i.id].cat === 'bikes';
+  const total = () => cart.reduce((n, i) => n + (isBike(i) ? 0 : unit(i) * i.qty), 0);
 
   /* ---------------- Raster + Filter ---------------- */
   const grid = $('#shGrid'), chips = $('#shChips');
   if (!grid) return;
   const card = p =>
     '<article class="sh-card" data-cat="' + p.cat + '">' +
-      '<button type="button" class="sh-img' + (p.gift ? ' is-gift' : '') + '" data-open="' + p.id + '" aria-label="' + esc(p.name + ' · ' + p.sub) + ' ansehen">' +
+      '<button type="button" class="sh-img' + (p.gift ? ' is-gift' : p.bike ? ' is-bike' : '') + '" data-open="' + p.id + '" aria-label="' + esc(p.name + ' · ' + p.sub) + ' ansehen">' +
         (p.gift ? giftArt(p) :
-          '<img src="' + src(p.imgs[0]) + '" alt="" loading="lazy">' + (p.imgs[1] ? '<img class="alt" src="' + src(p.imgs[1]) + '" alt="" loading="lazy">' : '')) +
+          '<img src="' + imgOf(p) + '" alt="" loading="lazy"' + rp(p) + '>' + (p.imgs && p.imgs[1] ? '<img class="alt" src="' + src(p.imgs[1]) + '" alt="" loading="lazy">' : '')) +
         (p.beispiel ? '<span class="sh-tag">Beispiel</span>' : '') +
       '</button>' +
-      '<div class="sh-b"><p class="sh-sub">' + esc(p.sub) + '</p><h3>' + esc(p.name) + '</h3><p class="sh-price">' + priceOf(p) + '</p></div>' +
+      '<div class="sh-b"><p class="sh-sub">' + esc(p.sub) + '</p><h3>' + esc(p.name) + '</h3><p class="sh-price">' + priceOf(p) + (p.bike ? ' <small>reservieren</small>' : '') + '</p></div>' +
     '</article>';
-  grid.innerHTML = P.map(card).join('');
-  chips.innerHTML = FILTERS.map((f, i) => {
-    const n = f.id === 'alle' ? P.length : P.filter(p => p.cat === f.id).length;
+  // Unterseiten (Zubehör, Kollektion) zeigen nur ihre Bereiche, der Warenkorb gilt für den ganzen Shop
+  const scope = (grid.dataset.scope || '').split(',').filter(Boolean);
+  const VIS = scope.length ? P.filter(p => scope.indexOf(p.cat) >= 0) : P;
+  const FIL = scope.length ? FILTERS.filter(f => f.id === 'alle' || scope.indexOf(f.id) >= 0) : FILTERS;
+  grid.innerHTML = VIS.map(card).join('');
+  chips.innerHTML = FIL.map((f, i) => {
+    const n = f.id === 'alle' ? VIS.length : VIS.filter(p => p.cat === f.id).length;
     return '<button type="button" data-f="' + f.id + '" aria-pressed="' + (i === 0) + '">' + f.name + '<span>' + n + '</span></button>';
   }).join('');
   const setFilter = f => {
@@ -133,11 +157,11 @@
   const pd = $('#shProduct');
   let curP = null, curOpt = null;
   const renderProduct = p => {
-    curP = p; curOpt = p.amounts ? p.amounts[1] || p.amounts[0] : null;
+    curP = p; curOpt = p.amounts ? p.amounts[1] || p.amounts[0] : p.bike && p.sizes ? p.sizes[0] : null;
     const opts = p.amounts || p.sizes;
     const media = p.gift ? '<div class="sh-pd-gift">' + giftArt(p, p.amounts ? curOpt : 0) + '</div>' :
-      '<div class="sh-pd-main"><img src="' + src(p.imgs[0]) + '" alt="' + esc(p.name + ', ' + p.sub) + '"></div>' +
-      (p.imgs.length > 1 ? '<div class="sh-thumbs">' + p.imgs.map((f, i) => '<button type="button" data-img="' + src(f) + '" aria-label="Bild ' + (i + 1) + '"' + (i ? '' : ' aria-current="true"') + '><img src="' + src(f) + '" alt=""></button>').join('') + '</div>' : '');
+      '<div class="sh-pd-main' + (p.bike ? ' is-bike' : '') + '"><img src="' + imgOf(p) + '" alt="' + esc(p.name + ', ' + p.sub) + '"' + rp(p) + '></div>' +
+      (p.imgs && p.imgs.length > 1 ? '<div class="sh-thumbs">' + p.imgs.map((f, i) => '<button type="button" data-img="' + src(f) + '" aria-label="Bild ' + (i + 1) + '"' + (i ? '' : ' aria-current="true"') + '><img src="' + src(f) + '" alt=""></button>').join('') + '</div>' : '');
     $('.sh-pd', pd).innerHTML =
       '<div class="sh-pd-media">' + media + '</div>' +
       '<div class="sh-pd-txt">' +
@@ -145,12 +169,13 @@
         '<h2 id="shPdTitle">' + esc(p.name) + '</h2>' +
         '<p class="sh-pd-price" id="shPdPrice">' + (p.amounts ? eur(curOpt) : priceOf(p)) + '</p>' +
         '<p class="sh-pd-text">' + esc(p.text) + '</p>' +
-        (p.fit ? '<p class="sh-fit"><b>Größenfinder</b>' + esc(p.fit) + '</p>' : '') +
-        (opts ? '<fieldset class="sh-opts"><legend>' + (p.amounts ? 'Betrag' : 'Größe') + '</legend><div>' + opts.map(o =>
+        (p.fit ? '<p class="sh-fit"><b>' + (p.bike ? 'Rahmengröße' : 'Größenfinder') + '</b>' + esc(p.fit) + '</p>' : '') +
+        (opts ? '<fieldset class="sh-opts"><legend>' + (p.amounts ? 'Betrag' : p.bike ? 'Rahmengröße' : 'Größe') + '</legend><div>' + opts.map(o =>
           '<button type="button" data-opt="' + o + '" aria-pressed="' + (o === curOpt) + '">' + (p.amounts ? o + ' €' : o) + '</button>').join('') + '</div></fieldset>' : '') +
         (p.laden ? '<a class="btn" href="v18-touren.html">Zu den Touren</a>' :
-          '<button type="button" class="btn sh-add" id="shAdd"' + (opts && !curOpt ? ' aria-disabled="true"' : '') + '>' + (opts && !curOpt ? 'Erst ' + (p.amounts ? 'Betrag' : 'Größe') + ' wählen' : 'In den Warenkorb') + '</button>') +
-        '<p class="fine">Abholen im Laden in Schönberg oder Versand, das regelt später die Kasse.</p>' +
+          '<div class="sh-acts"><button type="button" class="btn sh-add" id="shAdd"' + (opts && !curOpt ? ' aria-disabled="true"' : '') + '>' + (opts && !curOpt ? 'Erst ' + (p.amounts ? 'Betrag' : 'Größe') + ' wählen' : p.bike ? 'Reservieren' : 'In den Warenkorb') + '</button>' +
+          (p.bike ? '<a class="btn ghost" href="v18-bike.html?id=' + encodeURIComponent(p.bike.id) + '">Details und Filme</a>' : '') + '</div>') +
+        '<p class="fine">' + (p.bike ? 'Herstellerpreis Belgien, kein Racepoint-Angebot. Reservieren kostet nichts: Wir legen das Rad zurück, du fährst Probe und bezahlst im Laden.' : 'Abholen im Laden in Schönberg oder Versand, das regelt später die Kasse.') + '</p>' +
       '</div>';
   };
   const openProduct = id => { const p = byId[id]; if (!p) return; renderProduct(p); openDlg(pd); $('.sh-pd', pd).scrollTop = 0; };
@@ -168,7 +193,7 @@
       curOpt = curP.amounts ? +o.dataset.opt : o.dataset.opt;
       $$('[data-opt]', pd).forEach(b => b.setAttribute('aria-pressed', b === o));
       if (curP.amounts) { $('#shPdPrice').textContent = eur(curOpt); $('.sh-pd-gift', pd).innerHTML = giftArt(curP, curOpt); }
-      const add = $('#shAdd'); add.removeAttribute('aria-disabled'); add.textContent = 'In den Warenkorb';
+      const add = $('#shAdd'); add.removeAttribute('aria-disabled'); add.textContent = curP.bike ? 'Reservieren' : 'In den Warenkorb';
       return;
     }
     const add = e.target.closest('#shAdd');
@@ -176,8 +201,9 @@
       if (add.getAttribute('aria-disabled')) { $('.sh-opts', pd).classList.add('shake'); setTimeout(() => $('.sh-opts', pd).classList.remove('shake'), 500); return; }
       const key = curP.id + '|' + (curOpt || '');
       const hit = cart.find(i => i.key === key);
-      if (hit) hit.qty++; else cart.push({ key, id: curP.id, size: curP.amounts ? null : curOpt, amount: curP.amounts ? curOpt : null, qty: 1 });
-      save(); renderCart(); closeDlg(pd); toast(curP.name + (curOpt && !curP.amounts ? ' · ' + curOpt : '') + ' liegt im Warenkorb.');
+      if (hit) { if (!curP.bike) hit.qty++; } else cart.push({ key, id: curP.id, size: curP.amounts ? null : curOpt, amount: curP.amounts ? curOpt : null, qty: 1 });
+      save(); renderCart(); closeDlg(pd);
+      toast(curP.bike ? curP.name + ' ist reserviert. Bezahlt wird im Laden.' : curP.name + (curOpt && !curP.amounts ? ' · ' + curOpt : '') + ' liegt im Warenkorb.');
     }
   });
 
@@ -186,7 +212,7 @@
   const renderCart = () => {
     const n = count();
     $$('[data-cart-count]').forEach(el => { el.textContent = n; });
-    $$('.sh-cart-btn').forEach(b => b.classList.toggle('has', n > 0));
+    $$('.sh-cart-btn,.hdr-cart').forEach(b => b.classList.toggle('has', n > 0));
     $('#shFab').hidden = n === 0;
     if (!cart.length) {
       list.innerHTML = '<p class="sh-empty">Noch leer. Die Cap wäre ein Anfang.</p>';
@@ -194,13 +220,15 @@
       list.innerHTML = cart.map((i, k) => {
         const p = byId[i.id];
         return '<div class="sh-line">' +
-          (p.gift ? '<span class="sh-line-img">' + giftArt(p, i.amount) + '</span>' : '<img class="sh-line-img" src="' + src(p.imgs[0]) + '" alt="">') +
-          '<div><b>' + esc(p.name) + '</b><small>' + esc(p.sub.replace(RP + ' · ', '')) + (i.size ? ' · Größe ' + i.size : '') + (i.amount ? ' · ' + eur(i.amount) : '') + '</small>' +
-            '<div class="sh-qty"><button type="button" data-q="-1" data-k="' + k + '" aria-label="Eins weniger">−</button><span>' + i.qty + '</span><button type="button" data-q="1" data-k="' + k + '" aria-label="Eins mehr">+</button></div></div>' +
+          (p.gift ? '<span class="sh-line-img">' + giftArt(p, i.amount) + '</span>' : '<img class="sh-line-img' + (p.bike ? ' is-bike' : '') + '" src="' + imgOf(p) + '" alt=""' + rp(p) + '>') +
+          '<div><b>' + esc(p.name) + '</b><small>' + esc(p.sub.replace(RP + ' · ', '')) + (i.size && i.size !== 'Noch offen' ? ' · Größe ' + i.size : '') + (i.amount ? ' · ' + eur(i.amount) : '') + '</small>' +
+            (p.bike ? '<span class="sh-res">Reserviert · Probefahrt und Bezahlung im Laden</span><button type="button" class="sh-rm" data-q="-1" data-k="' + k + '">Entfernen</button>' :
+            '<div class="sh-qty"><button type="button" data-q="-1" data-k="' + k + '" aria-label="Eins weniger">−</button><span>' + i.qty + '</span><button type="button" data-q="1" data-k="' + k + '" aria-label="Eins mehr">+</button></div>') + '</div>' +
           '<p>' + eur(unit(i) * i.qty) + '</p></div>';
       }).join('');
     }
     $('#shTotal').textContent = eur(total());
+    $('#shCartFine').textContent = cart.some(isBike) ? 'Reservierte Bikes sind nicht in der Summe, die zahlst du im Laden. Versand oder Abholung wählst du an der Kasse.' : 'Versand oder Abholung wählst du an der Kasse.';
     $('#shCheckout').disabled = !cart.length;
   };
   list.addEventListener('click', e => {
@@ -210,7 +238,8 @@
     save(); renderCart();
   });
   const showCheckout = on => { $('#shCartMain').hidden = on; $('#shCheckoutInfo').hidden = !on; };
-  $$('[data-cart-open]').forEach(b => b.addEventListener('click', () => { showCheckout(false); renderCart(); openDlg(cd); }));
+  const openCart = () => { showCheckout(false); renderCart(); openDlg(cd); };
+  $$('[data-cart-open]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); openCart(); }));
   $('#shCheckout').addEventListener('click', () => showCheckout(true));
   $('#shBack').addEventListener('click', () => showCheckout(false));
 
@@ -224,4 +253,12 @@
 
   renderCart();
   if (window.RP18Site && RP18Site.reveal) RP18Site.reveal();
+  const qs = new URLSearchParams(location.search);
+  const f0 = qs.get('f');
+  if (f0 && FIL.some(f => f.id === f0)) {
+    setFilter(f0);
+    setTimeout(() => { const t = $('#produkte'); if (window.RP18Site && RP18Site.scrollTo) RP18Site.scrollTo(t); else t.scrollIntoView(); }, 400);
+  }
+  if (qs.get('p') && byId[qs.get('p')]) openProduct(qs.get('p'));
+  else if (location.hash === '#warenkorb') openCart();
 })();
