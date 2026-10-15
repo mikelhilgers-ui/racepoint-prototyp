@@ -218,6 +218,8 @@
     '<div class="chips rv" role="list">' + ki.chips.map(c => '<button type="button" role="listitem" data-ask="' + escA(c[1]) + '">' + STAR + escA(c[0]) + '</button>').join('') + '</div>' +
     '<p class="fine rv">' + TERMIN_HINWEIS + '</p></div></aside>' : '';
   if (main) main.insertAdjacentHTML('afterend', kiEnde + stoerer + footer);
+  const kibEnd = document.querySelector('.kib-end');
+  if (kibEnd && 'IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => document.documentElement.classList.toggle('v18-kib-end', e.isIntersecting)), { threshold: 0.25 }).observe(kibEnd);
   if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
 
   /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, Mix ist Standard) ---------------- */

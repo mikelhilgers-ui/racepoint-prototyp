@@ -828,3 +828,14 @@ html:is([data-theme="light"],[data-theme="mix"]) .tb{
 /* Sauberer Übergang: das Glühen läuft unten in den Footer-Ton aus */
 .kib-end::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,13,0),#0b0b0d 92%)}
 .kib-end .ai-in{z-index:1}
+
+/* Service-Zeilen: Bild bleibt randlos zur Seite, bekommt oben und unten Luft und zur Textseite runde Ecken,
+   damit Werkstatt-, Bikefitting- und Traumbike-Bild nicht mehr aneinanderstoßen */
+@media (min-width:821px){
+  .svc-row{padding-block:clamp(48px,5vw,88px)}
+  .svc-row .svc-media{border-radius:0 22px 22px 0}
+  .svc-row.fit .svc-media{border-radius:22px 0 0 22px}
+}
+/* Solange der KI-Block am Seitenende im Bild ist, braucht es den schwebenden Knopf nicht doppelt */
+.kib-launch{transition:opacity .4s,transform .4s var(--ease),visibility .4s}
+html.v18-kib-end .kib-launch{opacity:0;visibility:hidden;transform:translateY(16px)}

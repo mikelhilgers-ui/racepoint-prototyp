@@ -283,16 +283,17 @@ button{font:inherit;color:inherit}
 .hours li.closed span:last-child{color:rgba(255,255,255,.38)}
 
 /* Besuch in Hell und Mix: heller Block zwischen Touren-Filmband und KI-Berater (beide dunkel).
-   Wie die Service-Zeilen: Text links auf Hell, Ladenfoto rechts scharf bis an den Rand, Öffnungszeiten dunkel darauf. */
-html:is([data-theme="light"],[data-theme="mix"]) .visit{background:var(--bg)}
-html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{left:auto;width:44%}
-html:is([data-theme="light"],[data-theme="mix"]) .visit::before{left:auto;width:44%;background:linear-gradient(90deg,rgba(11,11,13,.28),rgba(11,11,13,0) 40%)}
+   Wie die Service-Zeilen: Text links auf Hell, Ladenfoto rechts bis an den Rand, oben und unten mit Luft,
+   damit es weder das Touren-Band noch den KI-Berater berührt. Öffnungszeiten dunkel darauf. Ohne Parallaxe. */
+html:is([data-theme="light"],[data-theme="mix"]) .visit{--vis-pad:clamp(56px,6vw,104px);min-height:0;padding:calc(var(--vis-pad) + 48px) 0;background:var(--bg)}
+html:is([data-theme="light"],[data-theme="mix"]) .visit-bg,html:is([data-theme="light"],[data-theme="mix"]) .visit::before{inset:var(--vis-pad) 0 var(--vis-pad) auto;width:44%;border-radius:22px 0 0 22px}
+html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{transform:none!important;background-position:50% 78%}
+html:is([data-theme="light"],[data-theme="mix"]) .visit::before{background:linear-gradient(90deg,rgba(11,11,13,.28),rgba(11,11,13,0) 40%)}
 html:is([data-theme="light"],[data-theme="mix"]) .vcard address{color:var(--ink)}
 html:is([data-theme="light"],[data-theme="mix"]) .visit .hours-card{--bg2:#121216;--strong:#fff;--line:rgba(255,255,255,.12);--ink:#f4f1ec;--mute:rgba(244,241,236,.66);--dim:rgba(244,241,236,.5);color:var(--ink);box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
 @media (max-width:900px){
-  html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{left:0;width:auto;top:auto;bottom:-8%;height:62%}
-  html:is([data-theme="light"],[data-theme="mix"]) .visit::before{left:0;width:auto;top:auto;bottom:-8%;height:74%}
-  html:is([data-theme="light"],[data-theme="mix"]) .visit::before{background:linear-gradient(180deg,var(--bg) 0%,var(--bg) 14%,rgba(244,242,238,0) 40%)}
+  html:is([data-theme="light"],[data-theme="mix"]) .visit{padding:var(--vis-pad) 0}
+  html:is([data-theme="light"],[data-theme="mix"]) .visit-bg,html:is([data-theme="light"],[data-theme="mix"]) .visit::before{display:none}
 }
 .hours li.today span:first-child::after{color:#fff}
 
