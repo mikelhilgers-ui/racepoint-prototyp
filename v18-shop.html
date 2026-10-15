@@ -40,7 +40,7 @@
       <p class="kicker"><i class="dot"></i>Shop · Bikes, Zubehör &amp; Kollektion</p>
       <h1><span>Racepoint</span><span><em>zum Mitnehmen.</em></span></h1>
       <p class="lead">Zubehör, Bekleidung und die Racepoint-Kollektion bestellst du direkt. Bikes reservierst du, bezahlt wird nach der Probefahrt im Laden. Draufsitzen solltest du ja vorher.</p>
-      <div class="btns"><a class="btn" href="#produkte">Zu den Produkten <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><button class="btn ghost" type="button" data-cart-open>Warenkorb</button></div>
+      <div class="btns"><a class="btn" href="#bereiche">Zu den Bereichen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><button class="btn ghost" type="button" data-cart-open>Warenkorb</button></div>
       <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill">Abholen in Schönberg</span></div>
     </div>
     <div class="phero-side">
@@ -52,10 +52,45 @@
   </div>
 </section>
 
+<section class="sec" id="bereiche" aria-labelledby="berH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Vier Bereiche</p><h2 class="h2 rv" id="berH">Was darf<br><em>es sein?</em></h2></div>
+      <p class="lead rv">Bikes reservierst du und fährst Probe. Alles andere bestellst du direkt oder holst es in Schönberg ab.</p>
+    </div>
+    <div class="cats">
+      <a class="cat rv" href="v18-bikes.html">
+        <img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern im Showroom" loading="lazy">
+        <span class="cat-n">01</span>
+        <div class="cat-b"><h3>Bikes</h3><p>Vom Kinderrad bis zum S-Works. Reservieren, Probe fahren, im Laden zahlen.</p><span class="price">ab 749 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-zubehoer.html">
+        <img src="assets/v18/media/cine/kleid-3.webp" alt="Bunte Trikotwand mit Mountainbike im Racepoint-Laden" loading="lazy" style="object-position:55% 50%">
+        <span class="cat-n">02</span>
+        <div class="cat-b"><h3>Zubehör &amp; Bekleidung</h3><p>Schuhe, Helme und Trikots für jede Runde.</p><span class="price">ab 24,90 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-kollektion.html">
+        <img src="assets/v18/media/shop/cap-1.webp" alt="Frau mit Racepoint-Cap und Racepoint-Shirt" loading="lazy" style="object-position:50% 15%">
+        <span class="cat-n">03</span>
+        <div class="cat-b"><h3>Racepoint-Kollektion</h3><p>Shirts, Hoodies und die Cap aus den Videos.</p><span class="price">ab 29,90 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-kollektion.html?f=gutschein">
+        <img src="assets/v18/media/cine/fitting-2.webp" alt="Bikefitting im Fitting-Raum von Racepoint" loading="lazy">
+        <span class="cat-n">04</span>
+        <div class="cat-b"><h3>Gutscheine</h3><p>Für Werkstatt, Bikefitting oder einfach so.</p><span class="price">ab 25 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="produkte" aria-labelledby="prodH">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Alles aus dem Laden</p><h2 class="h2 rv" id="prodH">Bikes, Zubehör<br><em>und Kollektion.</em></h2></div>
+      <div><p class="kicker rv">Alle Artikel</p><h2 class="h2 rv" id="prodH">Alles auf<br><em>einen Blick.</em></h2></div>
       <p class="lead rv">Bei der Kollektion steht, wer aus dem Team welche Größe trägt. Bei Bikes ist die Größe ein Richtwert, die klären wir bei der Probefahrt.</p>
     </div>
     <!-- Quellen und Stand der Preise: assets/v18/media/QUELLEN.md und shop.js -->
@@ -64,16 +99,6 @@
       <button class="sh-cart-btn" type="button" data-cart-open><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Warenkorb <span data-cart-count>0</span></button>
     </div>
     <div class="sh-grid" id="shGrid"></div>
-  </div>
-</section>
-
-<section class="sec" id="bereiche" aria-label="Bereiche" style="padding-top:0">
-  <div class="wrap">
-    <div class="cat-more">
-      <a class="mini rv" href="v18-bikes.html"><b>Bikes</b><span>Ansehen, reservieren, Probe fahren</span><i aria-hidden="true">↗</i></a>
-      <a class="mini rv" href="v18-zubehoer.html"><b>Zubehör &amp; Bekleidung</b><span>Schuhe, Helme, Trikots</span><i aria-hidden="true">↗</i></a>
-      <a class="mini rv" href="v18-kollektion.html"><b>Racepoint-Kollektion</b><span>Shirts, Hoodies und Gutscheine</span><i aria-hidden="true">↗</i></a>
-    </div>
   </div>
 </section>
 
