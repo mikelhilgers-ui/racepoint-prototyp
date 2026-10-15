@@ -171,11 +171,13 @@
     '<a class="btn stoer-btn" href="' + st.href + '">' + st.btn + ' ' + arrow + '</a></div>' +
     '<a class="stoer-fig" href="' + st.href + '" tabindex="-1" aria-hidden="true"><img src="' + st.img + '" alt="" loading="lazy"><span class="stoer-badge">Passt<br>dazu!</span></a>' +
     '</div></aside>' : '';
-  // KI-Berater ganz unten (auf Shop-Seiten vor dem Störer): überall gleicher Block, Text je Seite. Die Werkstatt hat ihn schon im Inhalt
+  // KI-Berater ganz unten (auf Shop-Seiten vor dem Störer): überall gleicher Block, Text je Seite. Alle v18-Seiten haben ihn (v18-anfrage.html ist nur eine Weiterleitung)
   const TERMIN_HINWEIS = 'Ein Termin ist nur eine Anfrage. Gebucht ist er erst, wenn das Racepoint-Team ihn bestätigt.';
   const KIB = {
     home: { k: 'KI-Berater <span class="ai-mode" id="aiMode">· verbindet …</span>', h1: 'Frag den', h2: 'KI-Berater.', p: 'Er empfiehlt Bikes aus dem Katalog, hilft bei der Rahmengröße, nennt Öffnungszeiten und bereitet Terminanfragen vor. Wird es persönlich, übernimmt Achim.', ph: 'Z. B. „Gravelbike bis 3.000 € für Touren im Venn“',
       chips: [['Bike-Beratung', 'Welches Bike passt zu mir? Ich hätte gern eine Beratung.'], ['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Termin', 'Ich möchte einen Termin vereinbaren.'], ['Rahmengröße', 'Welche Rahmengröße brauche ich?']] },
+    werkstatt: { k: 'KI-Berater', h1: 'Was klappert', h2: 'denn da?', p: 'Beschreib das Geräusch oder das Problem. Der KI-Berater ordnet es ein, nennt die passende Leistung und bereitet deinen Werkstatttermin vor. Wird es knifflig, übernimmt Achim.', ph: 'Z. B. „Schaltung springt am kleinen Ritzel“',
+      chips: [['Inspektion', 'Mein Rad braucht eine Inspektion. Wann habt ihr Zeit?'], ['Fahrwerk', 'Meine Federgabel braucht Service. Macht ihr das?'], ['E-Bike', 'Mein E-Bike hat ein Problem mit Motor oder Akku. Könnt ihr helfen?'], ['Termin', 'Ich möchte einen Werkstatttermin vereinbaren.']] },
     kontakt: { k: 'KI-Berater', h1: 'Schneller gefragt', h2: 'als angerufen.', p: 'Öffnungszeiten, Anfahrt, Termin oder eine Frage zum Rad: Der KI-Berater antwortet sofort und bereitet deine Anfrage vor. Wird es persönlich, übernimmt Achim.', ph: 'Z. B. „Habt ihr Samstag offen?“',
       chips: [['Öffnungszeiten', 'Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?'], ['Anfahrt', 'Wie komme ich zu Racepoint in Schönberg?'], ['Termin', 'Ich möchte einen Termin vereinbaren.'], ['Anfrage vorbereiten', 'Hilf mir, meine Anfrage an Racepoint vorzubereiten.']] },
     bikes: { k: 'KI-Berater', h1: 'Der KI-Berater', h2: 'hilft bei der Auswahl.', p: 'Beschreib, wo du fährst und was du ausgeben möchtest. Der KI-Berater sucht passende Modelle aus dem Katalog. Wenn es persönlich wird, übernimmt Achim.', ph: 'Z. B. „Erstes Rennrad, Budget 2.000 €“',
