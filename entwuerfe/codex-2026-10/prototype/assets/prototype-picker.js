@@ -20,7 +20,8 @@
     [3, 'Neueste Bikes', 'index.html?v=3'], [4, 'Finde dein Bike', 'index.html?v=4'],
     [5, 'Bold/Sportlich', 'index.html?v=5'], [6, 'Immersive', 'index.html?v=6'],
     [8, 'Der Aufbau', 'v8-aufbau.html'], [9, '3D-Studio', 'v9-3d-studio.html'],
-    [10, 'Die Runde', 'v10-die-runde.html'], [17, 'Best of', 'v17-best-of.html']
+    [10, 'Die Runde', 'v10-die-runde.html'], [17, 'Best of', 'v17-best-of.html'],
+    [18, 'Traumbike', 'v18-traumbike.html']
   ];
   function mount() {
     if (document.querySelector('.prototype-picker')) return;
@@ -56,7 +57,7 @@
       if (id === current) a.setAttribute('aria-current', 'page');
       links.append(a);
     };
-    // Neuere Einzelseiten (z. B. 17 · Best of) stehen als Neueste ganz oben
+    // Neuere Einzelseiten (z. B. 18 · Traumbike, 17 · Best of) stehen als Neueste ganz oben
     const newest = Math.max(...designs.map(([id]) => id));
     const older2 = standalone ? [] : [...older].reverse();
     for (const [id, label, path] of older2) if (id > newest) add(id, label, new URL(path, repository).href, 'NEW');
@@ -102,7 +103,7 @@
     body:has(dialog[open]) .prototype-picker{display:none}
     html.kib-open-doc .prototype-picker,body:has(#chatPanel:not(.hidden)) .prototype-picker{display:none}
     body:has(.prototype-picker) .advisor-fab{bottom:88px!important}
-    @media(max-width:600px){.prototype-picker{right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom))}.prototype-panel{max-height:calc(100dvh - 104px - env(safe-area-inset-bottom));max-width:calc(100vw - 28px)}body:has(.prototype-picker) .advisor-fab{bottom:82px!important}}
+    @media(max-width:640px){.prototype-picker{right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom))}.prototype-toggle{width:48px;height:48px;box-shadow:0 8px 22px #0006}.prototype-toggle svg{width:24px;height:24px}.prototype-panel{max-height:calc(100dvh - 90px - env(safe-area-inset-bottom));max-width:calc(100vw - 28px);margin-bottom:10px}body:has(.prototype-picker) .advisor-fab{bottom:calc(74px + env(safe-area-inset-bottom))!important}}
     @media(prefers-reduced-motion:reduce){.prototype-toggle{transition:none}.prototype-toggle:hover{transform:none}}
   `;
   document.head.append(style);

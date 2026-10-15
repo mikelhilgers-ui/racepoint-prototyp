@@ -10,7 +10,8 @@
 <!-- ================================================================= -->
 <!--  RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE (THROWAWAY)                      -->
 <!--  Die stärksten Ideen aller Entwürfe auf einer Startseite:          -->
-<!--  Cinematic-Hero (V1/V15) + Video im Schriftzug (V10), Aufbau (V8),  -->
+<!--  Cinematic-Hero (V1/V15) + Video im Schriftzug (V10), Traumbike-   -->
+<!--  Story mit echten Racepoint-Fotos und -Filmen (ohne 3D),            -->
 <!--  Finde dein Bike (V4/Codex), KI-Berater (V8–V10), Achim & Service,  -->
 <!--  Samstagsrunde mit Höhenprofil (V10), Filme, Besuch (V8).           -->
 <!--  Libs lokal in vendor/ · Logik in assets/v18/                      -->
@@ -19,6 +20,7 @@
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/traum.css">
 </head>
 <body data-page="home">
 
@@ -194,41 +196,118 @@
   </div>
 </section>
 
-<!-- ===================== 2 · Der Aufbau (aus V8, verdichtet) ===================== -->
-<section class="build" id="aufbau" aria-label="Ein Rennrad wird aus Einzelteilen aufgebaut">
-  <div class="build-spot" id="buildSpot" aria-hidden="true"></div>
-  <div class="build-bike" id="bikebox"></div>
-  <div class="build-3d" id="build3d" role="img" aria-label="3D-Ansicht des fertigen Rennrads, mit Ziehen drehbar"></div>
-  <div class="build-col" id="buildCol">
-    <div class="build-intro" id="buildIntro">
-      <p class="kicker">Meisterwerkstatt · Build Nº 01</p>
-      <h2 class="h2">Jedes Teil<br><em>zählt.</em></h2>
-      <p class="lead">34 Teile werden zu deinem Bike – Schraube für Schraube, wie in Achims Videos. Scroll und bau mit.</p>
-    </div>
-    <div class="build-step" id="stepCard">
-      <div class="swap">
-        <div class="num"><b id="stepNo">01</b><span>/ 04</span></div>
-        <h3 class="h3" id="stepTitle">Rahmen &amp; Gabel</h3>
-        <p id="stepText"></p>
-        <span class="spec" id="stepSpec"></span>
+<!-- ===================== 6 · Mein Traumbike: Story in fünf Kapiteln ===================== -->
+<!-- Alle Bilder und Filme der Story stehen in EINER Konfiguration: STORY oben in assets/v18/traum.js.
+     Die Platzhalter hier (data-t-img, data-t-films …) füllt traum.js daraus. -->
+<section class="traum" id="traum" aria-labelledby="traumTitle">
+  <nav class="t-rail" id="tRail" aria-label="Kapitel der Traumbike-Story">
+    <a href="#tIdea"><b>01</b><span>Die Idee</span></a>
+    <a href="#tTalk"><b>02</b><span>Beratung</span></a>
+    <a href="#tFit"><b>03</b><span>Bikefitting</span></a>
+    <a href="#tBuild"><b>04</b><span>Aufbau</span></a>
+    <a href="#tGo"><b>05</b><span>Übergabe</span></a>
+  </nav>
+
+  <!-- Kapitel 1 · Die Idee (angeheftet: echte Clips des Cervélo S5 „Lupine LTD“) -->
+  <div class="t-idea" id="tIdea">
+    <div class="t-stage" id="tStage">
+      <div class="t-layers" id="tLayers"></div>
+      <div class="t-vig" aria-hidden="true"></div>
+      <div class="t-intro wrap" id="tIntro">
+        <p class="kicker"><i class="dot"></i>Kapitel 1 / 5 · Die Idee</p>
+        <h2 class="h2" id="traumTitle">So entsteht<br><em>dein Traumbike.</em></h2>
+        <p class="lead">Von der ersten Idee bis zur ersten Ausfahrt. In fünf Kapiteln, mit echten Bildern aus unserem Laden in Schönberg.</p>
       </div>
+      <ol class="t-caps wrap" id="tCaps" aria-hidden="true"></ol>
+      <div class="t-fin wrap" id="tFin">
+        <h2 class="t-big">Das ist es.<br><em>Dein Traumbike.</em></h2>
+        <div class="t-fin-row">
+          <button class="btn ghost" type="button" data-video="5TcRRpUy5T4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/></svg>Einen S5-Aufbau im Film</button>
+          <p class="t-note">Beispiel: Cervélo S5 „Lupine LTD“ aus unserem Laden</p>
+        </div>
+      </div>
+      <div class="t-tick" id="tTick" aria-hidden="true"><i id="tTickBar"></i></div>
     </div>
-    <div class="build-fin" id="finTxt">
-      <p class="kicker">Build fertig · 6,8 kg</p>
-      <h2 class="h2">Das ist ein<br><em>Racepoint-Build.</em></h2>
-      <p class="lead">Geplant mit dir, aufgebaut von Achim, eingestellt beim Retül-Bikefitting.</p>
-      <div class="btns">
-        <a class="btn" data-ask="Ich möchte eine Beratung für einen individuellen Bike-Build.">Build besprechen</a>
-        <a class="btn ghost" href="v9-3d-studio.html">In 3D konfigurieren <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+  </div>
+
+  <!-- Kapitel 2 · Beratung bei Achim -->
+  <div class="t-ch t-talk" id="tTalk">
+    <div class="wrap t-talk-grid">
+      <div class="t-talk-txt">
+        <p class="kicker rv">Kapitel 2 / 5 · Beratung</p>
+        <h2 class="h2 rv">Erst reden.<br><em>Dann schrauben.</em></h2>
+        <p class="lead rv">Du erzählst, wo du fährst und was dich reizt. Achim zeigt dir, was dazu passt, im Laden zum Anfassen und ganz ohne Verkaufsdruck.</p>
+        <blockquote class="t-quote rv">„Ein Traumbike fängt nicht im Katalog an. Es fängt mit der Frage an, wo du fahren willst.“<cite>Achim Leufgen <span>Zitat-Entwurf, mit Achim abstimmen</span></cite></blockquote>
+        <div class="btns rv"><a class="btn" data-ask="Ich möchte mein Traumbike planen. Wie läuft eine Beratung bei euch ab?">Beratung anfragen</a></div>
+      </div>
+      <div class="t-talk-pics">
+        <figure class="t-pic t-pic-a"><img data-t-img="talk.main" alt="" loading="lazy"></figure>
+        <figure class="t-pic t-pic-b"><img data-t-img="talk.room" alt="" loading="lazy"></figure>
+        <figure class="t-pic t-pic-c"><img data-t-img="talk.detail" alt="" loading="lazy"></figure>
       </div>
     </div>
   </div>
-  <div class="build-hud" id="buildHud" aria-hidden="true"><b id="kg">0,00</b><small>kg</small></div>
-  <div class="build-prog" id="buildProg" aria-hidden="true">
-    <i id="buildBar"></i>
-    <ol>
-      <li><span>Rahmen</span></li><li><span>Laufräder</span></li><li><span>Antrieb</span></li><li><span>Cockpit</span></li>
-    </ol>
+
+  <!-- Kapitel 3 · Retül-Bikefitting -->
+  <div class="t-ch t-fit" id="tFit">
+    <div class="wrap t-fit-grid">
+      <figure class="t-pic t-fit-pic"><img data-t-img="fit.main" alt="" loading="lazy"><span class="rec"><i></i>Retül · 3D live</span></figure>
+      <div class="t-fit-txt">
+        <p class="kicker rv">Kapitel 3 / 5 · Bikefitting</p>
+        <h2 class="h2 rv">Passt dir.<br><em>Auf den Millimeter.</em></h2>
+        <p class="lead rv">Bevor das erste Teil montiert wird, vermessen wir dich mit Retül in 3D. Sattelhöhe, Reach und Cockpit stehen fest, bevor dein Rahmen in den Montageständer kommt.</p>
+        <ul class="t-facts rv">
+          <li><b>3D</b><span>Motion-Capture</span></li>
+          <li><b>~1,5 h</b><span>im Fitting-Raum</span></li>
+          <li><b>1×</b><span>gemessen, dann gebaut</span></li>
+        </ul>
+        <a class="txt-link rv" href="v18-bikefitting.html">So läuft Retül bei uns <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kapitel 4 · Aufbau in der Werkstatt (angeheftet: Shop-Film läuft mit dem Scrollen) -->
+  <div class="t-build" id="tBuild">
+    <div class="t-build-stage" id="tBuildStage">
+      <video class="t-scrub" id="tScrub" muted playsinline preload="auto" aria-hidden="true"></video>
+      <div class="t-build-shade" aria-hidden="true"></div>
+      <div class="t-build-txt wrap">
+        <p class="kicker">Kapitel 4 / 5 · Aufbau</p>
+        <h2 class="h2">Teil für Teil.<br><em>In Achims Händen.</em></h2>
+        <p class="lead">Jedes Lager gefettet, jeder Zug gekürzt, jede Schraube mit Drehmoment. So wie in seinen Videos, nur eben für dich.</p>
+      </div>
+      <ol class="t-steps" id="tSteps"></ol>
+    </div>
+  </div>
+
+  <div class="t-ch t-dream" id="tDream">
+    <div class="wrap">
+      <div class="sec-h">
+        <div>
+          <p class="kicker rv">Achims Dreambuilds</p>
+          <h2 class="h2 rv">Echte Builds.<br><em>Aus der Werkstatt.</em></h2>
+        </div>
+        <p class="lead rv">So sieht ein Aufbau bei Racepoint aus, vom nackten Rahmen bis zur ersten Ausfahrt. Such dir einen Film aus.</p>
+      </div>
+      <div class="t-films" id="tFilms"></div>
+    </div>
+  </div>
+
+  <!-- Kapitel 5 · Übergabe und erste Ausfahrt -->
+  <div class="t-ch t-go" id="tGo">
+    <div class="wrap t-go-grid">
+      <figure class="t-pic t-go-ride"><img data-t-img="go.ride" alt="" loading="lazy"></figure>
+      <div class="t-go-txt">
+        <p class="kicker rv">Kapitel 5 / 5 · Übergabe</p>
+        <h2 class="h2 rv">Abholen.<br><em>Losfahren.</em></h2>
+        <p class="lead rv">Wir stellen alles ein, gehen jedes Detail mit dir durch und schicken dich auf die erste Runde. Und wenn nach den ersten Kilometern etwas zwickt, kommst du einfach vorbei.</p>
+        <figure class="t-pic t-go-bike rv"><img data-t-img="go.bike" alt="" loading="lazy"><figcaption>Abholbereit · Cervélo S5 „Lupine LTD“</figcaption></figure>
+        <div class="btns rv">
+          <a class="btn" data-ask="Ich möchte mein Traumbike planen. Hilf mir beim Start.">Mein Traumbike planen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghost" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -286,9 +365,9 @@
     </div>
     <div class="film-grid">
       <button class="film film-big rv" type="button" data-video="9KIh7oOIPT4"><img src="entwuerfe/codex-2026-10/prototype/assets/films/9KIh7oOIPT4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Unboxing</span><b>Tarmac SL8 LTD Forward 50</b></span></button>
-      <button class="film rv" type="button" data-video="5TcRRpUy5T4"><img src="entwuerfe/codex-2026-10/prototype/assets/films/5TcRRpUy5T4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Aero · Bikebuild</span><b>Cervélo S5</b></span></button>
-      <button class="film rv" type="button" data-video="cIBBbESSOoc"><img src="entwuerfe/codex-2026-10/prototype/assets/films/cIBBbESSOoc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Gravel · Bikebuild</span><b>Specialized Crux</b></span></button>
-      <button class="film rv" type="button" data-video="-84OwxUfgIQ"><img src="entwuerfe/codex-2026-10/prototype/assets/films/-84OwxUfgIQ.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">E-MTB · Build</span><b>Turbo Levo SL</b></span></button>
+      <button class="film rv" type="button" data-video="QTqThigoqjc"><img src="assets/v18/media/films/QTqThigoqjc.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Rennrad · Unboxing &amp; Build</span><b>Cervélo Soloist 2026</b></span></button>
+      <button class="film rv" type="button" data-video="nyoM95Rp9g4"><img src="assets/v18/media/films/nyoM95Rp9g4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Leichtbau · Unboxing</span><b>Specialized Aethos 2</b></span></button>
+      <button class="film rv" type="button" data-video="2zD31t7mWCw"><img src="entwuerfe/codex-2026-10/prototype/assets/films/2zD31t7mWCw.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">MTB · Unboxing</span><b>Epic 8 Pro LTD</b></span></button>
       <button class="film rv" type="button" data-video="Z5TqAKmey0M"><img src="entwuerfe/codex-2026-10/prototype/assets/films/Z5TqAKmey0M.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Kids · Build</span><b>Hotwalk Carbon</b></span></button>
     </div>
   </div>
@@ -355,7 +434,7 @@
 <script src="assets/rp-core.js"></script>
 <script src="assets/ki-berater.js"></script>
 <script src="assets/v18/site.js"></script>
-<script src="assets/v18/bike.js"></script>
+<script src="assets/v18/traum.js"></script>
 <script src="assets/v18/bestof.js"></script>
 </body>
 </html>

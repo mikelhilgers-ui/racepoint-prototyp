@@ -4,13 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Racepoint · Bike · 18 · Mein Traumbike</title>
-<meta name="description" content="Bike-Detail bei Racepoint: Ausstattung, Herstellerpreis, Quelle, Konfigurator und persönliche Anfrage.">
+<meta name="description" content="Bike-Detail bei Racepoint: Ausstattung, Herstellerpreis, Quelle und dein Wunsch-Build mit Farbe, Größen-Richtwert und Extras für die persönliche Anfrage.">
 <link rel="icon" href="assets/racepoint-logo-sm.svg">
 <!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
      Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/wunsch.css">
 </head>
 <body data-page="bike">
 <a class="skip" href="#bd">Zum Inhalt springen</a>
@@ -28,22 +29,40 @@
 <section class="sec" id="cfgSec" aria-labelledby="cfgH" style="padding-top:clamp(40px,5vw,70px)">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Konfigurator · Dein Build</p><h2 class="h2 rv" id="cfgH">Mach es<br><em>zu deinem.</em></h2></div>
-      <p class="lead rv" id="cfgNote"></p>
+      <div><p class="kicker rv">Dein Wunsch-Build</p><h2 class="h2 rv" id="cfgH">Mach es<br><em>zu deinem.</em></h2></div>
+      <p class="lead rv" id="cfgNote">Wähle Farbe, Größe und Extras. Wir prüfen Verfügbarkeit und Details persönlich und melden uns mit einem klaren Vorschlag.</p>
     </div>
-    <div class="cfg">
-      <div id="cfgStage"></div>
-      <div class="cfg-box">
-        <div class="cfg-row"><p>Rahmenfarbe <b id="cfgPaint"></b></p><div class="sw" id="cfgSw" role="group" aria-label="Rahmenfarbe"></div></div>
-        <div class="cfg-row" id="rowTyres"><p>Reifen</p><div class="seg" id="cfgTyres" role="group" aria-label="Reifen"><button type="button" data-t="tan" aria-pressed="true">Tan-Wall</button><button type="button" data-t="black" aria-pressed="false">Schwarz</button></div></div>
-        <div class="cfg-row" id="rowSize"><p>Größe aus Körpergröße <b id="cfgSize"></b></p>
-          <label class="sr-only" for="cfgH">Körpergröße in cm</label>
-          <input class="rng" id="cfgH" type="range" min="150" max="205" step="1" value="175">
-          <div class="rng-scale"><span>150 cm</span><output id="cfgHOut" for="cfgH">175 cm</output><span>205 cm</span></div>
-          <p class="fine" style="margin-top:8px;text-transform:none;letter-spacing:0;font:400 13px var(--body)">Richtwert. Die exakte Größe ermitteln wir beim Retül-Bikefitting.</p>
+    <div class="wb">
+      <figure class="wb-photo">
+        <div class="bd-stage" id="wbStage"></div>
+        <figcaption id="wbCap"></figcaption>
+      </figure>
+      <div class="wb-panel">
+        <div class="wb-group">
+          <h3 class="wb-h" id="wbColH">Farbe</h3>
+          <div class="wb-chips" id="wbColors" role="group" aria-labelledby="wbColH"></div>
+          <p class="wb-hint">Farbe laut Hersteller – Verfügbarkeit bestätigen wir.</p>
         </div>
-        <div class="cfg-row sum"><p>Dein Build</p><dl id="sumList"></dl>
-          <div class="btns"><a class="btn" id="sumAsk" data-ask="">Build mit KI besprechen</a><a class="btn ghost" id="sumMail" href="mailto:info@racepoint.be">Per E-Mail anfragen</a></div>
+        <div class="wb-group" id="wbSizeBox">
+          <h3 class="wb-h" id="wbSizeH">Rahmengröße</h3>
+          <div class="wb-size">
+            <label class="sr-only" for="wbHeight">Körpergröße in cm</label>
+            <input class="rng" id="wbHeight" type="range" min="150" max="205" step="1" value="175">
+            <div class="rng-scale"><span>150 cm</span><output id="wbHeightOut" for="wbHeight">175 cm</output><span>205 cm</span></div>
+            <p class="wb-result" id="wbSize" aria-live="polite"></p>
+          </div>
+          <p class="wb-hint">Nur ein Richtwert. Die genaue Größe klärt das Bikefitting.</p>
+        </div>
+        <fieldset class="wb-group wb-extras">
+          <legend class="wb-h">Extras</legend>
+          <label class="wb-check"><input type="checkbox" name="extra" value="Retül-Bikefitting"><span>Retül-Bikefitting</span></label>
+          <label class="wb-check"><input type="checkbox" name="extra" value="Pedale"><span>Pedale</span></label>
+          <label class="wb-check"><input type="checkbox" name="extra" value="Leasing/Finanzierung"><span>Leasing/Finanzierung</span></label>
+        </fieldset>
+        <div class="wb-group wb-sum">
+          <h3 class="wb-h">Dein Build</h3>
+          <dl id="wbSum"></dl>
+          <div class="btns"><a class="btn" id="wbAsk" data-ask="">Mit KI besprechen</a><a class="btn ghost" id="wbMail" href="mailto:info@racepoint.be">Per E-Mail anfragen</a></div>
         </div>
       </div>
     </div>

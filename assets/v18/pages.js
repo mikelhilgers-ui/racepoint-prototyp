@@ -3,7 +3,7 @@
    - Kategorie-Seiten: echte Bikes aus RP18Data (Codex-Katalog) mit
      Filter + Sortierung, Filme der Kategorie
    - Bike-Detail (v18-bike.html?id=…): Galerie, Daten, Herstellerpreis,
-     Quelle, Anfrage, aehnliche Bikes + Konfigurator (3D bei Rennrad/Gravel)
+     Quelle, Anfrage, aehnliche Bikes + Wunsch-Build (Farbe, Groessen-Richtwert, Extras)
    - Filme-Seite: alle Filme mit Filter, Wiedergabe ueber RP.openVideo
    - Formulare [data-mailform] -> E-Mail-Entwurf (mailto), nichts wird gesendet
    - kleine Scroll-Effekte (Ablauf-Linie, Zeitstrahl)
@@ -24,11 +24,32 @@
   const playSvg = '<span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>';
   const lineBike = '<svg viewBox="0 0 120 70" aria-hidden="true"><circle cx="26" cy="46" r="20"/><circle cx="94" cy="46" r="20"/><path d="M26 46l18-26h34l16 26M44 20l18 26h-36M62 46l16-26M40 14h12M74 12l4 8"/></svg>';
 
-  /* ---------------- Konfigurator-Daten (Lacke wie im 3D-Studio V9, assets/v9/bike.js PAINTS) ---------------- */
-  const PAINT = [
-    ['rot', 'Racepoint-Rot', '#d3242a'], ['black', 'Gloss Black', '#0a0b0d'], ['carbon', 'Carbon', '#1d1e22'],
-    ['white', 'Weiß', '#e9e9e4'], ['chameleon', 'Chameleon', 'linear-gradient(135deg,#10a07e,#4b25c8)'],
-  ];
+  /* ---------------- Wunsch-Build-Daten ----------------
+     Herstellerfarben: geprüft am 2026-10-15 über die Specialized-Seite des jeweiligen Bikes (URL = source in data.js).
+     Es stehen nur die Varianten des Bikes selbst darin, keine Zubehörfarben der Seite.
+     `main` = Index der Farbe, die das Katalogfoto zeigt (Bildname, z. B. DUNEWHT-DPLAKE = Dune White / Deep Lake).
+       allez-cues                 geprüft am 2026-10-15 über https://www.specialized.com/be/nl/allez-shimano-cues/p/4221808
+       roubaix-sl8-tiagra         geprüft am 2026-10-15 über https://www.specialized.com/be/nl/roubaix-sl8-shimano-tiagra/p/4263270
+       tarmac-sl9-expert-di2      geprüft am 2026-10-15 über https://www.specialized.com/be/nl/tarmac-sl9-expert-shimano-ultegra-di2/p/4293531
+       diverge-4-sport-alloy      geprüft am 2026-10-15 über https://www.specialized.com/be/nl/diverge-4-sport-alloy-shimano-cues/p/4223511
+       crux-dsw-comp              geprüft am 2026-10-15 über https://www.specialized.com/be/nl/crux-dsw-comp-sram-apex-xplr/p/4221804
+       rockhopper-comp            geprüft am 2026-10-15 über https://www.specialized.com/be/nl/rockhopper-comp/p/4221745
+       stumpjumper-15-evo-expert  geprüft am 2026-10-15 über https://www.specialized.com/be/nl/stumpjumper-15-evo-expert-fact-11m-carbon-fox-performance-elite-w-genie-xt-di2/p/4291645
+       levo-4-evo-comp            geprüft am 2026-10-15 über https://www.specialized.com/be/nl/turbo-levo-4-evo-comp/p/4294788
+       vado-3-evo-4               geprüft am 2026-10-15 über https://www.specialized.com/be/nl/turbo-vado-3-evo-40/p/4279841
+       riprock-24                 geprüft am 2026-10-15 über https://www.specialized.com/be/nl/riprock-24/p/4222032 */
+  const COLORS = {
+    'allez-cues': { main: 2, list: ['Obsidian / Dove Grey', 'California Sunshine / Orange Zest', 'Dune White / Deep Lake'] },
+    'roubaix-sl8-tiagra': { main: 0, list: ['Satin Deep Marine Metallic / Shadow Silver'] },
+    'tarmac-sl9-expert-di2': { main: 0, list: ['Gloss Pacific Blue Metallic / White', 'Gloss Black / Silver Dust'] },
+    'diverge-4-sport-alloy': { main: 0, list: ['Satin Burnt Gold Metallic / Shadow Silver', 'Gloss Dark Navy / Dolomite Metallic'] },
+    'crux-dsw-comp': { main: 1, list: ['Emerald Metallic / Fjord Metallic', 'Shadow Silver / California Sunshine'] },
+    'rockhopper-comp': { main: 0, list: ['Gloss Pistachio / White Mountains', 'Satin Mauve Metallic / Fjord Metallic', 'Satin Nebula Metallic / Dolomite Metallic'] },
+    'stumpjumper-15-evo-expert': { main: 1, list: ['Gloss Nebula Metallic / Dolomite Metallic', 'Gloss Pistachio / Dark Moss Green'] },
+    'levo-4-evo-comp': { main: 0, list: ['Gloss Warm Smoke / Pistachio', 'Satin Agave Grey / Desert Metallic'] },
+    'vado-3-evo-4': { main: 0, list: ['Gloss Pacific Blue / Dune White', 'Gloss Nebula Metallic / Silver Dust', 'Gloss Sandstone Metallic / Warm Smoke Metallic'] },
+    'riprock-24': { main: 0, list: ['Gloss Majesty Blue Metallic / Sky Blue', 'Gloss Oasis / Emerald Metallic', 'Gloss Dolomite Metallic / Quartz Metallic', 'Gloss Smoke / Fjord Metallic'] },
+  };
   const SIZES = [[160, 'XS', 49], [168, 'S', 52], [176, 'M', 54], [184, 'L', 56], [192, 'XL', 58], [206, 'XXL', 61]];
 
   /* ---------------- Katalog ---------------- */
@@ -39,7 +60,8 @@
   const inCat = (b, c) => c === 'familie' ? (b.cat === 'kind' || b.id === 'vado-3-evo-4') : b.cat === c;
   const byId = id => D.bikes.find(b => b.id === id);
   const film = id => D.films.find(f => f.id === id);
-  const poster = id => 'entwuerfe/codex-2026-10/prototype/assets/films/' + id + '.jpg';
+  // Titelbild: eigenes "thumb" (neue Filme in assets/v18/media/films) oder Codex-Ordner
+  const poster = id => (film(id) || {}).thumb || 'entwuerfe/codex-2026-10/prototype/assets/films/' + id + '.jpg';
   const FILM_CAT = { road: 'Rennrad & Triathlon', gravel: 'Gravel', mtb: 'MTB & Service', ebike: 'E-Bike', familie: 'Familie' };
 
   // Bilder des Herstellers: wenn sie nicht laden, bleibt eine saubere Platzhalter-Kachel
@@ -196,70 +218,56 @@
   function config(b, cat) {
     const kids = b.cat === 'kind';
     const road = b.cat === 'rennrad' || b.cat === 'gravel';
-    // 3D nur, wenn der prozedurale Typ passt: Rennrad, Gravel, MTB, E-MTB (nicht Stadt-E-Bike, nicht Kinderrad)
-    const type3d = road || b.cat === 'mtb' ? b.cat : b.cat === 'ebike' && b.terrain.includes('trail') ? 'ebike' : null;
-    const cfg = { paint: 0, tyres: 'tan', h: 175 };
-    const stage = $('#cfgStage');
-    $('#cfgNote').textContent = type3d
-      ? '3D-Vorschau, nicht das exakte Modell: ein ' + (type3d === 'ebike' ? 'E-MTB' : CAT_NAME[b.cat]) + ' als Symbol für deinen Build. Verfügbare Herstellerfarben bestätigen wir persönlich.'
-      : 'Für dieses Modell zeigen wir bewusst das echte Herstellerbild statt eines unpassenden 3D-Modells. Wunschfarbe und Größe nehmen wir in deine Anfrage auf.';
-    if (!type3d) {
-      stage.innerHTML = '<div class="bd-stage" id="cfgPhoto"><img data-guard src="' + esc(b.image) + '" alt="Specialized ' + esc(b.name) + '" referrerpolicy="no-referrer">' + ph + '<span class="tag3d" id="cfgChip"></span></div>';
-      guardImgs(stage);
+    const col = COLORS[b.id] || { main: 0, list: [] };
+    const cfg = { color: col.list.length ? col.main : -1, h: 175 };
+    const stage = $('#wbStage');
+    stage.innerHTML = '<img data-guard src="' + esc(b.image) + '" alt="Specialized ' + esc(b.name) + ' (Herstellerbild)" referrerpolicy="no-referrer">' + ph.replace('Herstellerbild', 'Herstellerbild nicht erreichbar');
+    guardImgs(stage);
+    $('#wbCap').textContent = col.list.length ? 'Foto: ' + col.list[col.main] + ' · Bild des Herstellers' : 'Bild des Herstellers';
+
+    const chips = $('#wbColors');
+    if (col.list.length) {
+      chips.innerHTML = col.list.map((c, i) => '<button type="button" aria-pressed="' + (i === cfg.color) + '" data-i="' + i + '">' + esc(c) + '</button>').join('');
     } else {
-      stage.innerHTML = '<div class="bd-stage v3wrap"><img data-guard src="' + esc(b.image) + '" alt="" referrerpolicy="no-referrer">' + ph + '<div class="v3d" id="v3d" aria-label="3D-Ansicht, mit Ziehen drehbar"></div><span class="tag3d">3D-Vorschau · nicht das exakte Modell</span></div>';
-      guardImgs(stage);
+      $('#wbColH').parentNode.remove();
     }
-    if (!type3d || !road) $('#rowTyres').remove();
-    if (kids) $('#rowSize').querySelector('p').innerHTML = 'Größe <b id="cfgSize">nach Schrittlänge</b>';
-    $('#cfgSw').innerHTML = PAINT.map((p, i) => '<button type="button" style="--c:' + p[2] + '" aria-pressed="' + (i === 0) + '" aria-label="' + p[1] + '" title="' + p[1] + '" data-i="' + i + '"></button>').join('');
-    const h = $('#cfgH'), out = $('#cfgHOut');
-    let ctl = null;
+    if (kids) {
+      $('#wbSizeH').textContent = 'Größe';
+      $('#wbSizeBox .wb-size').remove();
+      $('#wbSizeBox .wb-hint').textContent = 'Bei Kinderrädern entscheidet die Schrittlänge. Wir lassen dein Kind im Laden Probesitzen.';
+    }
+    const h = $('#wbHeight'), out = $('#wbHeightOut');
     const sizeOf = v => SIZES.find(s => v < s[0]) || SIZES[SIZES.length - 1];
+    const extras = () => $$('input[name="extra"]:checked').map(x => x.value);
+    const joinDe = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1] : a.join('');
+
     function sync() {
-      const p = PAINT[cfg.paint], s = sizeOf(cfg.h);
-      $('#cfgPaint').textContent = p[1];
-      out.textContent = cfg.h + ' cm';
-      const sizeTxt = kids ? 'Probesitzen im Laden' : s[1] + (road ? ' · ca. ' + s[2] + ' cm' : '') + ' (Richtwert)';
-      if (!kids) $('#cfgSize').textContent = s[1] + (road ? ' · ' + s[2] : '');
-      const tyreTxt = cfg.tyres === 'tan' ? 'Tan-Wall' : 'Schwarz';
-      const withTyres = !!(type3d && road);
-      $('#sumList').innerHTML = '<dt>Modell</dt><dd>Specialized ' + esc(b.name) + '</dd><dt>Farbe</dt><dd>' + p[1] + ' (Wunsch)</dd>' +
-        (withTyres ? '<dt>Reifen</dt><dd>' + tyreTxt + '</dd>' : '') +
-        '<dt>Größe</dt><dd>' + sizeTxt + ' · bei ' + cfg.h + ' cm</dd><dt>Preis</dt><dd>' + eur(b.price) + ' Herstellerpreis</dd>';
-      const txt = 'Mein Racepoint-Build: Specialized ' + b.name + ', Wunschfarbe ' + p[1] + (withTyres ? ', Reifen ' + tyreTxt : '') + ', Körpergröße ' + cfg.h + ' cm (Größen-Richtwert ' + (kids ? 'offen' : s[1]) + '). Ist das so machbar und verfügbar?';
-      $('#sumAsk').setAttribute('data-ask', txt);
-      $('#sumMail').href = mailto('Mein Build: Specialized ' + b.name, 'Hallo Racepoint-Team,\n\n' + txt + '\n\nIch würde gern einen Termin für Beratung bzw. Retül-Bikefitting vereinbaren.\n\nViele Grüße\n');
-      const chip = $('#cfgChip'); if (chip) chip.textContent = 'Wunschfarbe: ' + p[1];
-      if (ctl) { ctl.setPaint(p[0]); ctl.setTyres(withTyres ? cfg.tyres : 'black'); }
+      const s = sizeOf(cfg.h), cname = cfg.color >= 0 ? col.list[cfg.color] : '';
+      const ex = extras();
+      const sizeShort = kids ? 'Probesitzen im Laden' : (road ? s[2] + ' / ' : '') + s[1];
+      if (!kids) {
+        out.textContent = cfg.h + ' cm';
+        $('#wbSize').innerHTML = 'Richtwert: <b>' + sizeShort + '</b>';
+      }
+      $('#wbSum').innerHTML = '<dt>Modell</dt><dd>Specialized ' + esc(b.name) + '</dd>' +
+        (cname ? '<dt>Farbe</dt><dd>' + esc(cname) + '</dd>' : '') +
+        '<dt>Größe</dt><dd>' + (kids ? sizeShort : 'Richtwert ' + sizeShort + ' · bei ' + cfg.h + ' cm') + '</dd>' +
+        '<dt>Extras</dt><dd>' + (ex.length ? esc(ex.join(', ')) : 'Keine ausgewählt') + '</dd>';
+      const txt = 'Mein Racepoint-Wunsch-Build: Specialized ' + b.name + (cname ? ', Farbe ' + cname + ' (laut Hersteller)' : '') +
+        (kids ? ', Größe nach Schrittlänge' : ', Körpergröße ' + cfg.h + ' cm (Größen-Richtwert ' + sizeShort + ')') +
+        (ex.length ? ', Extras: ' + joinDe(ex) : '') + '. Ist das so machbar und verfügbar?';
+      $('#wbAsk').setAttribute('data-ask', txt);
+      $('#wbMail').href = mailto('Mein Build: Specialized ' + b.name, 'Hallo Racepoint-Team,\n\n' + txt + '\n\nIch würde gern einen Termin für Beratung bzw. Retül-Bikefitting vereinbaren.\n\nViele Grüße\n');
     }
-    $('#cfgSw').addEventListener('click', e => {
+    chips.addEventListener('click', e => {
       const t = e.target.closest('button'); if (!t) return;
-      cfg.paint = +t.dataset.i;
-      $$('#cfgSw button').forEach(x => x.setAttribute('aria-pressed', String(x === t)));
+      cfg.color = +t.dataset.i;
+      $$('button', chips).forEach(x => x.setAttribute('aria-pressed', String(x === t)));
       sync();
     });
-    const seg = $('#cfgTyres');
-    if (seg) seg.addEventListener('click', e => {
-      const t = e.target.closest('button'); if (!t) return;
-      cfg.tyres = t.dataset.t;
-      $$('button', seg).forEach(x => x.setAttribute('aria-pressed', String(x === t)));
-      sync();
-    });
-    h.addEventListener('input', () => { cfg.h = +h.value; sync(); });
+    if (h) h.addEventListener('input', () => { cfg.h = +h.value; sync(); });
+    $$('input[name="extra"]').forEach(x => x.addEventListener('change', sync));
     sync();
-    if (type3d) {
-      // 3D erst laden, wenn der Konfigurator in die Naehe kommt
-      const box = $('#v3d');
-      const start = () => {
-        const go = () => window.RP18Bike3D.mount(box, { type: type3d, paint: PAINT[cfg.paint][0], tyres: road ? cfg.tyres : 'black', baseYaw: -0.45 })
-          .then(c => { ctl = c; box.parentElement.classList.add('has3d'); sync(); })
-          .catch(err => { console.info('3D nicht verfügbar, Foto bleibt:', err && err.message); box.remove(); });
-        if (window.RP18Bike3D) go(); else window.addEventListener('rp18:3d', go, { once: true });
-      };
-      const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '400px 0px' });
-      io.observe(box);
-    }
   }
 
   /* ---------------- Formulare -> E-Mail-Entwurf ---------------- */
