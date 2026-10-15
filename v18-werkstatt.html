@@ -25,49 +25,77 @@
 <body data-page="werkstatt">
 <a class="skip" href="#leistungen">Zum Inhalt springen</a>
 <main>
-<section class="phero cine" id="top">
+<!-- Video-Strecke: Das Hero-Video bleibt beim Scrollen stehen (sticky), der Hero-Text blendet aus,
+     die Leistungen blenden nacheinander darüber ein. Ablauf: assets/v18/werkstatt-aufbau.js · Look: werkstatt-aufbau.css -->
+<section class="phero cine wk" id="top" aria-label="Werkstatt und Leistungen">
   <figure class="phero-fig">
       <picture><source media="(max-width:820px)" srcset="assets/v18/media/cine/werkstatt.webp"><img class="cine-m" src="assets/v18/media/cine/werkstatt-amb.webp" alt="In der Racepoint-Werkstatt wird ein Cervélo Áspero-5 aufgebaut" fetchpriority="high"></picture>
       <video class="cine-m cine-bg" muted loop playsinline preload="none" aria-hidden="true" data-src="assets/v18/media/cine/werkstatt-amb.mp4" data-src-m="assets/v18/media/cine/werkstatt.mp4"></video>
+      <span class="wk-dim" aria-hidden="true"></span>
       <figcaption>Meisterwerkstatt · Schönberg</figcaption>
   </figure>
-  <div class="phero-word" aria-hidden="true">WERKSTATT</div>
+  <div class="wk-scene">
+    <div class="wk-intro">
+      <div class="phero-word" aria-hidden="true">WERKSTATT</div>
   <div class="wrap phero-grid">
-    <div class="phero-txt">
-      <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Werkstatt</li></ol>
-      <p class="kicker"><i class="dot"></i>Meisterwerkstatt · alle Marken</p>
-      <h1><span>Dein Bike muss</span><span><em>nicht quietschen.</em></span></h1>
-      <p class="lead">Inspektion, Reparatur, Fahrwerk-Service, E-Bike-Service und Laufräder, für alle Marken. Umfang, Teile und Kosten besprechen wir vorher mit dir.</p>
-      <div class="btns"><a class="btn" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Werkstatt-Termin <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#termin">Anliegen beschreiben</a></div>
-      <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Alle Marken</span><span class="pill">Fahrwerk · E-Bike</span></div>
+      <div class="phero-txt">
+        <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Werkstatt</li></ol>
+        <p class="kicker"><i class="dot"></i>Meisterwerkstatt · alle Marken</p>
+        <h1><span>Dein Bike muss</span><span><em>nicht quietschen.</em></span></h1>
+        <p class="lead">Inspektion, Reparatur, Fahrwerk-Service, E-Bike-Service und Laufräder, für alle Marken. Umfang, Teile und Kosten besprechen wir vorher mit dir.</p>
+        <div class="btns"><a class="btn" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Werkstatt-Termin <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#termin">Anliegen beschreiben</a></div>
+        <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Alle Marken</span><span class="pill">Fahrwerk · E-Bike</span></div>
+      </div>
+      <div class="phero-side">
+        <a class="phero-reel" href="https://www.instagram.com/reel/DXwpPV0IPSD/" target="_blank" rel="noopener" aria-label="Ein Aufbau auf Instagram ansehen">
+          <video muted loop playsinline preload="none" poster="assets/v18/media/cine/werkstatt.webp" data-src="assets/v18/media/cine/werkstatt.mp4" aria-hidden="true"></video>
+          <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@racepoint.be</span><b>Ein Aufbau</b><span>Vom Rahmen bis zur ersten Fahrt</span></span>
+        </a>
+        <button class="hero-badge phero-badge" type="button" data-video="2XNKIGcNOMY" aria-label="Film ansehen">
+            <svg class="hb-ring" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="hbWER" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text textLength="286" lengthAdjust="spacingAndGlyphs"><textPath href="#hbWER" textLength="286" lengthAdjust="spacingAndGlyphs">BRAIN SERVICE · EINBLICK IN DIE WERKSTATT · </textPath></text></svg>
+            <span class="hb-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+          </button>
+      </div>
     </div>
-    <div class="phero-side">
-      <a class="phero-reel" href="https://www.instagram.com/reel/DXwpPV0IPSD/" target="_blank" rel="noopener" aria-label="Ein Aufbau auf Instagram ansehen">
-        <video muted loop playsinline preload="none" poster="assets/v18/media/cine/werkstatt.webp" data-src="assets/v18/media/cine/werkstatt.mp4" aria-hidden="true"></video>
-        <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@racepoint.be</span><b>Ein Aufbau</b><span>Vom Rahmen bis zur ersten Fahrt</span></span>
-      </a>
-      <button class="hero-badge phero-badge" type="button" data-video="2XNKIGcNOMY" aria-label="Film ansehen">
-          <svg class="hb-ring" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="hbWER" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text textLength="286" lengthAdjust="spacingAndGlyphs"><textPath href="#hbWER" textLength="286" lengthAdjust="spacingAndGlyphs">BRAIN SERVICE · EINBLICK IN DIE WERKSTATT · </textPath></text></svg>
-          <span class="hb-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-        </button>
+    </div>
+
+    <div class="wk-svc" id="leistungen" aria-labelledby="lH">
+      <div class="wrap wk-svc-grid">
+        <div class="wk-svc-head">
+          <p class="kicker">Leistungen</p>
+          <h2 class="h2" id="lH">Das machen wir<br><em>in der Werkstatt.</em></h2>
+          <p class="lead">Von der Inspektion bis zum Laufradbau, für alle Marken.</p>
+          <span class="wk-prog" aria-hidden="true"><i></i></span>
+        </div>
+        <div class="svc6 wk-cards">
+          <article class="s6"><span class="wk-n" aria-hidden="true">01</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 00-5.2 5.2L4 16l4 4 5.3-5.3a4 4 0 005.2-5.2l-2.6 2.6-2.8-.7-.7-2.8z"/></svg></i><h3>Inspektion & Reparatur</h3><p>Beschreib uns, was ansteht oder was dir auffällt. Wir stimmen Umfang, mögliche Teile und Kosten vorher mit dir ab. Für jede Marke.</p><button type="button" data-ask="Ich brauche eine Inspektion oder Reparatur für mein Rad.">Termin anfragen →</button></article>
+<article class="s6"><span class="wk-n" aria-hidden="true">02</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v8a4 4 0 008 0V3M12 15v6M9 21h6"/><path d="M8 7h2M14 7h2"/></svg></i><h3>Fahrwerk-Service</h3><p>Service und Einstellung für Federgabel und Dämpfer.</p><button type="button" data-ask="Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer.">Termin anfragen →</button></article>
+<article class="s6"><span class="wk-n" aria-hidden="true">03</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></i><h3>E-Bike-Service</h3><p>Motor, Akku und Software. Wir schauen uns dein E-Bike an und besprechen mit dir, was zu tun ist.</p><button type="button" data-ask="Ich brauche einen E-Bike-Service (Motor, Akku, Software).">Termin anfragen →</button></article>
+<article class="s6"><span class="wk-n" aria-hidden="true">04</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2"/><path d="M12 3.5v6.5M12 14v6.5M3.5 12H10M14 12h6.5"/></svg></i><h3>Laufräder & Naben</h3><p>Laufradbau und DT-Swiss-Nabenservice. Sag uns, welche Komponenten du fährst.</p><button type="button" data-ask="Ich interessiere mich für Laufradbau oder DT-Swiss-Nabenservice.">Termin anfragen →</button></article>
+<article class="s6"><span class="wk-n" aria-hidden="true">05</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></i><h3>Begutachtung</h3><p>Unfallgutachten oder Einschätzung zum Zustand deines Bikes. Den passenden Service klärst du direkt mit dem Team.</p><button type="button" data-ask="Ich brauche ein Unfallgutachten bzw. eine Begutachtung meines Rads.">Termin anfragen →</button></article>
+<article class="s6"><span class="wk-n" aria-hidden="true">06</span><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></i><h3>Kleinigkeiten oft sofort</h3><p>Schlauch, Einstellung, ein Geräusch, das zu Hause da war und hier plötzlich weg ist: Vieles erledigen wir oft direkt, wenn du vorbeikommst.</p><button type="button" data-ask="Habt ihr heute geöffnet? Ich hätte eine Kleinigkeit am Rad.">Termin anfragen →</button></article>
+        </div>
+      </div>
+      <p class="wk-brands-h kicker">Alle Marken</p>
+      <div class="marq" aria-hidden="true"><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div></div>
     </div>
   </div>
 </section>
 
-<section class="sec service" id="leistungen" aria-labelledby="lH">
-  <div class="marq" aria-hidden="true"><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div><div>TREK · CUBE · CANYON · GIANT · SCOTT · CANNONDALE · BMC · ORBEA · CERVÉLO · RIDLEY · KTM · HAIBIKE ·&nbsp;</div></div>
-  <div class="wrap">
-    <div class="sec-h">
-      <div><p class="kicker rv">Leistungen</p><h2 class="h2 rv" id="lH">Das machen wir<br><em>in der Werkstatt.</em></h2></div>
-      <p class="lead rv">Von der Inspektion bis zum Laufradbau, für alle Marken.</p>
-    </div>
-    <div class="svc6">
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 00-5.2 5.2L4 16l4 4 5.3-5.3a4 4 0 005.2-5.2l-2.6 2.6-2.8-.7-.7-2.8z"/></svg></i><h3>Inspektion & Reparatur</h3><p>Beschreib uns, was ansteht oder was dir auffällt. Wir stimmen Umfang, mögliche Teile und Kosten vorher mit dir ab. Für jede Marke.</p><button type="button" data-ask="Ich brauche eine Inspektion oder Reparatur für mein Rad.">Termin anfragen →</button></article>
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v8a4 4 0 008 0V3M12 15v6M9 21h6"/><path d="M8 7h2M14 7h2"/></svg></i><h3>Fahrwerk-Service</h3><p>Service und Einstellung für Federgabel und Dämpfer.</p><button type="button" data-ask="Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer.">Termin anfragen →</button></article>
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg></i><h3>E-Bike-Service</h3><p>Motor, Akku und Software. Wir schauen uns dein E-Bike an und besprechen mit dir, was zu tun ist.</p><button type="button" data-ask="Ich brauche einen E-Bike-Service (Motor, Akku, Software).">Termin anfragen →</button></article>
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2"/><path d="M12 3.5v6.5M12 14v6.5M3.5 12H10M14 12h6.5"/></svg></i><h3>Laufräder & Naben</h3><p>Laufradbau und DT-Swiss-Nabenservice. Sag uns, welche Komponenten du fährst.</p><button type="button" data-ask="Ich interessiere mich für Laufradbau oder DT-Swiss-Nabenservice.">Termin anfragen →</button></article>
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></i><h3>Begutachtung</h3><p>Unfallgutachten oder Einschätzung zum Zustand deines Bikes. Den passenden Service klärst du direkt mit dem Team.</p><button type="button" data-ask="Ich brauche ein Unfallgutachten bzw. eine Begutachtung meines Rads.">Termin anfragen →</button></article>
-      <article class="s6 rv"><i><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></i><h3>Kleinigkeiten oft sofort</h3><p>Schlauch, Einstellung, ein Geräusch, das zu Hause da war und hier plötzlich weg ist: Vieles erledigen wir oft direkt, wenn du vorbeikommst.</p><button type="button" data-ask="Habt ihr heute geöffnet? Ich hätte eine Kleinigkeit am Rad.">Termin anfragen →</button></article>
+<section class="sec wk-l wk-t1 wk-fw" aria-labelledby="fwH">
+  <div class="wk-ghost" aria-hidden="true">FAHRWERK</div>
+  <div class="wrap feat">
+    <button class="feat-v rv" type="button" data-video="2XNKIGcNOMY" aria-label="Film: Specialized Brain Service">
+      <img src="entwuerfe/codex-2026-10/prototype/assets/films/2XNKIGcNOMY.jpg" alt="" loading="lazy">
+      <span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+      <span class="film-m"><span class="kicker">Short · Werkstatt</span><b>Specialized Brain Service</b></span>
+    </button>
+    <div>
+      <p class="kicker rv">Fahrwerk-Service</p>
+      <h2 class="h2 rv" id="fwH">Service für<br><em>Gabel &amp; Dämpfer.</em></h2>
+      <p class="lead rv">Wir warten Federgabel und Dämpfer und stellen das Setup auf dein Gewicht und dein Gelände ein. Wie das aussieht, zeigt Achim im Film zum Specialized Brain Service.</p>
+      <ul class="ticks rv"><li>Service für Federgabel &amp; Dämpfer</li><li>Einstellung auf dich und dein Gelände</li><li>Umfang und Kosten vorher abgestimmt</li></ul>
+      <div class="btns rv"><a class="btn" data-ask="Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer.">Fahrwerk-Service anfragen</a></div>
     </div>
   </div>
 </section>
@@ -91,24 +119,7 @@
   </div>
 </section>
 
-<section class="sec" aria-labelledby="fwH" style="padding-top:0">
-  <div class="wrap feat">
-    <button class="feat-v rv" type="button" data-video="2XNKIGcNOMY" aria-label="Film: Specialized Brain Service">
-      <img src="entwuerfe/codex-2026-10/prototype/assets/films/2XNKIGcNOMY.jpg" alt="" loading="lazy">
-      <span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-      <span class="film-m"><span class="kicker">Short · Werkstatt</span><b>Specialized Brain Service</b></span>
-    </button>
-    <div>
-      <p class="kicker rv">Fahrwerk-Service</p>
-      <h2 class="h2 rv" id="fwH">Service für<br><em>Gabel &amp; Dämpfer.</em></h2>
-      <p class="lead rv" style="margin-top:20px">Wir warten Federgabel und Dämpfer und stellen das Setup auf dein Gewicht und dein Gelände ein. Wie das aussieht, zeigt Achim im Film zum Specialized Brain Service.</p>
-      <ul class="ticks rv" style="margin-top:22px"><li>Service für Federgabel &amp; Dämpfer</li><li>Einstellung auf dich und dein Gelände</li><li>Umfang und Kosten vorher abgestimmt</li></ul>
-      <div class="btns rv" style="margin-top:20px"><a class="btn" data-ask="Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer.">Fahrwerk-Service anfragen</a></div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" aria-labelledby="flowH" style="padding-top:0">
+<section class="sec wk-l wk-t2 wk-flow" aria-labelledby="flowH">
   <div class="wrap">
     <div class="sec-h"><div><p class="kicker rv">Ablauf</p><h2 class="h2 rv" id="flowH">So läuft<br><em>ein Auftrag.</em></h2></div></div>
     <div class="flow-wrap"><span class="flow-line" aria-hidden="true"><i></i></span>
@@ -120,7 +131,7 @@
   </div>
 </section>
 
-<section class="sec" id="termin" aria-labelledby="tH" style="padding-top:0">
+<section class="sec wk-l wk-t1 wk-termin" id="termin" aria-labelledby="tH">
   <div class="wrap split">
     <div>
       <p class="kicker rv">Termin</p>
@@ -130,7 +141,7 @@
         <a class="btn" data-ask="Ich brauche einen Werkstatt-Termin für mein Rad.">Mit dem KI-Berater klären</a>
         <a class="btn ghost" href="tel:+3280548898">+32 80 54 88 98</a>
       </div>
-      <div class="hours-card rv" style="margin-top:28px"><p class="kicker">Öffnungszeiten</p><ul class="hours" data-hours></ul></div>
+      <div class="hours-card rv"><p class="kicker">Öffnungszeiten</p><ul class="hours" data-hours></ul></div>
     </div>
     <form class="formcard mform rv" data-mailform="Werkstatt">
       <p class="kicker">Werkstatt-Anfrage</p>
