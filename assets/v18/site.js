@@ -28,6 +28,9 @@
     { id: 'ebike', href: 'v18-ebike.html', name: 'E-Bike', short: 'Turbo Vado & Levo', img: 'entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg' },
     { id: 'familie', href: 'v18-familie.html', name: 'Kids & Familie', short: 'Riprock & Alltag', img: 'assets/achim-team.jpg' },
   ];
+  // Zubehör steht im Bikes-Menü, ist aber keine Bike-Kategorie
+  const ZUB = { id: 'zubehoer', href: 'v18-zubehoer.html', name: 'Zubehör', short: 'Schuhe, Helme, Bekleidung', img: 'assets/v18/media/cine/kleid-3.webp' };
+  const BIKES = 'v18-bikes.html';
   const PAGES = [
     { id: 'werkstatt', href: 'v18-werkstatt.html', name: 'Werkstatt' },
     { id: 'bikefitting', href: 'v18-bikefitting.html', name: 'Bikefitting' },
@@ -37,12 +40,12 @@
     { id: 'kontakt', href: 'v18-kontakt.html', name: 'Kontakt' },
   ];
   const page = document.body.dataset.page || 'home';
-  const isCat = CATS.some(c => c.id === page) || page === 'bike';
+  const isCat = CATS.some(c => c.id === page) || page === 'bike' || page === 'bikes' || page === ZUB.id;
   const cur = id => (id === page || (id === 'bikes' && isCat)) ? ' aria-current="page" class="on"' : '';
   const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
   const chev = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
   const isHome = page === 'home';
-  const bikesHref = isHome ? '#bikes' : HOME + '#bikes';
+  const bikesHref = BIKES;
 
   /* ---------------- Hell/Dunkel/Mix: Icons + Segment-Schalter ---------------- */
   const THEMES = [
@@ -66,7 +69,8 @@
         '<div class="dd">' +
           '<a href="' + bikesHref + '"' + cur('bikes') + ' aria-haspopup="true">Bikes' + chev + '</a>' +
           '<div class="dd-p"><div class="dd-in">' +
-            CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
+            CATS.concat(ZUB).map(c => '<a href="' + c.href + '" class="' + (c === ZUB ? 'dd-zub' : '') + (page === c.id ? ' on" aria-current="page"' : '"') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
+            '<a class="dd-all" href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Alle Bikes im Überblick ' + arrow + '</a>' +
           '</div></div>' +
         '</div>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
@@ -98,8 +102,8 @@
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
         '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a>' +
       '</nav>' +
-      '<p class="mm-k">Bikes</p>' +
-      '<div class="mm-cats">' + CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
+      '<p class="mm-k"><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page"' : '') + '>Bikes · alle im Überblick ' + arrow + '</a></p>' +
+      '<div class="mm-cats">' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
     '</div>';
 
   /* ---------------- Footer ---------------- */
@@ -129,7 +133,7 @@
       '<div class="ftr-brand"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">' +
         '<p>Dein Bike. Dein Moment.<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
-      '<nav aria-label="Bikes"><b>Bikes</b>' + CATS.map(c => '<a href="' + c.href + '"' + cur(c.id) + '>' + c.name + '</a>').join('') + '</nav>' +
+      '<nav aria-label="Bikes"><b>Bikes</b><a href="' + BIKES + '"' + (page === 'bikes' ? ' aria-current="page" class="on"' : '') + '>Alle Bikes</a>' + CATS.concat(ZUB).map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '>' + c.name + '</a>').join('') + '</nav>' +
       '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v18-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +
@@ -337,6 +341,20 @@
         slides[i].classList.add('on');
       }, 6000);
     }
+  }
+
+  /* ---------------- Reel-Kacheln: laufen nur, solange sie zu sehen sind ----------------
+     <video data-inview data-src="…" poster="…">; bei reduzierter Bewegung bleibt das Standbild. */
+  const tiles = $$('video[data-inview]');
+  if (tiles.length && !RM && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) {
+        if (!v.src) v.src = v.dataset.src;
+        v.muted = true; v.play().catch(() => {});
+      } else v.pause();
+    }), { threshold: 0.35 });
+    tiles.forEach(v => io.observe(v));
   }
   hours();
   setInterval(hours, 60 * 1000);

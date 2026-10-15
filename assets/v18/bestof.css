@@ -135,7 +135,8 @@ button{font:inherit;color:inherit}
 .cat-go{position:absolute;z-index:2;right:16px;top:14px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);transition:background .3s,transform .4s var(--ease)}
 .cat-go svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
 .cat:hover .cat-go{background:var(--red);transform:rotate(45deg)}
-.cat-more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.cat-more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}
+@media (max-width:1100px){ .cat-more{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .mini{position:relative;display:flex;flex-direction:column;gap:4px;padding:20px 56px 20px 22px;border-radius:18px;background:var(--bg2);border:1px solid var(--line);text-decoration:none;text-align:left;cursor:pointer;transition:border-color .3s,background .3s}
 .mini:hover{border-color:rgba(232,54,55,.6);background:var(--bg3)}
 .mini b{font:800 italic 26px/1 var(--display);text-transform:uppercase}

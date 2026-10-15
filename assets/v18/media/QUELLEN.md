@@ -101,6 +101,18 @@ Videos neu kodiert (H.264, ohne Ton, 720×1280), dazu je eine weiche Querformat-
 | `cine/kids*` (Video) | https://www.instagram.com/reel/DCrjjfVOBvT/ | racepoint.be | Kids & Familie (Karte) | Probefahrt aller Kinderradgrößen im Laden, mit Texteinblendungen. ⚠ Personen erkennbar |
 | `cine/fitting-1.webp` | https://www.instagram.com/p/Cn9aywmMk9h/ | racepoint.be | Bikefitting | Junger Fahrer mit Retül-Markern auf dem Allez Sprint. ⚠ **Person erkennbar, vermutlich minderjährig: Einverständnis nötig** |
 | `cine/fitting-2.webp`, `fitting-3.webp`, `fitting-g3/g4/g5.webp` | https://www.instagram.com/p/CVvVDq1sHc9/ (Fotos 1 bis 5) | racepoint.be | Bikefitting (Einstieg, Einblicke) | Retül-Fit mit Triathlet @tobias.drachler. ⚠ **Kunde erkennbar und namentlich genannt: Freigabe nötig** |
+| `cine/sl9*` | https://www.instagram.com/reel/Dd_07A1I1jM/ | racepoint.be | Zubehör (Einstieg-Karte, Helme) | Tarmac SL9 & Evade × Red Bull im Laden |
+| `cine/helme*` | https://www.instagram.com/reel/Cz61hg9M7qY/ | racepoint.be | Zubehör (Helme), Filme-Showreel | Helme wechseln auf einem Hocker |
+| `cine/schuh-scan*` | https://www.instagram.com/reel/CxnzZ2GssjK/ | racepoint.be | Zubehör (Schuhe) | S-Works Torch Lace unter dem Scanner. ⚠ tätowierter Arm erkennbar |
+| `cine/schuhe*` | https://www.instagram.com/reel/CzrSHkms9Nv/ | racepoint.be | Zubehör (Schuhe) | „Welcher Schuh heute?“, S-Works-Schuhe aus dem Karton |
+| `cine/sagan*` | https://www.instagram.com/reel/CEBpkuxFlaG/ | racepoint.be | Zubehör (Schuhe) | S-Works 7 Sagan Collection, Ausschnitt 0–12 s. ⚠ **Kind erkennbar: Einverständnis der Eltern nötig** |
+| `cine/merch*` | https://www.instagram.com/reel/CMXirtgFTVI/ | racepoint.be | Zubehör (Merch) | Fotoshooting Racepoint-Kollektion, ab 9 s (ohne „coming soon“-Titel). ⚠ Models erkennbar, im Beitrag genannt |
+| `cine/schuh-recon.webp` | https://www.instagram.com/p/CU74jS-sTPi/ | racepoint.be | Zubehör (Schuhe) | S-Works Recon |
+| `cine/schuh-reconsl.webp` | https://www.instagram.com/p/Cvh2hapMlvk/ | racepoint.be | Zubehör (Schuhe) | S-Works Recon SL in Oak Green. ⚠ Person im Hintergrund |
+| `cine/kleid-1…10.webp` | https://www.instagram.com/p/CAIzUx7gyhE/ (Fotos 1 bis 10) | racepoint.be | Zubehör (Einstieg, Bekleidung, Merch), Bikes, Menü | Sommerkollektion 2020 im Laden. Sortiment von 2020, nicht aktuell |
+| `cine/porto*` | https://www.instagram.com/reel/C5lt3vxM75o/ | racepoint.be | Bikes (Einstieg), Filme-Showreel | Specialized Porto mit Getränkekisten vor dem Laden. ⚠ Person erkennbar |
+| `cine/levo-1…3.webp` | https://www.instagram.com/p/CBgQoNElF1x/ | racepoint.be | Bikes (Karte, Einblicke) | Turbo Levo S-Works (Modell 2020) vor der Übergabe |
+| `cine/showreel*` | Schnitt aus rennrad, werkstatt, mtb, kids, helme, ueberuns, sl9, porto | racepoint.be / jnssnsarne | Filme (Einstieg) | Je 2,6 s. ⚠ enthält den MTB-Ausschnitt von @jnssnsarne, Freigaben wie oben |
 
 Nicht verwendet, aber geladen: https://www.instagram.com/p/DRKk-rriPNG/ (Cervélo im Matsch, Hochformat).
 Die Bildnachweise stehen auf der Seite in der Bildunterschrift („via @jnssnsarne“).

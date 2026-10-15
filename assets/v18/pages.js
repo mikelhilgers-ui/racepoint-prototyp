@@ -57,7 +57,7 @@
   const CAT_PAGE = { rennrad: 'v18-rennrad.html', gravel: 'v18-gravel.html', mtb: 'v18-mtb.html', ebike: 'v18-ebike.html', kind: 'v18-familie.html', familie: 'v18-familie.html' };
   const STYLE = { alltag: 'Alltag', sportlich: 'Sportlich', racer: 'Racer', trail: 'Trail' };
   // Familie & Alltag zeigt wie im Original das Kinder-MTB und das Alltags-E-Bike
-  const inCat = (b, c) => c === 'familie' ? (b.cat === 'kind' || b.id === 'vado-3-evo-4') : b.cat === c;
+  const inCat = (b, c) => c === 'alle' ? true : c === 'familie' ? (b.cat === 'kind' || b.id === 'vado-3-evo-4') : b.cat === c;
   const byId = id => D.bikes.find(b => b.id === id);
   const film = id => D.films.find(f => f.id === id);
   // Titelbild: eigenes "thumb" (neue Filme in assets/v18/media/films) oder Codex-Ordner
@@ -105,12 +105,14 @@
     const grid = $('#bikeGrid'), chips = $('#fchips'), sort = $('#sort');
     const all = D.bikes.filter(b => inCat(b, c));
     const styles = [...new Set(all.flatMap(b => b.styles))];
+    // Bikes-Übersicht (data-cat="alle"): nach Kategorie filtern statt nach Fahrstil
+    const byCat = c === 'alle', cats = [...new Set(all.map(b => b.cat))];
     let f = 'alle';
     chips.innerHTML = '<button type="button" aria-pressed="true" data-f="alle">Alle<span>' + all.length + '</span></button>' +
-      styles.map(s => '<button type="button" aria-pressed="false" data-f="' + s + '">' + (STYLE[s] || s) + '<span>' + all.filter(b => b.styles.includes(s)).length + '</span></button>').join('') +
-      (all.some(b => b.electric) && all.some(b => !b.electric) ? '<button type="button" aria-pressed="false" data-f="motor">Mit Motor<span>' + all.filter(b => b.electric).length + '</span></button>' : '');
+      (byCat ? cats.map(k => '<button type="button" aria-pressed="false" data-f="' + k + '">' + CAT_NAME[k] + '<span>' + all.filter(b => b.cat === k).length + '</span></button>').join('') : styles.map(s => '<button type="button" aria-pressed="false" data-f="' + s + '">' + (STYLE[s] || s) + '<span>' + all.filter(b => b.styles.includes(s)).length + '</span></button>').join('')) +
+      (!byCat && all.some(b => b.electric) && all.some(b => !b.electric) ? '<button type="button" aria-pressed="false" data-f="motor">Mit Motor<span>' + all.filter(b => b.electric).length + '</span></button>' : '');
     function render() {
-      let list = all.filter(b => f === 'alle' || (f === 'motor' ? b.electric : b.styles.includes(f)));
+      let list = all.filter(b => f === 'alle' || (byCat ? b.cat === f : f === 'motor' ? b.electric : b.styles.includes(f)));
       const s = sort.value;
       list = list.slice().sort((a, b) => s === 'desc' ? b.price - a.price : s === 'name' ? a.name.localeCompare(b.name, 'de') : a.price - b.price);
       grid.innerHTML = list.length ? list.map(b => card(b)).join('') :
@@ -130,7 +132,7 @@
     sort.addEventListener('change', render);
     render();
     const fr = $('#catFilms');
-    if (fr) { fr.innerHTML = (D.pageFilms[c] || []).map(id => filmCard(id)).join(''); SITE.reveal(fr); }
+    if (fr) { fr.innerHTML = (D.pageFilms[byCat ? 'bike' : c] || []).map(id => filmCard(id)).join(''); SITE.reveal(fr); }
     const from = $('#catFrom'); if (from) from.textContent = 'ab ' + eur(Math.min(...all.map(b => b.price)));
   }
 
