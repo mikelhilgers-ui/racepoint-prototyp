@@ -1,0 +1,20 @@
+{
+  "_hinweis": "Bike-Geometrie fuer tools/traum-sketch.py. Koordinaten in Pixeln des ORIGINALFOTOS (hier 600x400). Neues Foto: Punkte neu setzen (z. B. in einem Bildprogramm ablesen), dann das Skript laufen lassen. Siehe assets/v18/traum/README.md.",
+  "photo": "assets/roadbike-shop.jpg",
+  "photoAlt": "S-Works Tarmac mit Roval-Laufrädern im Racepoint-Laden",
+  "note": "Beispiel: S-Works Tarmac aus unserem Laden",
+  "rearHub": [133.5, 260],
+  "frontHub": [464, 259],
+  "wheelR": [114, 111],
+  "rimR": [86, 84],
+  "bb": [274, 279],
+  "seatCluster": [220, 120],
+  "headTop": [418, 100],
+  "headBottom": [432, 152],
+  "saddle": [[155, 35], [234, 40]],
+  "seatpostTop": [199, 44],
+  "stem": [452, 74],
+  "bar": [[430, 66], [478, 56], [494, 72], [496, 98], [484, 124]],
+  "chainringR": 40,
+  "groundY": 372
+}

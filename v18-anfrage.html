@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Racepoint · Anfrage · 18 · Mein Traumbike</title>
+<meta name="description" content="Bereite deine Anfrage an Racepoint vor: Bike-Beratung, Werkstatt, Retül-Bikefitting oder individueller Build.">
+<link rel="icon" href="assets/racepoint-logo-sm.svg">
+<!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
+     Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="assets/v18/bestof.css">
+<link rel="stylesheet" href="assets/v18/site.css">
+</head>
+<body data-page="anfrage">
+<a class="skip" href="#anfrage">Zum Inhalt springen</a>
+<main>
+<section class="phero" id="top" style="padding-bottom:30px">
+  <div class="phero-word" aria-hidden="true">ANFRAGE</div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="phero-txt">
+      <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Anfrage</li></ol>
+      <p class="kicker"><i class="dot"></i>Dein Anliegen</p>
+      <h1><span>Erzähl uns,</span><span><em>was du vorhast.</em></span></h1>
+      <p class="lead">Ein neues Bike, ein Werkstatttermin oder eine bessere Sitzposition. Hier bereitest du deine Nachricht an das Team vor.</p>
+    </div>
+  </div>
+</section>
+<section class="sec" id="anfrage" aria-label="Anfrage-Formular" style="padding-top:20px">
+  <div class="wrap split">
+    <form class="formcard mform rv" data-mailform="Anfrage">
+      <fieldset class="topics"><legend>Worum geht es?</legend>
+        <label><input type="radio" name="thema" value="Bike-Beratung" checked><span>Bike-Beratung</span></label><label><input type="radio" name="thema" value="Werkstatt"><span>Werkstatt</span></label><label><input type="radio" name="thema" value="Bikefitting"><span>Bikefitting</span></label><label><input type="radio" name="thema" value="Individueller Build"><span>Individueller Build</span></label><label><input type="radio" name="thema" value="Andere Frage"><span>Andere Frage</span></label>
+      </fieldset>
+      <label class="fld"><span>Deine Nachricht</span><textarea name="nachricht" placeholder="z. B. Ich suche ein Gravelbike für Touren, Budget bis 3.000 € …"></textarea></label>
+      <div class="two">
+        <label class="fld"><span>Dein Name, wenn du möchtest</span><input name="name" autocomplete="name"></label>
+        <label class="fld"><span>Telefon oder E-Mail</span><input name="kontakt" autocomplete="email"></label>
+      </div>
+      <button class="btn" type="submit">E-Mail-Entwurf vorbereiten <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
+      <p class="fine">Es wird nichts automatisch gesendet oder gebucht.</p>
+    </form>
+    <div>
+      <p class="kicker rv">Persönlich geht's weiter</p>
+      <h2 class="h2 rv">Deine Idee.<br><em>Unser Gespräch.</em></h2>
+      <p class="lead rv">Die Angaben werden in einen E-Mail-Entwurf übernommen. Du prüfst und versendest ihn selbst in deinem E-Mail-Programm.</p>
+      <p class="kicker rv" style="margin-top:28px">Vorschau</p>
+      <pre class="draft rv" data-draft aria-live="polite"></pre>
+      <div class="side-acts rv"><a class="btn ghost" data-ask="Hilf mir, meine Anfrage an Racepoint vorzubereiten.">Erst mit dem KI-Berater sprechen</a><a class="btn ghost" href="tel:+3280548898">Lieber anrufen: +32 80 54 88 98</a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis/lenis.min.js"></script>
+<script src="assets/rp-core.js"></script>
+<script src="assets/ki-berater.js"></script>
+<script src="assets/v18/data.js"></script>
+<script src="assets/v18/site.js"></script>
+<script src="assets/v18/pages.js"></script>
+</body>
+</html>
