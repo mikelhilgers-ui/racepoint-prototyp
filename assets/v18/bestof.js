@@ -83,8 +83,9 @@
   const t2len = s => s.length * 0.5;
   layoutKnock();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { layoutKnock(); ScrollTrigger.refresh(); });
-  let rz;
-  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layoutKnock, 150); });
+  // Neu setzen erst NACH dem ScrollTrigger-Refresh: vorher hat der gepinnte Hero noch die alte, feste Breite
+  // (sonst steht der Schriftzug nach Fenster- oder Monitorwechsel seitlich versetzt)
+  ScrollTrigger.addEventListener('refresh', layoutKnock);
 
   if (!RM) {
     // Headline-Reveal beim Laden
