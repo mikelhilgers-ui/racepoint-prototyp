@@ -808,3 +808,10 @@ html:is([data-theme="light"],[data-theme="mix"]) .tb{
   .stoer-badge{left:-18px;top:-18px}
 }
 @media (prefers-reduced-motion:reduce){ .stoer-fig img{transition:none} }
+/* KI-Berater (assets/ki-berater.js bleibt unberührt): Breite folgt dem Bildschirm, rund 30 %,
+   „Vergrößern“ nimmt die ganze Breite. Die Zieh-Kante entfällt, weil feste Stufen klarer sind. */
+@media (min-width:641px){
+  .kib .kib-panel{width:clamp(380px,30vw,760px) !important}
+  .kib.kib-big .kib-panel{width:calc(100vw - 40px) !important}
+  .kib .kib-resize{display:none}
+}
