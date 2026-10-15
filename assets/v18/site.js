@@ -145,12 +145,33 @@
       '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '</nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v18-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +
-    '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><span class="ftr-mini">' + SOCIAL.map(c => '<a href="' + c.href + '" target="_blank" rel="noopener" aria-label="' + c.name + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + c.svg + '</svg></a>').join('') + '</span><span>Prototyp 18 · Mein Traumbike</span></div></footer>';
+    '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><span>Prototyp 18 · Mein Traumbike</span></div></footer>';
 
   const skip = $('.skip');
   if (skip) skip.insertAdjacentHTML('afterend', header); else document.body.insertAdjacentHTML('afterbegin', header);
   const main = $('main');
-  if (main) main.insertAdjacentHTML('afterend', footer);
+  // Störer unten auf jeder Shop-Seite: verlinkt das Gegenstück (Rad ↔ Zubehör)
+  const ZUB_IMG = 'assets/v18/media/cine/helme.webp', BIKE_IMG = 'assets/roadbike-shop.jpg';
+  const toZub = (k, h1, h2, p) => ({ k, h1, h2, p, href: ZUB.href, btn: 'Zu Zubehör & Bekleidung', img: ZUB_IMG, alt: 'Helmwand im Racepoint-Laden' });
+  const STOER = {
+    rennrad: toZub('Passt zum Rennrad', 'Jetzt noch', 'Schuhe und Helm.', 'S-Works Torch, Evade-Helm und Trikots. Anprobieren geht in Schönberg.'),
+    gravel: toZub('Passt zum Gravelbike', 'Schotter ruft.', 'Schuhe auch?', 'Recon SL für Pedal und Feldweg, dazu Helm und Trikot.'),
+    mtb: toZub('Passt zum MTB', 'Fürs Trail', 'fehlt noch was.', 'S-Works Recon, Helm und Trikots. Anprobieren geht in Schönberg.'),
+    ebike: toZub('Passt zum E-Bike', 'Motor hat es.', 'Helm auch?', 'Helme, Schuhe und Bekleidung für jede Runde.'),
+    familie: toZub('Für die Großen', 'Die Eltern', 'fahren ja mit.', 'Helme, Schuhe und Trikots für alle, die hinterherkommen müssen.'),
+    bikes: toZub('Passt zum neuen Rad', 'Rad gefunden?', 'Jetzt Helm und Schuhe.', 'Schuhe, Helme und Trikots. Anprobieren geht in Schönberg.'),
+    bike: toZub('Passt zum neuen Rad', 'Rad gefunden?', 'Jetzt Helm und Schuhe.', 'Schuhe, Helme und Trikots. Anprobieren geht in Schönberg.'),
+    zubehoer: { k: 'Passt zu den Schuhen', h1: 'Schuhe sitzen?', h2: 'Fehlt nur das Rad.', p: 'Vom Allez bis zum S-Works: reservieren, Probe fahren, im Laden zahlen.', href: BIKES, btn: 'Bikes ansehen', img: BIKE_IMG, alt: 'S-Works Rennrad im Showroom' },
+    kollektion: { k: 'Passt zum Shirt', h1: 'Shirt sitzt?', h2: 'Jetzt das Rad dazu.', p: 'Vom Allez bis zum S-Works: reservieren, Probe fahren, im Laden zahlen.', href: BIKES, btn: 'Bikes ansehen', img: BIKE_IMG, alt: 'S-Works Rennrad im Showroom' },
+    shop: { k: 'Passt zum neuen Rad', h1: 'Erst vermessen,', h2: 'dann kaufen.', p: 'Beim Retül-Bikefitting vermessen wir deine Haltung in 3D, damit das neue Rad von Anfang an passt.', href: 'v18-bikefitting.html', btn: 'Zum Bikefitting', img: 'assets/v18/media/cine/fitting-3.webp', alt: 'Retül-Bikefitting bei Racepoint' },
+  };
+  const st = STOER[page];
+  const stoerer = st ? '<aside class="stoer" aria-label="' + st.k + '"><div class="wrap stoer-in">' +
+    '<div class="stoer-txt"><p class="stoer-k">' + st.k + '</p><h2 class="stoer-h">' + st.h1 + '<br><em>' + st.h2 + '</em></h2><p class="stoer-p">' + st.p + '</p>' +
+    '<a class="btn stoer-btn" href="' + st.href + '">' + st.btn + ' ' + arrow + '</a></div>' +
+    '<a class="stoer-fig" href="' + st.href + '" tabindex="-1" aria-hidden="true"><img src="' + st.img + '" alt="" loading="lazy"><span class="stoer-badge">Passt<br>dazu!</span></a>' +
+    '</div></aside>' : '';
+  if (main) main.insertAdjacentHTML('afterend', stoerer + footer);
   if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
 
   /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, Mix ist Standard) ---------------- */
