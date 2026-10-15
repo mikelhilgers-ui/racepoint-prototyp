@@ -88,7 +88,10 @@
       <span class="vc-l">Ladenfilm</span>
     </div>
 
-    <p class="knock-sub" id="knockSub" aria-hidden="true"><span>Specialized Elite</span><i></i><span>Cervélo</span><i></i><span>Meisterwerkstatt</span><i></i><span>Retül-Bikefitting</span></p>
+    <div class="knock-stack">
+      <p class="knock-sub" id="knockSub" aria-hidden="true"><span>Specialized Elite</span><i></i><span>Cervélo</span><i></i><span>Meisterwerkstatt</span><i></i><span>Retül-Bikefitting</span></p>
+      <p class="knock-team" id="knockTeam">Komm zu Achim, Elke und ihrem Team.</p>
+    </div>
     <div class="cue" id="cue" aria-hidden="true"><i></i><span>Scrollen</span></div>
   </div>
 </section>
@@ -111,7 +114,7 @@
       </div>
       <p class="lead rv">Achim berät dich so, wie du ihn aus den Videos kennst. Vorkenntnisse brauchst du nicht.</p>
     </div>
-    <div class="cats">
+    <div class="cats cats-6">
       <a class="cat rv" href="v18-rennrad.html">
         <img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern im Showroom" loading="lazy">
         <span class="cat-n">01</span>
@@ -136,12 +139,23 @@
         <div class="cat-b"><h3>E-Bike</h3><p>Zur Arbeit, auf Tour oder bergauf mit Rückenwind.</p><span class="price">ab 4.199 €</span></div>
         <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
       </a>
+      <a class="cat rv" href="v18-familie.html">
+        <img src="assets/v18/media/cine/kids-riprock.webp" alt="Mädchen mit Sonnenhut neben ihrem Specialized Riprock 24" loading="lazy" style="object-position:55% 40%">
+        <span class="cat-n">05</span>
+        <div class="cat-b"><h3>Kinder &amp; Familie</h3><p>Vom ersten Laufrad bis zur Familientour.</p><span class="price">ab 749 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-zubehoer.html">
+        <img src="assets/v18/media/cine/kleid-3.webp" alt="Bunte Trikotwand mit Mountainbike im Racepoint-Laden" loading="lazy">
+        <span class="cat-n">06</span>
+        <div class="cat-b"><h3>Zubehör</h3><p>Schuhe, Helme und Bekleidung für jede Runde.</p><span class="price">im Shop</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
     </div>
     <div class="cat-more">
-      <a class="mini rv" href="v18-familie.html"><b>Kinder &amp; Familie</b><span>Riprock, Hotwalk &amp; Co. · ab 749 €</span><i aria-hidden="true">↗</i></a>
-      <a class="mini rv" href="v18-zubehoer.html"><b>Zubehör &amp; Bekleidung</b><span>Schuhe, Helme, Trikots</span><i aria-hidden="true">↗</i></a>
-      <button class="mini rv" type="button" data-ask="Bietet ihr Leasing oder Finanzierung an?"><b>Leasing &amp; Finanzierung</b><span>Frag uns, was möglich ist</span><i aria-hidden="true">✶</i></button>
-      <a class="mini rv" href="v18-werkstatt.html"><b>Werkstatt für alle Marken</b><span>Auch für Trek, Canyon, Cube und mehr</span><i aria-hidden="true">↗</i></a>
+      <button class="mini rv" type="button" data-ask="Bietet ihr Leasing oder Finanzierung an?"><b>Leasing &amp; Finanzierung</b><span>In Raten zahlen, auf Anfrage</span><i aria-hidden="true">✶</i></button>
+      <a class="mini rv" href="v18-shop.html"><b>Shop</b><span>Bikes reservieren, Zubehör und Kollektion bestellen</span><i aria-hidden="true">↗</i></a>
+      <a class="mini rv" href="v18-werkstatt.html"><b>Werkstatt für alle Marken</b><span>Trek, Canyon, Cube und alle anderen</span><i aria-hidden="true">↗</i></a>
     </div>
     <p class="fine rv">Unverbindliche Herstellerpreise ausgewählter Modelle, Stand 14.10.2026.</p>
   </div>
@@ -206,49 +220,49 @@
   </div>
 </section>
 
-<!-- ===================== 6 · Mein Traumbike: Story in fünf Schritten ===================== -->
-<!-- Alle Bilder und Filme der Story stehen in EINER Konfiguration: STORY oben in assets/v18/traum.js.
-     Die Platzhalter hier (data-t-img, data-t-films …) füllt traum.js daraus. -->
-<section class="traum" id="traum" aria-labelledby="traumTitle">
-  <nav class="t-rail" id="tRail" aria-label="Die fünf Schritte">
-    <a href="#tIdea"><b>01</b><span>Die Idee</span></a>
+<!-- ===================== 6 · Mein Traumbike: vier eigenständige Kapitel ===================== -->
+<!-- Jedes Kapitel steht für sich (Traumbike, Beratung, Bikefitting, Werkstatt), die Nummer 01 bis 04
+     zeigt nur den üblichen Ablauf. Alle Bilder und Filme stehen in EINER Konfiguration: STORY oben in
+     assets/v18/traum.js. Die Platzhalter hier (data-t-img …) füllt traum.js daraus. -->
+<section class="traum" id="traum" aria-label="Traumbike, Beratung, Bikefitting und Werkstatt">
+  <nav class="t-rail" id="tRail" aria-label="Kapitel">
+    <a href="#tIdea"><b>01</b><span>Traumbike</span></a>
     <a href="#tTalk"><b>02</b><span>Beratung</span></a>
     <a href="#tFit"><b>03</b><span>Bikefitting</span></a>
-    <a href="#tBuild"><b>04</b><span>Aufbau</span></a>
-    <a href="#tGo"><b>05</b><span>Übergabe</span></a>
+    <a href="#tBuild"><b>04</b><span>Werkstatt</span></a>
   </nav>
 
-  <!-- Kapitel 1 · Die Idee (angeheftet: echte Clips des Cervélo S5 „Lupine LTD“) -->
+  <!-- 01 · Traumbike (angeheftet: Clips mit Rahmen, Laufrädern und Farbe) -->
   <div class="t-idea" id="tIdea">
     <div class="t-stage" id="tStage">
       <div class="t-layers" id="tLayers"></div>
       <div class="t-vig" aria-hidden="true"></div>
       <div class="t-intro wrap" id="tIntro">
-        <p class="kicker"><i class="dot"></i>Schritt 1 von 5 · Die Idee</p>
-        <h2 class="h2" id="traumTitle">So läuft ein<br><em>Radkauf bei uns.</em></h2>
-        <p class="lead">Fünf Schritte von der Beratung bis zur Übergabe. Alle Bilder stammen aus unserem Laden in Schönberg.</p>
+        <p class="kicker"><i class="dot"></i>01 · Traumbike</p>
+        <h2 class="h2" id="traumTitle">So könnte dein<br><em>Traumbike aussehen.</em></h2>
+        <p class="lead">Rahmen, Laufräder, Farbe: So kann ein Bike nach deiner Idee aussehen. Was davon bei dir möglich ist, zeigen wir dir im Laden.</p>
       </div>
       <ol class="t-caps wrap" id="tCaps" aria-hidden="true"></ol>
       <div class="t-fin wrap" id="tFin">
-        <h2 class="t-big">Das fertige Rad.<br><em>Cervélo S5.</em></h2>
-        <div class="t-fin-row">
-          <button class="btn ghost" type="button" data-video="5TcRRpUy5T4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/></svg>Einen S5-Aufbau im Film</button>
-          <p class="t-note">Beispiel: Cervélo S5 „Lupine LTD“ aus unserem Laden</p>
+        <h2 class="t-big">Such dir<br><em>dein Bike aus.</em></h2>
+        <div class="btns t-fin-btns">
+          <a class="btn" href="v18-bikes.html">Bikes ansehen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghost" href="v18-anfrage.html?thema=Individueller%20Build">Idee besprechen</a>
         </div>
       </div>
       <div class="t-tick" id="tTick" aria-hidden="true"><i id="tTickBar"></i></div>
     </div>
   </div>
 
-  <!-- Kapitel 2 · Beratung bei Achim -->
+  <!-- 02 · Beratung bei Achim -->
   <div class="t-ch t-talk" id="tTalk">
     <div class="wrap t-talk-grid">
       <div class="t-talk-txt">
-        <p class="kicker rv">Schritt 2 von 5 · Beratung</p>
-        <h2 class="h2 rv">Zuerst sprichst<br><em>du mit Achim.</em></h2>
-        <p class="lead rv">Du erzählst, wo und wie viel du fährst. Achim zeigt dir im Laden passende Bikes, die du direkt anfassen kannst.</p>
+        <p class="kicker rv">02 · Beratung</p>
+        <h2 class="h2 rv">Beratung<br><em>bei Achim.</em></h2>
+        <p class="lead rv">Du erzählst Achim, wo und wie viel du fährst. Dann schaut ihr gemeinsam, welches Bike dazu passt. Im Laden kannst du passende Bikes direkt anfassen.</p>
         <blockquote class="t-quote rv">„Sag mir, wo du fährst, dann suchen wir zusammen das passende Bike.“<cite>Achim Leufgen <span>Zitat-Entwurf, mit Achim abstimmen</span></cite></blockquote>
-        <div class="btns rv"><a class="btn" data-ask="Ich möchte mein neues Bike planen. Wie läuft eine Beratung bei euch ab?">Beratung anfragen</a></div>
+        <div class="btns rv"><a class="btn" data-ask="Ich möchte mein neues Bike planen. Wie läuft eine Beratung bei euch ab?">Beratung anfragen</a><a class="btn ghost" href="v18-anfrage.html?thema=Bike-Beratung">Termin anfragen</a></div>
       </div>
       <div class="t-talk-pics">
         <figure class="t-pic t-pic-a"><img data-t-img="talk.main" alt="" loading="lazy"></figure>
@@ -258,52 +272,35 @@
     </div>
   </div>
 
-  <!-- Kapitel 3 · Retül-Bikefitting -->
+  <!-- 03 · Retül-Bikefitting -->
   <div class="t-ch t-fit" id="tFit">
     <div class="wrap t-fit-grid">
       <figure class="t-pic t-fit-pic"><img data-t-img="fit.main" alt="" loading="lazy"><span class="rec"><i></i>Retül · 3D live</span></figure>
       <div class="t-fit-txt">
-        <p class="kicker rv">Schritt 3 von 5 · Bikefitting</p>
-        <h2 class="h2 rv">Retül-Fitting<br><em>vor dem Aufbau.</em></h2>
-        <p class="lead rv">Bevor das erste Teil montiert wird, vermessen wir dich mit Retül in 3D. So stehen Sattelhöhe, Reach und Cockpit fest, bevor dein Rahmen in den Montageständer kommt.</p>
+        <p class="kicker rv">03 · Bikefitting</p>
+        <h2 class="h2 rv">Bikefitting<br><em>mit Retül.</em></h2>
+        <p class="lead rv">Wir vermessen deine Bewegung in 3D und stellen danach Sattel, Cockpit und Cleats ein. Das geht auf einem neuen Bike genauso wie auf deinem jetzigen.</p>
         <ul class="t-facts rv">
           <li><b>3D</b><span>Bewegungsmessung</span></li>
           <li><b>~1,5 h</b><span>im Fitting-Raum</span></li>
-          <li><b>1×</b><span>vor dem Aufbau gemessen</span></li>
+          <li><b>Retül</b><span>zertifiziert</span></li>
         </ul>
-        <a class="txt-link rv" href="v18-bikefitting.html">So läuft Retül bei uns <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+        <div class="btns rv"><a class="btn" href="v18-anfrage.html?thema=Bikefitting">Fitting-Termin</a><a class="btn ghost" href="v18-bikefitting.html">So läuft Retül bei uns <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
       </div>
     </div>
   </div>
 
-  <!-- Kapitel 4 · Aufbau in der Werkstatt (angeheftet: Shop-Film läuft mit dem Scrollen) -->
+  <!-- 04 · Werkstatt (angeheftet: Shop-Film läuft mit dem Scrollen), danach Achims Aufbau-Filme -->
   <div class="t-build" id="tBuild">
     <div class="t-build-stage" id="tBuildStage">
       <video class="t-scrub" id="tScrub" muted playsinline preload="none" aria-hidden="true"></video>
       <div class="t-build-shade" aria-hidden="true"></div>
       <div class="t-build-txt wrap">
-        <p class="kicker">Schritt 4 von 5 · Aufbau</p>
-        <h2 class="h2">Aufbau<br><em>in der Werkstatt.</em></h2>
-        <p class="lead">Lager werden gefettet, Züge gekürzt, Schrauben mit Drehmoment angezogen. Achim baut auf wie in seinen Videos.</p>
+        <p class="kicker">04 · Werkstatt</p>
+        <h2 class="h2">Dein Bike<br><em>in der Werkstatt.</em></h2>
+        <p class="lead">Wir fetten Lager, kürzen Züge und ziehen Schrauben mit Drehmoment an. Beim neuen Bike genauso wie beim Service an deinem jetzigen.</p>
       </div>
       <ol class="t-steps" id="tSteps"></ol>
-    </div>
-  </div>
-
-  <!-- Kapitel 5 · Übergabe und erste Ausfahrt -->
-  <div class="t-ch t-go" id="tGo">
-    <div class="wrap t-go-grid">
-      <figure class="t-pic t-go-ride"><img data-t-img="go.ride" alt="" loading="lazy"></figure>
-      <div class="t-go-txt">
-        <p class="kicker rv">Schritt 5 von 5 · Übergabe</p>
-        <h2 class="h2 rv">Übergabe<br><em>im Laden.</em></h2>
-        <p class="lead rv">Wir stellen alles ein und gehen das Bike mit dir durch. Zwickt nach den ersten Kilometern etwas, kommst du vorbei.</p>
-        <figure class="t-pic t-go-bike rv"><img data-t-img="go.bike" alt="" loading="lazy"><figcaption>Abholbereit · Cervélo S5 „Lupine LTD“</figcaption></figure>
-        <div class="btns rv">
-          <a class="btn" data-ask="Ich möchte mein neues Bike planen. Hilf mir beim Start.">Mein Bike planen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          <a class="btn ghost" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -311,12 +308,22 @@
     <div class="wrap">
       <div class="sec-h">
         <div>
-          <p class="kicker rv">Aufbau-Filme</p>
+          <p class="kicker rv">04 · Aufbau-Filme</p>
           <h2 class="h2 rv">Achims Builds<br><em>auf YouTube.</em></h2>
         </div>
-        <p class="lead rv">So sieht ein Aufbau bei uns aus. Such dir einen Film aus.</p>
+        <div class="t-dream-cta rv">
+          <p class="lead">So sieht ein Aufbau bei uns aus. Such dir einen Film aus.</p>
+          <div class="btns">
+            <a class="btn" href="v18-werkstatt.html">Zur Werkstatt <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+            <a class="btn ghost" href="v18-filme.html">Alle Filme</a>
+          </div>
+        </div>
       </div>
       <div class="t-films" id="tFilms"></div>
+      <div class="btns t-end rv">
+        <a class="btn" data-ask="Ich möchte mein neues Bike planen. Hilf mir beim Start.">Mein Bike planen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="v18-anfrage.html">Termin anfragen</a>
+      </div>
     </div>
   </div>
 </section>

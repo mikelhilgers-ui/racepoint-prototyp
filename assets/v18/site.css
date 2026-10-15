@@ -639,5 +639,45 @@ html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 .hdr-cart span{position:absolute;right:-4px;top:-4px;display:none;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--red);color:#fff;font:700 11px/19px var(--body);text-align:center}
 .hdr-cart.has span{display:block}
 .hdr-cart:hover{border-color:var(--edge2)}
+
+/* Traumbike-Story (v18-traumbike.html): vier eigenständige Kapitel (Traumbike, Beratung, Bikefitting,
+   Werkstatt). Klassen t-pic/t-big/t-note aus traum.css, dunkle Variablen kommen über .t-pic
+   aus theme.css, daher passt alles in Dunkel/Hell/Mix. Dieser Block steht am Ende von site.css. */
+/* Feine Trennlinie zwischen den Kapiteln, damit jedes für sich steht */
+.traum .t-ch{border-top:1px solid var(--line)}
+.traum .t-fit{border-top:0}
+.traum .t-dream{border-top:0}
+/* Hero: Versal-Zeile (#knockSub, von bestof.js eingeblendet) und darunter die kleine Team-Zeile.
+   Beide stehen in .knock-stack, so liegt die zweite nie über der ersten (auch wenn die erste bei 390/360 umbricht). */
+.knock-stack{position:absolute;z-index:3;left:var(--gut);right:var(--gut);top:calc(50% + var(--ky,140px));display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.2vw,14px);pointer-events:none}
+.knock-stack .knock-sub{position:static;left:auto;right:auto;top:auto;width:100%}
+.knock-team{margin:0;text-align:center;font:400 clamp(14px,1.15vw,17px)/1.4 var(--body);letter-spacing:0;text-transform:none;color:var(--mute);opacity:0;visibility:hidden}
+.knock-team.is-on{opacity:1;visibility:visible}
+/* Hero-Schriftzug ist hell auf Film: die Zeile braucht auf dem Film genug Kontrast */
+.knock-team{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+/* Reduzierte Bewegung: traum.js setzt die Zeile in den Hero-Text (.in-flow), der Schriftzug fehlt dort */
+.knock-team.in-flow{opacity:1;visibility:visible;margin-top:14px;text-align:left}
+@media (prefers-reduced-motion:reduce){ .knock-stack{display:none} }
+}
+/* Kapitel-Leiste: das Label des aktuellen Kapitels nur beim Überfahren zeigen (sonst liegt es über dem Inhalt) */
+.traum .t-rail a.cur:not(:hover) span{opacity:0;transform:translateX(-6px)}
+/* Kapitel 4: Überschrift darf breiter sein als der Fließtext */
+.traum .t-build-txt > .h2{max-width:none}
+/* Kapitel 1: Schlusszeile mit zwei Knöpfen (statt Hinweis auf den nächsten Schritt) */
+.t-fin-btns{margin-top:clamp(20px,3vh,30px)}
+.t-fin-btns .btn{pointer-events:auto}
+.t-fin::before{content:"";position:absolute;z-index:-1;left:-8vw;right:-8vw;top:-120px;bottom:-90px;pointer-events:none;background:radial-gradient(ellipse 75% 80% at 28% 42%,rgba(5,5,6,.78) 0%,rgba(5,5,6,.45) 50%,rgba(5,5,6,0) 78%)}
+/* Kapitel 4: Filme-Block mit Knöpfen rechts neben der Überschrift */
+.t-dream-cta{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+/* Abschluss unter den Filmen: zwei Knöpfe, kein Bild */
+.t-end{margin-top:clamp(36px,4.5vw,64px)}
+@media (max-width:560px){
+  .t-intro .h2{font-size:clamp(42px,12.6vw,60px)}
+  .t-dream-cta .btn,.t-fit-txt .btns .btn,.t-talk-txt .btns .btn{flex:1 1 auto}
+}
+/* Reduzierte Bewegung: traum.css blendet .t-big aus, hier bleiben die Zeilen sichtbar */
+.t-static #tFin .t-big{display:block}
+.t-static #tFin .t-big{font-size:clamp(36px,6vw,72px)}
+.t-static .t-fin::before{display:none}
 /* Bike-Detail: Hinweis unter Reservieren */
 .bd-res{margin-top:12px;color:var(--mute);font-size:14px;max-width:46ch}
