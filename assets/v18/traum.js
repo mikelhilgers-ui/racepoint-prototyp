@@ -90,13 +90,22 @@
   const clips = STORY.idea.clips, fin = STORY.idea.final;
   const layers = $('#tLayers');
   layers.innerHTML = clips.map((c, i) =>
-    '<div class="t-layer" data-i="' + i + '"><video muted loop playsinline preload="' + (i < 2 ? 'auto' : 'metadata') + '" poster="' + c.poster + '" style="object-position:' + c.pos + '" aria-hidden="true"></video></div>'
+    '<div class="t-layer" data-i="' + i + '"><video muted loop playsinline preload="none" data-poster="' + c.poster + '" style="object-position:' + c.pos + '" aria-hidden="true"></video></div>'
   ).join('') +
     '<div class="t-layer t-final" data-i="' + clips.length + '">' +
-    '<img class="t-final-bg" src="' + fin.srcM + '" alt="" aria-hidden="true">' +
-    '<picture><source media="(max-width:819px)" srcset="' + fin.srcM + '"><img class="t-final-img" src="' + fin.src + '" alt="' + esc(fin.alt) + '"></picture></div>';
+    '<img class="t-final-bg" src="' + fin.srcM + '" alt="" aria-hidden="true" loading="lazy">' +
+    '<picture><source media="(max-width:819px)" srcset="' + fin.srcM + '"><img class="t-final-img" src="' + fin.src + '" alt="' + esc(fin.alt) + '" loading="lazy"></picture></div>';
   const vids = $$('video', layers);
-  vids.forEach((v, i) => { v.src = small() ? clips[i].srcM : clips[i].src; });
+  // Filme erst laden, wenn die Story näher als anderthalb Bildschirme ist (sonst bremsen sie den Seitenstart)
+  const near = (el, fn) => {
+    if (!('IntersectionObserver' in window)) return fn();
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); fn(); } }, { rootMargin: '150% 0px' });
+    io.observe(el);
+  };
+  near(root, () => vids.forEach((v, i) => {
+    v.poster = v.dataset.poster;
+    if (!RM) { v.preload = i < 2 ? 'auto' : 'metadata'; v.src = small() ? clips[i].srcM : clips[i].src; }
+  }));
   $('#tCaps').innerHTML = clips.map((c, i) =>
     '<li class="t-cap"><b>0' + (i + 1) + '</b><span><strong>' + esc(c.title) + '</strong>' + (c.text ? esc(c.text) : '') + '</span></li>').join('');
 
@@ -111,7 +120,8 @@
 
   const scrub = $('#tScrub'), BF = STORY.build.film;
   scrub.poster = BF.poster;
-  scrub.src = BF.src;
+  scrub.addEventListener('loadedmetadata', () => { scrub.currentTime = RM ? (BF.from + BF.to) / 2 : BF.from; }, { once: true });
+  near($('#tBuild'), () => { scrub.preload = 'auto'; scrub.src = BF.src; });
 
   /* ---------- Kapitel-Leiste ---------- */
   const rail = $('#tRail'), railLinks = $$('a', rail);
@@ -133,8 +143,6 @@
   /* ---------- Reduzierte Bewegung: statische Endzustände ---------- */
   if (RM) {
     root.classList.add('t-static');
-    vids.forEach(v => { v.removeAttribute('src'); v.load(); });
-    scrub.currentTime = (BF.from + BF.to) / 2;
     return;
   }
 
@@ -209,7 +217,6 @@
   } }, 0);
   steps.forEach((s, i) => btl.to(s, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 0.35 + i * 0.85));
   btl.to({}, { duration: 0.4 });
-  scrub.addEventListener('loadedmetadata', () => { scrub.currentTime = BF.from; }, { once: true });
   ScrollTrigger.create({
     trigger: '#tBuild', pin: '#tBuildStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * 2.4),
     animation: btl, scrub: 0.4, anticipatePin: 1,

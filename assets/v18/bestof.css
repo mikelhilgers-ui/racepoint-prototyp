@@ -116,7 +116,9 @@ button{font:inherit;color:inherit}
 .sec{position:relative;padding:clamp(84px,9vw,140px) 0}
 .sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:24px 48px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,64px)}
 .sec-h .h2{margin-top:16px}
-.rv{opacity:0;transform:translateY(36px)}
+.rv{opacity:0;transform:translateY(22px)}
+/* bis die Schrift da ist und das Intro startet (html.rp-boot setzt der Kopf der Seite) */
+.rp-boot .hero-content,.rp-boot .hero-badge,.rp-boot #heroCtrl,.rp-boot .phero-txt{visibility:hidden}
 .no-js .rv,.rm .rv{opacity:1;transform:none}
 
 /* 3 · Kategorien */
@@ -253,7 +255,8 @@ button{font:inherit;color:inherit}
 
 /* 9 · Besuch */
 .visit{position:relative;min-height:100vh;display:flex;align-items:center;padding:140px 0 110px;overflow:hidden}
-.visit-bg{position:absolute;inset:-12% 0;background:url(../shop-interior.jpg) center/cover}
+.visit-bg{position:absolute;inset:-12% 0;background:var(--bg3) center/cover}
+.visit-bg.lz-on,.no-js .visit-bg{background-image:url(../shop-interior.jpg)}
 .visit::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,11,13,.95) 0%,rgba(11,11,13,.78) 48%,rgba(11,11,13,.45) 100%),linear-gradient(180deg,var(--bg) 0%,rgba(11,11,13,0) 18%,rgba(11,11,13,0) 82%,var(--bg) 100%)}
 .visit-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(30px,5vw,80px);align-items:center}
 .vcard .h2{margin:20px 0 22px;font-size:clamp(46px,5.6vw,92px)}

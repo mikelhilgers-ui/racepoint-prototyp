@@ -1,0 +1,157 @@
+/* =====================================================================
+   RACEPOINT · 18 · Dunkel / Hell / Mix (THROWAWAY)
+   html[data-theme] setzt der Kopf jeder v18-Seite vor dem ersten Bild
+   (Standard: dunkel), umgeschaltet wird im Header bzw. Mobil-Menü.
+   Alle Farben laufen über Variablen. Ein Block, der die dunklen Variablen
+   bekommt, ist dunkel, egal in welchem Modus. So funktionieren Inseln
+   (Film- und Fotobühnen, Footer) und der Mix-Modus mit denselben Regeln.
+   ===================================================================== */
+
+/* ---------------- Variablen: dunkel (Standard, Inseln, dunkle Mix-Blöcke) ---------------- */
+:root,
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info),
+html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
+html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),
+html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){
+  --bg:#0b0b0d; --bg2:#121216; --bg3:#18181d;
+  --ink:#f4f1ec; --mute:rgba(244,241,236,.66); --dim:rgba(244,241,236,.42); --line:rgba(255,255,255,.09);
+  --strong:#fff; --strong-inv:#0b0b0d; --nav:rgba(255,255,255,.78);
+  --glass:rgba(255,255,255,.04); --glass2:rgba(255,255,255,.08); --edge:rgba(255,255,255,.16); --edge2:rgba(255,255,255,.4);
+  --ghost:rgba(255,255,255,.07); --ghost2:rgba(255,255,255,.15); --ghost-b:rgba(255,255,255,.2);
+  --pill:rgba(12,12,14,.55); --pill-b:rgba(255,255,255,.14);
+  --card:rgba(255,255,255,.03); --field:#141317; --noimg:#1e1e24; --noimg2:#121216;
+  --stroke:rgba(255,255,255,.2); --stroke2:rgba(255,255,255,.08); --grid:rgba(255,255,255,.028); --fade0:rgba(11,11,13,0);
+  --ai-mid:#130c0d; --live:#86efac; --shadow:rgba(0,0,0,.8);
+  --rail-b:rgba(11,11,13,.55); --rail-glow:rgba(0,0,0,.8);
+  --logo-l:block; --logo-d:none; --warn:#f3dcae; --warn2:#f0cf8f; --ok:#bbf7d0; --no:#fecaca;
+  color-scheme:dark;
+}
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info),
+html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
+html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),
+html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){color:var(--ink)}
+html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),
+html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){background-color:var(--bg)}
+/* Mix: Abschnitte, die sonst nahtlos ineinanderlaufen (padding-top:0), brauchen wieder Luft */
+html[data-theme="mix"] body:not([data-page="home"]) main > section.sec{padding-top:clamp(64px,7vw,110px) !important}
+
+/* ---------------- Variablen: hell (Hell und die hellen Mix-Blöcke) ---------------- */
+html:is([data-theme="light"],[data-theme="mix"]){
+  --bg:#f4f2ee; --bg2:#ffffff; --bg3:#e9e6e0;
+  --ink:#17171b; --mute:rgba(23,23,27,.68); --dim:rgba(23,23,27,.47); --line:rgba(23,23,27,.12);
+  --strong:#17171b; --strong-inv:#fff; --nav:rgba(23,23,27,.72);
+  --glass:rgba(255,255,255,.7); --glass2:rgba(255,255,255,.95); --edge:rgba(23,23,27,.16); --edge2:rgba(23,23,27,.4);
+  --ghost:rgba(23,23,27,.05); --ghost2:rgba(23,23,27,.1); --ghost-b:rgba(23,23,27,.2);
+  --pill:rgba(255,255,255,.8); --pill-b:rgba(23,23,27,.13);
+  --card:#fff; --field:#fff; --noimg:#fff; --noimg2:#e6e3dd;
+  --stroke:rgba(23,23,27,.22); --stroke2:rgba(23,23,27,.09); --grid:rgba(23,23,27,.04); --fade0:rgba(244,242,238,0);
+  --ai-mid:#fbe7e4; --live:#15803d; --shadow:rgba(23,23,27,.35);
+  --rail-b:rgba(255,255,255,.8); --rail-glow:rgba(255,255,255,.95);
+  --logo-l:none; --logo-d:block; --warn:#7a4f06; --warn2:#8a5a08; --ok:#15803d; --no:#b91c1c;
+  color-scheme:light;
+}
+
+/* ---------------- Schalter ---------------- */
+.theme-seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;border:1px solid var(--line);background:var(--glass)}
+.theme-seg button{display:inline-flex;align-items:center;gap:6px;height:34px;min-width:34px;padding:0 9px;border:0;border-radius:999px;background:none;color:var(--mute);cursor:pointer;font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;transition:background .25s,color .25s}
+.theme-seg button:hover{color:var(--ink)}
+.theme-seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.theme-seg svg,.theme-tg svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.theme-seg .half,.theme-tg .half{fill:currentColor;stroke:none}
+.hdr .theme-seg span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.theme-tg{display:none;width:42px;height:42px;flex:none;place-items:center;padding:0;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer}
+.theme-tg svg{display:none}
+html:not([data-theme="light"]):not([data-theme="mix"]) .theme-tg .ic-dark,html[data-theme="light"] .theme-tg .ic-light,html[data-theme="mix"] .theme-tg .ic-mix{display:block}
+.mm-theme{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.mm-theme p{margin:0;font:600 12px var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+@media (max-width:600px){.hdr .theme-seg{display:none}.theme-tg{display:grid}}
+html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,border-color .35s,fill .35s,stroke .35s !important}
+
+/* ---------------- Regeln über Variablen (wirken in jedem Modus und jedem Block) ---------------- */
+.logo .lg-l{display:var(--logo-l)}
+.logo .lg-d{display:var(--logo-d)}
+.hdr.solid{background:color-mix(in srgb,var(--bg) 82%,transparent)}
+.hdr-nav a{color:var(--nav)}
+.hdr-nav a.on{color:var(--strong)}
+.hdr-nav a:hover{color:var(--red)}
+.burger,.mclose{color:var(--ink)}
+.mmenu{background:color-mix(in srgb,var(--bg) 97%,transparent)}
+.dd-in{background:color-mix(in srgb,var(--bg2) 96%,transparent);border-color:var(--line);box-shadow:0 30px 60px -20px var(--shadow)}
+.dd-in a:hover,.dd-in a.on{background:var(--glass2);color:var(--strong)}
+.dd-in b{color:var(--strong)}
+
+.btn.ghost{background:var(--ghost);border-color:var(--ghost-b);color:var(--ink)}
+.btn.ghost:hover{background:var(--ghost2)}
+.pill{background:var(--pill);border-color:var(--pill-b);color:var(--ink)}
+.pill.is-open{color:var(--ok)}
+.pill.is-closed{color:var(--no)}
+:is(.chips button,.ctabs a,.fchips button,.seg button,.topics span,.wb-chips button,.ride-chips a){border-color:var(--edge);background:var(--glass)}
+:is(.ctabs a,.fchips button,.wb-chips button):hover{color:var(--strong);border-color:var(--edge2)}
+:is(.fchips,.seg,.wb-chips) button[aria-pressed="true"]{background:var(--strong);color:var(--strong-inv);border-color:var(--strong)}
+.ctabs a.on,.topics input:checked + span{background:var(--red);border-color:var(--red);color:#fff}
+.topics input:focus-visible + span{outline-color:var(--strong)}
+:is(.sort select,.fld input,.fld select,.fld textarea){background:var(--field);color:var(--strong);border-color:var(--edge)}
+:is(.txt-link,.crumbs a:hover,.bd-src:hover,.cfg-row > p b,.s6 button,.ride-stops button,.t-quote,.t-facts b,.tc-ask,.t-cap strong,.t-step b,.rt-card b,.tr-err b){color:var(--strong)}
+
+/* Startseite */
+.marq{-webkit-text-stroke-color:var(--stroke)}
+.ai{background:linear-gradient(180deg,var(--bg) 0%,var(--ai-mid) 50%,var(--bg) 100%)}
+.ai-mode.live{color:var(--live)}
+.ask,.ask::after{background:var(--field)}
+.ask input{color:var(--strong)}
+.ask input::placeholder{color:var(--dim)}
+.ride-prof .grid line{stroke:var(--stroke2)}
+.ride-prof .line-bg{stroke:var(--edge)}
+.ride-marks span{border-color:var(--edge2)}
+.ride-marks span.on{border-color:#fff}
+.ride-stops li,.ride-cta{background:var(--card)}
+.ride-stops li.on{background:color-mix(in srgb,var(--red) 8%,var(--card))}
+
+/* Traumbike-Story außerhalb der Bühnen */
+.t-rail a{color:var(--dim)}
+.t-rail a:hover,.t-rail a.cur{color:var(--strong)}
+.t-rail a b{background:var(--rail-b);border-color:var(--edge)}
+.t-rail a.cur b{background:var(--red);border-color:var(--red);color:#fff}
+.t-rail a span{text-shadow:0 1px 8px var(--rail-glow)}
+.t-quote cite span{border-color:var(--edge)}
+.t-facts li{background:var(--card)}
+.t-pic{box-shadow:0 30px 70px -30px var(--shadow)}
+
+/* Unterseiten */
+.phero{background:radial-gradient(900px 600px at 78% 40%,rgba(232,54,55,.12),rgba(232,54,55,0) 70%),
+    linear-gradient(var(--grid) 1px,transparent 1px) 0 0/48px 48px,
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/48px 48px,var(--bg)}
+.phero::after{background:linear-gradient(var(--fade0),var(--bg))}
+.phero-word{-webkit-text-stroke-color:var(--stroke2)}
+.bimg.noimg,.bd-stage.noimg{background:radial-gradient(120% 90% at 50% 40%,var(--noimg),var(--noimg2))}
+:is(.bimg,.bd-stage) .ph svg{stroke:var(--edge2)}
+.bd-thumbs .noimg{background:var(--noimg2)}
+.empty{border-color:var(--edge)}
+.note,.flow li,.wb-check{background:var(--card)}
+.flow-line,.tl::before{background:var(--edge)}
+.wb-check{border-color:var(--line)}
+.wb-check:hover{border-color:var(--edge2)}
+.wb-check input{border-color:var(--edge2)}
+.sw button{border-color:var(--edge)}
+.sw button[aria-pressed="true"]{border-color:var(--strong)}
+.draft{background:var(--field);border-color:var(--edge)}
+:is(.dif i,.surf .bar,.tr-stops .pz){background:var(--glass2)}
+.tc-spark .b{stroke:var(--edge)}
+:is(.tr-load,.tr-err){border-color:var(--edge)}
+
+/* Öffnungszeiten-Karte (Kontakt-Block der Startseite bleibt dunkel, sonst passt sie sich an) */
+.hours-card{background:color-mix(in srgb,var(--bg2) 82%,transparent);border-color:var(--line)}
+.hours li{color:var(--mute)}
+.hours li.today{color:var(--strong)}
+.hours li.closed span:last-child{color:var(--dim)}
+
+/* Touren */
+.tr-how{background:linear-gradient(180deg,color-mix(in srgb,var(--bg2) 88%,transparent),color-mix(in srgb,var(--bg) 88%,transparent));box-shadow:0 40px 80px -40px var(--shadow)}
+.tr-topo path{stroke:var(--stroke2)}
+.tr-topo .ix path{stroke:var(--edge)}
+.tr-topo .hr{stroke:rgba(232,54,55,.55)}
+.tr-note{color:var(--warn)}
+.bsp{color:var(--warn2)}
+
+/* Mobil-Menü: heutiger Tag bleibt rot */
+.mm-week li:not(.today){background:var(--bg3)}

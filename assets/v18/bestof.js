@@ -87,9 +87,13 @@
 
   if (!RM) {
     // Headline-Reveal beim Laden
-    const split = SplitText.create('#heroH span', { type: 'words,chars', mask: 'chars' });
-    gsap.from(split.chars, { yPercent: 110, rotate: 4, duration: 1.05, ease: 'power4.out', stagger: 0.028, delay: 0.15 });
-    gsap.from(['#heroContent .kicker', '.hero-row', '.hero-pills', '.hero-badge', '#heroCtrl'], { autoAlpha: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.55 });
+    // Erst mit geladener Schrift zerlegen, sonst springen die Zeilen; bis dahin hält html.rp-boot den Text verborgen
+    RP18Site.whenFonts(() => {
+      const split = SplitText.create('#heroH span', { type: 'words,chars', mask: 'chars' });
+      gsap.from(split.chars, { yPercent: 110, rotate: 4, duration: 0.9, ease: 'power4.out', stagger: 0.022, delay: 0.05 });
+      gsap.from(['#heroContent .kicker', '.hero-row', '.hero-pills', '.hero-badge', '#heroCtrl'], { autoAlpha: 0, y: 20, duration: 0.7, ease: 'power3.out', stagger: 0.06, delay: 0.35 });
+      document.documentElement.classList.remove('rp-boot');
+    });
     $('#cue').style.display = 'flex';
 
     const htl = gsap.timeline({
@@ -112,9 +116,18 @@
      ===================================================================== */
   // Einblenden
   if (!RM) {
-    ScrollTrigger.batch('.rv', { start: 'top 90%', once: true, onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out', overwrite: true }) });
+    RP18Site.reveal(document);
   } else {
     gsap.set('.rv', { opacity: 1, y: 0 });
+  }
+
+  // Hintergrund des Besuch-Abschnitts erst kurz vorher laden
+  const visitBg = $('#visitBg');
+  if (visitBg) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); visitBg.classList.add('lz-on'); } }, { rootMargin: '150% 0px' });
+      io.observe(visitBg);
+    } else visitBg.classList.add('lz-on');
   }
 
   // Achim: Foto öffnet sich, Zitat leuchtet Wort für Wort auf

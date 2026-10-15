@@ -44,15 +44,29 @@
   const isHome = page === 'home';
   const bikesHref = isHome ? '#bikes' : HOME + '#bikes';
 
+  /* ---------------- Hell/Dunkel/Mix: Icons + Segment-Schalter ---------------- */
+  const THEMES = [
+    { id: 'dark', name: 'Dunkel' },
+    { id: 'light', name: 'Hell' },
+    { id: 'mix', name: 'Mix' },
+  ];
+  const ICON = {
+    dark: '<svg class="ic-dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>',
+    light: '<svg class="ic-light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>',
+    mix: '<svg class="ic-mix" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path class="half" d="M12 3.5a8.5 8.5 0 0 1 0 17z"/></svg>',
+  };
+  const themeSeg = '<div class="theme-seg" role="group" aria-label="Darstellung">' +
+    THEMES.map(t => '<button type="button" data-set-theme="' + t.id + '" aria-pressed="false" title="' + t.name + '">' + ICON[t.id] + '<span>' + t.name + '</span></button>').join('') + '</div>';
+
   /* ---------------- Header ---------------- */
   const header =
     '<header class="hdr" id="hdr"><div class="hdr-in">' +
-      '<a class="logo" href="' + HOME + '" aria-label="Racepoint · Startseite"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"></a>' +
+      '<a class="logo" href="' + HOME + '" aria-label="Racepoint · Startseite"><img class="lg-l" src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16"><img class="lg-d" src="assets/racepoint-logo-dark.svg" alt="Racepoint" width="200" height="16"></a>' +
       '<nav class="hdr-nav" aria-label="Hauptnavigation">' +
         '<div class="dd">' +
           '<a href="' + bikesHref + '"' + cur('bikes') + ' aria-haspopup="true">Bikes' + chev + '</a>' +
           '<div class="dd-p"><div class="dd-in">' +
-            CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img src="' + c.img + '" alt="" loading="lazy"><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
+            CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><span><b>' + c.name + '</b><small>' + c.short + '</small></span></a>').join('') +
           '</div></div>' +
         '</div>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
@@ -60,27 +74,58 @@
       '<div class="hdr-r">' +
         '<span class="pill pill-status" data-open-status></span>' +
         '<a class="btn btn-sm" data-ask="Ich möchte einen Termin vereinbaren.">Termin</a>' +
+        themeSeg +
+        '<button class="theme-tg" type="button" data-theme-next>' + ICON.dark + ICON.light + ICON.mix + '</button>' +
         '<button class="burger" type="button" aria-label="Menü öffnen" aria-controls="mmenu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>' +
       '</div>' +
     '</div></header>' +
     '<div class="mmenu" id="mmenu" aria-hidden="true" data-lenis-prevent>' +
       '<button class="mclose" type="button" aria-label="Menü schließen">&times;</button>' +
-      '<p class="mm-k">Bikes</p>' +
-      '<div class="mm-cats">' + CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img src="' + c.img + '" alt="" loading="lazy"><b>' + c.name + '</b></a>').join('') + '</div>' +
+      // Mobil zuerst das, was man unterwegs braucht: Status, Zeiten, Anrufen, Route. Bikes kommen ans Ende.
+      '<div class="mm-info">' +
+        '<span class="pill pill-status" data-open-status></span>' +
+        '<ul class="mm-week" data-hours-week aria-label="Öffnungszeiten"></ul>' +
+        '<div class="mm-act">' +
+          '<a class="btn" href="tel:+3280548898">Anrufen</a>' +
+          '<a class="btn ghost" data-ask="Ich möchte einen Termin vereinbaren.">Termin</a>' +
+          '<a class="btn ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Racepoint+Sch%C3%B6nberg+Belgien" target="_blank" rel="noopener">Route</a>' +
+        '</div>' +
+        '<p class="mm-adr">K.-F. Schinkel Straße 5 · 4782 Schönberg</p>' +
+      '</div>' +
+      '<div class="mm-theme"><p>Darstellung</p>' + themeSeg + '</div>' +
       '<nav class="mm-links" aria-label="Seiten">' +
         '<a href="' + HOME + '"' + cur('home') + '>Start</a>' +
         PAGES.map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') +
         '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a>' +
       '</nav>' +
-      '<div class="mmenu-f">' +
-        '<span class="pill pill-status" data-open-status></span>' +
-        '<div class="btns"><a class="btn" data-ask="Ich möchte einen Termin vereinbaren.">Termin anfragen</a><a class="btn ghost" href="tel:+3280548898">+32 80 54 88 98</a></div>' +
-      '</div>' +
+      '<p class="mm-k">Bikes</p>' +
+      '<div class="mm-cats">' + CATS.map(c => '<a href="' + c.href + '"' + (page === c.id ? ' aria-current="page" class="on"' : '') + '><img data-src="' + c.img + '" alt=""><b>' + c.name + '</b></a>').join('') + '</div>' +
     '</div>';
 
   /* ---------------- Footer ---------------- */
+  // Kanäle (Zahlen gerundet, Stand IST-Analyse 10/2026)
+  const SOCIAL = [
+    { k: 'yt', href: 'https://www.youtube.com/@racepointbikeshop', name: 'YouTube', handle: '@racepointbikeshop', n: '80.000', unit: 'Abos · 18 Mio. Aufrufe', cta: 'Abonnieren',
+      svg: '<path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8z" class="f"/><path d="M10 15.2V8.8l5.4 3.2z" class="p"/>' },
+    { k: 'ig', href: 'https://www.instagram.com/racepoint.be/', name: 'Instagram', handle: '@racepoint.be', n: '14.000', unit: 'Follower · Builds & Ausfahrten', cta: 'Folgen',
+      svg: '<rect x="3" y="3" width="18" height="18" rx="5.2" class="s"/><circle cx="12" cy="12" r="4.2" class="s"/><circle cx="17.3" cy="6.7" r="1.2" class="d"/>' },
+    { k: 'fb', href: 'https://www.facebook.com/racepoint.be/', name: 'Facebook', handle: '/racepoint.be', n: '5.000', unit: 'Fans · News aus dem Laden', cta: 'Folgen',
+      svg: '<path d="M13.6 21v-7.6h2.6l.4-3h-3V8.5c0-.9.3-1.5 1.6-1.5h1.6V4.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4V10.4H8v3h2.6V21z" class="f"/>' },
+  ];
+  const social =
+    '<div class="wrap ftr-soc">' +
+      '<div class="ftr-soc-h"><p class="kicker">Racepoint unterwegs</p><p class="ftr-soc-t">Folge uns. Rund <b>100.000</b> Menschen schauen Achim schon über die Schulter.</p></div>' +
+      '<div class="ftr-soc-g">' + SOCIAL.map(c =>
+        '<a class="soc soc-' + c.k + '" href="' + c.href + '" target="_blank" rel="noopener">' +
+          '<span class="soc-ic"><svg viewBox="0 0 24 24" aria-hidden="true">' + c.svg + '</svg></span>' +
+          '<span class="soc-m"><b>' + c.name + '</b><small>' + c.handle + '</small></span>' +
+          '<span class="soc-n"><strong>' + c.n + '</strong><small>' + c.unit + '</small></span>' +
+          '<span class="soc-go">' + c.cta + ' ' + arrow + '</span>' +
+        '</a>').join('') +
+      '</div>' +
+    '</div>';
   const footer =
-    '<footer class="ftr"><div class="wrap ftr-grid">' +
+    '<footer class="ftr">' + social + '<div class="wrap ftr-grid">' +
       '<div class="ftr-brand"><img src="assets/racepoint-logo-light.svg" alt="Racepoint" width="200" height="16">' +
         '<p>Dein Bike. Dein Moment.<br>Specialized Elite Händler · Cervélo · Meisterwerkstatt · Retül-Bikefitting</p>' +
         '<span class="pill pill-status" data-open-status></span></div>' +
@@ -88,13 +133,36 @@
       '<nav aria-label="Service"><b>Racepoint</b>' + PAGES.filter(p => p.id !== 'kontakt').map(p => '<a href="' + p.href + '"' + cur(p.id) + '>' + p.name + '</a>').join('') + '<a href="v18-anfrage.html"' + cur('anfrage') + '>Anfrage</a></nav>' +
       '<div class="ftr-c"><b>Kontakt</b><span>K.-F. Schinkel Straße 5<br>4782 Schönberg, Belgien</span><a href="tel:+3280548898">+32 80 54 88 98</a><a href="mailto:info@racepoint.be">info@racepoint.be</a><a href="v18-kontakt.html"' + cur('kontakt') + '>Kontakt &amp; Anfahrt ' + arrow + '</a></div>' +
     '</div>' +
-    '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><a href="https://www.youtube.com/@racepointbikeshop" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/racepoint.be/" target="_blank" rel="noopener">Instagram</a><span>Prototyp 18 · Mein Traumbike</span></div></footer>';
+    '<div class="wrap ftr-bot"><span>© Racepoint · Schönberg, Ostbelgien</span><span class="ftr-mini">' + SOCIAL.map(c => '<a href="' + c.href + '" target="_blank" rel="noopener" aria-label="' + c.name + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + c.svg + '</svg></a>').join('') + '</span><span>Prototyp 18 · Mein Traumbike</span></div></footer>';
 
   const skip = $('.skip');
   if (skip) skip.insertAdjacentHTML('afterend', header); else document.body.insertAdjacentHTML('afterbegin', header);
   const main = $('main');
   if (main) main.insertAdjacentHTML('afterend', footer);
   if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
+
+  /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, dunkel ist Standard) ---------------- */
+  const curTheme = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'light' || t === 'mix' ? t : 'dark'; };
+  const syncTheme = () => {
+    const t = curTheme(), i = THEMES.findIndex(x => x.id === t), next = THEMES[(i + 1) % THEMES.length];
+    $$('[data-set-theme]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)));
+    $$('[data-theme-next]').forEach(b => b.setAttribute('aria-label', 'Darstellung: ' + THEMES[i].name + '. Wechseln zu ' + next.name));
+  };
+  const setTheme = t => {
+    const root = document.documentElement;
+    if (!RM) { root.classList.add('theme-anim'); setTimeout(() => root.classList.remove('theme-anim'), 450); }
+    root.setAttribute('data-theme', t);
+    try { localStorage.setItem('rp18-theme', t); } catch (e) {}
+    syncTheme();
+  };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-set-theme],[data-theme-next]');
+    if (!b) return;
+    if (b.dataset.setTheme) return setTheme(b.dataset.setTheme);
+    const i = THEMES.findIndex(x => x.id === curTheme());
+    setTheme(THEMES[(i + 1) % THEMES.length].id);
+  });
+  syncTheme();
 
   /* ---------------- Lenis ---------------- */
   let lenis = null;
@@ -115,13 +183,17 @@
     if (lenis) on ? lenis.stop() : lenis.start();
     if (on) setTimeout(() => $('.mclose').focus(), 60);
   };
-  burger.addEventListener('click', () => setMenu(true));
+  // Bilder in Dropdown und Mobil-Menü erst laden, wenn das Menü gebraucht wird (sonst ~850 KB beim Start)
+  const loadImgs = box => $$('img[data-src]', box).forEach(i => { i.src = i.dataset.src; i.removeAttribute('data-src'); });
+  burger.addEventListener('pointerenter', () => loadImgs(mmenu), { once: true });
+  burger.addEventListener('click', () => { loadImgs(mmenu); setMenu(true); });
   $('.mclose').addEventListener('click', () => { setMenu(false); burger.focus(); });
   mmenu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && mmenu.classList.contains('on')) setMenu(false); });
 
   // Bikes-Dropdown: per Tastatur/Touch oeffnen
   const dd = $('.hdr .dd');
+  ['pointerenter', 'focusin'].forEach(ev => dd.addEventListener(ev, () => loadImgs(dd), { once: true }));
   dd.addEventListener('focusin', () => dd.classList.add('open'));
   dd.addEventListener('focusout', e => { if (!dd.contains(e.relatedTarget)) dd.classList.remove('open'); });
   dd.addEventListener('mouseleave', () => dd.classList.remove('open'));
@@ -170,7 +242,16 @@
     const els = $$('.rv', root).filter(el => !el.dataset.rvOn);
     els.forEach(el => { el.dataset.rvOn = '1'; });
     if (RM || !window.ScrollTrigger) { els.forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; }); return; }
-    ScrollTrigger.batch(els, { start: 'top 92%', once: true, onEnter: b => gsap.to(b, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out', overwrite: true }) });
+    // Früh starten (kurz bevor das Element den unteren Rand erreicht) und kurz halten, damit nichts hinterherhinkt.
+    // Was beim Laden schon sichtbar ist, löst sofort aus.
+    ScrollTrigger.batch(els, { start: 'top bottom-=40', once: true, interval: 0.05, onEnter: b => gsap.to(b, { opacity: 1, y: 0, duration: 0.65, stagger: 0.05, ease: 'power2.out', overwrite: true }) });
+  }
+  // Schrift abwarten (höchstens 800 ms), dann fn einmal ausführen
+  function whenFonts(fn) {
+    let done = false;
+    const go = () => { if (!done) { done = true; fn(); } };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+    setTimeout(go, 800);
   }
   function counters(root) {
     $$('[data-count]', root).forEach(el => {
@@ -183,6 +264,9 @@
     });
   }
   function hours() {
+    $$('[data-hours-week]').forEach(ul => {
+      ul.innerHTML = RP.hoursRows('de').map(r => '<li class="' + (r.today ? 'today ' : '') + (r.open ? '' : 'closed') + '"' + (r.today ? ' aria-current="date"' : '') + '><b>' + r.short + '</b><span>' + (r.open ? r.text.replace(' Uhr', '') : 'zu') + '</span></li>').join('');
+    });
     $$('[data-hours]').forEach(ul => {
       ul.innerHTML = RP.hoursRows('de').map(r => '<li class="' + (r.today ? 'today ' : '') + (r.open ? '' : 'closed') + '"><span>' + r.day + '</span><span>' + r.text + '</span></li>').join('');
     });
@@ -194,7 +278,10 @@
     if (!RM && window.gsap) {
       const h = $('.phero');
       if (h) {
-        gsap.from($$('.phero-txt > *', h), { autoAlpha: 0, y: 34, duration: 1, ease: 'power3.out', stagger: 0.07, delay: 0.1 });
+        whenFonts(() => {
+          gsap.from($$('.phero-txt > *', h), { autoAlpha: 0, y: 24, duration: 0.75, ease: 'power3.out', stagger: 0.06 });
+          document.documentElement.classList.remove('rp-boot');
+        });
         const fig = $('.phero-fig', h);
         if (fig) {
           gsap.fromTo(fig, { clipPath: 'inset(10% 10% 10% 10% round 22px)' }, { clipPath: 'inset(0% 0% 0% 0% round 22px)', duration: 1.4, ease: 'expo.out', delay: 0.15 });
@@ -206,9 +293,10 @@
       }
     }
   }
+  if (!isHome && !$('.phero')) document.documentElement.classList.remove('rp-boot');
   hours();
   setInterval(hours, 60 * 1000);
   window.addEventListener('load', () => { if (window.ScrollTrigger) ScrollTrigger.refresh(); });
 
-  window.RP18Site = { lenis, CATS, PAGES, HOME, page, reveal, counters, fmt, scrollTo: scrollToEl, setMenu, RM };
+  window.RP18Site = { lenis, CATS, PAGES, HOME, page, reveal, counters, fmt, scrollTo: scrollToEl, setMenu, RM, whenFonts };
 })();

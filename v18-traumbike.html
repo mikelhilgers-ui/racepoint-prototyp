@@ -17,10 +17,19 @@
 <!--  Libs lokal in vendor/ · Logik in assets/v18/                      -->
 <!-- ================================================================= -->
 
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='mix')t='dark';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
 <link rel="stylesheet" href="assets/v18/traum.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
 </head>
 <body data-page="home">
 
@@ -269,7 +278,7 @@
   <!-- Kapitel 4 · Aufbau in der Werkstatt (angeheftet: Shop-Film läuft mit dem Scrollen) -->
   <div class="t-build" id="tBuild">
     <div class="t-build-stage" id="tBuildStage">
-      <video class="t-scrub" id="tScrub" muted playsinline preload="auto" aria-hidden="true"></video>
+      <video class="t-scrub" id="tScrub" muted playsinline preload="none" aria-hidden="true"></video>
       <div class="t-build-shade" aria-hidden="true"></div>
       <div class="t-build-txt wrap">
         <p class="kicker">Kapitel 4 / 5 · Aufbau</p>
