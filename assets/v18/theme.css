@@ -9,10 +9,9 @@
 
 /* ---------------- Variablen: dunkel (Standard, Inseln, dunkle Mix-Blöcke) ---------------- */
 :root,
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
 html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
-html[data-theme="mix"] body[data-page="home"] .achim,
 html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){
   --bg:#0b0b0d; --bg2:#121216; --bg3:#18181d;
@@ -28,27 +27,24 @@ html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(e
   --logo-l:block; --logo-d:none; --warn:#f3dcae; --warn2:#f0cf8f; --ok:#bbf7d0; --no:#fecaca;
   color-scheme:dark;
 }
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.kib-end,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
 html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
-html[data-theme="mix"] body[data-page="home"] .achim,
 html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){color:var(--ink)}
-html[data-theme="mix"] body[data-page="home"] .achim,
 html[data-theme="mix"] main > .mix-dunkel,
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){background-color:var(--bg)}
-/* Startseite: Rhythmus der Abschnitte (Reihenfolge: #top · ticker · #bikes · #achim · #werkstatt · #bikefitting · #traum · #filme · #touren · #kontakt · #berater aus site.js)
-   Mix:     D · rot · L · D · L · L · D · L · D · L · D   (Bühnen #top, #achim, #traum, #touren, #kontakt dunkel)
+/* Startseite: Rhythmus der Abschnitte (Reihenfolge: #top · ticker · #bikes · #werkstatt · #bikefitting · #traum · #filme · #touren · #kontakt · #achim · #berater aus site.js)
+   Mix:     D · rot · L · L · L · D · L · D · D · L · D   (Bühnen #top, #traum, #touren, #kontakt dunkel; #achim weiß als heller Block vor dem KI-Berater)
    Hell:    Bühnen dunkel, sonst hell, benachbarte helle Abschnitte wechseln zwischen --bg und --bg2
    Dunkel:  benachbarte Abschnitte wechseln zwischen --bg und --bg2, dazu eine feine Linie
    Service (Werkstatt und Bikefitting) steht immer im selben Ton, getrennt nur durch die Linie. */
-html[data-theme="mix"] body[data-page="home"] .svc-row{background-color:var(--bg2)}
-html[data-theme="light"] body[data-page="home"] :is(.achim,.yt){background-color:var(--bg2)}
-html[data-theme="light"] body[data-page="home"] .bikes,
-html[data-theme="light"] body[data-page="home"] .svc-row{background-color:var(--bg)}
+html[data-theme="mix"] body[data-page="home"] :is(.svc-row,.achim){background-color:var(--bg2)}
+html[data-theme="light"] body[data-page="home"] :is(.achim,.yt,.svc-row){background-color:var(--bg2)}
+html[data-theme="light"] body[data-page="home"] .bikes{background-color:var(--bg)}
 html[data-theme="light"] body[data-page="home"] .achim{border-top:1px solid var(--line)}
-html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="home"] :is(.achim,.yt){background-color:var(--bg2)}
-html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="home"] :is(.bikes,.svc-row){background-color:var(--bg)}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="home"] :is(.achim,.yt,.svc-row){background-color:var(--bg2)}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="home"] .bikes{background-color:var(--bg)}
 html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="home"] :is(.achim,.svc-row.work,.yt,.ai){border-top:1px solid var(--line)}
 
 /* Mix: Abschnitte, die sonst nahtlos ineinanderlaufen (padding-top:0), brauchen wieder Luft */
