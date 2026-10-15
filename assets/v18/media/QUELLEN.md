@@ -97,7 +97,7 @@ Videos neu kodiert (H.264, ohne Ton, 720×1280), dazu je eine weiche Querformat-
 | `cine/gravel-3.webp` | https://www.instagram.com/p/DPvb1uGCLGK/ (Foto 3) | jnssnsarne | Gravel | Gravel-WM, Fahrergruppe auf dem Feldweg. ⚠ wie oben, weitere Fahrer erkennbar |
 | `cine/kids-bmx.webp` | https://www.instagram.com/p/CT4RUEGMr-M/ | racepoint.be | Kids & Familie | Junge springt mit dem BMX. ⚠ **Kind erkennbar: Einverständnis der Eltern nötig** |
 | `cine/kids-riprock.webp` | https://www.instagram.com/p/COXmiYph3LL/ | racepoint.be | Kids & Familie | Olivia mit Riprock 24. ⚠ **Kind erkennbar: Einverständnis der Eltern nötig** |
-| `cine/kids-hotwalk.webp` | https://www.instagram.com/p/Cnw7Tm6sPcD/ | racepoint.be | Kids & Familie | Hotwalk Carbon, dahinter Leon (Mitarbeiter) am Boden. ⚠ Person erkennbar |
+| `cine/kids-hotwalk.webp` | https://www.instagram.com/p/Cnw7Tm6sPcD/ | racepoint.be | Kids & Familie | Hotwalk Carbon, dahinter Leon am Boden. ⚠ Person erkennbar |
 | `cine/kids*` (Video) | https://www.instagram.com/reel/DCrjjfVOBvT/ | racepoint.be | Kids & Familie (Karte) | Probefahrt aller Kinderradgrößen im Laden, mit Texteinblendungen. ⚠ Personen erkennbar |
 | `cine/fitting-1.webp` | https://www.instagram.com/p/Cn9aywmMk9h/ | racepoint.be | Bikefitting | Junger Fahrer mit Retül-Markern auf dem Allez Sprint. ⚠ **Person erkennbar, vermutlich minderjährig: Einverständnis nötig** |
 | `cine/fitting-2.webp`, `fitting-3.webp`, `fitting-g3/g4/g5.webp` | https://www.instagram.com/p/CVvVDq1sHc9/ (Fotos 1 bis 5) | racepoint.be | Bikefitting (Einstieg, Einblicke) | Retül-Fit mit Triathlet @tobias.drachler. ⚠ **Kunde erkennbar und namentlich genannt: Freigabe nötig** |

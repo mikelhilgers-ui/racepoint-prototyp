@@ -141,8 +141,8 @@
   if (main) main.insertAdjacentHTML('afterend', footer);
   if (window.RP && RP.updateStatusPills) RP.updateStatusPills();
 
-  /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, dunkel ist Standard) ---------------- */
-  const curTheme = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'light' || t === 'mix' ? t : 'dark'; };
+  /* ---------------- Hell/Dunkel/Mix (Startwert setzt der Seitenkopf, Mix ist Standard) ---------------- */
+  const curTheme = () => { const t = document.documentElement.getAttribute('data-theme'); return t === 'light' || t === 'dark' ? t : 'mix'; };
   const syncTheme = () => {
     const t = curTheme(), i = THEMES.findIndex(x => x.id === t), next = THEMES[(i + 1) % THEMES.length];
     $$('[data-set-theme]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)));
