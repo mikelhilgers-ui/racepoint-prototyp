@@ -225,9 +225,15 @@
 
   /* ---------------- Header ein-/ausblenden ---------------- */
   const hdr = $('#hdr');
+  // Hintergrund auch ohne Scroll-Ereignis setzen (Anker, Neuladen mitten auf der Seite, Sprung per Skript)
+  const hdrSolid = () => hdr.classList.toggle('solid', (window.scrollY || document.documentElement.scrollTop) > 60);
+  hdrSolid();
+  window.addEventListener('scroll', hdrSolid, { passive: true });
+  window.addEventListener('load', hdrSolid);
   if (window.ScrollTrigger) {
     ScrollTrigger.create({
       start: 0, end: 'max',
+      onRefresh: hdrSolid,
       onUpdate: self => {
         const y = self.scroll();
         hdr.classList.toggle('solid', y > 60);
