@@ -312,7 +312,7 @@
   if (!isHome && !$('.phero')) document.documentElement.classList.remove('rp-boot');
 
   /* ---------------- Kino-Einstieg: Filme und Galerie ----------------
-     Hintergrund: Desktop den weichen Querformat-Film (-amb), Handy das Hochformat.
+     Hintergrund: Desktop den Querformat-Film (-amb), Handy das Hochformat.
      Bei reduzierter Bewegung bleiben die Standbilder stehen. */
   const cine = $('.phero.cine');
   if (cine && !RM) {
@@ -320,8 +320,7 @@
     const vids = [];
     const bg = $('.cine-bg', cine);
     if (bg) {
-      // .sharp: auch am Desktop das scharfe Hochformat statt des weichen Querformats
-      bg.src = ((small || cine.classList.contains('sharp')) && bg.dataset.srcM) || bg.dataset.src;
+      bg.src = (small && bg.dataset.srcM) || bg.dataset.src;
       bg.addEventListener('playing', () => bg.classList.add('on'), { once: true });
       vids.push(bg);
     }
