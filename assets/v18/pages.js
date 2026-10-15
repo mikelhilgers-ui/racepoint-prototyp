@@ -160,7 +160,7 @@
     const b = id && byId(id);
     if (!b) {
       document.title = 'Racepoint · Bikes';
-      $('#bdTop').innerHTML = '<div class="bd-miss"><p class="kicker">Bike-Detail</p><h1 class="h2" style="margin-top:14px">Bike nicht<br><em>gefunden.</em></h1><p class="lead" style="margin-top:18px">' + (id ? 'Dieses Modell kennen wir hier nicht. ' : '') + 'Hier sind alle Modelle aus unserer Auswahl.</p></div>';
+      $('#bdTop').innerHTML = '<div class="bd-miss"><p class="kicker">Bike-Detail</p><h1 class="h2" style="margin-top:14px">Bike nicht<br><em>gefunden.</em></h1><p class="lead" style="margin-top:18px">' + (id ? 'Dieses Modell kennen wir hier nicht, vielleicht steht es nur im Laden. ' : '') + 'Hier sind alle Modelle aus unserer Auswahl.</p></div>';
       $('#bdSim h2').innerHTML = 'Alle <em>Bikes</em>';
       $('#simGrid').innerHTML = D.bikes.map(x => card(x)).join('');
       $('#cfgSec').remove();

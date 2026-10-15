@@ -32,7 +32,7 @@
         { src: M + 's5/s5-rahmen.mp4', srcM: M + 's5/s5-rahmen-m.mp4', poster: M + 's5/s5-rahmen.webp', pos: '55% 50%',
           title: 'Die Farbe gehört dazu.', text: '„Lupine“ ist Blau mit Kupfer.' },
         { src: M + 's5/s5-rad.mp4', srcM: M + 's5/s5-rad-m.mp4', poster: M + 's5/s5-rad.webp', pos: '50% 50%',
-          title: 'Das fertige S5.', text: '' },
+          title: 'Das fertige S5.', text: 'Jetzt fehlt nur noch jemand, der draufsitzt.' },
       ],
       final: { src: M + 's5/s5-ganz.webp', srcM: M + 's5/s5-ganz-m.webp',
         alt: 'Cervélo S5 „Lupine LTD“ in Blau und Kupfer vor einer dunklen Holzwand' },
