@@ -1,18 +1,19 @@
 /* =====================================================================
-   RACEPOINT · 18 · MEIN TRAUMBIKE — Traumbike-Story (THROWAWAY)
-   Vier eigenständige Kapitel mit echten Racepoint-Fotos und -Filmen, ohne 3D.
-   Jedes Kapitel steht für sich, die Nummer 01 bis 04 zeigt nur den üblichen Ablauf.
-   Im Text steht nie ein Modell, immer „dein Bike“:
-     1) Traumbike    angeheftet: Clips (Rahmen, Laufräder, Farbe) als Beispiel,
-                     wie ein Bike aussehen kann; Schluss mit Links zu den Bikes
-     2) Beratung     Fotos von Team und Laden, Zitat
-     3) Bikefitting  Retül-Teaser, Link auf v18-bikefitting.html
-     4) Werkstatt    angeheftet: Shop-Film läuft mit dem Scrollen (6,5–11,9 s),
-                     danach Achims Aufbau-Filme (RP.openVideo über data-video)
-                     und die Abschluss-Knöpfe „Mein Bike planen“ / „Termin anfragen“
-   Alle Medien stehen in STORY (unten). Bild tauschen: siehe
-   assets/v18/traum/README.md. Quellen: assets/v18/media/QUELLEN.md.
-   Benötigt: gsap, ScrollTrigger, Lenis (über assets/v18/site.js), window.RP
+   RACEPOINT · 18 · MEIN TRAUMBIKE — Startseite: Traumbike, Aufbau-Filme, Touren (THROWAWAY)
+   Gliederung der Startseite (v18-traumbike.html), Reihenfolge von oben:
+     Hero · Sortiment (#bikes) · Achim (#achim) · Werkstatt (#werkstatt) · Bikefitting (#bikefitting)
+     · Traumbike (#traum) · Aufbau-Filme (#builds) · Touren (#touren)
+     · YouTube (#filme) · Kontakt (#kontakt) · KI-Berater (#berater)
+   Diese Datei steuert drei Blöcke. Jeder läuft für sich und bricht ohne seine Elemente still ab:
+     1) Traumbike     angeheftet: Clips (Rahmen, Laufräder, Farbe) als Beispiel, wie ein Bike
+                      aussehen kann; Schluss mit Links zu den Bikes und zum Gespräch
+     2) Aufbau-Filme  Achims Builds, öffnen über data-video im Filmfenster (RP.openVideo)
+     3) Touren        Filmband mit Höhenlinien (wie der Hero von v18-touren.html) und drei
+                      Tourenkarten mit Streckenlinie. Daten aus assets/v17/touren (nur gelesen),
+                      Helfer RP18Touren aus touren-map.js
+   Der Hero-Zusatz „Komm zu Achim, Elke und ihrem Team.“ steht ganz unten in dieser Datei.
+   Alle Medien von 1) und 2) stehen in STORY (unten). Quellen: assets/v18/media/QUELLEN.md.
+   Benötigt: gsap, ScrollTrigger, Lenis (über assets/v18/site.js), window.RP, window.RP18Touren
    ===================================================================== */
 (function () {
   'use strict';
@@ -21,7 +22,7 @@
 
   /* ================= DIE EINE KONFIGURATION ================= */
   const STORY = {
-    // Kapitel 1: Clips als Beispiel, wie ein Bike aussehen kann (Rahmen, Laufräder, Farbe).
+    // Traumbike: Clips als Beispiel, wie ein Bike aussehen kann (Rahmen, Laufräder, Farbe).
     // "src" = Desktop, "srcM" = Handy,
     // "pos" = Bildausschnitt im Hochformat (object-position)
     idea: {
@@ -39,23 +40,7 @@
       still: { src: M + 's5/s5-rahmen.webp', srcM: M + 's5/s5-rahmen.webp',
         alt: 'Lackierter Rennradrahmen in Blau mit Kupfer' },
     },
-    talk: {
-      main: { src: M + 'team-laden.webp', alt: 'Achim, Elke und das Racepoint-Team mit Kindern und Bikes im Laden' },
-      room: { src: M + 'showroom-2.webp', alt: 'Rennräder und Mountainbikes im Racepoint-Showroom' },
-      detail: { src: M + 'detail-schaltgriff.webp', alt: 'Nahaufnahme eines Schaltgriffs an einem Rennrad' },
-    },
-    fit: {
-      main: { src: M + 'fitting-raum.webp', alt: 'Der Retül-Fitting-Raum bei Racepoint mit Rollentrainer und Messtechnik' },
-    },
-    build: {
-      film: { src: 'assets/racepoint-teaser-scrub.mp4', poster: 'assets/v10/film-poster.jpg', from: 6.5, to: 11.9 },
-      steps: [
-        { img: M + 'werkstatt-steuersatz.webp', alt: 'Steuersatz wird gefettet', title: 'Lager & Steuersatz', text: 'Gefettet und spielfrei eingepresst.' },
-        { img: M + 'werkstatt-schaltwerk.webp', alt: 'Schaltwerk wird eingestellt', title: 'Antrieb', text: 'Schaltung eingestellt.' },
-        { img: M + 'werkstatt-lenkerband.webp', alt: 'Lenkerband wird gewickelt', title: 'Cockpit', text: 'Lenkerband wickeln, Lenker ausrichten.' },
-      ],
-    },
-    // Achims Dreambuilds: der erste Film wird groß gezeigt
+    // Achims Aufbau-Filme: der erste Film wird groß gezeigt
     films: [
       { id: 'IDVUInlGTOw', title: 'S-Works Tarmac SL8', sub: 'Rennrad-Aufbau mit SRAM Force', img: M + 'films/IDVUInlGTOw.jpg' },
       { id: 'cIBBbESSOoc', title: 'S-Works Crux', sub: 'Ein Gravelbike entsteht', img: 'entwuerfe/codex-2026-10/prototype/assets/films/cIBBbESSOoc.jpg' },
@@ -64,157 +49,217 @@
       { id: 'WHggv7Jye4M', title: 'S-Works Shiv', sub: 'Triathlon-Build im Detail', img: 'entwuerfe/codex-2026-10/prototype/assets/films/WHggv7Jye4M.jpg' },
       { id: '17-1wlt905s', title: 'S-Works Tarmac SL9', sub: 'Das neue Tarmac im Aufbau', img: M + 'films/17-1wlt905s.jpg' },
     ],
+    // Touren-Teaser: eine Tour je Art (jeweils die erste dieser Art in touren.json),
+    // Film im Hintergrund (Desktop -amb, Handy die normale Datei)
+    tours: {
+      base: 'assets/v17/touren/',
+      types: ['rennrad', 'gravel', 'mtb'],
+      typeName: { rennrad: 'Rennrad', gravel: 'Gravel', mtb: 'MTB' },
+    },
   };
   /* ========================================================== */
 
-  const root = document.getElementById('traum');
-  if (!root || !window.gsap) return;
-  gsap.registerPlugin(ScrollTrigger);
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const RM = !!(window.RP && RP.reducedMotion);
   const small = () => window.innerWidth < 820;
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const playSvg = '<span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>';
-
-  /* ---------- Bilder aus STORY in die Platzhalter setzen ---------- */
-  $$('[data-t-img]', root).forEach(img => {
-    const item = img.dataset.tImg.split('.').reduce((o, k) => o && o[k], STORY);
-    if (!item) return;
-    img.src = item.src; img.alt = item.alt || '';
-  });
-
-  /* ---------- Kapitel 1: Ebenen (Clips, bei reduzierter Bewegung ein Standbild) ---------- */
-  const clips = STORY.idea.clips, fin = STORY.idea.still;
-  const layers = $('#tLayers');
-  layers.innerHTML = clips.map((c, i) =>
-    '<div class="t-layer" data-i="' + i + '"><video muted loop playsinline preload="none" data-poster="' + c.poster + '" style="object-position:' + c.pos + '" aria-hidden="true"></video></div>'
-  ).join('') + (RM ?
-    '<div class="t-layer t-final" data-i="' + clips.length + '">' +
-    '<picture><img class="t-final-img" src="' + fin.src + '" alt="' + esc(fin.alt) + '" loading="lazy"></picture></div>' : '');
-  const vids = $$('video', layers);
-  // Filme erst laden, wenn die Story näher als anderthalb Bildschirme ist (sonst bremsen sie den Seitenstart)
+  // Filme erst laden, wenn der Block näher als anderthalb Bildschirme ist (sonst bremsen sie den Seitenstart)
   const near = (el, fn) => {
+    if (!el) return;
     if (!('IntersectionObserver' in window)) return fn();
     const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); fn(); } }, { rootMargin: '150% 0px' });
     io.observe(el);
   };
-  near(root, () => vids.forEach((v, i) => {
-    v.poster = v.dataset.poster;
-    if (!RM) { v.preload = i < 2 ? 'auto' : 'metadata'; v.src = small() ? clips[i].srcM : clips[i].src; }
-  }));
-  $('#tCaps').innerHTML = clips.map((c, i) =>
-    '<li class="t-cap"><b>0' + (i + 1) + '</b><span><strong>' + esc(c.title) + '</strong>' + (c.text ? esc(c.text) : '') + '</span></li>').join('');
 
-  /* ---------- Kapitel 4: Arbeitsschritte + Aufbau-Filme ---------- */
-  $('#tSteps').innerHTML = STORY.build.steps.map((s, i) =>
-    '<li class="t-step"><img src="' + s.img + '" alt="' + esc(s.alt) + '" loading="lazy"><span><b>0' + (i + 1) + ' · ' + esc(s.title) + '</b>' + esc(s.text) + '</span></li>').join('');
-  $('#tFilms').innerHTML = STORY.films.map((f, i) =>
-    '<button class="film t-film' + (i ? '' : ' t-film-big') + ' rv" type="button" data-video="' + f.id + '">' +
-    '<img src="' + f.img + '" alt="" loading="lazy">' + playSvg +
-    '<span class="film-m"><span class="kicker">' + esc(f.sub) + '</span><b>' + esc(f.title) + '</b></span></button>').join('');
-  // .rv blendet bestof.js ein (läuft nach dieser Datei und erfasst auch diese Karten)
+  /* =====================================================================
+     1) TRAUMBIKE: angeheftete Filmfolge
+     ===================================================================== */
+  function traumbike() {
+    const root = $('#traum');
+    if (!root) return;
+    const clips = STORY.idea.clips, fin = STORY.idea.still;
+    const layers = $('#tLayers');
+    if (!layers) return;
+    layers.innerHTML = clips.map((c, i) =>
+      '<div class="t-layer" data-i="' + i + '"><video muted loop playsinline preload="none" data-poster="' + c.poster + '" style="object-position:' + c.pos + '" aria-hidden="true"></video></div>'
+    ).join('') + (RM ?
+      '<div class="t-layer t-final" data-i="' + clips.length + '">' +
+      '<picture><img class="t-final-img" src="' + fin.src + '" alt="' + esc(fin.alt) + '" loading="lazy"></picture></div>' : '');
+    const vids = $$('video', layers);
+    near(root, () => vids.forEach((v, i) => {
+      v.poster = v.dataset.poster;
+      if (!RM) { v.preload = i < 2 ? 'auto' : 'metadata'; v.src = small() ? clips[i].srcM : clips[i].src; }
+    }));
+    $('#tCaps').innerHTML = clips.map((c, i) =>
+      '<li class="t-cap"><b>0' + (i + 1) + '</b><span><strong>' + esc(c.title) + '</strong>' + (c.text ? esc(c.text) : '') + '</span></li>').join('');
 
-  const scrub = $('#tScrub'), BF = STORY.build.film;
-  scrub.poster = BF.poster;
-  scrub.addEventListener('loadedmetadata', () => { scrub.currentTime = RM ? (BF.from + BF.to) / 2 : BF.from; }, { once: true });
-  near($('#tBuild'), () => { scrub.preload = 'auto'; scrub.src = BF.src; });
+    /* Reduzierte Bewegung (oder ohne gsap): statischer Endzustand */
+    if (RM || !window.gsap || !window.ScrollTrigger) {
+      root.classList.add('t-static');
+      return;
+    }
+    gsap.registerPlugin(ScrollTrigger);
 
-  /* ---------- Kapitel-Leiste ---------- */
-  const rail = $('#tRail'), railLinks = $$('a', rail);
-  const chapters = [['#tIdea'], ['#tTalk'], ['#tFit'], ['#tBuild', '#tDream']]; // Kapitel 4 reicht bis zum Ende der Aufbau-Filme
-  ScrollTrigger.create({ trigger: root, start: 'top 60%', end: 'bottom 40%', toggleClass: { targets: rail, className: 'on' } });
-  chapters.forEach(([sel, endSel], i) => {
+    const n = clips.length;
+    const L = $$('.t-layer', layers), caps = $$('.t-cap', root);
+    let active = -1;
+    function setActive(i) {
+      if (i === active) return;
+      active = i;
+      vids.forEach((v, k) => {
+        if (Math.abs(k - i) <= 1) { if (v.preload !== 'auto') v.preload = 'auto'; }
+        if (k === i) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else if (!v.paused) v.pause();
+      });
+    }
+    gsap.set(L.slice(1), { clipPath: 'inset(0% 0% 0% 100%)' });
+    gsap.set(caps, { autoAlpha: 0, y: 24 });
+    gsap.set('#tFin', { autoAlpha: 0 });
+    gsap.set('#tFin .t-big', { yPercent: 30, autoAlpha: 0 });
+
+    const tl = gsap.timeline({ defaults: { ease: 'none' } });
+    // Einstieg: Titel, dann erster Clip übernimmt
+    tl.to('#tIntro', { autoAlpha: 0, y: -50, duration: 0.5 }, 0.55)
+      .to(caps[0], { autoAlpha: 1, y: 0, duration: 0.3 }, 0.9);
+    for (let i = 1; i < n; i++) {
+      const t = 0.9 + i * 1.1;
+      tl.to(caps[i - 1], { autoAlpha: 0, y: -24, duration: 0.2 }, t - 0.3)
+        .to(L[i], { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.6, ease: 'power2.inOut' }, t - 0.2)
+        .fromTo($('video', L[i]), { scale: 1.18 }, { scale: 1, duration: 1.3 }, t - 0.2)
+        .to(caps[i], { autoAlpha: 1, y: 0, duration: 0.25 }, t + 0.15);
+    }
+    // Schluss: Links zu den Bikes
+    const tf = 0.9 + n * 1.1;
+    tl.to(caps[n - 1], { autoAlpha: 0, y: -24, duration: 0.25 }, tf - 0.4)
+      .to('#tFin', { autoAlpha: 1, duration: 0.01 }, tf - 0.1)
+      .to('#tFin .t-big', { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, tf - 0.1)
+      .from('#tFin .t-fin-btns', { autoAlpha: 0, y: 20, duration: 0.3 }, tf + 0.25)
+      .to({}, { duration: 0.7 });
+    const total = tl.duration();
+    const marks = clips.map((_, i) => i === 0 ? 0 : 0.9 + i * 1.1 - 0.2);
+
     ScrollTrigger.create({
-      trigger: sel, endTrigger: endSel || sel, start: 'top 55%', end: 'bottom 55%',
-      onToggle: st => { if (st.isActive) railLinks.forEach((a, k) => a.classList.toggle('cur', k === i)); },
+      trigger: '#tIdea', pin: '#tStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * (small() ? 4.2 : 4.8)),
+      animation: tl, scrub: 0.6, anticipatePin: 1,
+      onUpdate: st => {
+        const tt = st.progress * total;
+        let i = 0; marks.forEach((m, k) => { if (tt >= m + 0.25) i = k; });
+        setActive(i);
+        gsap.set('#tTickBar', { scaleX: st.progress });
+      },
+      onToggle: st => { if (!st.isActive) { vids.forEach(v => v.pause()); active = -1; } else setActive(Math.max(active, 0)); },
     });
-  });
-  railLinks.forEach(a => a.addEventListener('click', e => {
-    const t = $(a.getAttribute('href'));
-    if (!t || !window.RP18Site || !RP18Site.scrollTo) return;
-    e.preventDefault(); RP18Site.scrollTo(t);
-  }));
-
-  /* ---------- Reduzierte Bewegung: statische Endzustände ---------- */
-  if (RM) {
-    root.classList.add('t-static');
-    return;
+    setActive(0);
   }
 
-  /* ---------- Kapitel 1: angeheftete Filmfolge ---------- */
-  const n = clips.length;
-  const L = $$('.t-layer', layers), caps = $$('.t-cap', root);
-  let active = -1;
-  function setActive(i) {
-    if (i === active) return;
-    active = i;
-    vids.forEach((v, k) => {
-      if (Math.abs(k - i) <= 1) { if (v.preload !== 'auto') v.preload = 'auto'; }
-      if (k === i) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else if (!v.paused) v.pause();
+  /* =====================================================================
+     2) AUFBAU-FILME
+     ===================================================================== */
+  function builds() {
+    const box = $('#tFilms');
+    if (!box) return;
+    box.innerHTML = STORY.films.map((f, i) =>
+      '<button class="film t-film' + (i ? '' : ' t-film-big') + ' rv" type="button" data-video="' + f.id + '">' +
+      '<img src="' + f.img + '" alt="" loading="lazy">' + playSvg +
+      '<span class="film-m"><span class="kicker">' + esc(f.sub) + '</span><b>' + esc(f.title) + '</b></span></button>').join('');
+    // .rv blendet bestof.js ein (läuft nach dieser Datei und erfasst auch diese Karten)
+  }
+
+  /* =====================================================================
+     3) TOUREN: Filmband, Höhenlinien, drei Karten
+     Gleiche Datenquelle wie v18-touren.html (assets/v17/touren, nur gelesen). Alle Zahlen
+     (Anzahl, km, Höhenmeter) rechnet die Seite aus den GPX-Dateien. Ohne Daten bleiben die Karten
+     als Links mit Namen stehen, nur ohne Zahlen und Linie.
+     Deep-Link einer Karte: v18-touren.html#tour-<id> (handleHash in touren.js wählt die Tour).
+     ===================================================================== */
+  function touren() {
+    const box = $('#touren');
+    if (!box) return;
+    const T = window.RP18Touren, C = STORY.tours;
+    const WORDS = ['Keine', 'Eine', 'Zwei', 'Drei', 'Vier', 'Fünf', 'Sechs', 'Sieben', 'Acht', 'Neun', 'Zehn', 'Elf', 'Zwölf'];
+    const nf = n => (+n).toLocaleString('de-BE', { maximumFractionDigits: 0 });
+
+    /* Film im Hintergrund: erst kurz vorher laden, nur abspielen, solange das Band zu sehen ist */
+    const vid = $('.tb-vid', box);
+    if (vid && !RM) {
+      near(box, () => {
+        vid.src = (small() && vid.dataset.srcM) || vid.dataset.src;
+        vid.addEventListener('playing', () => vid.classList.add('on'), { once: true });
+        vid.muted = true;
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause(); })).observe(box);
+        } else vid.play().catch(() => {});
+      });
+    }
+    if (!T) return;
+
+    /* Höhenlinien (Karten-Generator aus touren-map.js, Ausschnitt wie im Touren-Hero) */
+    const topo = $('#tbTopo');
+    let topoG = null;
+    function drawTopo() {
+      if (!topo) return;
+      const U = T.U, reg = { x0: -26 * U, y0: -15 * U, x1: 26 * U, y1: 15 * U };
+      topo.innerHTML = '<svg viewBox="' + reg.x0 + ' ' + reg.y0 + ' ' + (reg.x1 - reg.x0) + ' ' + (reg.y1 - reg.y0) + '" preserveAspectRatio="xMidYMid slice">' +
+        T.layersSVG(reg, { cells: 150, iv: 20, ix: 100, topoOnly: true }) + '<g class="hrt"></g></svg>';
+      topoG = $('.hrt', topo);
+      requestAnimationFrame(() => topo.classList.add('on'));
+    }
+
+    /* kleine Streckenlinie für eine Karte */
+    function routeSVG(geo) {
+      const bb = geo.bb, w = bb.x1 - bb.x0, h = bb.y1 - bb.y0, p = Math.max(w, h) * 0.08, r = Math.max(w, h) * 0.035;
+      const a = geo.pp[0];
+      return '<svg viewBox="' + (bb.x0 - p).toFixed(1) + ' ' + (bb.y0 - p).toFixed(1) + ' ' + (w + 2 * p).toFixed(1) + ' ' + (h + 2 * p).toFixed(1) +
+        '" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="' + geo.d + '"/><circle cx="' + a[0].toFixed(1) + '" cy="' + a[1].toFixed(1) + '" r="' + r.toFixed(1) + '"/></svg>';
+    }
+
+    async function load() {
+      const res = await fetch(C.base + 'touren.json');
+      if (!res.ok) throw new Error('touren.json: HTTP ' + res.status);
+      const man = await res.json();
+      const all = man.touren || [];
+      const list = await Promise.all(all.map(async m => {
+        try {
+          const r = await fetch(C.base + m.file);
+          if (!r.ok) throw new Error(m.file + ': HTTP ' + r.status);
+          const g = T.parseGPX(await r.text());
+          const st = T.stats(g.pts);
+          return { m, st, geo: T.routeGeom(g.pts, st.cum) };
+        } catch (e) { console.warn('[Touren-Teaser]', m.id, e); return { m, err: true }; }
+      }));
+      return list;
+    }
+    function fill(list) {
+      const ok = list.filter(t => !t.err);
+      // Anzahl in der Überschrift aus den Daten
+      const cnt = $('[data-tb="count"]', box);
+      if (cnt && WORDS[list.length]) cnt.textContent = WORDS[list.length];
+      // Höhenlinien-Hintergrund: alle Routen als rote Punktlinie, wie im Touren-Hero
+      if (topoG) topoG.innerHTML = ok.map(t => '<path class="hr" d="' + t.geo.d + '"/>').join('');
+      // Karten: je eine Tour pro Art
+      $$('.tb-card', box).forEach(card => {
+        const t = ok.find(x => x.m.type === card.dataset.type);
+        if (!t) return;
+        card.href = 'v18-touren.html#tour-' + t.m.id;
+        $('.tb-nm', card).textContent = t.m.title;
+        $('.tb-km', card).textContent = nf(t.st.km);
+        $('.tb-hm', card).textContent = nf(t.st.up);
+        $('.tb-route', card).innerHTML = routeSVG(t.geo);
+        card.classList.add('ready');
+      });
+      const bsp = $('.tb-bsp', box);
+      if (bsp) bsp.hidden = !ok.some(t => t.m.beispiel);
+    }
+    near(box, () => {
+      (window.requestIdleCallback || (f => setTimeout(f, 60)))(drawTopo);
+      load().then(fill).catch(e => console.warn('[Touren-Teaser]', e));
     });
   }
-  gsap.set(L.slice(1), { clipPath: 'inset(0% 0% 0% 100%)' });
-  gsap.set(caps, { autoAlpha: 0, y: 24 });
-  gsap.set('#tFin', { autoAlpha: 0 });
-  gsap.set('#tFin .t-big', { yPercent: 30, autoAlpha: 0 });
 
-  const tl = gsap.timeline({ defaults: { ease: 'none' } });
-  // Einstieg: Titel, dann erster Clip übernimmt
-  tl.to('#tIntro', { autoAlpha: 0, y: -50, duration: 0.5 }, 0.55)
-    .to(caps[0], { autoAlpha: 1, y: 0, duration: 0.3 }, 0.9);
-  for (let i = 1; i < n; i++) {
-    const t = 0.9 + i * 1.1;
-    tl.to(caps[i - 1], { autoAlpha: 0, y: -24, duration: 0.2 }, t - 0.3)
-      .to(L[i], { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.6, ease: 'power2.inOut' }, t - 0.2)
-      .fromTo($('video', L[i]), { scale: 1.18 }, { scale: 1, duration: 1.3 }, t - 0.2)
-      .to(caps[i], { autoAlpha: 1, y: 0, duration: 0.25 }, t + 0.15);
-  }
-  // Schluss: Links zu den Bikes
-  const tf = 0.9 + n * 1.1;
-  tl.to(caps[n - 1], { autoAlpha: 0, y: -24, duration: 0.25 }, tf - 0.4)
-    .to('#tFin', { autoAlpha: 1, duration: 0.01 }, tf - 0.1)
-    .to('#tFin .t-big', { yPercent: 0, autoAlpha: 1, duration: 0.5, ease: 'power3.out' }, tf - 0.1)
-    .from('#tFin .t-fin-btns', { autoAlpha: 0, y: 20, duration: 0.3 }, tf + 0.25)
-    .to({}, { duration: 0.7 });
-  const total = tl.duration();
-  const marks = clips.map((_, i) => i === 0 ? 0 : 0.9 + i * 1.1 - 0.2);
-
-  ScrollTrigger.create({
-    trigger: '#tIdea', pin: '#tStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * (small() ? 4.2 : 4.8)),
-    animation: tl, scrub: 0.6, anticipatePin: 1,
-    onUpdate: st => {
-      const tt = st.progress * total;
-      let i = 0; marks.forEach((m, k) => { if (tt >= m + 0.25) i = k; });
-      setActive(i);
-      gsap.set('#tTickBar', { scaleX: st.progress });
-    },
-    onToggle: st => { if (!st.isActive) { vids.forEach(v => v.pause()); active = -1; } else setActive(Math.max(active, 0)); },
-  });
-  setActive(0);
-
-  /* ---------- Kapitel 2: ruhige Parallaxe ---------- */
-  [['.t-pic-a', -40], ['.t-pic-b', 60], ['.t-pic-c', -90]].forEach(([sel, y]) => {
-    const el = $(sel, root); if (!el) return;
-    gsap.fromTo(el, { y: -y / 2 }, { y: y / 2, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-  gsap.fromTo('.t-fit-pic img', { scale: 1.15 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.t-fit-pic', start: 'top bottom', end: 'center center', scrub: true } });
-
-  /* ---------- Kapitel 4: Shop-Film scrubben ---------- */
-  const steps = $$('.t-step', root);
-  gsap.set(steps, { autoAlpha: 0, y: 40 });
-  const btl = gsap.timeline({ defaults: { ease: 'none' } });
-  const fp = { t: 0 };
-  btl.to(fp, { t: 1, duration: 3, onUpdate: () => {
-    const want = BF.from + fp.t * (BF.to - BF.from);
-    if (scrub.readyState >= 1 && Math.abs(scrub.currentTime - want) > 0.03) scrub.currentTime = want;
-  } }, 0);
-  steps.forEach((s, i) => btl.to(s, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 0.35 + i * 0.85));
-  btl.to({}, { duration: 0.4 });
-  ScrollTrigger.create({
-    trigger: '#tBuild', pin: '#tBuildStage', start: 'top top', end: () => '+=' + Math.round(window.innerHeight * 2.4),
-    animation: btl, scrub: 0.4, anticipatePin: 1,
-  });
+  builds();
+  traumbike();
+  touren();
 })();
 
 /* ---------- Hero: die Zeile „Komm zu Achim, Elke und ihrem Team.“ läuft mit der Einblendung der
