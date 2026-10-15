@@ -171,3 +171,10 @@ html.theme-anim,html.theme-anim *{transition:background-color .35s,color .35s,bo
 
 /* Mobil-Menü: heutiger Tag bleibt rot */
 .mm-week li:not(.today){background:var(--bg3)}
+
+/* Bikefitting: Mix wechselt über die Abschnittsfolge. Hell und Dunkel trennen benachbarte Blöcke über zwei Töne */
+html[data-theme="light"] body[data-page="bikefitting"] main > .fit-t1{background-color:#f4f2ee}
+html[data-theme="light"] body[data-page="bikefitting"] main > .fit-t2{background-color:#e9e6e0;border-top:1px solid rgba(23,23,27,.1)}
+html[data-theme="mix"] body[data-page="bikefitting"] main > .fit-t1{background-color:#f4f2ee}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="bikefitting"] main > .fit-t1{background-color:#131318}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="bikefitting"] main > .fit-t2{background-color:#0b0b0d;border-top:1px solid rgba(255,255,255,.06)}
