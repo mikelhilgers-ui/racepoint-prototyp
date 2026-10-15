@@ -516,3 +516,60 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 /* Ohne Prototyp-Zahnrad (wie 17): KI-Berater sitzt ganz unten rechts */
 html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 @media (max-width:640px){html body .kib-launch{bottom:calc(14px + env(safe-area-inset-bottom))}}
+
+/* =====================================================================
+   Kino-Einstieg der Unterseiten (.phero.cine): Bild oder Film über die
+   volle Breite, Text darüber, rechts eine Reel-Karte im Hochformat.
+   Handy: das Hochformat-Video selbst ist der Hintergrund.
+   ===================================================================== */
+.phero.cine{min-height:min(100svh,1000px);display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(120px,16vh,170px) 0 clamp(64px,9vh,110px);background:#0b0b0d;isolation:isolate}
+.phero.cine::after{display:none}
+/* Unterer Verlauf liegt fest auf der Bühne (wandert nicht mit dem Bild), damit keine Bildkante stehen bleibt */
+.phero.cine::before{content:"";position:absolute;inset:auto 0 0;height:46%;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,13,0) 0%,rgba(11,11,13,.72) 55%,#0b0b0d 100%)}
+.phero.cine .phero-fig{position:absolute;inset:0;z-index:0;margin:0;aspect-ratio:auto;border-radius:0;box-shadow:none;background:#09090b;transform-origin:50% 40%}
+.phero.cine .phero-fig :is(img,video){position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.phero.cine .phero-fig picture{position:absolute;inset:0}
+.phero.cine .cine-bg{opacity:0;transition:opacity 1s}
+.phero.cine .cine-bg.on{opacity:1}
+.phero.cine .phero-fig::after{z-index:1;background:
+  linear-gradient(90deg,rgba(9,9,11,.9) 0%,rgba(9,9,11,.62) 36%,rgba(9,9,11,.18) 68%,rgba(9,9,11,.32) 100%),
+  linear-gradient(180deg,rgba(9,9,11,.55) 0%,rgba(9,9,11,0) 22%)}
+.phero.cine .phero-fig figcaption{z-index:2;left:var(--gut);right:auto;bottom:22px;max-width:44vw;font-size:11px;color:rgba(255,255,255,.62)}
+.phero.cine .phero-fig > .phero-badge{right:calc(var(--gut) + 90px);bottom:40px}
+.phero.cine .phero-word{z-index:1;opacity:.5}
+.phero.cine .phero-grid{grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:clamp(30px,5vw,90px)}
+.phero.cine h1{font-size:clamp(60px,8.4vw,150px);text-shadow:0 10px 50px rgba(0,0,0,.45)}
+.phero.cine .lead{color:rgba(244,241,236,.84)}
+/* Galerie (Gravel): langsames Überblenden mit leichtem Zoom */
+.phero.cine .cine-slide{opacity:0;transition:opacity 1.6s ease}
+.phero.cine .cine-slide.on{opacity:1;animation:cineKb 9s linear both}
+@keyframes cineKb{from{transform:scale(1.08)}to{transform:scale(1)}}
+/* Reel-Karte */
+.phero-side{position:relative;align-self:end}
+.phero-reel{position:relative;display:block;width:clamp(210px,19vw,300px);aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#111 center/cover;box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.14);text-decoration:none;color:#fff;transition:transform .5s var(--ease)}
+.phero-reel:hover{transform:translateY(-4px) rotate(-.6deg)}
+.phero-reel video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.phero-reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 26%,rgba(0,0,0,0) 58%,rgba(0,0,0,.82));pointer-events:none}
+.pr-txt{position:absolute;z-index:1;left:16px;right:16px;bottom:16px;display:flex;flex-direction:column;gap:3px}
+.pr-txt b{font:800 italic 22px/1 var(--display);text-transform:uppercase}
+.pr-txt > span:last-child{font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.78)}
+.pr-h{display:inline-flex;align-items:center;gap:6px;margin-bottom:4px;font:600 11px var(--display);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.pr-ig{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+.pr-ig .f{fill:currentColor;stroke:none}
+.phero-side .phero-badge{position:absolute;right:auto;left:-52px;top:-52px;bottom:auto}
+.phero.cine + .ctabs{margin-top:0;padding:4px 0 26px;background:#0b0b0d}
+@media (max-width:1000px){
+  .phero.cine .phero-grid{grid-template-columns:minmax(0,1fr) auto}
+  .phero-reel{width:clamp(170px,24vw,220px)}
+}
+@media (max-width:820px){
+  .phero.cine{min-height:max(640px,100svh);padding-top:110px}
+  .phero.cine .phero-grid{grid-template-columns:1fr}
+  .phero-reel{display:none}
+  .phero-side{position:static;order:-1;display:flex;justify-content:flex-end;margin-bottom:-14px}
+  .phero-side .phero-badge{position:relative;left:auto;bottom:auto;width:92px;height:92px}
+  .phero.cine .phero-fig::after{background:linear-gradient(180deg,rgba(9,9,11,.6) 0%,rgba(9,9,11,.28) 20%,rgba(9,9,11,.52) 42%)}
+  .phero.cine::before{height:62%}
+  .phero.cine .phero-fig figcaption{display:none}
+  .phero.cine .phero-fig > .phero-badge{bottom:auto;top:96px;right:16px;width:92px;height:92px}
+}

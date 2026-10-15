@@ -9,8 +9,9 @@
 
 /* ---------------- Variablen: dunkel (Standard, Inseln, dunkle Mix-Blöcke) ---------------- */
 :root,
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
+html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
 html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){
   --bg:#0b0b0d; --bg2:#121216; --bg3:#18181d;
@@ -26,8 +27,9 @@ html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(e
   --logo-l:block; --logo-d:none; --warn:#f3dcae; --warn2:#f0cf8f; --ok:#bbf7d0; --no:#fecaca;
   color-scheme:dark;
 }
-html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info),
+html:is([data-theme="light"],[data-theme="mix"]) :is(.hero,.t-stage,.t-build-stage,.visit,.film,.cat,.phero-fig,.fhero,.mm-cats,.map,.retul,.ftr,.ticker,.t-pic,.achim-fig,.feat-v,.tag3d,.rec,.tcard,.tr-info,.phero.cine,.phero.cine + .ctabs),
 html:is([data-theme="light"],[data-theme="mix"]) body[data-page="home"] .hdr:not(.solid),
+html:is([data-theme="light"],[data-theme="mix"]) body:has(.phero.cine) .hdr:not(.solid),
 html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),
 html[data-theme="mix"] body:not([data-page="home"]) main > section:nth-of-type(even){color:var(--ink)}
 html[data-theme="mix"] body[data-page="home"] :is(.achim,.films),

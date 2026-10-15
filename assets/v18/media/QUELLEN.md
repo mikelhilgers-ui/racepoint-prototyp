@@ -79,3 +79,22 @@ Die übrigen Titelbilder liegen schon in `entwuerfe/codex-2026-10/prototype/asse
 - Ein Foto von Achim **im Beratungsgespräch** (am Rad, mit Kundschaft), damit Kapitel 2 nicht nur das Teamfoto zeigt.
 - Ein Retül-Foto in höherer Auflösung (mind. 1600 px), gern mit Messung am Rad.
 - Bestätigung oder eigene Formulierung für das Zitat in Kapitel 2 (steht als Entwurf auf der Seite).
+
+## Kino-Einstieg der Unterseiten (`cine/`), abgerufen am 15.10.2026
+
+Videos neu kodiert (H.264, ohne Ton, 720×1280), dazu je eine weiche Querformat-Fassung
+(`-amb.mp4`, 640×360) für den Hintergrund und Standbilder (`.webp`). Mikel hat die Beiträge am
+15.10.2026 als Material geliefert.
+
+| Datei | Quelle | Konto | Einsatz | Inhalt |
+|---|---|---|---|---|
+| `cine/rennrad*` | https://www.instagram.com/reel/DZ-heZaoN9a/ | racepoint.be | Rennrad | Fahrer auf Cervélo S5 („Freedom Has a New Shape“), Ausschnitt 3,8–17,8 s ohne Texteinblendung. ⚠ Person erkennbar |
+| `cine/werkstatt*` | https://www.instagram.com/reel/DXwpPV0IPSD/ | racepoint.be | Werkstatt, Gravel (Karte) | Aufbau des Cervélo Áspero-5 für Arne, Schnitt aus vier Ausschnitten. ⚠ Mechaniker erkennbar |
+| `cine/ueberuns*` | https://www.instagram.com/reel/DBl1S7iMZy_/ | racepoint.be | Über uns (Karte) | Tarmac-SL8-Sprint auf einer Waldstraße. ⚠ Person erkennbar |
+| `cine/mtb*` | https://www.instagram.com/reel/DN83YExiAq-/ | jnssnsarne | MTB | Arne im MTB-Rennen in Les Gets. ⚠ **Fremdes Konto, Filmer laut Beitrag ein Dritter: Freigabe von Arne und dem Filmer nötig** |
+| `cine/gravel-1.webp` | https://www.instagram.com/p/DX2PdW1CLQK/ (Foto 1) | jnssnsarne | Gravel | Arne bei The Traka. ⚠ **Fremdes Konto, Fotograf unbekannt: Freigabe nötig** |
+| `cine/gravel-2.webp` | https://www.instagram.com/p/DXXgpI_CC0b/ (Foto 2) | jnssnsarne | Gravel | UCI Gravel World Series, Fahrer im Wald. ⚠ wie oben |
+| `cine/gravel-3.webp` | https://www.instagram.com/p/DPvb1uGCLGK/ (Foto 3) | jnssnsarne | Gravel | Gravel-WM, Fahrergruppe auf dem Feldweg. ⚠ wie oben, weitere Fahrer erkennbar |
+
+Nicht verwendet, aber geladen: https://www.instagram.com/p/DRKk-rriPNG/ (Cervélo im Matsch, Hochformat).
+Die Bildnachweise stehen auf der Seite in der Bildunterschrift („via @jnssnsarne“).

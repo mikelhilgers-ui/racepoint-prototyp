@@ -289,7 +289,13 @@
           document.documentElement.classList.remove('rp-boot');
         });
         const fig = $('.phero-fig', h);
-        if (fig) {
+        if (fig && h.classList.contains('cine')) {
+          // Kino-Einstieg: Bühne zoomt sanft auf, beim Scrollen bleibt das Bild etwas zurück
+          gsap.fromTo(fig, { scale: 1.12 }, { scale: 1, duration: 2.4, ease: 'expo.out' });
+          gsap.to(fig, { yPercent: 16, ease: 'none', scrollTrigger: { trigger: h, start: 'top top', end: 'bottom top', scrub: true } });
+          const side = $('.phero-side', h);
+          if (side) gsap.from(side, { y: 50, autoAlpha: 0, duration: 1.1, ease: 'power3.out', delay: 0.45 });
+        } else if (fig) {
           gsap.fromTo(fig, { clipPath: 'inset(10% 10% 10% 10% round 22px)' }, { clipPath: 'inset(0% 0% 0% 0% round 22px)', duration: 1.4, ease: 'expo.out', delay: 0.15 });
           gsap.fromTo($('img', fig), { scale: 1.25 }, { scale: 1.06, duration: 1.8, ease: 'expo.out', delay: 0.15 });
           gsap.to($('img', fig), { yPercent: 6, ease: 'none', scrollTrigger: { trigger: h, start: 'top top', end: 'bottom top', scrub: true } });
@@ -300,6 +306,38 @@
     }
   }
   if (!isHome && !$('.phero')) document.documentElement.classList.remove('rp-boot');
+
+  /* ---------------- Kino-Einstieg: Filme und Galerie ----------------
+     Hintergrund: Desktop den weichen Querformat-Film (-amb), Handy das Hochformat.
+     Bei reduzierter Bewegung bleiben die Standbilder stehen. */
+  const cine = $('.phero.cine');
+  if (cine && !RM) {
+    const small = matchMedia('(max-width:820px)').matches;
+    const vids = [];
+    const bg = $('.cine-bg', cine);
+    if (bg) {
+      bg.src = (small && bg.dataset.srcM) || bg.dataset.src;
+      bg.addEventListener('playing', () => bg.classList.add('on'), { once: true });
+      vids.push(bg);
+    }
+    const reel = $('.phero-reel video', cine);
+    if (reel && !small) { reel.src = reel.dataset.src; vids.push(reel); }
+    vids.forEach(v => { v.muted = true; v.play().catch(() => {}); });
+    // ausserhalb des Bildschirms anhalten (Akku, CPU)
+    if (vids.length && 'IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => vids.forEach(v => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }))).observe(cine);
+    }
+    const slides = $$('.cine-slide', cine);
+    if (slides.length > 1) {
+      let i = 0;
+      setInterval(() => {
+        if (document.hidden) return;
+        slides[i].classList.remove('on');
+        i = (i + 1) % slides.length;
+        slides[i].classList.add('on');
+      }, 6000);
+    }
+  }
   hours();
   setInterval(hours, 60 * 1000);
   window.addEventListener('load', () => { if (window.ScrollTrigger) ScrollTrigger.refresh(); });
