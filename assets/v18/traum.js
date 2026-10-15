@@ -126,11 +126,10 @@
   /* ---------- Kapitel-Leiste ---------- */
   const rail = $('#tRail'), railLinks = $$('a', rail);
   const chapters = ['#tIdea', '#tTalk', '#tFit', '#tBuild', '#tGo'];
-  ScrollTrigger.create({ trigger: root, start: 'top 60%', end: 'bottom 40%', toggleClass: { targets: rail, className: 'on' } });
+  ScrollTrigger.create({ trigger: root, endTrigger: '#tGo', start: 'top 60%', end: 'bottom 40%', toggleClass: { targets: rail, className: 'on' } });
   chapters.forEach((sel, i) => {
-    const end = i === 3 ? '#tDream' : sel;
     ScrollTrigger.create({
-      trigger: sel, endTrigger: end, start: 'top 55%', end: 'bottom 55%',
+      trigger: sel, start: 'top 55%', end: 'bottom 55%',
       onToggle: st => { if (st.isActive) railLinks.forEach((a, k) => a.classList.toggle('cur', k === i)); },
     });
   });
