@@ -121,12 +121,12 @@ window.RPA = window.RPA || {};
     ].map(([date, name]) => ({ date, name }));
   };
 
-  // Termin-Regeln (Demo; echt: Google Kalender "Werkstatt" über die Calendar API mit Frei/Belegt-Abfrage)
+  // Leistungen wie in eTermin eingerichtet (Demo-Kopie, schreibgeschützt; echt: eTermin-API). note = App-Notiz für die KI.
   A.APPT_TYPES = {
     inspektion: { name: 'Inspektion', minutes: 60, days: [1, 2, 3, 5, 6], window: ['09:00', '12:00'], perDay: 4, buffer: 15, resource: 'Werkstatt' },
     fahrwerk: { name: 'Fahrwerk-Service', minutes: 120, days: [1, 2, 3, 5], window: ['09:00', '12:00'], perDay: 2, buffer: 15, resource: 'Werkstatt' },
     ebike: { name: 'E-Bike-Diagnose', minutes: 60, days: [1, 2, 3, 5, 6], window: ['09:00', '12:00'], perDay: 3, buffer: 15, resource: 'Werkstatt' },
-    retuel: { name: 'Retül-Bikefitting', minutes: 90, days: [2, 4], window: ['09:00', '17:00'], perDay: 2, buffer: 30, resource: 'Fitting-Studio' },
+    retuel: { name: 'Retül-Bikefitting', minutes: 90, days: [2, 4], window: ['09:00', '17:00'], perDay: 2, buffer: 30, resource: 'Fitting-Studio', note: 'Kunde soll Radschuhe und Radhose mitbringen.' },
     beratung: { name: 'Kaufberatung', minutes: 45, days: [1, 2, 3, 5, 6], window: ['09:00', '18:00'], perDay: 6, buffer: 0, resource: 'Laden', shopHours: true }
   };
 
@@ -177,11 +177,11 @@ window.RPA = window.RPA || {};
     const y = Number(today.slice(0, 4));
     let armistice = y + '-11-11'; if (armistice < today) armistice = (y + 1) + '-11-11';
     return [
-      { id: 'T-1042', type: 'inspektion', who: 'M. K.', start: next(2) + 'T09:00', note: 'Schaltung springt bei Ultegra 11-fach, Kette quietscht.', via: 'KI-Chat', lang: 'de', status: 'open', at: A.addDays(today, -1) + 'T18:42' },
-      { id: 'T-1043', type: 'retuel', who: 'S. D.', start: next(5) + 'T10:00', note: 'Knieschmerzen nach langen Fahrten, neues Tarmac geplant.', via: 'KI-Chat', lang: 'fr', status: 'open', at: today + 'T08:15' },
-      { id: 'T-1044', type: 'beratung', who: 'J. W.', start: next(6) + 'T10:00', note: 'Gravelbike bis 2.700 €, eher sportlich.', via: 'KI-Chat', lang: 'nl', status: 'open', at: today + 'T09:03' },
-      { id: 'T-1045', type: 'ebike', who: 'P. L.', start: armistice + 'T10:00', note: 'Turbo Vado zeigt Fehler am Display.', via: 'KI-Chat', lang: 'de', status: 'open', at: today + 'T10:27' },
-      { id: 'T-1039', type: 'inspektion', who: 'R. H.', start: next(1) + 'T09:00', note: 'Jahresinspektion Roubaix.', via: 'KI-Chat', lang: 'de', status: 'confirmed', at: A.addDays(today, -3) + 'T16:10' }
+      { id: 'T-1042', type: 'inspektion', who: 'M. K.', start: next(2) + 'T09:00', note: 'Schaltung springt bei Ultegra 11-fach, Kette quietscht.', via: 'KI-Chat → eTermin', lang: 'de', status: 'open', at: A.addDays(today, -1) + 'T18:42' },
+      { id: 'T-1043', type: 'retuel', who: 'S. D.', start: next(5) + 'T10:00', note: 'Knieschmerzen nach langen Fahrten, neues Tarmac geplant.', via: 'KI-Chat → eTermin', lang: 'fr', status: 'open', at: today + 'T08:15' },
+      { id: 'T-1044', type: 'beratung', who: 'J. W.', start: next(6) + 'T10:00', note: 'Gravelbike bis 2.700 €, eher sportlich.', via: 'KI-Chat → eTermin', lang: 'nl', status: 'open', at: today + 'T09:03' },
+      { id: 'T-1045', type: 'ebike', who: 'P. L.', start: armistice + 'T10:00', note: 'Turbo Vado zeigt Fehler am Display.', via: 'KI-Chat → eTermin', lang: 'de', status: 'open', at: today + 'T10:27' },
+      { id: 'T-1039', type: 'inspektion', who: 'R. H.', start: next(1) + 'T09:00', note: 'Jahresinspektion Roubaix.', via: 'KI-Chat → eTermin', lang: 'de', status: 'confirmed', at: A.addDays(today, -3) + 'T16:10' }
     ];
   };
 

@@ -221,7 +221,8 @@ window.RPA = window.RPA || {};
     const own = a.media.filter(m => !m.hidden);
     const all = sup.concat(own.map(m => Object.assign({ supplier: false }, m)));
     const order = a.gallery || [];
-    return all.sort((x, y) => (order.indexOf(x.id) + 1 || 999) - (order.indexOf(y.id) + 1 || 999));
+    // Ausgeblendete Herstellerbilder ans Ende (sie erscheinen ohnehin nirgends)
+    return all.sort((x, y) => (x.hidden - y.hidden) || ((order.indexOf(x.id) + 1 || 999) - (order.indexOf(y.id) + 1 || 999)));
   };
   A.coverOf = function (a) {
     const list = A.mediaList(a).filter(m => !m.hidden && m.kind === 'image');
@@ -249,8 +250,8 @@ window.RPA = window.RPA || {};
       default: return [A.addDays(t, -dow), t, 'diese Woche'];
     }
   };
-  A.statsRange = function (from, to) {
-    const days = [], t = A.today(), frac = Math.min(1, Math.max(0.05, (A.brussels().min - 8 * 60) / (12 * 60)));
+  A.statsRange = function (from, to, partial) {
+    const days = [], t = partial || A.today(), frac = Math.min(1, Math.max(0.05, (A.brussels().min - 8 * 60) / (12 * 60)));
     for (let d = from; d <= to; d = A.addDays(d, 1)) {
       const x = A.statsForDay(d);
       if (d === t) ['visits', 'chats', 'handoffs', 'appointments', 'unanswered'].forEach(k => x[k] = Math.round(x[k] * frac));

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0c0c0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Racepoint App</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="login"></div>
+<div class="app" id="app">
+  <aside class="side" aria-label="Navigation">
+    <a class="side-logo" href="#/uebersicht"><img src="../assets/racepoint-logo-white.svg" alt="Racepoint"><span>App</span></a>
+    <nav id="side-nav"></nav>
+    <div class="side-user" id="side-user"></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <a class="top-mark" href="#/uebersicht" aria-label="Übersicht"><img src="../assets/racepoint-logo-sm.svg" alt=""></a>
+      <span class="top-title" id="top-title"></span>
+      <div class="top-status" id="top-status"></div>
+    </header>
+    <main id="view" class="view"></main>
+    <footer class="foot">Racepoint App · Prototyp mit Demo-Daten · <a href="#/einstellungen">Demo zurücksetzen</a></footer>
+  </div>
+  <nav class="tabbar" id="tabbar" aria-label="Hauptnavigation"></nav>
+</div>
+<!-- Daten aus dem echten Katalog und die echten Öffnungszeiten (nur lesen) -->
+<script src="../assets/rp-core.js"></script>
+<script src="../assets/v17/data.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/core.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/media.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/views-cockpit.js"></script>
+<script src="js/views-site.js"></script>
+<script src="js/views-ops.js"></script>
+<script src="js/assistant.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
