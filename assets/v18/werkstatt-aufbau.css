@@ -1,0 +1,102 @@
+/* =====================================================================
+   RACEPOINT · 18 · WERKSTATT: Look der Seite (THROWAWAY)
+   Gehört zu assets/v18/werkstatt-aufbau.js. Nur für v18-werkstatt.html (body[data-page="werkstatt"]).
+   Aufbau der Seite: Hero (.phero.cine, Look aus site.css) · Leistungen als Fotokacheln (#leistungen, Bento)
+   · Termin (#termin).
+   1. Rhythmus: Hero dunkel · Kacheln hell (#f4f2ee) · Termin hell, aber ein Ton dunkler (#e9e6e0) mit Trennlinie ·
+      Footer dunkel. Im Dunkel-Theme wechseln zwei Dunkeltöne (#131318 / #0b0b0d). Die Mix-Regel aus theme.css
+      (jeder zweite Abschnitt dunkel) wird für die hellen Abschnitte aufgehoben.
+   2. Fotokacheln: Klassen .cats/.cat aus bestof.css (wie die Kategorie-Kacheln der Startseite), hier nur das Raster.
+   3. Termin: zwei gleichwertige Wege, darunter Formular, Ablauf, Öffnungszeiten und Telefon.
+   ===================================================================== */
+
+/* ---------------- 1. Rhythmus der Abschnitte ---------------- */
+body[data-page="werkstatt"] main > section.wk-l{position:relative;overflow:clip;padding-top:clamp(72px,8vw,128px) !important}
+/* Mix: theme.css färbt jeden zweiten Abschnitt dunkel. Hier bleiben die hellen Abschnitte hell (Hell-Variablen). */
+html[data-theme="mix"]:root body[data-page="werkstatt"] main > section.wk-l{
+  --bg:#f4f2ee; --bg2:#ffffff; --bg3:#e9e6e0;
+  --ink:#17171b; --mute:rgba(23,23,27,.68); --dim:rgba(23,23,27,.47); --line:rgba(23,23,27,.12);
+  --strong:#17171b; --strong-inv:#fff; --nav:rgba(23,23,27,.72);
+  --glass:rgba(255,255,255,.7); --glass2:rgba(255,255,255,.95); --edge:rgba(23,23,27,.16); --edge2:rgba(23,23,27,.4);
+  --ghost:rgba(23,23,27,.05); --ghost2:rgba(23,23,27,.1); --ghost-b:rgba(23,23,27,.2);
+  --pill:rgba(255,255,255,.8); --pill-b:rgba(23,23,27,.13);
+  --card:#fff; --field:#fff; --noimg:#fff; --noimg2:#e6e3dd;
+  --stroke:rgba(23,23,27,.22); --stroke2:rgba(23,23,27,.09); --grid:rgba(23,23,27,.04); --fade0:rgba(244,242,238,0);
+  --ai-mid:#fbe7e4; --live:#15803d; --shadow:rgba(23,23,27,.35);
+  --rail-b:rgba(255,255,255,.8); --rail-glow:rgba(255,255,255,.95);
+  --logo-l:none; --logo-d:block; --warn:#7a4f06; --warn2:#8a5a08; --ok:#15803d; --no:#b91c1c;
+  color-scheme:light;
+}
+/* Töne: Hell/Mix = zwei Hell-Töne, Dunkel = zwei Dunkeltöne (Hero #0b0b0d, Kacheln #131318, Termin #0b0b0d) */
+html:is([data-theme="light"],[data-theme="mix"]) body[data-page="werkstatt"] main > section.wk-t1{background-color:#f4f2ee}
+html:is([data-theme="light"],[data-theme="mix"]) body[data-page="werkstatt"] main > section.wk-t2{background-color:#e9e6e0;border-top:1px solid rgba(23,23,27,.1)}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="werkstatt"] main > section.wk-t1{background-color:#131318}
+html:not([data-theme="light"]):not([data-theme="mix"]) body[data-page="werkstatt"] main > section.wk-t2{background-color:#0b0b0d;border-top:1px solid rgba(255,255,255,.06)}
+body[data-page="werkstatt"] main > section.wk-l{color:var(--ink)}
+
+/* ---------------- 2. Leistungen: Fotokacheln im Bento-Raster ---------------- */
+.wk-svc{padding-bottom:0 !important}
+.wk-bento{grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:clamp(230px,19.5vw,290px);gap:14px}
+.wk-t{aspect-ratio:auto}
+.wk-t img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.wk-a{grid-column:1 / 3;grid-row:1 / 3}
+.wk-b{grid-column:3;grid-row:1}
+.wk-c{grid-column:3;grid-row:2}
+.wk-f{grid-column:4;grid-row:1 / 3}
+.wk-d{grid-column:1 / 3;grid-row:3}
+.wk-e{grid-column:3 / 5;grid-row:3}
+.wk-t .cat-b h3{font-size:clamp(28px,2.6vw,42px);line-height:.92;overflow-wrap:anywhere}
+.wk-t .cat-b p{margin:8px 0 0;max-width:34ch}
+.wk-a .cat-b h3{font-size:clamp(46px,5vw,84px)}
+.wk-a .cat-b p{font-size:17px;max-width:30ch}
+.wk-d .cat-b p,.wk-e .cat-b p{max-width:44ch}
+.wk-t img{filter:saturate(1) brightness(1)}
+.wk-t:hover img{filter:saturate(1.08) brightness(1.08)}
+.wk-t:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+
+/* Marken: Laufband am Ende der Kacheln */
+.wk-brands-h{box-sizing:border-box;width:100%;max-width:var(--max);margin:clamp(40px,5vw,72px) auto 4px;padding:0 var(--gut);color:var(--mute)}
+.wk-svc .marq{margin:0;padding-bottom:clamp(36px,5vw,64px);font-size:clamp(46px,6.4vw,104px)}
+
+@media (max-width:900px){
+  .wk-bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:clamp(250px,66vw,420px);grid-auto-rows:clamp(190px,46vw,320px);gap:10px}
+  .wk-a{grid-column:1 / 3;grid-row:1}
+  .wk-b{grid-column:1;grid-row:2}
+  .wk-c{grid-column:2;grid-row:2}
+  .wk-f{grid-column:1;grid-row:3 / 5}
+  .wk-d{grid-column:2;grid-row:3}
+  .wk-e{grid-column:2;grid-row:4}
+  .wk-a .cat-b h3{font-size:clamp(40px,9vw,64px)}
+  .wk-t .cat-b h3{font-size:clamp(24px,5.4vw,34px)}
+}
+@media (max-width:560px){
+  .wk-t .cat-b{left:13px;right:11px;bottom:13px}
+  .wk-t .cat-b h3{font-size:clamp(22px,6.3vw,28px)}
+  .wk-t .cat-b p{font-size:12.5px;line-height:1.35;margin-top:6px}
+  .wk-a .cat-b h3{font-size:clamp(38px,11.5vw,50px)}
+  .wk-a .cat-b p{font-size:14px}
+}
+
+/* ---------------- 3. Termin ---------------- */
+.wk-termin .sec-h{margin-bottom:clamp(28px,4vw,48px)}
+.tw-paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.tw-path{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:clamp(24px,3vw,40px);border-radius:var(--r);background:var(--card,var(--bg2));border:1px solid var(--line);box-shadow:0 26px 50px -38px var(--shadow)}
+.tw-ic{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:rgba(232,54,55,.12);margin-bottom:6px}
+.tw-ic svg{width:25px;height:25px;fill:none;stroke:var(--red);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tw-path h3{margin:0;font:900 italic clamp(30px,3vw,46px)/.95 var(--display);text-transform:uppercase;color:var(--strong)}
+.tw-path p{margin:0 0 10px;max-width:46ch;color:var(--mute);font-size:16px;line-height:1.5}
+.tw-path .btn{margin-top:auto}
+.tw-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:14px;margin-top:14px;align-items:start}
+#anfrage{scroll-margin-top:90px}
+.tw-side{display:flex;flex-direction:column;gap:14px}
+.tw-steps{display:grid;gap:12px;margin:0;padding:0 4px 4px;list-style:none}
+.tw-steps li{display:flex;align-items:center;gap:14px;font-size:15px;line-height:1.35;color:var(--mute)}
+.tw-steps b{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:1px solid var(--edge);font:800 italic 16px/1 var(--display);color:var(--strong)}
+.wk-termin .hours-card{margin:0}
+.tw-tel{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);border:1px solid var(--line);color:var(--mute);font-size:15px;transition:border-color .3s}
+.tw-tel:hover{border-color:rgba(232,54,55,.5)}
+.tw-tel svg{flex:none;width:20px;height:20px;fill:none;stroke:var(--red);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tw-tel b{color:var(--strong);white-space:nowrap}
+@media (max-width:900px){
+  .tw-paths,.tw-grid{grid-template-columns:minmax(0,1fr)}
+}

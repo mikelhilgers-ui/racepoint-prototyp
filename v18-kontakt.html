@@ -8,36 +8,45 @@
 <link rel="icon" href="assets/racepoint-logo-sm.svg">
 <!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
      Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='dark')t='mix';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
+<link rel="stylesheet" href="assets/v18/anfrage.css">
 </head>
 <body data-page="kontakt">
 <a class="skip" href="#kontakt">Zum Inhalt springen</a>
 <main>
-<section class="phero" id="top">
+<section class="phero cine" id="top">
+  <figure class="phero-fig">
+      <img class="cine-m" src="assets/shop-interior.jpg" alt="Der Racepoint-Laden in Schönberg von innen" fetchpriority="high" style="object-position:55% 50%">
+      <figcaption>K.-F. Schinkel Straße 5 · Schönberg</figcaption>
+  </figure>
   <div class="phero-word" aria-hidden="true">SCHÖNBERG</div>
   <div class="wrap phero-grid">
     <div class="phero-txt">
       <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Kontakt &amp; Anfahrt</li></ol>
       <p class="kicker"><i class="dot"></i>Kontakt &amp; Anfahrt</p>
-      <h1><span>Wir sehen uns.</span><span><em>In Schönberg.</em></span></h1>
-      <p class="lead">Komm mit einer Frage, einer Idee oder deinem Bike. Showroom, Werkstatt und Bikefitting-Studio – mitten im Dreiländereck.</p>
+      <h1><span>Racepoint</span><span><em>in Schönberg.</em></span></h1>
+      <p class="lead">Showroom, Werkstatt und Fitting-Raum an einer Adresse, im Dreiländereck. Komm mit deinem Bike oder mit einer Frage vorbei. Ein Rad mit Geräusch zählt als beides.</p>
       <div class="btns"><a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Racepoint%2C%20K.-F.%20Schinkel%20Stra%C3%9Fe%205%2C%204782%20Sch%C3%B6nberg%2C%20Belgien" target="_blank" rel="noopener">Route planen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="tel:+3280548898">+32 80 54 88 98</a></div>
       <div class="phero-pills"><span class="pill pill-status" data-open-status></span></div>
     </div>
-    <figure class="phero-fig">
-      <img src="assets/shop-interior.jpg" alt="Der Racepoint-Laden in Schönberg von innen" fetchpriority="high" style="object-position:55% 50%">
-      <figcaption>K.-F. Schinkel Straße 5 · Schönberg</figcaption>
-      
-    </figure>
   </div>
 </section>
 
 <section class="sec" id="kontakt" aria-labelledby="kH" style="padding-top:20px">
   <div class="wrap kgrid">
     <div class="kcard rv">
-      <p class="kicker">Dein Weg zu uns</p>
+      <p class="kicker">Adresse</p>
       <h2 class="h3" id="kH" style="margin-top:12px">Komm vorbei.</h2>
       <address>Racepoint<br>K.-F. Schinkel Straße 5<br>4782 Schönberg · Belgien</address>
       <div class="vlinks">
@@ -50,7 +59,7 @@
       <span class="pill pill-status" data-open-status></span>
       <p class="kicker" style="margin-top:18px">Öffnungszeiten</p>
       <ul class="hours" data-hours></ul>
-      <p class="fine">Live-Status nach belgischer Zeit. Für Werkstatt und Bikefitting vereinbare deinen Termin bitte direkt mit dem Team.</p>
+      <p class="fine">Der Status richtet sich nach belgischer Zeit. Termine für Werkstatt und Bikefitting bitte direkt mit dem Team absprechen.</p>
     </div>
     <a class="map rv" href="https://www.google.com/maps/search/?api=1&amp;query=Racepoint%2C%20K.-F.%20Schinkel%20Stra%C3%9Fe%205%2C%204782%20Sch%C3%B6nberg%2C%20Belgien" target="_blank" rel="noopener" aria-label="Racepoint in Google Maps öffnen" style="grid-column:1/-1">
       <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -74,24 +83,50 @@
   </div>
 </section>
 
-<section class="sec" aria-labelledby="nH" style="padding-top:0">
-  <div class="wrap split">
-    <div>
-      <p class="kicker rv">Sag Hallo</p>
-      <h2 class="h2 rv" id="nH">Eine Frage<br><em>vorab?</em></h2>
-      <p class="lead rv">Schreib uns direkt – das Formular bereitet eine E-Mail an info@racepoint.be vor. Oder frag den KI-Berater, der kennt Öffnungszeiten, Katalog und Termine.</p>
-      <div class="side-acts rv"><a class="btn" data-ask="Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte.">KI-Berater fragen</a><a class="btn ghost" href="v18-anfrage.html">Ausführliche Anfrage <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
-    </div>
-    <form class="formcard mform rv" data-mailform="Kontakt">
-      <label class="fld"><span>Worum geht es?</span><select name="thema"><option>Bike-Beratung</option><option>Werkstatt</option><option>Bikefitting</option><option>Individueller Build</option><option>Andere Frage</option></select></label>
-      <label class="fld"><span>Deine Nachricht</span><textarea name="nachricht" placeholder="Was dürfen wir für dich tun?"></textarea></label>
+<section class="sec an-sec" id="anfrage" aria-labelledby="nH">
+  <div class="wrap">
+    <div class="sec-h an-h"><div><p class="kicker rv">Nachricht</p><h2 class="h2 rv" id="nH">Schreib uns<br><em>vorab.</em></h2></div><p class="lead rv">Neues Bike, Werkstatt-Termin oder Bikefitting: Schreib kurz, worum es geht. Ein Satz reicht, ein Roman geht auch.</p></div>
+  </div>
+  <div class="wrap an-grid">
+    <form class="formcard mform rv" data-mailform="Anfrage">
+      <fieldset class="topics"><legend>Worum geht es?</legend>
+        <label><input type="radio" name="thema" value="Bike-Beratung" checked><span>Bike-Beratung</span></label><label><input type="radio" name="thema" value="Werkstatt"><span>Werkstatt</span></label><label><input type="radio" name="thema" value="Bikefitting"><span>Bikefitting</span></label><label><input type="radio" name="thema" value="Individueller Build"><span>Individueller Build</span></label><label><input type="radio" name="thema" value="Andere Frage"><span>Andere Frage</span></label>
+      </fieldset>
+      <label class="fld"><span>Deine Nachricht</span><textarea name="nachricht" placeholder="z. B. Ich suche ein Gravelbike für Touren, Budget bis 3.000 € …"></textarea></label>
       <div class="two">
-        <label class="fld"><span>Dein Name</span><input name="name" autocomplete="name"></label>
+        <label class="fld"><span>Dein Name, wenn du möchtest</span><input name="name" autocomplete="name"></label>
         <label class="fld"><span>Telefon oder E-Mail</span><input name="kontakt" autocomplete="email"></label>
       </div>
-      <button class="btn" type="submit">E-Mail-Entwurf öffnen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
-      <p class="fine">Es wird nichts automatisch gesendet. Du prüfst und versendest die E-Mail selbst.</p>
+      <button class="btn" type="submit">E-Mail-Entwurf vorbereiten <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
+      <p class="fine">Es wird nichts automatisch gesendet oder gebucht.</p>
+      <div class="an-draft">
+        <p class="kicker">Vorschau deines Entwurfs</p>
+        <pre class="draft" data-draft aria-live="polite"></pre>
+      </div>
     </form>
+    <aside class="an-side" aria-label="So geht es weiter">
+      <p class="kicker rv">So geht es weiter</p>
+      <ol class="an-steps rv">
+        <li><b>Thema wählen und schreiben</b><span>Such das Thema aus und schreib, worum es geht.</span></li>
+        <li><b>Entwurf prüfen</b><span>Deine Angaben landen in einem E-Mail-Entwurf. Du siehst ihn, bevor etwas passiert.</span></li>
+        <li><b>Selbst abschicken</b><span>Du schickst ihn aus deinem E-Mail-Programm ab.</span></li>
+      </ol>
+      <p class="kicker rv an-alt-k">Oder anders</p>
+      <div class="an-alts rv">
+        <a class="an-alt" href="tel:+3280548898">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4.5-2 1.5a12 12 0 006 6l1.5-2 4.5 1.5v3a2 2 0 01-2 2A16.5 16.5 0 014.5 5.5a2 2 0 012-2z"/></svg></span>
+          <span class="an-tx"><b>+32 80 54 88 98</b><small>Reden geht oft schneller als Tippen.</small></span>
+        </a>
+        <button class="an-alt" type="button" data-ask="Hilf mir, meine Anfrage an Racepoint vorzubereiten.">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5h14a2 2 0 012 2V15a2 2 0 01-2 2h-7l-4.5 3.5V17H5a2 2 0 01-2-2V7.5a2 2 0 012-2z"/></svg></span>
+          <span class="an-tx"><b>Mit dem KI-Berater sprechen</b><small>Er hilft dir, die Anfrage zu formulieren.</small></span>
+        </button>
+        <a class="an-alt" href="mailto:info@racepoint.be">
+          <span class="an-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/></svg></span>
+          <span class="an-tx"><b>info@racepoint.be</b><small>Direkt aus deinem E-Mail-Programm.</small></span>
+        </a>
+      </div>
+    </aside>
   </div>
 </section>
 </main>

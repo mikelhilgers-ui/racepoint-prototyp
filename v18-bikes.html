@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Racepoint · Bikes · 18 · Mein Traumbike</title>
+<meta name="description" content="Alle Bikes bei Racepoint in Schönberg: Rennrad, Gravel, MTB, E-Bike und Kinderräder von Specialized und Cervélo, mit Beratung, Probefahrt und Werkstatt.">
+<link rel="icon" href="assets/racepoint-logo-sm.svg">
+<!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
+     Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='dark')t='mix';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="assets/v18/bestof.css">
+<link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
+</head>
+<body data-page="bikes">
+<a class="skip" href="#modelle">Zum Inhalt springen</a>
+<main data-cat="alle">
+<section class="phero cine dim" id="top">
+  <figure class="phero-fig">
+      <picture><source media="(max-width:820px)" srcset="assets/v18/media/cine/porto.webp"><img class="cine-m" src="assets/v18/media/cine/porto-amb.webp" alt="Specialized Porto Lastenrad fährt vor den Racepoint-Laden" fetchpriority="high"></picture>
+      <video class="cine-m cine-bg" muted loop playsinline preload="none" aria-hidden="true" data-src="assets/v18/media/cine/porto-amb.mp4" data-src-m="assets/v18/media/cine/porto.mp4"></video>
+      <figcaption>Specialized Porto, beladen mit Jupiler und Bud · @racepoint.be</figcaption>
+  </figure>
+  <div class="phero-word" aria-hidden="true">BIKES</div>
+  <div class="wrap phero-grid">
+    <div class="phero-txt">
+      <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Bikes</li></ol>
+      <p class="kicker"><i class="dot"></i>Sortiment · Specialized Elite-Händler &amp; Cervélo</p>
+      <h1><span>Für jeden</span><span><em>das passende Rad.</em></span></h1>
+      <p class="lead">Rennrad, Gravel, MTB, E-Bike, Kinderrad. Und wer die Jupiler-Kästen fürs Wochenende holt, bekommt ein Lastenrad. Achim berät dich im Laden, mit Probefahrt, Bikefitting und eigener Werkstatt.</p>
+      <div class="btns"><a class="btn" data-ask="Welches Bike passt zu mir?">KI-Berater fragen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#modelle">Alle Modelle</a></div>
+      <div class="phero-pills"><span class="pill pill-status" data-open-status></span></div>
+    </div>
+    <div class="phero-side">
+      <a class="phero-reel pr-photo" href="https://www.instagram.com/p/CBgQoNElF1x/" target="_blank" rel="noopener" aria-label="Turbo Levo S-Works auf Instagram ansehen">
+        <img src="assets/v18/media/cine/levo-1.webp" alt="Specialized Turbo Levo S-Works in Rot und Weiß im Racepoint-Laden" loading="lazy">
+        <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@racepoint.be</span><b>Turbo Levo S-Works</b><span>Fertig für die Übergabe</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+<nav class="ctabs" aria-label="Kategorien"><div class="wrap"><div class="ctabs-in"><a href="v18-bikes.html" class="on" aria-current="page">Alle Bikes</a><a href="v18-rennrad.html">Rennrad</a><a href="v18-gravel.html">Gravel</a><a href="v18-mtb.html">MTB</a><a href="v18-ebike.html">E-Bike</a><a href="v18-familie.html">Kinder & Familie</a><a href="v18-zubehoer.html">Zubehör</a></div></div></nav>
+
+<section class="sec bikes" id="kategorien" aria-labelledby="katH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Sechs Bereiche</p><h2 class="h2 rv" id="katH">Vom Laufrad<br><em>bis zum Helm.</em></h2></div>
+      <p class="lead rv">Straße, Schotter, Trail, mit Motor oder für die Kleinsten. Dazu alles, was du beim Fahren am Körper trägst.</p>
+    </div>
+    <div class="cats cats-6">
+      <a class="cat rv" href="v18-rennrad.html">
+        <img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern im Showroom" loading="lazy">
+        <span class="cat-n">01</span>
+        <div class="cat-b"><h3>Rennrad</h3><p>Von der Feierabendrunde bis zum Radmarathon.</p><span class="price">ab 1.499 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-gravel.html">
+        <img src="assets/gravel-ride.jpg" alt="Drei Gravelbiker auf einem Schotterweg" loading="lazy">
+        <span class="cat-n">02</span>
+        <div class="cat-b"><h3>Gravel</h3><p>Für Schotter, Waldwege und lange Touren im Venn.</p><span class="price">ab 2.299 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-mtb.html">
+        <img src="assets/mtb-action.jpg" alt="Mountainbiker im Wald auf einem Trail" loading="lazy">
+        <span class="cat-n">03</span>
+        <div class="cat-b"><h3>MTB</h3><p>Vom ersten Trail bis zum Enduro-Wochenende.</p><span class="price">ab 949 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-ebike.html">
+        <img src="entwuerfe/codex-2026-10/prototype/assets/hero-ebike.jpg" alt="E-Mountainbike auf einem Felsen in den Bergen" loading="lazy">
+        <span class="cat-n">04</span>
+        <div class="cat-b"><h3>E-Bike</h3><p>Zur Arbeit, auf Tour oder bergauf mit Rückenwind.</p><span class="price">ab 4.199 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-familie.html">
+        <img src="assets/v18/media/cine/kids-riprock.webp" alt="Mädchen mit Sonnenhut neben ihrem Specialized Riprock 24" loading="lazy" style="object-position:55% 40%">
+        <span class="cat-n">05</span>
+        <div class="cat-b"><h3>Kinder &amp; Familie</h3><p>Vom ersten Laufrad bis zur Familientour.</p><span class="price">ab 749 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-zubehoer.html">
+        <img src="assets/v18/media/cine/kleid-3.webp" alt="Bunte Trikotwand mit Mountainbike im Racepoint-Laden" loading="lazy">
+        <span class="cat-n">06</span>
+        <div class="cat-b"><h3>Zubehör</h3><p>Schuhe, Helme und Bekleidung für jede Runde.</p><span class="price">im Shop</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+    <div class="cat-more">
+      <button class="mini rv" type="button" data-ask="Bietet ihr Leasing oder Finanzierung an?"><b>Leasing &amp; Finanzierung</b><span>In Raten zahlen, auf Anfrage</span><i aria-hidden="true">✶</i></button>
+      <a class="mini rv" href="v18-shop.html"><b>Shop</b><span>Bikes reservieren, Zubehör und Kollektion bestellen</span><i aria-hidden="true">↗</i></a>
+      <a class="mini rv" href="v18-werkstatt.html"><b>Werkstatt für alle Marken</b><span>Trek, Canyon, Cube und alle anderen</span><i aria-hidden="true">↗</i></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="modelle" aria-labelledby="modH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Alle Modelle · <span id="bikeCount"></span></p><h2 class="h2 rv" id="modH">Die Modelle<br><em>im Überblick.</em></h2></div>
+      <p class="lead rv">Mit Bildern, Ausstattung und Herstellerpreis. Im Laden steht oft mehr, frag einfach nach.</p>
+    </div>
+    <div class="tools">
+      <div class="fchips" id="fchips" role="group" aria-label="Filter"></div>
+      <label class="sort">Sortieren <select id="sort"><option value="asc">Preis aufsteigend</option><option value="desc">Preis absteigend</option><option value="name">Name A–Z</option></select></label>
+    </div>
+    <div class="bgrid" id="bikeGrid" aria-live="polite"></div>
+    <p class="note"><b>Herstellerpreise in Belgien, geprüft am 14.10.2026. Kein Racepoint-Angebot.</b> Ausführung, Preis, passende Größe und lokaler Bestand werden persönlich bestätigt. Leasing &amp; Finanzierung auf Anfrage.</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="whyH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Beratung und Service</p><h2 class="h2 rv" id="whyH">Beratung, Fitting<br><em>und Werkstatt.</em></h2></div>
+      <p class="lead rv">Erst fragen wir, wo du fährst und was du ausgeben möchtest. Dann suchen wir das Rad dazu.</p>
+    </div>
+    <div class="pts">
+      <article class="pt rv"><b>01</b><h3>Beratung von Achim</h3><p>Achim erklärt dir die Unterschiede, wie in seinen Videos. Passt das günstigere Rad besser zu dir, sagt er das auch.</p></article>
+      <article class="pt rv"><b>02</b><h3>Probefahrt &amp; Fitting</h3><p>Fahr Probe, bevor du kaufst. Beim Retül-Bikefitting (ca. 1,5 Stunden) stellen wir das Rad auf deinen Körper ein.</p></article>
+      <article class="pt rv"><b>03</b><h3>Werkstatt</h3><p>Service, Fahrwerk und Reparatur machen wir selbst, in unserer Werkstatt in Schönberg. Für alle Marken.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-label="Einblicke aus dem Laden" style="padding-top:0">
+  <div class="wrap gal3">
+    <figure class="rv"><img src="assets/v18/media/cine/levo-2.webp" alt="Rotes Oberrohr eines Specialized Turbo Levo mit Levo-Schriftzug" loading="lazy"></figure>
+    <figure class="rv"><img src="assets/v18/media/cine/kleid-3.webp" alt="Bunte Bekleidungswand mit Mountainbike im Racepoint-Laden" loading="lazy"></figure>
+    <figure class="rv"><img src="assets/v18/media/cine/levo-3.webp" alt="Display und Gabel eines Turbo Levo S-Works" loading="lazy"></figure>
+  </div>
+</section>
+
+<section class="sec films mix-hell ton2" aria-labelledby="filmH" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Achims Filme</p><h2 class="h2 rv" id="filmH">Wie bei Achim<br><em>ein Bike entsteht.</em></h2></div>
+      <a class="btn ghost rv" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+    </div>
+    <div class="frow" id="catFilms"></div>
+    <p class="fine">Originalfilme aus Achims Archiv, keine aktuellen Verkaufsangebote.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis/lenis.min.js"></script>
+<script src="assets/rp-core.js"></script>
+<script src="assets/ki-berater.js"></script>
+<script src="assets/v18/data.js"></script>
+<script src="assets/v18/site.js"></script>
+<script src="assets/v18/pages.js"></script>
+</body>
+</html>

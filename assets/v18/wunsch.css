@@ -1,0 +1,62 @@
+/* =====================================================================
+   RACEPOINT · 18 · MEIN TRAUMBIKE — Wunsch-Build (nur v18-bike.html)
+   Ruhiger Block ohne 3D: Herstellerfoto, Farb-Chips, Größen-Richtwert,
+   Extras, Zusammenfassung. Nutzt die Variablen aus bestof.css.
+   ===================================================================== */
+.wb{margin-top:clamp(30px,4vw,56px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,80px);align-items:start;padding-bottom:clamp(8px,2vw,24px)}
+.wb-photo{margin:0;position:sticky;top:96px}
+.wb-photo .bd-stage{aspect-ratio:4/3;box-shadow:0 30px 70px -30px rgba(0,0,0,.7)}
+.wb-photo figcaption{margin-top:14px;color:var(--dim);font-size:13px;line-height:1.5}
+
+.wb-panel{min-width:0;display:flex;flex-direction:column}
+.wb-group{margin:0;padding:clamp(22px,2.4vw,32px) 0;border:0;border-bottom:1px solid var(--line);min-width:0}
+.wb-group:first-child{padding-top:0}
+.wb-h{display:block;margin:0 0 16px;padding:0;font:600 12px/1.2 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.wb-hint{margin:14px 0 0;color:var(--mute);font-size:14px;line-height:1.5}
+
+/* Farb-Chips (Text, kein Farbfeld: die Namen sind Herstellerangaben) */
+.wb-chips{display:flex;flex-wrap:wrap;gap:10px}
+.wb-chips button{min-height:46px;max-width:100%;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);cursor:pointer;font:600 14px/1.25 var(--body);color:var(--ink);text-align:left;transition:background .25s var(--ease),border-color .25s var(--ease),color .25s var(--ease)}
+.wb-chips button:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08)}
+.wb-chips button[aria-pressed="true"]{background:#fff;color:#0b0b0d;border-color:#fff}
+
+/* Größe */
+.wb-size .rng{margin:0}
+.wb-result{margin:10px 0 0;font:600 15px var(--body);color:var(--mute)}
+.wb-result b{color:var(--ink);font:900 italic 34px/1 var(--display);letter-spacing:.02em;margin-left:6px;vertical-align:-2px}
+
+/* Extras */
+.wb-extras{display:flex;flex-direction:column;gap:10px}
+.wb-extras .wb-h{float:left;width:100%}
+.wb-check{display:flex;align-items:center;gap:14px;min-height:54px;padding:12px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);cursor:pointer;font-weight:600;transition:border-color .25s var(--ease),background .25s var(--ease)}
+.wb-check:hover{border-color:rgba(255,255,255,.3)}
+.wb-check input{appearance:none;-webkit-appearance:none;flex:none;width:24px;height:24px;margin:0;border-radius:7px;border:2px solid rgba(255,255,255,.4);background:transparent;cursor:pointer;display:grid;place-content:center;transition:background .2s,border-color .2s}
+.wb-check input::after{content:"";width:12px;height:7px;border:solid #fff;border-width:0 0 3px 3px;transform:rotate(-45deg) scale(0);margin-top:-3px;transition:transform .2s var(--ease)}
+.wb-check input:checked{background:var(--red);border-color:var(--red)}
+.wb-check input:checked::after{transform:rotate(-45deg) scale(1)}
+.wb-check:has(input:checked){border-color:rgba(232,54,55,.7);background:rgba(232,54,55,.07)}
+.wb-check input:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+
+/* Zusammenfassung */
+.wb-sum{border-bottom:0;padding-bottom:0}
+.wb-sum dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 22px}
+.wb-sum dt{color:var(--dim);font:600 12px/1.7 var(--display);letter-spacing:.16em;text-transform:uppercase}
+.wb-sum dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.wb-sum .btns{margin-top:26px;display:flex;flex-wrap:wrap;gap:12px}
+.wb-sum .btns .btn{flex:1 1 200px}
+
+@media (max-width:900px){
+  .wb{grid-template-columns:minmax(0,1fr);gap:28px}
+  .wb-photo{position:static}
+}
+@media (max-width:560px){
+  /* Luft unten, damit der KI-Knopf unten rechts nichts verdeckt */
+  #cfgSec{padding-bottom:120px}
+  .wb-sum dl{grid-template-columns:minmax(0,1fr);gap:2px}
+  .wb-sum dt{margin-top:10px}
+  .wb-chips button{border-radius:16px}
+  .wb-sum .btns .btn{flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  .wb *,.wb *::after{transition:none!important}
+}

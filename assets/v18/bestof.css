@@ -116,7 +116,9 @@ button{font:inherit;color:inherit}
 .sec{position:relative;padding:clamp(84px,9vw,140px) 0}
 .sec-h{display:flex;align-items:flex-end;justify-content:space-between;gap:24px 48px;flex-wrap:wrap;margin-bottom:clamp(36px,5vw,64px)}
 .sec-h .h2{margin-top:16px}
-.rv{opacity:0;transform:translateY(36px)}
+.rv{opacity:0;transform:translateY(22px)}
+/* bis die Schrift da ist und das Intro startet (html.rp-boot setzt der Kopf der Seite) */
+.rp-boot .hero-content,.rp-boot .hero-badge,.rp-boot #heroCtrl,.rp-boot .phero-txt{visibility:hidden}
 .no-js .rv,.rm .rv{opacity:1;transform:none}
 
 /* 3 · Kategorien */
@@ -133,7 +135,8 @@ button{font:inherit;color:inherit}
 .cat-go{position:absolute;z-index:2;right:16px;top:14px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);transition:background .3s,transform .4s var(--ease)}
 .cat-go svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
 .cat:hover .cat-go{background:var(--red);transform:rotate(45deg)}
-.cat-more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+.cat-more{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}
+@media (max-width:1100px){ .cat-more{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .mini{position:relative;display:flex;flex-direction:column;gap:4px;padding:20px 56px 20px 22px;border-radius:18px;background:var(--bg2);border:1px solid var(--line);text-decoration:none;text-align:left;cursor:pointer;transition:border-color .3s,background .3s}
 .mini:hover{border-color:rgba(232,54,55,.6);background:var(--bg3)}
 .mini b{font:800 italic 26px/1 var(--display);text-transform:uppercase}
@@ -191,6 +194,7 @@ button{font:inherit;color:inherit}
 .svc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .svc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;background:var(--bg2);border:1px solid var(--line)}
 .svc figure{position:relative;margin:0;aspect-ratio:16/8.6;overflow:hidden}
+.svc figure>a{display:block;width:100%;height:100%;cursor:pointer}
 .svc figure img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
 .svc:hover figure img{transform:scale(1.05)}
 .svc-fit figure img{object-position:50% 35%}
@@ -215,6 +219,12 @@ button{font:inherit;color:inherit}
 .ride-stats{display:flex;gap:clamp(24px,4vw,56px);margin-bottom:14px}
 .ride-stats b{display:block;font:900 italic clamp(48px,5vw,80px)/.9 var(--display);font-variant-numeric:tabular-nums}
 .ride-stats span{font:600 12px var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+.ride-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.ride-stats i{font-style:normal}
+.ride-alt b{color:var(--mute)}
+.ride-bsp{flex:none;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font:700 11px var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+.ride-msg{margin:18px 0 0;color:var(--mute);font-size:14px}
+.ride-btns{display:flex;flex-wrap:wrap;gap:10px}
 .ride-chart{position:relative;height:clamp(150px,22vw,260px)}
 .ride-prof{position:absolute;inset:0;width:100%;height:100%;overflow:visible;max-width:none}
 .ride-prof .grid line{stroke:rgba(255,255,255,.07);stroke-width:1;vector-effect:non-scaling-stroke}
@@ -253,7 +263,8 @@ button{font:inherit;color:inherit}
 
 /* 9 · Besuch */
 .visit{position:relative;min-height:100vh;display:flex;align-items:center;padding:140px 0 110px;overflow:hidden}
-.visit-bg{position:absolute;inset:-12% 0;background:url(../shop-interior.jpg) center/cover}
+.visit-bg{position:absolute;inset:-12% 0;background:var(--bg3) center/cover}
+.visit-bg.lz-on,.no-js .visit-bg{background-image:url(../shop-interior.jpg)}
 .visit::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,11,13,.95) 0%,rgba(11,11,13,.78) 48%,rgba(11,11,13,.45) 100%),linear-gradient(180deg,var(--bg) 0%,rgba(11,11,13,0) 18%,rgba(11,11,13,0) 82%,var(--bg) 100%)}
 .visit-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(30px,5vw,80px);align-items:center}
 .vcard .h2{margin:20px 0 22px;font-size:clamp(46px,5.6vw,92px)}
@@ -270,6 +281,21 @@ button{font:inherit;color:inherit}
 .hours li.today{color:#fff;font-weight:700}
 .hours li.today span:first-child::after{content:"Heute";margin-left:10px;padding:2px 7px;border-radius:6px;background:var(--red);font:700 11px/1.4 var(--body);letter-spacing:.06em;text-transform:uppercase;vertical-align:2px}
 .hours li.closed span:last-child{color:rgba(255,255,255,.38)}
+
+/* Besuch in Hell und Mix: heller Block zwischen Touren-Filmband und KI-Berater (beide dunkel).
+   Wie die Service-Zeilen: Text links auf Hell, Ladenfoto rechts bis an den Rand, oben und unten mit Luft,
+   damit es weder das Touren-Band noch den KI-Berater berührt. Öffnungszeiten dunkel darauf. Ohne Parallaxe. */
+html:is([data-theme="light"],[data-theme="mix"]) .visit{--vis-pad:clamp(56px,6vw,104px);min-height:0;padding:calc(var(--vis-pad) + 48px) 0;background:var(--bg)}
+html:is([data-theme="light"],[data-theme="mix"]) .visit-bg,html:is([data-theme="light"],[data-theme="mix"]) .visit::before{inset:var(--vis-pad) 0 var(--vis-pad) auto;width:44%;border-radius:22px 0 0 22px}
+html:is([data-theme="light"],[data-theme="mix"]) .visit-bg{transform:none!important;background-position:50% 78%}
+html:is([data-theme="light"],[data-theme="mix"]) .visit::before{background:linear-gradient(90deg,rgba(11,11,13,.28),rgba(11,11,13,0) 40%)}
+html:is([data-theme="light"],[data-theme="mix"]) .vcard address{color:var(--ink)}
+html:is([data-theme="light"],[data-theme="mix"]) .visit .hours-card{--bg2:#121216;--strong:#fff;--line:rgba(255,255,255,.12);--ink:#f4f1ec;--mute:rgba(244,241,236,.66);--dim:rgba(244,241,236,.5);color:var(--ink);box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
+@media (max-width:900px){
+  html:is([data-theme="light"],[data-theme="mix"]) .visit{padding:var(--vis-pad) 0}
+  html:is([data-theme="light"],[data-theme="mix"]) .visit-bg,html:is([data-theme="light"],[data-theme="mix"]) .visit::before{display:none}
+}
+.hours li.today span:first-child::after{color:#fff}
 
 /* Footer */
 .ftr{border-top:1px solid var(--line);padding:64px 0 120px;background:var(--bg)}
@@ -343,6 +369,12 @@ button{font:inherit;color:inherit}
   .ride-stops li{padding:14px 16px}
   .ride-stops h4{font-size:24px}
   .ride-marks em{display:none}
+  .ride-top{flex-direction:column-reverse;gap:10px}
+  .ride-stats{gap:18px;width:100%}
+  .ride-stats b{font-size:40px}
+  .ride-stats span{font-size:10.5px;letter-spacing:.14em}
+  .ride-btns{width:100%}
+  .ride-btns .btn{width:100%;justify-content:center}
   .ftr-grid{grid-template-columns:1fr}
   .stats b{font-size:28px}
   .vlinks a{font-size:24px}

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Racepoint · Shop · 18 · Mein Traumbike</title>
+<meta name="description" content="Der Racepoint-Shop: Bikes zum Reservieren, Schuhe, Helme, Bekleidung, die Racepoint-Kollektion und Gutscheine. Abholen in Schönberg oder Versand.">
+<link rel="icon" href="assets/racepoint-logo-sm.svg">
+<!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
+     Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='dark')t='mix';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="assets/v18/bestof.css">
+<link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
+<link rel="stylesheet" href="assets/v18/shop.css">
+</head>
+<body data-page="shop">
+<a class="skip" href="#produkte">Zum Inhalt springen</a>
+<main>
+<section class="phero cine" id="top">
+  <figure class="phero-fig">
+      <img class="cine-m cine-slide on" src="assets/v18/media/cine/levo-1.webp" alt="Specialized Turbo Levo S-Works in Rot und Weiß im Racepoint-Laden" style="object-position:50% 50%" fetchpriority="high">
+      <img class="cine-m cine-slide" src="assets/v18/media/cine/gravel-1.webp" alt="Gravelrennen: Fahrer in voller Fahrt auf Schotter" style="object-position:50% 50%" loading="lazy">
+      <img class="cine-m cine-slide" src="assets/v18/media/cine/kleid-7.webp" alt="Wand mit Helmen, Trikots und Jacken im Racepoint-Laden" style="object-position:50% 50%" loading="lazy">
+      <img class="cine-m cine-slide" src="assets/v18/media/shop/hoodie-bw-w-3.webp" alt="Rückenprint des schwarzen Racepoint-Hoodies" style="object-position:50% 30%" loading="lazy">
+      <figcaption>Bikes, Laden und Kollektion · via @racepoint.be und racepoint-shop.com</figcaption>
+  </figure>
+  <div class="phero-word" aria-hidden="true">SHOP</div>
+  <div class="wrap phero-grid">
+    <div class="phero-txt">
+      <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Shop</li></ol>
+      <p class="kicker"><i class="dot"></i>Shop · Bikes, Zubehör &amp; Kollektion</p>
+      <h1><span>Racepoint</span><span><em>zum Mitnehmen.</em></span></h1>
+      <p class="lead">Zubehör, Bekleidung und die Racepoint-Kollektion bestellst du direkt. Bikes reservierst du, bezahlt wird nach der Probefahrt im Laden. Draufsitzen solltest du ja vorher.</p>
+      <div class="btns"><a class="btn" href="#bereiche">Zu den Bereichen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><button class="btn ghost" type="button" data-cart-open>Warenkorb</button></div>
+      <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill">Abholen in Schönberg</span></div>
+    </div>
+    <div class="phero-side">
+      <a class="phero-reel" href="https://www.instagram.com/reel/Dd_07A1I1jM/" target="_blank" rel="noopener" aria-label="Tarmac SL9 und Evade Red Bull auf Instagram ansehen">
+        <video muted loop playsinline preload="none" poster="assets/v18/media/cine/sl9.webp" data-src="assets/v18/media/cine/sl9.mp4" aria-hidden="true"></video>
+        <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@racepoint.be</span><b>SL9 &amp; Evade × Red Bull</b><span>Built to race. Built to fly.</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="bereiche" aria-labelledby="berH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Vier Bereiche</p><h2 class="h2 rv" id="berH">Was darf<br><em>es sein?</em></h2></div>
+      <p class="lead rv">Bikes reservierst du und fährst Probe. Alles andere bestellst du direkt oder holst es in Schönberg ab.</p>
+    </div>
+    <div class="cats">
+      <a class="cat rv" href="v18-bikes.html">
+        <img src="assets/roadbike-shop.jpg" alt="S-Works Rennrad mit Roval-Laufrädern im Showroom" loading="lazy">
+        <span class="cat-n">01</span>
+        <div class="cat-b"><h3>Bikes</h3><p>Vom Kinderrad bis zum S-Works. Reservieren, Probe fahren, im Laden zahlen.</p><span class="price">ab 749 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-zubehoer.html">
+        <img src="assets/v18/media/cine/kleid-3.webp" alt="Bunte Trikotwand mit Mountainbike im Racepoint-Laden" loading="lazy" style="object-position:55% 50%">
+        <span class="cat-n">02</span>
+        <div class="cat-b"><h3>Zubehör &amp; Bekleidung</h3><p>Schuhe, Helme und Trikots für jede Runde.</p><span class="price">ab 24,90 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-kollektion.html">
+        <img src="assets/v18/media/shop/cap-1.webp" alt="Frau mit Racepoint-Cap und Racepoint-Shirt" loading="lazy" style="object-position:50% 15%">
+        <span class="cat-n">03</span>
+        <div class="cat-b"><h3>Racepoint-Kollektion</h3><p>Shirts, Hoodies und die Cap aus den Videos.</p><span class="price">ab 29,90 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+      <a class="cat rv" href="v18-kollektion.html?f=gutschein">
+        <img src="assets/v18/media/cine/fitting-2.webp" alt="Bikefitting im Fitting-Raum von Racepoint" loading="lazy">
+        <span class="cat-n">04</span>
+        <div class="cat-b"><h3>Gutscheine</h3><p>Für Werkstatt, Bikefitting oder einfach so.</p><span class="price">ab 25 €</span></div>
+        <span class="cat-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="produkte" aria-labelledby="prodH">
+  <div class="wrap">
+    <div class="sec-h">
+      <div><p class="kicker rv">Alle Artikel</p><h2 class="h2 rv" id="prodH">Alles auf<br><em>einen Blick.</em></h2></div>
+      <p class="lead rv">Bei der Kollektion steht, wer aus dem Team welche Größe trägt. Bei Bikes ist die Größe ein Richtwert, die klären wir bei der Probefahrt.</p>
+    </div>
+    <!-- Quellen und Stand der Preise: assets/v18/media/QUELLEN.md und shop.js -->
+    <div class="tools sh-tools">
+      <div class="fchips" id="shChips" role="group" aria-label="Produkte filtern"></div>
+      <button class="sh-cart-btn" type="button" data-cart-open><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Warenkorb <span data-cart-count>0</span></button>
+    </div>
+    <div class="sh-grid" id="shGrid"></div>
+    <!-- Hinweis auf den Laden: online steht nicht alles, im Laden kann man anprobieren und fragen -->
+    <aside class="sh-visit rv" aria-labelledby="shVisitH">
+      <div class="sh-visit-bg" aria-hidden="true"></div>
+      <div class="sh-visit-txt">
+        <p class="kicker">Laden in Schönberg</p>
+        <h3 class="h3 sh-visit-h" id="shVisitH">Nicht fündig geworden?<br><em>Dann komm vorbei.</em></h3>
+        <p>Im Laden kannst du anprobieren, Probe fahren und Achim und Elke direkt fragen. Anprobieren klappt dort ohnehin besser als am Bildschirm.</p>
+        <span class="pill pill-status" data-open-status></span>
+      </div>
+      <div class="sh-visit-act">
+        <a class="btn" href="v18-kontakt.html">Anfahrt &amp; Öffnungszeiten <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="tel:+3280548898">+32 80 54 88 98</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<dialog class="sh-dlg" id="shProduct" aria-labelledby="shPdTitle">
+  <button class="sh-x" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="sh-pd" data-lenis-prevent></div>
+</dialog>
+
+<dialog class="sh-dlg" id="shCart" aria-labelledby="shCartTitle">
+  <button class="sh-x" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="sh-cart-h"><h2 id="shCartTitle">Warenkorb</h2></div>
+  <div id="shCartMain">
+    <div id="shCartList" data-lenis-prevent></div>
+    <div class="sh-cart-f">
+      <p class="sh-sum"><span>Zwischensumme</span><span id="shTotal">0,00 €</span></p>
+      <p class="fine" id="shCartFine">Versand oder Abholung wählst du an der Kasse.</p>
+      <button class="btn" type="button" id="shCheckout">Zur Kasse <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></button>
+    </div>
+  </div>
+  <div id="shCheckoutInfo" hidden>
+    <h3>Hier endet der Prototyp.</h3>
+    <p>Im fertigen Shop übernimmt an dieser Stelle die Kasse von Shopify: Adresse, Bezahlung und Bestätigung per E-Mail. Die Artikel pflegt Racepoint dann selbst im Shopify-Konto.</p>
+    <p>Reservierte Bikes gehen als Anfrage an Racepoint. Achim meldet sich wegen Probefahrt und Größe, bezahlt wird im Laden.</p>
+    <p>Bestellt wurde nichts. Der Warenkorb bleibt nur in diesem Browser gespeichert.</p>
+    <div class="btns"><button class="btn ghost" type="button" id="shBack">Zurück zum Warenkorb</button><button class="btn" type="button" data-close>Weiter stöbern</button></div>
+  </div>
+</dialog>
+
+<button class="sh-cart-btn" id="shFab" type="button" data-cart-open hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>Warenkorb <span data-cart-count>0</span></button>
+<p class="sh-toast" id="shToast" role="status" aria-live="polite"></p>
+
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis/lenis.min.js"></script>
+<script src="assets/rp-core.js"></script>
+<script src="assets/ki-berater.js"></script>
+<script src="assets/v18/data.js"></script>
+<script src="assets/v18/site.js"></script>
+<script src="assets/v18/pages.js"></script>
+<script src="assets/v18/shop.js"></script>
+</body>
+</html>

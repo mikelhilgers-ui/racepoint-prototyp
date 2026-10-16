@@ -8,32 +8,47 @@
 <link rel="icon" href="assets/racepoint-logo-sm.svg">
 <!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
      Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='dark')t='mix';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
 </head>
 <body data-page="ueber-uns">
 <a class="skip" href="#team">Zum Inhalt springen</a>
 <main>
-<section class="phero" id="top">
+<section class="phero cine" id="top">
+  <figure class="phero-fig">
+      <img class="cine-m" src="assets/v18/media/team-laden.webp" alt="Achim, Elke und das Racepoint-Team mit Kindern und ihren neuen Bikes im Laden" fetchpriority="high" style="object-position:50% 45%">
+      <figcaption>Achim, Elke &amp; Team · Schönberg</figcaption>
+  </figure>
   <div class="phero-word" aria-hidden="true">RACEPOINT</div>
   <div class="wrap phero-grid">
     <div class="phero-txt">
       <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>Über uns</li></ol>
-      <p class="kicker"><i class="dot"></i>Die Menschen hinter Racepoint</p>
-      <h1><span>Bikes sind</span><span><em>unser Ding.</em></span></h1>
-      <p class="lead">Persönlich vom ersten Gespräch bis zur letzten Schraube. Lerne die Menschen kennen, die hinter deinem Bike stehen.</p>
+      <p class="kicker"><i class="dot"></i>Das Team von Racepoint</p>
+      <h1><span>Achim, Elke</span><span><em>und das Team.</em></span></h1>
+      <p class="lead">Fahrradladen in Schönberg, seit rund 18 Jahren. Verkauf, Werkstatt für alle Marken und Retül-Bikefitting findest du bei uns im Laden.</p>
       <div class="btns"><a class="btn" href="v18-kontakt.html">Komm vorbei <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#team">Das Team</a></div>
       <div class="phero-pills"><span class="pill pill-status" data-open-status></span></div>
     </div>
-    <figure class="phero-fig">
-      <img src="assets/achim-team.jpg" alt="Achim, Elke und das Racepoint-Team mit Kindern und ihren neuen Bikes im Laden" fetchpriority="high" style="object-position:60% 50%">
-      <figcaption>Achim, Elke &amp; Team · Schönberg</figcaption>
+    <div class="phero-side">
+      <a class="phero-reel" href="https://www.instagram.com/reel/DBl1S7iMZy_/" target="_blank" rel="noopener" aria-label="Tarmac SL8 auf Instagram ansehen">
+        <video muted loop playsinline preload="none" poster="assets/v18/media/cine/ueberuns.webp" data-src="assets/v18/media/cine/ueberuns.mp4" aria-hidden="true"></video>
+        <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@racepoint.be</span><b>Tarmac SL8</b><span>Sprint im Wald</span></span>
+      </a>
       <button class="hero-badge phero-badge" type="button" data-video="9KIh7oOIPT4" aria-label="Film ansehen">
           <svg class="hb-ring" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="hbRAC" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text textLength="286" lengthAdjust="spacingAndGlyphs"><textPath href="#hbRAC" textLength="286" lengthAdjust="spacingAndGlyphs">DER EXPERTE AUS DEN VIDEOS · 80.000 ABOS · </textPath></text></svg>
           <span class="hb-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
         </button>
-    </figure>
+    </div>
   </div>
 </section>
 
@@ -42,7 +57,7 @@
     <figure class="achim-fig rm-open" style="clip-path:none"><img src="assets/v10/film-3.jpg" alt="Im Racepoint-Showroom zwischen Rennrädern" loading="lazy" style="transform:none"><figcaption>Showroom · Schönberg</figcaption></figure>
     <div class="achim-txt">
       <p class="kicker rv" id="qH">Achim Leufgen · Zweiradmechaniker-Meister</p>
-      <blockquote class="quote rv" style="margin-top:20px">„Ich bin der Achim aus den Videos. Bevor ein Bike unseren Laden verlässt, war es in meinen Händen – egal ob Kinderrad, E-Bike oder S-Works.“</blockquote>
+      <blockquote class="quote rv" style="margin-top:20px">„Ich bin der Achim aus den Videos. Bevor ein Bike unseren Laden verlässt, war es in meinen Händen, egal ob Kinderrad, E-Bike oder S-Works.“</blockquote>
       <div class="stats rv">
         <div><b data-count="80000">80.000</b><span>YouTube-Abos</span></div>
         <div><b data-count="18">18</b><span>Jahre Erfahrung</span></div>
@@ -55,13 +70,13 @@
 <section class="sec" id="team" aria-labelledby="teamH" style="padding-top:0">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Handwerk · Leidenschaft · Schönberg</p><h2 class="h2 rv" id="teamH">Kein Bike<br><em>von irgendwem.</em></h2></div>
-      <p class="lead rv">Bei Racepoint treffen Achims Begeisterung für besondere Builds und ehrliches Handwerk aufeinander. Mit Elke und dem Team macht er aus „Ich suche ein Bike“ ein „Das ist meins“.</p>
+      <div><p class="kicker rv">Team · Schönberg</p><h2 class="h2 rv" id="teamH">Das Team<br><em>im Laden.</em></h2></div>
+      <p class="lead rv">Achim ist Zweiradmechaniker-Meister und baut Bikes auf. Gemeinsam mit Elke und dem Team berät er dich im Laden in Schönberg. Sprüche gibt es dazu.</p>
     </div>
     <div class="team">
-      <article class="tm rv"><span class="ini">A</span><h3>Achim</h3><p class="kicker">Zweiradmechaniker-Meister · Retül-zertifiziert</p><p>Seine Begeisterung für Bikes zeigt sich in der Werkstatt, in individuellen Builds, beim Bikefitting und vor der Kamera.</p></article>
-      <article class="tm rv"><span class="ini">E</span><h3>Elke</h3><p class="kicker">Racepoint · Schönberg</p><p>Zusammen mit Achim und dem Team steht Elke für persönliche Beratung in Schönberg – vom ersten Gespräch an.</p></article>
-      <article class="tm rv"><span class="ini">T</span><h3>Das Team</h3><p class="kicker">Werkstatt &amp; Beratung</p><p>Von Menschen, die genauso gern fahren wie du: Beratung, Werkstatt für alle Marken und Betreuung deines Bikes.</p></article>
+      <article class="tm rv"><span class="ava"><img src="assets/v18/media/team/achim.webp" alt="Achim" width="160" height="160" loading="lazy"></span><h3>Achim</h3><p class="kicker">Zweiradmechaniker-Meister · Retül-zertifiziert</p><p>Werkstatt, individuelle Builds, Bikefitting und die Videos auf YouTube.</p></article>
+      <article class="tm rv"><span class="ava"><img src="assets/v18/media/team/elke.webp" alt="Elke" width="160" height="160" loading="lazy"></span><h3>Elke</h3><p class="kicker">Racepoint · Schönberg</p><p>Gemeinsam mit Achim und dem Team berät Elke dich persönlich im Laden in Schönberg.</p></article>
+      <article class="tm rv"><span class="ava ava-2"><img src="assets/v18/media/team/team-1.webp" alt="Mechaniker aus dem Racepoint-Team" width="160" height="160" loading="lazy"><img src="assets/v18/media/team/team-2.webp" alt="Mechaniker aus dem Racepoint-Team" width="160" height="160" loading="lazy"></span><h3>Leon &amp; Sven</h3><p class="kicker">Mechaniker · Werkstatt</p><p>Die beiden schrauben in der Werkstatt an Rädern aller Marken: Service, Reparatur und Aufbau deines Bikes.</p></article>
     </div>
   </div>
 </section>
@@ -69,47 +84,31 @@
 <section class="sec" aria-labelledby="gH" style="padding-top:0">
   <div class="wrap about-grid">
     <div class="sticky">
-      <p class="kicker rv">Geschichte</p>
+      <p class="kicker rv">Seit 18 Jahren</p>
       <h2 class="h2 rv" id="gH">18 Jahre<br><em>Racepoint.</em></h2>
-      <p class="lead rv" style="margin-top:20px">Was in Schönberg im Dreiländereck angefangen hat, schauen heute 80.000 Menschen auf YouTube. Geblieben ist das Wichtigste: persönliche Beratung und ehrliches Handwerk.</p>
+      <p class="lead rv" style="margin-top:20px">Angefangen hat es mit dem Laden in Schönberg im Dreiländereck. Heute hat Achims YouTube-Kanal 80.000 Abonnenten.</p>
     </div>
     <div class="tl-wrap"><span class="tl-fill" aria-hidden="true"></span>
     <ol class="tl">
-      <li class="rv"><p class="kicker">Der Anfang</p><h3>Ein Laden in Schönberg</h3><p>Seit 18 Jahren in Ostbelgien – mitten im Dreiländereck, eine Stunde von Aachen, Lüttich und Luxemburg.</p></li>
-      <li class="rv"><p class="kicker">Handwerk</p><h3>Meisterwerkstatt für alle Marken</h3><p>Inspektion, Reparatur, Fahrwerk und E-Bike-Service – nicht nur für Specialized, sondern für alles, was zwei Räder hat.</p></li>
-      <li class="rv"><p class="kicker">Partner</p><h3>Specialized Elite Händler &amp; Cervélo</h3><p>Als Specialized Elite Händler begleiten wir dich von der Auswahl bis zur Betreuung deines Bikes.</p></li>
-      <li class="rv"><p class="kicker">Präzision</p><h3>Retül-Bikefitting</h3><p>Achim ist Retül-zertifiziert: 3D-Motion-Capture, damit dein Bike wirklich zu dir passt.</p></li>
-      <li class="rv"><p class="kicker">Vor der Kamera</p><h3>80.000 schauen zu</h3><p>Builds, Unboxings und Werkstatt-Wissen auf @racepointbikeshop – unsere Builds machen sichtbar, wie viel Handwerk in einem Bike steckt.</p></li>
+      <li class="rv"><p class="kicker">Laden</p><h3>Ein Laden in Schönberg</h3><p>Seit 18 Jahren in Ostbelgien, im Dreiländereck. Aachen und Lüttich sind rund eine Stunde entfernt, Luxemburg gut eine Stunde.</p></li>
+      <li class="rv"><p class="kicker">Handwerk</p><h3>Meisterwerkstatt für alle Marken</h3><p>Inspektion, Reparatur, Fahrwerk und E-Bike-Service für alle Marken.</p></li>
+      <li class="rv"><p class="kicker">Partner</p><h3>Specialized Elite Händler &amp; Cervélo</h3><p>Als Specialized Elite Händler beraten wir dich bei der Auswahl und betreuen dein Bike danach in der Werkstatt.</p></li>
+      <li class="rv"><p class="kicker">Fitting</p><h3>Retül-Bikefitting</h3><p>Achim ist Retül-zertifiziert. Mit 3D-Messung stellt er Sattel, Cockpit und Cleats auf dich ein.</p></li>
+      <li class="rv"><p class="kicker">Vor der Kamera</p><h3>80.000 Abonnenten</h3><p>Bike-Builds und Werkstatt-Wissen auf @racepointbikeshop.</p></li>
     </ol></div>
   </div>
 </section>
 
 <section class="sec films" aria-labelledby="fH" style="padding-top:0">
   <div class="wrap">
-    <div class="sec-h"><div><p class="kicker rv">Auch vor der Kamera</p><h2 class="h2 rv" id="fH">Wir bauen.<br><em>Du fieberst mit.</em></h2></div><a class="btn ghost rv" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+    <div class="sec-h"><div><p class="kicker rv">Filme</p><h2 class="h2 rv" id="fH">Zwei Builds<br><em>aus der Werkstatt.</em></h2></div><a class="btn ghost rv" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
     <div class="frow">
       <button class="film rv" type="button" data-video="vV_rL9yq620"><img src="entwuerfe/codex-2026-10/prototype/assets/films/vV_rL9yq620.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Leichtbau aus Achims Werkstatt</span><b>S-Works Aethos</b></span></button>
-      <button class="film rv" type="button" data-video="5TcRRpUy5T4"><img src="entwuerfe/codex-2026-10/prototype/assets/films/5TcRRpUy5T4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Vom Rahmen zum Aero-Dreambuild</span><b>Cervélo S5</b></span></button>
+      <button class="film rv" type="button" data-video="5TcRRpUy5T4"><img src="entwuerfe/codex-2026-10/prototype/assets/films/5TcRRpUy5T4.jpg" alt="" loading="lazy"><span class="film-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span><span class="film-m"><span class="kicker">Vom Rahmen zum Aero-Rennrad</span><b>Cervélo S5</b></span></button>
     </div>
   </div>
 </section>
 
-<section class="sec ai cta" aria-label="Beratung">
-  <div class="ai-glow" aria-hidden="true"></div>
-  <div class="wrap ai-in">
-    <div class="ai-orb" aria-hidden="true"><i></i><b></b></div>
-    <p class="kicker rv">Sag Hallo</p>
-    <h2 class="h2 rv">Wir sehen uns<br><em>in Schönberg.</em></h2>
-    <p class="lead rv">Komm mit einer Frage, einer Idee oder deinem Bike. Oder frag vorab den KI-Berater.</p>
-    <form class="ask rv" data-ask-form>
-      <label class="sr-only" for="askInput">Frage an den KI-Berater</label>
-      <input id="askInput" type="text" autocomplete="off" placeholder="Z. B. „Wann seid ihr am Samstag da?“">
-      <button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="chips rv" role="list"><button type="button" role="listitem" data-ask="Habt ihr heute geöffnet? Wie sind eure Öffnungszeiten?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Öffnungszeiten</button><button type="button" role="listitem" data-ask="Wie erreiche ich euch? Adresse, Telefon und E-Mail bitte."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Kontakt & Anfahrt</button><button type="button" role="listitem" data-ask="Ich möchte einen Termin vereinbaren."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Termin</button></div>
-    <p class="fine rv">Termine werden nur als Anfrage vorbereitet – gebucht wird erst durch das Racepoint-Team.</p>
-  </div>
-</section>
 </main>
 
 <script src="vendor/gsap/gsap.min.js"></script>

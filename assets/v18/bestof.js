@@ -4,9 +4,10 @@
    2) Hero: Shop-Film, Headline-Reveal, Film „verdichtet“ sich beim
       Scrollen in den Schriftzug RACEPOINT (Video im Schriftzug, V10)
    3) Traumbike-Story -> assets/v18/traum.js (eigene Datei)
-   4) Achim, KI-Status, Samstagsrunde mit Höhenprofil (V10), Kontakt
+   4) Achim, KI-Status, Samstagsrunde = echter Venn-Klassiker
+      (Daten aus assets/v17/touren, Helfer RP18Touren), Kontakt
    Benötigt: gsap, ScrollTrigger, SplitText, DrawSVGPlugin, Lenis,
-   window.RP (assets/rp-core.js)
+   window.RP (assets/rp-core.js), window.RP18Touren (touren-map.js)
    ===================================================================== */
 (function () {
   'use strict';
@@ -82,14 +83,19 @@
   const t2len = s => s.length * 0.5;
   layoutKnock();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { layoutKnock(); ScrollTrigger.refresh(); });
-  let rz;
-  window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(layoutKnock, 150); });
+  // Neu setzen erst NACH dem ScrollTrigger-Refresh: vorher hat der gepinnte Hero noch die alte, feste Breite
+  // (sonst steht der Schriftzug nach Fenster- oder Monitorwechsel seitlich versetzt)
+  ScrollTrigger.addEventListener('refresh', layoutKnock);
 
   if (!RM) {
     // Headline-Reveal beim Laden
-    const split = SplitText.create('#heroH span', { type: 'words,chars', mask: 'chars' });
-    gsap.from(split.chars, { yPercent: 110, rotate: 4, duration: 1.05, ease: 'power4.out', stagger: 0.028, delay: 0.15 });
-    gsap.from(['#heroContent .kicker', '.hero-row', '.hero-pills', '.hero-badge', '#heroCtrl'], { autoAlpha: 0, y: 24, duration: 0.9, ease: 'power3.out', stagger: 0.08, delay: 0.55 });
+    // Erst mit geladener Schrift zerlegen, sonst springen die Zeilen; bis dahin hält html.rp-boot den Text verborgen
+    RP18Site.whenFonts(() => {
+      const split = SplitText.create('#heroH span', { type: 'words,chars', mask: 'chars' });
+      gsap.from(split.chars, { yPercent: 110, rotate: 4, duration: 0.9, ease: 'power4.out', stagger: 0.022, delay: 0.05 });
+      gsap.from(['#heroContent .kicker', '.hero-row', '.hero-pills', '.hero-badge', '#heroCtrl'], { autoAlpha: 0, y: 20, duration: 0.7, ease: 'power3.out', stagger: 0.06, delay: 0.35 });
+      document.documentElement.classList.remove('rp-boot');
+    });
     $('#cue').style.display = 'flex';
 
     const htl = gsap.timeline({
@@ -112,9 +118,18 @@
      ===================================================================== */
   // Einblenden
   if (!RM) {
-    ScrollTrigger.batch('.rv', { start: 'top 90%', once: true, onEnter: els => gsap.to(els, { opacity: 1, y: 0, duration: 1, stagger: 0.08, ease: 'power3.out', overwrite: true }) });
+    RP18Site.reveal(document);
   } else {
     gsap.set('.rv', { opacity: 1, y: 0 });
+  }
+
+  // Hintergrund des Besuch-Abschnitts erst kurz vorher laden
+  const visitBg = $('#visitBg');
+  if (visitBg) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); visitBg.classList.add('lz-on'); } }, { rootMargin: '150% 0px' });
+      io.observe(visitBg);
+    } else visitBg.classList.add('lz-on');
   }
 
   // Achim: Foto öffnet sich, Zitat leuchtet Wort für Wort auf
@@ -145,63 +160,112 @@
     tick();
   })();
 
-  /* ---- Samstagsrunde: Höhenprofil zeichnet sich beim Scrollen ---- */
-  const STOPS = [
-    { km: 0, t: 'Kaffee bei Achim', tag: 'Start · für alle', x: 'Treffpunkt im Laden, Reifendruck checken – los.', q: 'Welche Runde rund um Schönberg passt zu mir?', a: 'Welche Runde passt zu mir?' },
-    { km: 9, t: 'Asphalt-Rampen', tag: 'Rennrad', x: 'Bis 12 %: Hier zeigt ein leichtes Rennrad, was es kann.', q: 'Welches Rennrad passt zu mir?', a: 'Welches Rennrad?' },
-    { km: 21, t: 'Schotter im Venn', tag: 'Gravel', x: 'Moor links, Moor rechts, breite Reifen drunter.', q: 'Welches Gravelbike passt zu mir?', a: 'Welches Gravelbike?' },
-    { km: 33, t: 'Trails in der Eifel', tag: 'MTB', x: 'Wurzeln, Anlieger – und danach Fahrwerk-Service.', q: 'Welches MTB passt zu meinen Trails?', a: 'Welches MTB?' },
-    { km: 42, t: 'Der lange Anstieg', tag: 'E-Bike', x: 'Sieben Kilometer bergauf, oben noch Luft zum Reden.', q: 'Welches E-Bike passt zu mir?', a: 'Welches E-Bike?' },
-    { km: 51, t: 'Stopp am See', tag: 'Kids & Einsteiger', x: 'Eis für alle – und Räder für jedes Budget.', q: 'Welches Rad passt für mein Kind oder als Einstieg?', a: 'Rad für mein Kind?' },
-  ];
-  const TOTAL_KM = 58, TOTAL_HM = 640;
-  const CP = [[0, 425], [4, 455], [9, 565], [12, 520], [17, 590], [21, 655], [26, 610], [30, 560], [33, 495], [37, 470], [42, 690], [46, 640], [51, 470], [55, 500], [58, 425]];
-  function elev(km) {
-    let i = 0;
-    while (i < CP.length - 2 && km > CP[i + 1][0]) i++;
-    const a = CP[i], b = CP[i + 1], u = clamp((km - a[0]) / (b[0] - a[0]), 0, 1), s = u * u * (3 - 2 * u);
-    return a[1] + (b[1] - a[1]) * s + Math.sin(km * 2.3) * 6 + Math.sin(km * 5.1) * 3;
-  }
-  const VW = 1000, VH = 240, EMIN = 380, EMAX = 720;
-  const px = km => km / TOTAL_KM * VW, py = e => VH - (e - EMIN) / (EMAX - EMIN) * (VH - 16);
-  const samples = [];
-  for (let k = 0; k <= TOTAL_KM + 1e-6; k += 0.25) samples.push([k, elev(k)]);
-  // kumulierte Höhenmeter, skaliert auf die offizielle Angabe
-  let up = 0; const cum = [0];
-  for (let i = 1; i < samples.length; i++) { up += Math.max(0, samples[i][1] - samples[i - 1][1]); cum.push(up); }
-  const hmAt = km => cum[Math.min(cum.length - 1, Math.round(km / 0.25))] / up * TOTAL_HM;
-  const d = samples.map((s, i) => (i ? 'L' : 'M') + px(s[0]).toFixed(1) + ',' + py(s[1]).toFixed(1)).join(' ');
-  $('#rideLine').setAttribute('d', d);
-  $('#rideLineBg').setAttribute('d', d);
-  $('#rideArea2').setAttribute('d', d + ' L' + VW + ',' + VH + ' L0,' + VH + ' Z');
-  $('#rideProf .grid').innerHTML = [0.25, 0.5, 0.75].map(f => '<line x1="0" x2="' + VW + '" y1="' + (VH * f) + '" y2="' + (VH * f) + '"/>').join('');
-  const marks = $('#rideMarks'), stopsEl = $('#rideStops'), dot = $('#rideDot');
-  const markPts = STOPS.map(s => s.km).concat([TOTAL_KM]);
-  marks.innerHTML = markPts.map((k, i) => '<span style="left:' + (k / TOTAL_KM * 100).toFixed(2) + '%;top:' + (py(elev(k)) / VH * 100).toFixed(2) + '%"><em>' + (i === markPts.length - 1 ? 'Ziel' : 'km ' + k) + '</em></span>').join('');
-  stopsEl.innerHTML = STOPS.map(s => '<li><span class="km">km ' + s.km + ' · ' + s.tag + '</span><h4>' + s.t + '</h4><p>' + s.x + '</p><button type="button" data-ask="' + s.q + '">' + s.a + ' →</button></li>').join('');
-  const markEls = $$('span', marks), stopEls = $$('li', stopsEl), rKm = $('#rKm'), rHm = $('#rHm');
-  function ride(p) {
-    const km = p * TOTAL_KM;
-    rKm.textContent = fmt(km);
-    rHm.textContent = fmt(hmAt(km));
-    markEls.forEach((m, i) => m.classList.toggle('on', km >= markPts[i] - 0.01));
-    stopEls.forEach((li, i) => li.classList.toggle('on', km >= STOPS[i].km - 0.01));
-    dot.style.left = (km / TOTAL_KM * 100) + '%';
-    dot.style.top = (py(elev(km)) / VH * 100) + '%';
-    dot.style.opacity = p > 0.002 && p < 0.998 ? 1 : 0;
-  }
-  if (!RM) {
-    gsap.set('#rideLine', { drawSVG: '0%' });
-    const o = { p: 0 };
-    gsap.to(o, {
-      p: 1, ease: 'none',
-      scrollTrigger: { trigger: '#rideBox', start: 'top 72%', end: 'bottom 55%', scrub: 0.6 },
-      onUpdate: () => { gsap.set('#rideLine', { drawSVG: (o.p * 100) + '%' }); ride(o.p); },
-    });
-    ride(0);
-  } else {
-    ride(1);
-  }
+  /* ---- Samstagsrunde: echte Tour (Venn-Klassiker) aus den Touren-Daten.
+     Profil, Stopps und Zahlen kommen aus assets/v17/touren (wie v18-touren.html);
+     beim Scrollen fährt der Punkt die Runde ab. ---- */
+  (function rideInit() {
+    const box = $('#rideBox');
+    if (!box || !window.RP18Touren) return;
+    const T = window.RP18Touren, BASE = 'assets/v17/touren/', TOUR = 'venn-klassiker';
+    const VW = 1000, VH = 240;
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const setAll = (sel, v) => $$(sel).forEach(el => { el.textContent = v; });
+    function draw(m, st, all) {
+      const total = st.km, up = Math.round(st.up);
+      // Stopps wie auf der Touren-Seite verorten: Start 0, Ziel = Länge, sonst nächster Streckenpunkt (max. 1,5 km), sonst km-Angabe
+      const stops = (m.stops || []).map(s => {
+        let km = null;
+        if (s.start) km = 0;
+        else if (s.ziel) km = total;
+        else {
+          if (isFinite(s.lat) && isFinite(s.lon)) {
+            const i = T.nearestIndex(st.pts, +s.lat, +s.lon);
+            if (T.haversine(st.pts[i], { lat: +s.lat, lon: +s.lon }) <= 1.5) km = st.cum[i];
+          }
+          if (km == null && isFinite(s.km)) km = clamp(+s.km, 0, total);
+        }
+        return km == null ? null : Object.assign({}, s, { km });
+      }).filter(Boolean).sort((a, b) => a.km - b.km);
+      // Profil gleichmäßig über die Distanz, Höhenmeter kumuliert (für die Live-Zahl)
+      const N = 320, pe = [], pc = [];
+      for (let i = 0; i <= N; i++) {
+        const fi = T.indexAtKm(st.cum, total * i / N);
+        pe.push(T.lerpArr(st.ele, fi)); pc.push(T.lerpArr(st.gain, fi));
+      }
+      const gMax = pc[N] || 1;
+      const lo = Math.floor((st.min - 25) / 50) * 50, hi = Math.ceil((st.max + 15) / 50) * 50;
+      const py = e => VH - (e - lo) / (hi - lo) * (VH - 16);
+      const at = (arr, p) => T.lerpArr(arr, clamp(p, 0, 1) * N);
+      const d = pe.map((e, i) => (i ? 'L' : 'M') + (i / N * VW).toFixed(1) + ',' + py(e).toFixed(1)).join(' ');
+      $('#rideLine').setAttribute('d', d);
+      $('#rideLineBg').setAttribute('d', d);
+      $('#rideArea2').setAttribute('d', d + ' L' + VW + ',' + VH + ' L0,' + VH + ' Z');
+      $('#rideProf .grid').innerHTML = [0.25, 0.5, 0.75].map(f => '<line x1="0" x2="' + VW + '" y1="' + (VH * f) + '" y2="' + (VH * f) + '"/>').join('');
+      const fill = s => String(s || '').replace(/\{title\}/g, '„' + m.title + '“').replace(/\{km\}/g, fmt(total)).replace(/\{hm\}/g, fmt(up));
+      const marks = $('#rideMarks'), stopsEl = $('#rideStops'), dot = $('#rideDot');
+      const last = stops.length - 1;
+      marks.innerHTML = stops.map((s, i) => '<span style="left:' + (s.km / total * 100).toFixed(2) + '%;top:' + (py(at(pe, s.km / total)) / VH * 100).toFixed(2) + '%"><em>' + (i === 0 ? 'Start' : i === last ? 'Ziel' : 'km ' + fmt(s.km)) + '</em></span>').join('');
+      stopsEl.innerHTML = stops.map(s => '<li><span class="km">km ' + fmt(s.km) + ' · ' + esc(s.name) + '</span><h4>' + esc(s.title) + '</h4><p>' + esc(s.tagline) + '</p>' +
+        (s.ask ? '<button type="button" data-ask="' + esc(fill(s.ask)) + '">' + esc(s.cta || 'Frag den KI-Berater') + ' →</button>' : '') + '</li>').join('');
+      // Zahlen im Text aus den Daten
+      setAll('[data-ride="km"]', fmt(total));
+      setAll('[data-ride="hm"]', fmt(up));
+      setAll('[data-ride="count"]', String(all.length));
+      $$('[data-ride-type]').forEach(el => { const n = all.filter(t => t.type === el.dataset.rideType).length; el.textContent = n + (n === 1 ? ' Tour' : ' Touren'); });
+      const bsp = $('#rideBsp'); if (bsp) bsp.hidden = !m.beispiel;
+      const markEls = $$('span', marks), stopEls = $$('li', stopsEl), rKm = $('#rKm'), rHm = $('#rHm'), rEl = $('#rEl');
+      function ride(p) {
+        const km = p * total;
+        rKm.textContent = fmt(km);
+        rHm.textContent = fmt(at(pc, p) / gMax * up);
+        rEl.textContent = fmt(at(pe, p));
+        markEls.forEach((el, i) => el.classList.toggle('on', km >= stops[i].km - 0.05));
+        stopEls.forEach((li, i) => li.classList.toggle('on', km >= stops[i].km - 0.05));
+        dot.style.left = (p * 100) + '%';
+        dot.style.top = (py(at(pe, p)) / VH * 100) + '%';
+        dot.style.opacity = p > 0.002 && p < 0.998 ? 1 : 0;
+      }
+      if (!RM) {
+        gsap.set('#rideLine', { drawSVG: '0%' });
+        ride(0);
+        const o = { p: 0 };
+        gsap.to(o, {
+          p: 1, ease: 'none',
+          scrollTrigger: { trigger: '#rideBox', start: 'top 72%', end: 'bottom 55%', scrub: 0.6 },
+          onUpdate: () => { gsap.set('#rideLine', { drawSVG: (o.p * 100) + '%' }); ride(o.p); },
+        });
+        ScrollTrigger.sort(); ScrollTrigger.refresh();
+      } else {
+        ride(1);
+      }
+      box.classList.add('ready');
+    }
+    async function load() {
+      const man = await (await fetch(BASE + 'touren.json')).json();
+      const all = man.touren || [];
+      const m = all.find(t => t.id === TOUR) || all[0];
+      const r = await fetch(BASE + m.file);
+      if (!r.ok) throw new Error(m.file + ': HTTP ' + r.status);
+      const g = T.parseGPX(await r.text());
+      const st = Object.assign(T.stats(g.pts), { pts: g.pts });
+      if (!st.hasEle) throw new Error('keine Höhendaten');
+      draw(m, st, all);
+    }
+    // erst laden, wenn der Abschnitt in die Nähe kommt (GPX ~70 KB)
+    let started = false;
+    const go = () => {
+      if (started) return; started = true;
+      load().catch(e => {
+        console.warn('[Samstagsrunde]', e);
+        box.classList.add('ride-err');
+        const s = $('#rideStops'); if (s) s.insertAdjacentHTML('beforebegin', '<p class="ride-msg">Das Höhenprofil lädt gerade nicht. Alle Touren mit GPX findest du auf der Touren-Seite.</p>');
+      });
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: '150% 0px' });
+      io.observe(box);
+    } else go();
+  })();
 
   /* ---- Öffnungszeiten (live, belgische Zeit) ---- */
   $('#hours').innerHTML = RP.hoursRows('de').map(r => '<li class="' + (r.today ? 'today ' : '') + (r.open ? '' : 'closed') + '"><span>' + r.day + '</span><span>' + r.text + '</span></li>').join('');

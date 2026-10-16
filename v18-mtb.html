@@ -4,50 +4,66 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Racepoint · MTB · 18 · Mein Traumbike</title>
-<meta name="description" content="MTB bei Racepoint in Schönberg: echte Modelle mit Herstellerpreis, ehrliche Beratung von Achim und Werkstatt für alle Marken.">
+<meta name="description" content="MTB bei Racepoint in Schönberg: echte Modelle mit Herstellerpreis, Beratung von Achim und Werkstatt für alle Marken.">
 <link rel="icon" href="assets/racepoint-logo-sm.svg">
 <!-- RACEPOINT — PROTOTYP 18 · MEIN TRAUMBIKE · Unterseite (THROWAWAY)
      Header, Mobil-Menü und Footer: assets/v18/site.js · Styles: bestof.css + site.css -->
+<!-- Schriften sofort laden (sonst setzt rp-core.js sie erst am Ende ein und die Überschriften springen) -->
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-900-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-800-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/fonts/fonts.css" data-rp-fonts>
+<!-- Hell/Dunkel und Intro vor dem ersten Bild setzen, damit nichts aufblitzt -->
+<script>(function(d){var t;try{t=localStorage.getItem('rp18-theme')}catch(e){}if(t!=='light'&&t!=='dark')t='mix';d.setAttribute('data-theme',t);if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('rp-boot');setTimeout(function(){d.classList.remove('rp-boot')},3000)}})(document.documentElement)</script>
 <link rel="stylesheet" href="vendor/lenis/lenis.css">
 <link rel="stylesheet" href="assets/v18/bestof.css">
 <link rel="stylesheet" href="assets/v18/site.css">
+<link rel="stylesheet" href="assets/v18/theme.css">
 </head>
 <body data-page="mtb">
 <a class="skip" href="#modelle">Zum Inhalt springen</a>
 <main data-cat="mtb">
-<section class="phero" id="top">
+<section class="phero cine" id="top">
+  <figure class="phero-fig">
+      <picture><source media="(max-width:820px)" srcset="assets/v18/media/cine/mtb.webp"><img class="cine-m" src="assets/v18/media/cine/mtb-amb.webp" alt="Mountainbiker fährt im Rennen über Felsen im Wald" fetchpriority="high"></picture>
+      <video class="cine-m cine-bg" muted loop playsinline preload="none" aria-hidden="true" data-src="assets/v18/media/cine/mtb-amb.mp4" data-src-m="assets/v18/media/cine/mtb.mp4"></video>
+      <figcaption>Arne in Les Gets · via @jnssnsarne</figcaption>
+  </figure>
   <div class="phero-word" aria-hidden="true">TRAIL</div>
   <div class="wrap phero-grid">
     <div class="phero-txt">
       <ol class="crumbs" aria-label="Brotkrumen"><li><a href="v18-traumbike.html">Racepoint</a></li><li>MTB</li></ol>
-      <p class="kicker"><i class="dot"></i>MTB · Specialized &amp; Cervélo</p>
-      <h1><span>Raus aus dem</span><span><em>Alltag.</em></span></h1>
-      <p class="lead">Waldwege, Wurzeln, Kurven. Finde ein Bike, das zu deinem Gelände und deinem Fahrstil passt. Vom ersten Hardtail bis zum Trail-Fully.</p>
-      <div class="btns"><a class="btn" data-ask="Welches MTB passt zu meinen Trails?">Finde dein Bike <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#modelle">Modelle ansehen</a></div>
-      <div class="phero-pills"><span class="pill pill-status" data-open-status></span><span class="pill" id="catFrom">ab –</span></div>
+      <p class="kicker"><i class="dot"></i>MTB · Specialized</p>
+      <h1><span>Vom ersten Trail</span><span><em>bis zum Enduro.</em></span></h1>
+      <p class="lead">Für den Wald hinterm Haus, Trails in den Ardennen und Rennen. Vom Rockhopper Comp bis zum Stumpjumper 15 EVO. Den Fahrwerk-Service machen wir in der eigenen Werkstatt, den Matsch bringst du selbst mit.</p>
+      <div class="btns"><a class="btn" data-ask="Welches MTB passt zu meinen Trails?">KI-Berater fragen <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a class="btn ghost" href="#modelle">Modelle ansehen</a></div>
+      <div class="phero-pills"><span class="pill pill-status" data-open-status></span></div>
     </div>
-    <figure class="phero-fig">
-      <img src="assets/mtb-action.jpg" alt="Mountainbiker im Wald auf einem Trail" fetchpriority="high" style="object-position:60% 50%">
-      <figcaption>Trails in der Eifel</figcaption>
+    <div class="phero-side">
+      <a class="phero-reel" href="https://www.instagram.com/reel/DN83YExiAq-/" target="_blank" rel="noopener" aria-label="Felsen, Wurzeln, Matsch auf Instagram ansehen">
+        <video muted loop playsinline preload="none" poster="assets/v18/media/cine/mtb.webp" data-src="assets/v18/media/cine/mtb.mp4" aria-hidden="true"></video>
+        <span class="pr-txt"><span class="pr-h"><svg class="pr-ig" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="f"/></svg>@jnssnsarne</span><b>Felsen, Wurzeln, Matsch</b><span>MTB-Rennen in Les Gets</span></span>
+      </a>
       <button class="hero-badge phero-badge" type="button" data-video="2zD31t7mWCw" aria-label="Film ansehen">
           <svg class="hb-ring" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="hbTRA" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text textLength="286" lengthAdjust="spacingAndGlyphs"><textPath href="#hbTRA" textLength="286" lengthAdjust="spacingAndGlyphs">EPIC 8 PRO LTD · MOUNTAINBIKE · UNBOXING · </textPath></text></svg>
           <span class="hb-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
         </button>
-    </figure>
+    </div>
   </div>
 </section>
-<nav class="ctabs" aria-label="Kategorien"><div class="wrap"><div class="ctabs-in"><a href="v18-rennrad.html">Rennrad</a><a href="v18-gravel.html">Gravel</a><a href="v18-mtb.html" class="on" aria-current="page">MTB</a><a href="v18-ebike.html">E-Bike</a><a href="v18-familie.html">Kids & Familie</a></div></div></nav>
+<nav class="ctabs" aria-label="Kategorien"><div class="wrap"><div class="ctabs-in"><a href="v18-bikes.html">Alle Bikes</a><a href="v18-rennrad.html">Rennrad</a><a href="v18-gravel.html">Gravel</a><a href="v18-mtb.html" class="on" aria-current="page">MTB</a><a href="v18-ebike.html">E-Bike</a><a href="v18-familie.html">Kinder & Familie</a><a href="v18-zubehoer.html">Zubehör</a></div></div></nav>
 
 <section class="sec" aria-labelledby="storyH">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Worauf es ankommt</p><h2 class="h2 rv" id="storyH">Mehr Trail.<br><em>Mehr Gefühl.</em></h2></div>
-      <p class="lead rv">Das passende Fahrwerk richtet sich nach deinen Wegen. Ein höherer Preis allein macht noch keine bessere Wahl.</p>
+      <div><p class="kicker rv">Hardtail oder Fully</p><h2 class="h2 rv" id="storyH">Welches Fahrwerk<br><em>zu welchem Weg.</em></h2></div>
+      <p class="lead rv">Die Wahl hängt vom Gelände ab. Ein höherer Preis macht ein Rad nicht automatisch passender.</p>
     </div>
     <div class="pts">
-      <article class="pt rv"><b>01</b><h3>Hardtail</h3><p>Ein gefedertes Vorderrad und ein ungefedertes Heck: übersichtlich für den Einstieg, Touren und moderateres Gelände. Das Rockhopper ist ein Beispiel.</p></article>
-      <article class="pt rv"><b>02</b><h3>Fully</h3><p>Federung an beiden Rädern kann auf anspruchsvolleren Trails interessant sein. Beim Stumpjumper sind 160 mm vorne und 145 mm hinten angegeben.</p></article>
-      <article class="pt rv"><b>03</b><h3>Setup zählt</h3><p>Größe, Reifen und die passende Fahrwerkseinstellung beeinflussen dein Fahrgefühl. Wir besprechen, was zu deinem Können und deinen Strecken passt.</p></article>
+      <article class="pt rv"><b>01</b><h3>Hardtail</h3><p>Vorne gefedert, hinten starr. Das Rockhopper Comp (949 €) hat eine RockShox Judy und Shimano Deore 1×12, übersichtlich für Einstieg, Waldwege und moderates Gelände.</p></article>
+      <article class="pt rv"><b>02</b><h3>Fully</h3><p>Gefedert vorne und hinten. Das Stumpjumper 15 EVO Expert (6.999 €) hat 160 mm vorne, 145 mm hinten, Shimano XT Di2 und einen Carbonrahmen, für anspruchsvolle Trails.</p></article>
+      <article class="pt rv"><b>03</b><h3>Größe und Fahrwerk</h3><p>Rahmengröße, Reifen und Fahrwerkseinstellung bestimmen, wie sich das Rad fährt. Wir besprechen mit dir, was zu deinen Strecken und deinem Können passt.</p></article>
     </div>
   </div>
 </section>
@@ -55,8 +71,8 @@
 <section class="sec" id="modelle" aria-labelledby="modH" style="padding-top:0">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Eine kuratierte Auswahl · <span id="bikeCount"></span></p><h2 class="h2 rv" id="modH">Bikes für<br><em>deine Ideen.</em></h2></div>
-      <p class="lead rv">Mit echten Bildern, belegter Ausstattung und einem Preis zur Orientierung. Den Rest klären wir persönlich.</p>
+      <div><p class="kicker rv">Unsere Mountainbikes · <span id="bikeCount"></span></p><h2 class="h2 rv" id="modH">Rockhopper und<br><em>Stumpjumper.</em></h2></div>
+      <p class="lead rv">Mit Bildern, Ausstattung und Herstellerpreis. Weitere Modelle zeigen wir dir im Laden.</p>
     </div>
     <div class="tools">
       <div class="fchips" id="fchips" role="group" aria-label="Filter"></div>
@@ -67,33 +83,17 @@
   </div>
 </section>
 
-<section class="sec films" aria-labelledby="filmH" style="padding-top:0">
+<section class="sec films mix-hell ton2" aria-labelledby="filmH" style="padding-top:0">
   <div class="wrap">
     <div class="sec-h">
-      <div><p class="kicker rv">Achims Filme · Echte Handarbeit</p><h2 class="h2 rv" id="filmH">Vom Bauteil zum<br><em>Gänsehautmoment.</em></h2></div>
+      <div><p class="kicker rv">Achims Filme</p><h2 class="h2 rv" id="filmH">Epic 8 und<br><em>Fahrwerk-Service.</em></h2></div>
       <a class="btn ghost rv" href="v18-filme.html">Alle Filme <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
     </div>
     <div class="frow" id="catFilms"></div>
-    <p class="fine">Originalfilme aus unserem Build-Archiv, keine aktuellen Verkaufsangebote.</p>
+    <p class="fine">Originalfilme aus Achims Archiv, keine aktuellen Verkaufsangebote.</p>
   </div>
 </section>
 
-<section class="sec ai cta" aria-label="Beratung">
-  <div class="ai-glow" aria-hidden="true"></div>
-  <div class="wrap ai-in">
-    <div class="ai-orb" aria-hidden="true"><i></i><b></b></div>
-    <p class="kicker rv">Online entdecken · Persönlich entscheiden</p>
-    <h2 class="h2 rv">Dein Bike.<br><em>Deine Geschichte.</em></h2>
-    <p class="lead rv">Erzähl uns, was du vorhast. Der KI-Berater sucht passende Modelle aus dem echten Katalog – und wenn es persönlich wird, übernimmt Achim.</p>
-    <form class="ask rv" data-ask-form>
-      <label class="sr-only" for="askInput">Frage an den KI-Berater</label>
-      <input id="askInput" type="text" autocomplete="off" placeholder="Z. B. „Erstes Hardtail für Waldwege bis 1.500 €“">
-      <button type="submit" aria-label="Frage senden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-    </form>
-    <div class="chips rv" role="list"><button type="button" role="listitem" data-ask="Welches MTB passt zu meinen Trails?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Welches MTB?</button><button type="button" role="listitem" data-ask="Hardtail oder Fully – was passt zu mir?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Hardtail oder Fully?</button><button type="button" role="listitem" data-ask="Ich brauche einen Fahrwerk-Service für Gabel und Dämpfer."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Fahrwerk-Service</button><button type="button" role="listitem" data-ask="Welche Rahmengröße brauche ich?"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.6L20 9.5l-4.5 3.8L17 19l-5-3.2L7 19l1.5-5.7L4 9.5l5.8-.9z"/></svg>Rahmengröße</button></div>
-    <p class="fine rv">Termine werden nur als Anfrage vorbereitet – gebucht wird erst durch das Racepoint-Team.</p>
-  </div>
-</section>
 </main>
 
 <script src="vendor/gsap/gsap.min.js"></script>

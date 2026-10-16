@@ -25,19 +25,32 @@
 @media (max-width:1560px){.hdr-r .pill-status{display:none}}
 
 /* Mobil-Menue */
-.mmenu{padding:84px var(--gut) 40px}
+.mmenu{padding:76px var(--gut) 40px}
+/* Mobil-Menü: oben Status, Wochenzeiten, Anrufen/Termin/Route · dann Seiten · Bikes am Ende */
+.mm-info{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--bg2)}
+.mm-info .pill{align-self:flex-start}
+.mm-week{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.mm-week li{display:flex;flex-direction:column;gap:3px;padding:7px 0 6px;border-radius:10px;background:var(--bg3)}
+.mm-week b{font:700 13px/1 var(--display);letter-spacing:.08em;text-transform:uppercase}
+.mm-week span{font-size:11px;line-height:1.1;color:var(--mute);white-space:nowrap}
+.mm-week li.closed span{color:var(--dim)}
+.mm-week li.today{background:var(--red);color:#fff}
+.mm-week li.today span{color:rgba(255,255,255,.9)}
+.mm-act{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mm-act .btn{min-height:46px;padding:10px 8px;min-width:0;font-size:14px}
+.mm-adr{margin:0;font-size:13px;color:var(--mute)}
+.mm-links{display:flex;flex-direction:column;margin-top:14px}
+.mm-links a{font:900 italic clamp(26px,8vw,40px)/1 var(--display);text-transform:uppercase;text-decoration:none;padding:9px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.mm-links a.on{color:var(--red)}
+.mm-links a.on::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--red)}
+.mmenu > .mm-k{margin-top:26px}
 .mm-k{margin:0 0 10px;font:600 12px var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--red)}
 .mm-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
 .mm-cats a{position:relative;display:flex;align-items:flex-end;min-height:62px;padding:10px 12px;border-radius:14px;overflow:hidden;text-decoration:none;isolation:isolate;border:1px solid var(--line)}
 .mm-cats img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(.5) saturate(.9)}
 .mm-cats a::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,11,13,.75),rgba(11,11,13,.1))}
-.mm-cats b{font:800 italic 22px/1 var(--display);text-transform:uppercase}
+.mm-cats b{font:800 italic 22px/1 var(--display);text-transform:uppercase;color:#fff}
 .mm-cats a.on{border-color:var(--red);box-shadow:inset 0 0 0 1px var(--red)}
-.mm-links{display:flex;flex-direction:column;margin-top:18px}
-.mm-links a{font:900 italic clamp(34px,10vw,46px)/1 var(--display);text-transform:uppercase;text-decoration:none;padding:9px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.mm-links a.on{color:var(--red)}
-.mm-links a.on::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--red)}
-.mmenu-f .btns{gap:8px}
 html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events:none}
 
 /* Footer */
@@ -45,6 +58,41 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 .ftr a.on{color:var(--red)}
 .ftr-c a svg,.txt-link svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;display:inline-block;vertical-align:-2px}
 .ftr-bot a{color:var(--dim);text-decoration:none}
+/* Footer: Kanäle als Kacheln */
+.ftr{padding-top:0}
+.ftr-soc{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2.2fr);gap:clamp(24px,4vw,64px);align-items:center;padding-top:clamp(48px,6vw,80px);padding-bottom:clamp(48px,6vw,72px);margin-bottom:48px}
+.ftr-soc-t{margin:12px 0 0;font:800 italic clamp(26px,2.4vw,36px)/1.02 var(--display);text-transform:uppercase}
+.ftr .ftr-soc-t b{font:inherit;font-weight:900;letter-spacing:inherit;margin:0;color:var(--red)}
+.ftr-soc-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ftr .soc{--c:var(--red);position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ic m" "n n" "go go";gap:16px 14px;padding:20px;border-radius:18px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);text-decoration:none;overflow:hidden;isolation:isolate;transition:border-color .3s,transform .3s var(--ease)}
+.ftr .soc::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--c) 30%,transparent),transparent 60%);opacity:.35;transition:opacity .3s}
+.ftr .soc:hover{border-color:var(--c);transform:translateY(-3px);color:var(--ink)}
+.ftr .soc:hover::before{opacity:1}
+.soc-yt{--c:#ff0033}.soc-ig{--c:#e1306c}.soc-fb{--c:#1877f2}
+.soc-ig::before{background:radial-gradient(120% 90% at 0% 0%,rgba(254,218,117,.35),rgba(214,41,118,.28) 40%,rgba(79,91,213,.12) 70%,transparent) !important}
+.soc-ic{grid-area:ic;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--c);color:#fff}
+.soc-ig .soc-ic{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}
+.soc-ic svg{width:26px;height:26px}
+.soc-ic .f{fill:#fff}.soc-ic .p{fill:var(--c)}.soc-ic .s{fill:none;stroke:#fff;stroke-width:2}.soc-ic .d{fill:#fff}
+.soc-m{grid-area:m;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.ftr .soc-m b{font:800 italic 22px/1 var(--display);text-transform:uppercase;letter-spacing:.01em;color:var(--ink);margin:0}
+.soc-m small{margin-top:4px;font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.soc-n{grid-area:n;display:flex;flex-direction:column}
+.soc-n strong{font:900 italic clamp(38px,3.4vw,52px)/.9 var(--display);font-variant-numeric:tabular-nums}
+.soc-n small{margin-top:6px;font-size:13px;color:var(--mute)}
+.soc-go{grid-area:go;display:inline-flex;align-items:center;gap:6px;font:700 14px var(--body);color:var(--ink)}
+.soc-go svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;transition:transform .3s var(--ease)}
+.soc:hover .soc-go svg{transform:translate(2px,-2px)}
+.ftr-bot{align-items:center}
+@media (max-width:1000px){.ftr-soc{grid-template-columns:1fr}}
+@media (max-width:700px){
+  .ftr-soc-g{grid-template-columns:1fr;gap:10px}
+  .ftr .soc{grid-template-columns:auto 1fr auto;grid-template-areas:"ic m n" "go go go";gap:12px 14px;padding:16px}
+  .soc-n{align-items:flex-end;text-align:right}
+  .soc-n strong{font-size:34px}
+  .soc-n small{display:none}
+  .soc-go{font-size:13px}
+}
 .ftr-bot a:hover{color:#fff}
 .txt-link{display:inline-flex;align-items:center;gap:8px;min-height:40px;margin-top:22px;font:700 15px var(--body);text-decoration:none;color:#fff;border-bottom:1px solid rgba(232,54,55,.7)}
 .txt-link:hover{color:var(--red)}
@@ -82,7 +130,7 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 
 /* Kategorie-Reiter */
 .ctabs{position:relative;z-index:3;margin-top:-20px}
-.ctabs-in{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 0 10px}
+.ctabs-in{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 10px}
 .ctabs-in::-webkit-scrollbar{display:none}
 .ctabs a{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:10px 20px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);text-decoration:none;font:800 italic 19px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--mute);transition:all .25s}
 .ctabs a:hover{color:#fff;border-color:rgba(255,255,255,.35)}
@@ -339,7 +387,9 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 /* ---------------- Ueber uns ---------------- */
 .team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .tm{padding:26px 24px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--line)}
-.tm .ini{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--red),#ff7a45);font:900 italic 28px var(--display)}
+.tm .ava{display:flex}
+.tm .ava img{width:clamp(128px,11vw,160px);height:clamp(128px,11vw,160px);border-radius:50%;object-fit:cover;padding:3px;background:linear-gradient(135deg,var(--red),#ff7a45)}
+.tm .ava-2 img + img{margin-left:-36px}
 .tm h3{margin:18px 0 4px;font:900 italic 32px/.95 var(--display);text-transform:uppercase}
 .tm .kicker{font-size:12px}
 .tm p{margin:12px 0 0;color:var(--mute);font-size:15px}
@@ -398,7 +448,8 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
   .phero .btns .btn{flex:1 1 auto}
   .phero-word{font-size:34vw}
   .ctabs{margin-top:-6px}
-  .ctabs a{min-height:44px;padding:9px 16px;font-size:17px}
+  .ctabs-in{gap:6px}
+  .ctabs a{min-height:40px;padding:8px 12px;font-size:14.5px}
   .tools{align-items:stretch}
   .sort{justify-content:space-between}
   .bd{padding-top:88px}
@@ -464,3 +515,329 @@ html.mm-open .kib-launch,html.mm-open .prototype-picker{opacity:0;pointer-events
 /* Ohne Prototyp-Zahnrad (wie 17): KI-Berater sitzt ganz unten rechts */
 html body .kib-launch{bottom:calc(20px + env(safe-area-inset-bottom))}
 @media (max-width:640px){html body .kib-launch{bottom:calc(14px + env(safe-area-inset-bottom))}}
+
+/* =====================================================================
+   Kino-Einstieg der Unterseiten (.phero.cine): Bild oder Film über die
+   volle Breite, Text darüber, rechts eine Reel-Karte im Hochformat.
+   Handy: das Hochformat-Video selbst ist der Hintergrund.
+   ===================================================================== */
+.phero.cine{min-height:min(100svh,1000px);display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(120px,16vh,170px) 0 clamp(64px,9vh,110px);background:#0b0b0d;isolation:isolate}
+.phero.cine::after{display:none}
+/* Unterer Verlauf liegt fest auf der Bühne (wandert nicht mit dem Bild), damit keine Bildkante stehen bleibt */
+.phero.cine::before{content:"";position:absolute;inset:auto 0 0;height:46%;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,13,0) 0%,rgba(11,11,13,.72) 55%,#0b0b0d 100%)}
+.phero.cine .phero-fig{position:absolute;inset:0;z-index:0;margin:0;aspect-ratio:auto;border-radius:0;box-shadow:none;background:#09090b;transform-origin:50% 40%}
+.phero.cine .phero-fig :is(img,video){position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.phero.cine .phero-fig picture{position:absolute;inset:0}
+.phero.cine .cine-bg{opacity:0;transition:opacity 1s}
+.phero.cine .cine-bg.on{opacity:1}
+.phero.cine .phero-fig::after{z-index:1;background:
+  linear-gradient(90deg,rgba(9,9,11,.9) 0%,rgba(9,9,11,.62) 36%,rgba(9,9,11,.18) 68%,rgba(9,9,11,.32) 100%),
+  linear-gradient(180deg,rgba(9,9,11,.55) 0%,rgba(9,9,11,0) 22%)}
+.phero.cine .phero-fig figcaption{z-index:2;left:var(--gut);right:auto;bottom:22px;max-width:44vw;font-size:11px;color:rgba(255,255,255,.62)}
+.phero.cine .phero-fig > .phero-badge{right:calc(var(--gut) + 90px);bottom:40px}
+.phero.cine .phero-word{z-index:1;opacity:.5}
+.phero.cine .phero-grid{grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:clamp(30px,5vw,90px)}
+.phero.cine h1{font-size:clamp(60px,8.4vw,150px);text-shadow:0 10px 50px rgba(0,0,0,.45)}
+.phero.cine .lead{color:rgba(244,241,236,.84)}
+/* Galerie (Gravel): langsames Überblenden mit leichtem Zoom */
+.phero.cine .cine-slide{opacity:0;transition:opacity 1.6s ease}
+.phero.cine .cine-slide.on{opacity:1;animation:cineKb 9s linear both}
+@keyframes cineKb{from{transform:scale(1.08)}to{transform:scale(1)}}
+/* Reel-Karte */
+.phero-side{position:relative;align-self:end}
+.phero-reel{position:relative;display:block;width:clamp(210px,19vw,300px);aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#111 center/cover;box-shadow:0 40px 90px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.14);text-decoration:none;color:#fff;transition:transform .5s var(--ease)}
+.phero-reel:hover{transform:translateY(-4px) rotate(-.6deg)}
+.phero-reel :is(video,img){position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.phero-reel.pr-photo{margin:0}
+.phero-reel.pr-photo:hover{transform:none}
+.phero-reel::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0) 26%,rgba(0,0,0,0) 58%,rgba(0,0,0,.82));pointer-events:none}
+.pr-txt{position:absolute;z-index:1;left:16px;right:16px;bottom:16px;display:flex;flex-direction:column;gap:3px}
+.pr-txt b{font:800 italic 22px/1 var(--display);text-transform:uppercase}
+.pr-txt > span:last-child{font-size:12.5px;line-height:1.35;color:rgba(255,255,255,.78)}
+.pr-h{display:inline-flex;align-items:center;gap:6px;margin-bottom:4px;font:600 11px var(--display);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+.pr-ig{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
+.pr-ig .f{fill:currentColor;stroke:none}
+.phero-side .phero-badge{position:absolute;right:auto;left:-52px;top:-52px;bottom:auto}
+/* Touren: rechts bleibt die Karte „So funktioniert’s“, die Höhenlinien liegen über dem Film */
+.phero.cine.tr-hero .phero-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)}
+.phero.cine .tr-topo{z-index:1}
+.phero.cine + .ctabs{margin-top:0;padding:4px 0 26px;background:#0b0b0d}
+@media (max-width:1000px){
+  .phero.cine .phero-grid{grid-template-columns:minmax(0,1fr) auto}
+  .phero-reel{width:clamp(170px,24vw,220px)}
+}
+@media (max-width:820px){
+  .phero.cine{min-height:max(640px,100svh);padding-top:110px}
+  .phero.cine .phero-grid,.phero.cine.tr-hero .phero-grid{grid-template-columns:1fr}
+  .phero-reel{display:none}
+  .phero-side{position:static;order:-1;display:flex;justify-content:flex-end;margin-bottom:-14px}
+  .phero-side .phero-badge{position:relative;left:auto;bottom:auto;width:92px;height:92px}
+  .phero.cine .phero-fig::after{background:linear-gradient(180deg,rgba(9,9,11,.6) 0%,rgba(9,9,11,.28) 20%,rgba(9,9,11,.52) 42%)}
+  .phero.cine::before{height:62%}
+  .phero.cine .phero-fig figcaption{display:none}
+  .phero.cine .phero-fig > .phero-badge{bottom:auto;top:96px;right:16px;width:92px;height:92px}
+}
+
+/* ---- Bikes-Menü: Zubehör-Kachel und Link zur Übersicht ---- */
+.dd-in{grid-template-columns:repeat(6,134px)}
+.dd-in a.dd-zub{position:relative;margin-left:6px}
+.dd-in a.dd-zub::before{content:"";position:absolute;left:-7px;top:10px;bottom:10px;width:1px;background:var(--line)}
+.dd-in a.dd-all{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:center;gap:8px;padding:12px;font:600 12px/1 var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--red);border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+.dd-in a.dd-all svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+.mm-k a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.mm-k a svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2}
+@media (min-width:561px) and (max-width:1180px){ .dd-in{grid-template-columns:repeat(6,118px)} }
+
+/* ---- Zubehör: Reel-Wand (Video- und Fotokacheln) und Galerie ---- */
+.zwall{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.zt{position:relative;display:block;aspect-ratio:4/5.2;border-radius:var(--r);overflow:hidden;background:#111;color:#fff;text-decoration:none;isolation:isolate}
+.zt.w{grid-column:span 2;aspect-ratio:auto}
+.zt :is(video,img){position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.zt:hover :is(video,img){transform:scale(1.04)}
+.zt::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,rgba(8,8,10,0) 48%,rgba(8,8,10,.86))}
+.zt .pr-txt{left:20px;right:20px;bottom:18px}
+.zt .pr-txt b{font-size:clamp(22px,2.1vw,30px)}
+.zt .pr-txt > span:last-child{font-size:14px}
+.zgal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.zgal figure{margin:0;border-radius:var(--r);overflow:hidden;aspect-ratio:1;background:var(--bg2)}
+.zgal figure:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+.zgal img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.zgal figure:hover img{transform:scale(1.05)}
+.zgal + .fine a{color:inherit}
+@media (max-width:820px){
+  .zwall{grid-template-columns:1fr 1fr;gap:10px}
+  .zt.w,.zwall > .zt:last-child:nth-child(odd){grid-column:1/-1;aspect-ratio:16/11}
+  .zt .pr-txt{left:14px;right:14px;bottom:12px}
+  .zt .pr-txt b{font-size:20px}
+  .zt .pr-txt > span:last-child{font-size:12.5px}
+  .zgal{grid-template-columns:1fr 1fr;gap:10px}
+  .zgal figure:first-child{grid-column:1/-1;grid-row:auto;aspect-ratio:4/3}
+}
+/* Helles Hintergrundbild (z. B. Himmel im Porto-Reel): Bühne abdunkeln, damit die Überschrift lesbar bleibt */
+.phero.cine.dim .cine-m{filter:brightness(.8)}
+@media (max-width:820px){ .phero.cine.dim .cine-m{filter:brightness(.6)} }
+/* Ohne Reel-Karte steht der Film-Knopf frei über dem Film, mit Abstand zum KI-Knopf */
+@media (min-width:821px){
+  .phero.cine:not(:has(.phero-reel)) .phero-side .phero-badge{left:auto;top:auto;right:70px;bottom:120px}
+}
+/* Bikes-Übersicht: sechs Kacheln (mit Kinder & Familie und Zubehör), darunter drei Minis */
+@media (min-width:1181px){
+  .cats.cats-6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cats-6 .cat{aspect-ratio:4/3.3}
+}
+@media (min-width:901px){ .cats-6 + .cat-more{grid-template-columns:repeat(3,minmax(0,1fr))} }
+/* Shop-Menü: sieben Kacheln, unten zwei Links */
+.dd-in{grid-template-columns:repeat(7,124px)}
+@media (min-width:561px) and (max-width:1180px){ .dd-in{grid-template-columns:repeat(7,108px)} }
+.dd-in .dd-foot{grid-column:1/-1;display:flex;justify-content:center;gap:36px;border-top:1px solid var(--line)}
+.dd-in .dd-foot a.dd-all{border-top:0}
+/* Warenkorb im Header */
+.hdr-cart{position:relative;display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:50%;border:1px solid var(--line);color:var(--ink);text-decoration:none}
+.hdr-cart svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.hdr-cart span{position:absolute;right:-4px;top:-4px;display:none;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--red);color:#fff;font:700 11px/19px var(--body);text-align:center}
+.hdr-cart.has span{display:block}
+.hdr-cart:hover{border-color:var(--edge2)}
+
+/* Traumbike-Story (v18-traumbike.html): Startseite ab dem Hero. Gliederung: Hero-Zeile, Service (Werkstatt- und
+   Bikefitting-Zeile, .svc-row), Traumbike (.traum), YouTube (.yt), Touren-Filmband (.tb).
+   Klassen t-pic/t-big aus traum.css, dunkle Variablen kommen für .film, .rec usw. aus theme.css,
+   daher passt alles in Dunkel/Hell/Mix. Das Filmband .tb setzt die dunklen Variablen selbst.
+   Dieser Block steht am Ende von site.css. */
+/* Hero: Versal-Zeile (#knockSub, von bestof.js eingeblendet) und darunter die kleine Team-Zeile.
+   Beide stehen in .knock-stack, so liegt die zweite nie über der ersten (auch wenn die erste bei 390/360 umbricht). */
+.knock-stack{position:absolute;z-index:3;left:var(--gut);right:var(--gut);top:calc(50% + var(--ky,140px));display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.2vw,14px);pointer-events:none}
+.knock-stack .knock-sub{position:static;left:auto;right:auto;top:auto;width:100%}
+.knock-team{margin:0;text-align:center;font:400 clamp(14px,1.15vw,17px)/1.4 var(--body);letter-spacing:0;text-transform:none;color:var(--mute);opacity:0;visibility:hidden}
+.knock-team.is-on{opacity:1;visibility:visible}
+/* Hero-Schriftzug ist hell auf Film: die Zeile braucht auf dem Film genug Kontrast */
+.knock-team{text-shadow:0 1px 14px rgba(0,0,0,.55)}
+/* Reduzierte Bewegung: traum.js setzt die Zeile in den Hero-Text (.in-flow), der Schriftzug fehlt dort */
+.knock-team.in-flow{opacity:1;visibility:visible;margin-top:14px;text-align:left}
+@media (prefers-reduced-motion:reduce){ .knock-stack{display:none} }
+
+/* Service: Werkstatt (Medium links) und Bikefitting (Medium rechts), randlose Zeilen im selben Hellton.
+   Das Medium nimmt 58 % der Breite ein und läuft bis an den Viewport-Rand, der Text steht auf der Seite des
+   Seitenrasters (--max). Dazwischen eine feine Linie, sodass beide wie ein Kapitel wirken. */
+.svc-row{--svc-h:min(78vh,720px);--svc-pad:max(var(--gut),calc((100vw - var(--max)) / 2 + var(--gut)));position:relative;display:grid;grid-template-columns:minmax(0,58fr) minmax(0,42fr);min-height:var(--svc-h);background:var(--bg)}
+.svc-row + .svc-row{border-top:1px solid var(--line)}
+.svc-row.fit{grid-template-columns:minmax(0,42fr) minmax(0,58fr)}
+.svc-row.fit .svc-media{order:2}
+.svc-media{position:relative;margin:0;min-height:var(--svc-h);overflow:hidden;background:var(--bg3)}
+.svc-link{position:absolute;inset:0;display:block}
+.svc-media picture{position:absolute;inset:0;display:block}
+.svc-media :is(img,video){position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
+.svc-vid{opacity:0;transition:opacity 1s}
+.svc-vid.on{opacity:1}
+.svc-zoom{transform-origin:50% 40%;will-change:transform}
+.svc-txt{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:20px;min-width:0;padding:clamp(56px,6vw,104px) var(--svc-pad) clamp(56px,6vw,104px) clamp(48px,6.5vw,128px)}
+.svc-row.fit .svc-txt{padding:clamp(56px,6vw,104px) clamp(48px,6.5vw,128px) clamp(56px,6vw,104px) var(--svc-pad)}
+.svc-idx{margin:0;display:flex;align-items:baseline;gap:.55em;font:700 italic clamp(17px,1.5vw,22px)/1 var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--mute)}
+.svc-idx b{font:900 italic clamp(30px,3vw,46px)/.9 var(--display);letter-spacing:.02em;color:var(--red)}
+.svc-idx i{font-style:normal;color:var(--dim)}
+.svc-txt .h2{margin:0;font-size:clamp(40px,4.3vw,76px)}
+.svc-txt .ticks{margin:4px 0 6px}
+.svc-txt .ticks strong{color:var(--ink);font-weight:600}
+.svc-txt .btns{margin-top:6px}
+
+/* Traumbike: Schlusszeile mit zwei Knöpfen */
+.t-fin-btns{margin-top:clamp(20px,3vh,30px)}
+.t-fin-btns .btn{pointer-events:auto}
+.t-fin::before{content:"";position:absolute;z-index:-1;left:-8vw;right:-8vw;top:-120px;bottom:-90px;pointer-events:none;background:radial-gradient(ellipse 75% 80% at 28% 42%,rgba(5,5,6,.78) 0%,rgba(5,5,6,.45) 50%,rgba(5,5,6,0) 78%);-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 38%,#000 80%,transparent 100%)}
+/* YouTube: ein großer Film (zwei Spalten, zwei Zeilen) und fünf Kacheln. Karten (.film) aus bestof.css */
+.yt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.yt-big{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:100%}
+.yt-big .film-play{width:84px;height:84px;margin:-42px 0 0 -42px}
+.yt-big .film-m{left:24px;bottom:22px}
+.yt-big .film-m b{font-size:clamp(34px,3.4vw,54px)}
+.yt-big .film-m .kicker{font-size:13px}
+.yt .films-cta strong{color:var(--ink);font-weight:600}
+@media (max-width:560px){
+  .t-intro .h2{font-size:clamp(42px,12.6vw,60px)}
+}
+/* Reduzierte Bewegung: traum.css blendet .t-big aus, hier bleiben die Zeilen sichtbar */
+.t-static #tFin .t-big{display:block}
+.t-static #tFin .t-big{font-size:clamp(36px,6vw,72px)}
+.t-static .t-fin::before{display:none}
+
+/* Touren-Filmband: Fahrfilm abgedunkelt und leicht weich, darüber die roten Höhenlinien (wie der Touren-Hero),
+   links Text, rechts drei schmale Tourenkarten. Immer dunkel, auch in Hell und Mix. */
+html:is([data-theme="light"],[data-theme="mix"]) .tb{
+  --bg:#0b0b0d; --bg2:#121216; --bg3:#18181d;
+  --ink:#f4f1ec; --mute:rgba(244,241,236,.66); --dim:rgba(244,241,236,.42); --line:rgba(255,255,255,.09);
+  --strong:#fff; --strong-inv:#0b0b0d; --nav:rgba(255,255,255,.78);
+  --glass:rgba(255,255,255,.04); --glass2:rgba(255,255,255,.08); --edge:rgba(255,255,255,.16); --edge2:rgba(255,255,255,.4);
+  --ghost:rgba(255,255,255,.07); --ghost2:rgba(255,255,255,.15); --ghost-b:rgba(255,255,255,.2);
+  --pill:rgba(12,12,14,.55); --pill-b:rgba(255,255,255,.14);
+  --card:rgba(255,255,255,.03); --field:#141317; --stroke:rgba(255,255,255,.2); --stroke2:rgba(255,255,255,.08);
+  --shadow:rgba(0,0,0,.8); color-scheme:dark;
+}
+.tb{position:relative;isolation:isolate;overflow:hidden;background:#0b0b0d;color:var(--ink);padding:clamp(72px,8vw,128px) 0 clamp(36px,4vw,64px)}
+.tb-bg{position:absolute;inset:0;z-index:-3;background:#09090b}
+.tb-bg picture{position:absolute;inset:0}
+.tb-bg :is(img,video){position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;filter:brightness(.6) saturate(.85) blur(1.5px);transform:scale(1.04)}
+.tb-vid{opacity:0;transition:opacity 1s}
+.tb-vid.on{opacity:1}
+.tb::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:
+  linear-gradient(90deg,rgba(9,9,11,.92) 0%,rgba(9,9,11,.7) 40%,rgba(9,9,11,.3) 100%),
+  linear-gradient(180deg,rgba(9,9,11,.55) 0%,rgba(9,9,11,0) 22%,rgba(9,9,11,0) 68%,#0b0b0d 100%)}
+.tb-topo{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.2s;
+  -webkit-mask-image:radial-gradient(120% 90% at 72% 40%,#000 25%,transparent 75%);mask-image:radial-gradient(120% 90% at 72% 40%,#000 25%,transparent 75%)}
+.tb-topo.on{opacity:1}
+.tb-topo svg{width:100%;height:100%;max-width:none}
+.tb-topo path{fill:none;stroke:rgba(255,255,255,.07);stroke-width:1;vector-effect:non-scaling-stroke}
+.tb-topo .ix path{stroke:rgba(255,255,255,.12)}
+.tb-topo .hr{stroke:rgba(232,54,55,.55);stroke-width:2;stroke-dasharray:2 6;stroke-linecap:round}
+.tb-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(30px,5vw,90px);align-items:center}
+.tb-txt{display:flex;flex-direction:column;align-items:flex-start;gap:20px;min-width:0;text-shadow:0 2px 24px rgba(0,0,0,.45)}
+.tb-txt .h2{margin:0;font-size:clamp(46px,6vw,100px)}
+.tb-txt .lead{color:rgba(244,241,236,.84);max-width:34em}
+.tb-txt .btns{margin-top:6px}
+.tb-cards{display:grid;gap:12px;min-width:0}
+.tb-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,10vw,150px);grid-template-areas:"ty route" "nm route" "st route";align-content:center;column-gap:16px;row-gap:6px;min-height:104px;padding:14px 20px 14px 22px;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:rgba(11,11,13,.58);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#f4f1ec;text-decoration:none;text-shadow:none;transition:border-color .3s,background .3s,transform .4s var(--ease)}
+.tb-card:hover,.tb-card:focus-visible{border-color:var(--red);background:rgba(232,54,55,.12);transform:translateX(-4px)}
+.tb-ty{grid-area:ty;font:600 12px/1 var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+.tb-nm{grid-area:nm;font:800 italic clamp(26px,2.3vw,34px)/1 var(--display);text-transform:uppercase}
+.tb-st{grid-area:st;font-size:14px;color:rgba(244,241,236,.7);transition:opacity .5s}
+.tb-st b{font:800 italic 20px/1 var(--display);color:#f4f1ec;letter-spacing:.02em}
+.tb-st i{margin:0 8px;font-style:normal;opacity:.5}
+.tb-card:not(.ready) .tb-st{opacity:0}
+.tb-route{grid-area:route;position:relative;align-self:center;display:block;height:76px}
+.tb-route svg{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:none;overflow:visible}
+.tb-route path{fill:none;stroke:var(--red);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.tb-route circle{fill:#fff}
+.tb-go{position:absolute;right:14px;top:14px;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.55;transition:opacity .3s,transform .3s var(--ease)}
+.tb-card:hover .tb-go{opacity:1;transform:translate(2px,-2px)}
+.tb-foot{margin-top:clamp(28px,3.5vw,48px)}
+.tb-how{margin:0;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);font:700 14px/1.3 var(--display);letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,236,.78)}
+.tb-how i{margin:0 .9em;font-style:normal;color:var(--red)}
+.tb-bsp{margin:10px 0 0;font-size:12.5px;line-height:1.4;color:rgba(244,241,236,.55)}
+.tb-bsp[hidden]{display:none}
+
+@media (max-width:820px){
+  .svc-row,.svc-row.fit{grid-template-columns:minmax(0,1fr);min-height:0}
+  .svc-row.fit .svc-media{order:0}
+  .svc-media{min-height:0;aspect-ratio:4/5}
+  .svc-txt,.svc-row.fit .svc-txt{padding:clamp(36px,8vw,56px) var(--gut) clamp(48px,10vw,72px)}
+  .yt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .yt-big{grid-column:1/-1;grid-row:auto;aspect-ratio:16/10;min-height:0}
+  .yt-grid .film:last-child{grid-column:1/-1;aspect-ratio:16/7}
+  .tb-grid{grid-template-columns:minmax(0,1fr);gap:32px}
+  .tb::before{background:
+    linear-gradient(180deg,rgba(9,9,11,.62) 0%,rgba(9,9,11,.72) 55%,#0b0b0d 100%)}
+}
+@media (max-width:560px){
+  .svc-txt .btns .btn,.tb-txt .btns .btn{flex:1 1 auto}
+  .yt .films-cta .btns .btn{flex:1 1 auto}
+  .yt-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(-1 * var(--gut));padding:0 var(--gut) 6px;scrollbar-width:none;gap:12px}
+  .yt-grid::-webkit-scrollbar{display:none}
+  .yt-grid .film,.yt-grid .film:last-child{flex:0 0 78%;aspect-ratio:16/11;scroll-snap-align:start}
+  .yt-grid .yt-big{flex-basis:88%}
+  .yt-grid .film-m b{font-size:22px}
+  .yt-big .film-m b{font-size:28px}
+  .tb-card{min-height:104px;padding:14px 16px 14px 18px;grid-template-columns:minmax(0,1fr) 92px}
+  .tb-how{font-size:12.5px;letter-spacing:.14em}
+}
+@media (prefers-reduced-motion:reduce){
+  .tb-card,.tb-go,.svc-vid{transition:none}
+}
+/* Bike-Detail: Hinweis unter Reservieren */
+.bd-res{margin-top:12px;color:var(--mute);font-size:14px;max-width:46ch}
+/* Seiten-Hero mobil: ohne KI-Berater-Knopf und Öffnungsstatus, der zweite Knopf wird zum Hauptknopf */
+@media (max-width:820px){
+  .phero .phero-txt .btns > .btn[data-ask]{display:none}
+  .phero .phero-txt .btns > .btn[data-ask] + .btn.ghost{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 10px 30px -10px rgba(232,54,55,.7)}
+  .phero .phero-pills .pill-status{display:none}
+  .phero .phero-pills:not(:has(.pill:not(.pill-status))){display:none}
+}
+
+/* Störer unten auf Shop-Seiten (site.js): rotes Band, verlinkt das Gegenstück */
+.stoer{position:relative;overflow:hidden;background:var(--red);color:#fff;padding:clamp(48px,6vw,88px) 0}
+.stoer::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 85% 50%,rgba(0,0,0,.22),transparent 60%);pointer-events:none}
+.stoer-in{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(32px,5vw,80px);align-items:center}
+.stoer-k{margin:0 0 14px;font:700 13px/1 var(--display);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.stoer-h{margin:0;font:900 italic clamp(40px,5.2vw,84px)/.9 var(--display);text-transform:uppercase;color:#fff}
+.stoer-h em{font-style:inherit;color:#111}
+.stoer-p{margin:18px 0 26px;max-width:44ch;font-size:clamp(16px,1.2vw,18px);line-height:1.55;color:rgba(255,255,255,.9)}
+.btn.stoer-btn{background:#fff;color:#111;box-shadow:0 14px 30px -14px rgba(0,0,0,.5)}
+.btn.stoer-btn:hover{background:#111;color:#fff}
+.stoer-fig{position:relative;display:block;aspect-ratio:16/11;border-radius:22px;transform:rotate(1.5deg);box-shadow:0 30px 60px -24px rgba(0,0,0,.55)}
+.stoer-fig img{width:100%;height:100%;object-fit:cover;border-radius:inherit;transition:transform .6s var(--ease)}
+.stoer-fig:hover img{transform:scale(1.03)}
+.stoer-badge{position:absolute;left:-26px;top:-26px;display:grid;place-items:center;width:clamp(96px,9vw,126px);aspect-ratio:1;border-radius:50%;background:#fff;color:var(--red);font:900 italic clamp(18px,1.7vw,24px)/.95 var(--display);text-align:center;text-transform:uppercase;transform:rotate(-14deg);box-shadow:0 12px 30px -10px rgba(0,0,0,.45);border:3px dashed var(--red);outline:6px solid #fff}
+@media (max-width:820px){
+  .stoer-in{grid-template-columns:1fr}
+  .stoer-fig{order:-1;margin:0 10px 0 22px;transform:rotate(1deg)}
+  .stoer-badge{left:-18px;top:-18px}
+}
+@media (prefers-reduced-motion:reduce){ .stoer-fig img{transition:none} }
+/* KI-Berater (assets/ki-berater.js bleibt unberührt): Breite folgt dem Bildschirm, rund 30 %,
+   „Vergrößern“ nimmt die ganze Breite. Die Zieh-Kante entfällt, weil feste Stufen klarer sind. */
+@media (min-width:641px){
+  .kib .kib-panel{width:clamp(380px,30vw,760px) !important}
+  .kib.kib-big .kib-panel{width:calc(100vw - 40px) !important}
+  .kib .kib-resize{display:none}
+}
+/* KI-Berater ganz unten (site.js): dunkel in allen Themes, läuft ohne Linie in den Footer */
+.kib-end{position:relative;padding-bottom:clamp(64px,7vw,104px)}
+.kib-end + .ftr{position:relative;margin-top:-1px;border-top:0}
+/* KI-Block unten: Orb wie der KI-Knopf unten rechts (Farbring, Funke, grüner Punkt) */
+.kib-end .ai-orb{width:84px;height:84px;filter:drop-shadow(0 14px 34px rgba(232,54,55,.35))}
+.kib-end .ai-orb i{inset:-2px;background:conic-gradient(from 0deg,#E83637,#ff7a45,#ffd6b0,#fff,#E83637);filter:blur(.3px);animation:spin 4s linear infinite}
+.kib-end .ai-orb b{inset:4px;background:radial-gradient(circle at 35% 30%,#3a1a1b 0%,#141518 55%,#0b0b0d 100%);box-shadow:none}
+.kib-end .ai-orb::after{inset:18px;z-index:1;background:radial-gradient(circle,rgba(255,122,69,.55),rgba(232,54,55,0) 70%)}
+.kib-end .ai-spark{position:absolute;left:50%;top:50%;z-index:2;width:36px;height:36px;margin:-18px 0 0 -18px}
+.kib-end .ai-ping{position:absolute;right:3px;top:3px;z-index:3;width:16px;height:16px;border-radius:50%;background:#22c55e;border:3px solid #0e0f11}
+/* Sauberer Übergang: das Glühen läuft unten in den Footer-Ton aus */
+.kib-end::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;pointer-events:none;background:linear-gradient(180deg,rgba(11,11,13,0),#0b0b0d 92%)}
+.kib-end .ai-in{z-index:1}
+
+/* Service-Zeilen: Bild bleibt randlos zur Seite, bekommt oben und unten Luft und zur Textseite runde Ecken,
+   damit Werkstatt-, Bikefitting- und Traumbike-Bild nicht mehr aneinanderstoßen */
+@media (min-width:821px){
+  .svc-row{padding-block:clamp(48px,5vw,88px)}
+  .svc-row .svc-media{border-radius:0 22px 22px 0}
+  .svc-row.fit .svc-media{border-radius:22px 0 0 22px}
+}
+/* Solange der KI-Block am Seitenende im Bild ist, braucht es den schwebenden Knopf nicht doppelt */
+.kib-launch{transition:opacity .4s,transform .4s var(--ease),visibility .4s}
+html.v18-kib-end .kib-launch{opacity:0;visibility:hidden;transform:translateY(16px)}

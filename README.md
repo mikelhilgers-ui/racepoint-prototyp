@@ -8,7 +8,7 @@ Prototypen zur Richtungsentscheidung. Alle 15 aktiven Entwürfe sind über das Z
 
 `node preview.mjs` starten, dann http://127.0.0.1:8101/ öffnen. Die Startseite zeigt alle Entwürfe mit Vorschaubildern, neueste zuerst. Unter Windows lädt `powershell -File start-preview.ps1` vorhandene API-Zugangsdaten aus den Benutzer-Umgebungsvariablen, ohne sie in Dateien zu schreiben.
 
-Das Zahnrad steht auf jedem Prototyp und allen Unterseiten, außer bei 17 · Best of: Dort sitzt nur der KI-Berater unten rechts, die Seite wirkt wie eine fertige Website. **17 · Best of** steht als neuester Entwurf ganz oben. **16 · Motion**, **15 · Cinema**, **14 · Terrain**, **13 · Velocity**, **11 · Original**, **10 · Die Runde**, **9 · 3D-Studio** und **8 · Der Aufbau** tragen das rote **NEW**-Badge. Atelier und Kunden-Feedback sind aus der Auswahl entfernt. Beim Wechsel zwischen den vollständigen Designs bleibt die Unterseite erhalten. Cinema startet den lokalen Shop-Teaser direkt und stumm; Pause und Ton sind bedienbar.
+Das Zahnrad steht auf jedem Prototyp und allen Unterseiten, außer bei 17 · Best of und 18 · Traumbike: Dort sitzt nur der KI-Berater unten rechts, die Seite wirkt wie eine fertige Website. **18 · Traumbike** steht als neuester Entwurf ganz oben, danach **17 · Best of**. **16 · Motion**, **15 · Cinema**, **14 · Terrain**, **13 · Velocity**, **11 · Original**, **10 · Die Runde**, **9 · 3D-Studio** und **8 · Der Aufbau** tragen das rote **NEW**-Badge. Atelier und Kunden-Feedback sind aus der Auswahl entfernt. Beim Wechsel zwischen den vollständigen Designs bleibt die Unterseite erhalten. Cinema startet den lokalen Shop-Teaser direkt und stumm; Pause und Ton sind bedienbar.
 
 Unser Paket unter `entwuerfe/codex-2026-10/` verwendet den echten KI-Berater mit Herstellerrecherche. Der gemeinsame lokale Server stellt dessen API bereit. Die übrigen Prototypen nutzen ihn ebenfalls über `assets/ki-berater.js`. Für eine statische Vorschau reicht weiterhin ein einfacher Webserver; dort steht die echte KI nicht zur Verfügung.
 
@@ -25,6 +25,22 @@ Die Linux-App `racepoint-prototypen` liegt mit dem B1-Plan `racepoint-preview-pl
 Zum erneuten Bereitstellen nach dem Build `powershell -NoProfile -File hosting/package.ps1` ausführen. Das ZIP verwendet ausdrücklich Linux-kompatible Pfade. Dann mit `node hosting/deploy-azure.mjs --upload` hochladen und mit `node hosting/deploy-azure.mjs` den Status prüfen (4 = erfolgreich). Der Helfer verwendet die bestehende Azure-CLI-Anmeldung mit explizitem Abonnement, auch wenn ein anderes Azure-Konto als Standard ausgewählt ist. App-Einstellungen und Startbefehl bleiben erhalten; Basic Auth bleibt deaktiviert. `/healthz` prüft den Server; `/api/status` meldet den KI-Status. Eine erfolgreiche echte Chat-Antwort gehört zur abschließenden Prüfung.
 
 Der öffentliche Testserver begrenzt KI-Anfragen auf zwei gleichzeitig, zwölf pro Minute und standardmäßig 100 pro UTC-Tag. Diese Zähler gelten pro Serverprozess und werden bei einem Neustart zurückgesetzt; sie sind keine dauerhafte Abrechnungsgrenze. `AI_DAILY_REQUEST_LIMIT` steuert das Tageskontingent. `PUBLIC_ORIGIN` legt die erlaubte öffentliche Adresse fest.
+
+## Neu: Prototyp 18 · Mein Traumbike
+
+`v18-traumbike.html` (Logik und Styles in `assets/v18/`) ist dieselbe Website wie 17 · Best of, aber **ohne 3D**. Grund ist das Feedback „3D ist cool, aber es sind nicht die richtigen Bikes“. Alles wird mit echten Fotos und Filmen von Racepoint erzählt. Reihenfolge der Startseite: Hero (Shop-Film), Laufband, Bikes, Achim, Werkstatt, **Traumbike-Story**, Samstagsrunde, Filme, Besuch, KI-Berater.
+
+**Die Traumbike-Story** (`assets/v18/traum.js` + `assets/v18/traum.css`) erzählt in fünf angehefteten bzw. ruhig bewegten Kapiteln, wie ein Traumbike entsteht. Beispiel ist das Cervélo S5 „Lupine LTD“ aus dem Laden:
+
+1. **Die Idee:** Echte Clips des S5 aus Racepoints Instagram-Beitrag laufen beim Scrollen nacheinander, vom Schriftzug über Cockpit, Antrieb und Lackierung bis zum ganzen Rad. Höhepunkt: „Das ist es. Dein Traumbike.“ mit Knopf zum S5-Aufbau-Film.
+2. **Beratung:** Team- und Ladenfotos, ein Zitat von Achim (als Entwurf markiert).
+3. **Bikefitting:** Foto aus dem Retül-Raum, Link auf `v18-bikefitting.html`.
+4. **Aufbau:** Der Shop-Film läuft beim Scrollen mit (Szene 6,5–11,9 s), dazu drei Werkstatt-Details. Danach „Achims Dreambuilds“: S5, Crux, Levo SL, Aethos, Shiv und Tarmac SL9 öffnen den YouTube-Film.
+5. **Übergabe:** Ausfahrt-Foto, „Mein Traumbike planen“ (KI-Berater) und „Termin anfragen“.
+
+Alle Bilder und Filme der Story stehen in **einer** Konfiguration, `STORY` oben in `assets/v18/traum.js`. Wie man ein Foto oder einen Clip tauscht, steht in `assets/v18/traum/README.md`, die Herkunft jeder Datei in `assets/v18/media/QUELLEN.md`. Bei `prefers-reduced-motion` gibt es nichts Angeheftetes, die Story zeigt dann ruhige Endzustände.
+
+**Bike-Seite:** `v18-bike.html?id=…` zeigt statt des 3D-Konfigurators einen **Wunsch-Build**: Katalogfoto, Herstellerfarben als Auswahl, Größen-Richtwert nach Körpergröße, Extras (Retül, Pedale, Leasing) und eine Zusammenfassung, die an den KI-Berater oder per E-Mail geht.
 
 ## Neu: Prototyp 17 · Best of
 

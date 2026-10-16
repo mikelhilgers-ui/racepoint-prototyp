@@ -20,7 +20,8 @@
     [3, 'Neueste Bikes', 'index.html?v=3'], [4, 'Finde dein Bike', 'index.html?v=4'],
     [5, 'Bold/Sportlich', 'index.html?v=5'], [6, 'Immersive', 'index.html?v=6'],
     [8, 'Der Aufbau', 'v8-aufbau.html'], [9, '3D-Studio', 'v9-3d-studio.html'],
-    [10, 'Die Runde', 'v10-die-runde.html'], [17, 'Best of', 'v17-best-of.html']
+    [10, 'Die Runde', 'v10-die-runde.html'], [17, 'Best of', 'v17-best-of.html'],
+    [18, 'Traumbike', 'v18-traumbike.html']
   ];
   function mount() {
     if (document.querySelector('.prototype-picker')) return;
@@ -56,7 +57,7 @@
       if (id === current) a.setAttribute('aria-current', 'page');
       links.append(a);
     };
-    // Neuere Einzelseiten (z. B. 17 · Best of) stehen als Neueste ganz oben
+    // Neuere Einzelseiten (z. B. 18 · Traumbike, 17 · Best of) stehen als Neueste ganz oben
     const newest = Math.max(...designs.map(([id]) => id));
     const older2 = standalone ? [] : [...older].reverse();
     for (const [id, label, path] of older2) if (id > newest) add(id, label, new URL(path, repository).href, 'NEW');
