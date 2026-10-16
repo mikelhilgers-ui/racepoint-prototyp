@@ -691,3 +691,4 @@ body.signed-out .login{display:flex;min-height:100dvh;align-items:center;justify
 }
 @media (min-width:1280px){.art-grid{grid-template-columns:repeat(4,1fr)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+p.muted>.ic,p.small>.ic{width:15px;height:15px;vertical-align:-3px;margin-right:6px}
