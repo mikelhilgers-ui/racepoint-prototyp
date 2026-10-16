@@ -14,9 +14,10 @@ export function joinText(content){
 
 // Preserve full provider content for tool continuations; only text goes to the UI.
 export async function readAnthropicStream(response,{onText=()=>{},onProgress=()=>{}}={}){
-  const content=[],inputs=new Map();let stop_reason=null,complete=false;
+  const content=[],inputs=new Map(),usage={};let stop_reason=null,complete=false;
   for await(const {data}of readEvents(response.body)){
     if(data.type==='error')throw new Error('Die Verbindung zum KI-Anbieter wurde unterbrochen. Bitte versuche es erneut.');
+    if(data.type==='message_start'&&data.message?.usage)Object.assign(usage,data.message.usage);
     if(data.type==='content_block_start'){
       const block=structuredClone(data.content_block);content[data.index]=block;
       if(block.type==='tool_use'||block.type==='server_tool_use')inputs.set(data.index,'');
@@ -32,9 +33,10 @@ export async function readAnthropicStream(response,{onText=()=>{},onProgress=()=
       else if(delta.type==='signature_delta')block.signature=delta.signature;
     }else if(data.type==='content_block_stop'){
       const input=inputs.get(data.index);if(input)content[data.index].input=JSON.parse(input);
-    }else if(data.type==='message_delta')stop_reason=data.delta.stop_reason??stop_reason;
+    }else if(data.type==='message_delta'){stop_reason=data.delta?.stop_reason??stop_reason;if(data.usage)Object.assign(usage,data.usage);}
     else if(data.type==='message_stop'){complete=true;break;}
   }
   if(!complete)throw new Error('Die KI-Antwort wurde unterbrochen. Bitte versuche es erneut.');
-  return {content,stop_reason};
+  // Token usage (message_start + message_delta) for cost display; callers may ignore it.
+  return {content,stop_reason,usage};
 }

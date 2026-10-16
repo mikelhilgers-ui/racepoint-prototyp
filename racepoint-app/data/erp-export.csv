@@ -1,0 +1,66 @@
+# DEMO-DATEN · fiktiver Export aus Intec (ERP) für den Racepoint-App-Prototyp
+# Keine echten Bestände oder Preise. EANs aus dem internen GS1-Bereich 200–299 mit gültiger Prüfziffer, keine Handelsartikel.
+# Spalten: EAN; Artikel-ID (Racepoint App); Modell; Größe; Farbe; Bestand (Stück); Ladenpreis EUR inkl. MwSt.; Stand des Abgleichs
+ean;artikel_id;modell;groesse;farbe;bestand;ladenpreis_eur;stand
+2000401700019;allez-cues;Allez · Shimano CUES;49;Dune White/Deep Lake;2;1499.00;2026-10-16T13:48:00+02:00
+2000401700026;allez-cues;Allez · Shimano CUES;52;Dune White/Deep Lake;0;1499.00;2026-10-16T13:48:00+02:00
+2000401700033;allez-cues;Allez · Shimano CUES;54;Dune White/Deep Lake;0;1499.00;2026-10-16T13:48:00+02:00
+2000401700040;allez-cues;Allez · Shimano CUES;56;Dune White/Deep Lake;2;1499.00;2026-10-16T13:48:00+02:00
+2000401700057;allez-cues;Allez · Shimano CUES;58;Dune White/Deep Lake;3;1499.00;2026-10-16T13:48:00+02:00
+2000401700064;allez-cues;Allez · Shimano CUES;61;Dune White/Deep Lake;0;1499.00;2026-10-16T13:48:00+02:00
+2000401700071;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;49;Metallic Deep Marine/Shadow Silver;1;2299.00;2026-10-16T13:48:00+02:00
+2000401700088;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;52;Metallic Deep Marine/Shadow Silver;2;2299.00;2026-10-16T13:48:00+02:00
+2000401700095;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;54;Metallic Deep Marine/Shadow Silver;0;2299.00;2026-10-16T13:48:00+02:00
+2000401700101;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;56;Metallic Deep Marine/Shadow Silver;1;2299.00;2026-10-16T13:48:00+02:00
+2000401700118;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;58;Metallic Deep Marine/Shadow Silver;1;2299.00;2026-10-16T13:48:00+02:00
+2000401700125;roubaix-sl8-tiagra;Roubaix SL8 · Shimano Tiagra;61;Metallic Deep Marine/Shadow Silver;2;2299.00;2026-10-16T13:48:00+02:00
+2000401700132;tarmac-sl9-expert-di2;Tarmac SL9 Expert · Ultegra Di2;49;Pacific Blue Metallic/White;0;6999.00;2026-10-16T13:48:00+02:00
+2000401700149;tarmac-sl9-expert-di2;Tarmac SL9 Expert · Ultegra Di2;52;Pacific Blue Metallic/White;3;6999.00;2026-10-16T13:48:00+02:00
+2000401700156;tarmac-sl9-expert-di2;Tarmac SL9 Expert · Ultegra Di2;54;Pacific Blue Metallic/White;1;6999.00;2026-10-16T13:48:00+02:00
+2000401700163;tarmac-sl9-expert-di2;Tarmac SL9 Expert · Ultegra Di2;56;Pacific Blue Metallic/White;3;6999.00;2026-10-16T13:48:00+02:00
+2000401700170;tarmac-sl9-expert-di2;Tarmac SL9 Expert · Ultegra Di2;58;Pacific Blue Metallic/White;3;6999.00;2026-10-16T13:48:00+02:00
+2000401700187;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;49;Bronze Gold Metallic/Shadow Silver;2;2299.00;2026-10-16T13:48:00+02:00
+2000401700194;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;52;Bronze Gold Metallic/Shadow Silver;2;2299.00;2026-10-16T13:48:00+02:00
+2000401700200;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;54;Bronze Gold Metallic/Shadow Silver;0;2299.00;2026-10-16T13:48:00+02:00
+2000401700217;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;56;Bronze Gold Metallic/Shadow Silver;2;2299.00;2026-10-16T13:48:00+02:00
+2000401700224;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;58;Bronze Gold Metallic/Shadow Silver;3;2299.00;2026-10-16T13:48:00+02:00
+2000401700231;diverge-4-sport-alloy;Diverge 4 Sport Alloy · Shimano CUES;61;Bronze Gold Metallic/Shadow Silver;3;2299.00;2026-10-16T13:48:00+02:00
+2000401700248;crux-dsw-comp;Crux DSW Comp · SRAM Apex XPLR;49;Shadow Silver/Flake Silver;0;2599.00;2026-10-16T13:48:00+02:00
+2000401700255;crux-dsw-comp;Crux DSW Comp · SRAM Apex XPLR;52;Shadow Silver/Flake Silver;2;2599.00;2026-10-16T13:48:00+02:00
+2000401700262;crux-dsw-comp;Crux DSW Comp · SRAM Apex XPLR;54;Shadow Silver/Flake Silver;3;2599.00;2026-10-16T13:48:00+02:00
+2000401700279;crux-dsw-comp;Crux DSW Comp · SRAM Apex XPLR;56;Shadow Silver/Flake Silver;2;2599.00;2026-10-16T13:48:00+02:00
+2000401700286;crux-dsw-comp;Crux DSW Comp · SRAM Apex XPLR;58;Shadow Silver/Flake Silver;1;2599.00;2026-10-16T13:48:00+02:00
+2000401700293;rockhopper-comp;Rockhopper Comp;XS;Pistachio/White Mountains;0;949.00;2026-10-16T13:48:00+02:00
+2000401700309;rockhopper-comp;Rockhopper Comp;S;Pistachio/White Mountains;2;949.00;2026-10-16T13:48:00+02:00
+2000401700316;rockhopper-comp;Rockhopper Comp;M;Pistachio/White Mountains;0;949.00;2026-10-16T13:48:00+02:00
+2000401700323;rockhopper-comp;Rockhopper Comp;L;Pistachio/White Mountains;0;949.00;2026-10-16T13:48:00+02:00
+2000401700330;rockhopper-comp;Rockhopper Comp;XL;Pistachio/White Mountains;0;949.00;2026-10-16T13:48:00+02:00
+2000401700347;rockhopper-comp;Rockhopper Comp;XS;Satin Black;3;949.00;2026-10-16T13:48:00+02:00
+2000401700354;rockhopper-comp;Rockhopper Comp;S;Satin Black;1;949.00;2026-10-16T13:48:00+02:00
+2000401700361;rockhopper-comp;Rockhopper Comp;M;Satin Black;2;949.00;2026-10-16T13:48:00+02:00
+2000401700378;rockhopper-comp;Rockhopper Comp;L;Satin Black;0;949.00;2026-10-16T13:48:00+02:00
+2000401700385;rockhopper-comp;Rockhopper Comp;XL;Satin Black;0;949.00;2026-10-16T13:48:00+02:00
+2000401700392;stumpjumper-15-evo-expert;Stumpjumper 15 EVO Expert · XT Di2;S2;Pistachio/Dark Moss;0;6799.00;2026-10-16T13:48:00+02:00
+2000401700408;stumpjumper-15-evo-expert;Stumpjumper 15 EVO Expert · XT Di2;S3;Pistachio/Dark Moss;2;6799.00;2026-10-16T13:48:00+02:00
+2000401700415;stumpjumper-15-evo-expert;Stumpjumper 15 EVO Expert · XT Di2;S4;Pistachio/Dark Moss;3;6799.00;2026-10-16T13:48:00+02:00
+2000401700422;stumpjumper-15-evo-expert;Stumpjumper 15 EVO Expert · XT Di2;S5;Pistachio/Dark Moss;2;6799.00;2026-10-16T13:48:00+02:00
+2000401700439;levo-4-evo-comp;Turbo Levo 4 EVO Comp;S2;Warm Smoke Metallic;2;7499.00;2026-10-16T13:48:00+02:00
+2000401700446;levo-4-evo-comp;Turbo Levo 4 EVO Comp;S3;Warm Smoke Metallic;1;7499.00;2026-10-16T13:48:00+02:00
+2000401700453;levo-4-evo-comp;Turbo Levo 4 EVO Comp;S4;Warm Smoke Metallic;3;7499.00;2026-10-16T13:48:00+02:00
+2000401700460;levo-4-evo-comp;Turbo Levo 4 EVO Comp;S5;Warm Smoke Metallic;1;7499.00;2026-10-16T13:48:00+02:00
+2000401700477;vado-3-evo-4;Turbo Vado 3 EVO 4.0;S;Pacific Blue Metallic;3;4199.00;2026-10-16T13:48:00+02:00
+2000401700484;vado-3-evo-4;Turbo Vado 3 EVO 4.0;M;Pacific Blue Metallic;1;4199.00;2026-10-16T13:48:00+02:00
+2000401700491;vado-3-evo-4;Turbo Vado 3 EVO 4.0;L;Pacific Blue Metallic;1;4199.00;2026-10-16T13:48:00+02:00
+2000401700507;vado-3-evo-4;Turbo Vado 3 EVO 4.0;XL;Pacific Blue Metallic;3;4199.00;2026-10-16T13:48:00+02:00
+2000401700514;vado-3-evo-4;Turbo Vado 3 EVO 4.0;S;Dune White;2;4199.00;2026-10-16T13:48:00+02:00
+2000401700521;vado-3-evo-4;Turbo Vado 3 EVO 4.0;M;Dune White;2;4199.00;2026-10-16T13:48:00+02:00
+2000401700538;vado-3-evo-4;Turbo Vado 3 EVO 4.0;L;Dune White;0;4199.00;2026-10-16T13:48:00+02:00
+2000401700545;vado-3-evo-4;Turbo Vado 3 EVO 4.0;XL;Dune White;3;4199.00;2026-10-16T13:48:00+02:00
+2000401700552;riprock-24;Riprock 24;24";Majestic Blue Metallic/Sky Blue;3;699.00;2026-10-16T13:48:00+02:00
+2000401700569;sworks-tarmac-sl8;S-Works Tarmac SL8 · Dura-Ace Di2;52;Satin Carbon/Gloss Black;1;13999.00;2026-10-16T13:48:00+02:00
+2000401700576;sworks-tarmac-sl8;S-Works Tarmac SL8 · Dura-Ace Di2;54;Satin Carbon/Gloss Black;2;13999.00;2026-10-16T13:48:00+02:00
+2000401700583;sworks-tarmac-sl8;S-Works Tarmac SL8 · Dura-Ace Di2;56;Satin Carbon/Gloss Black;1;13999.00;2026-10-16T13:48:00+02:00
+2000401700590;sworks-aethos;S-Works Aethos · SRAM Red AXS;52;Gloss Carbon/Chrome;2;12499.00;2026-10-16T13:48:00+02:00
+2000401700606;sworks-aethos;S-Works Aethos · SRAM Red AXS;54;Gloss Carbon/Chrome;2;12499.00;2026-10-16T13:48:00+02:00
+2000401700613;sworks-aethos;S-Works Aethos · SRAM Red AXS;56;Gloss Carbon/Chrome;0;12499.00;2026-10-16T13:48:00+02:00
+2000401700620;sworks-aethos;S-Works Aethos · SRAM Red AXS;58;Gloss Carbon/Chrome;1;12499.00;2026-10-16T13:48:00+02:00

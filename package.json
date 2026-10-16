@@ -8,6 +8,6 @@
     "start": "node server.mjs",
     "preview": "node preview.mjs",
     "build": "node hosting/build.mjs",
-    "test": "node --test hosting/http.test.mjs entwuerfe/codex-2026-10/server/agent.test.mjs entwuerfe/codex-2026-10/server/latency.test.mjs"
+    "test": "node --test hosting/http.test.mjs entwuerfe/codex-2026-10/server/agent.test.mjs entwuerfe/codex-2026-10/server/latency.test.mjs entwuerfe/codex-2026-10/server/app-assistant.test.mjs"
   }
 }
